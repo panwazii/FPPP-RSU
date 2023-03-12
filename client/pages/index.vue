@@ -22,6 +22,10 @@
     </v-card>
 
     <indexRoom />
+
+    <indexContact />
+
+    
   </div>
 </template>
 
