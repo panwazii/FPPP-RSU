@@ -1,17 +1,19 @@
 <template>
-  <div class="mt-10 d-flex justify-center">
-    <v-container>
+  <div class="room1 mt-10 d-flex justify-center">
+
       <v-row>
+        
         <v-col
-          class="mx-auto d-flex justify-center"
-          cols="12"
-          sm="4"
+          class="pa-5 mx-0 d-flex justify-center"
+          xs="12"
+          sm="6"
           md="3"
-          xs="1"
+
+          
           v-for="room in rooms"
           :key="room.id"
         >
-          <v-card class="mx-auto ml-1 mr-1" max-width="250" max-height="250">
+          <v-card class="mx-0 ml-1 mr-1" width="250" height="250">
             <v-img :src="room.src" height="100px"></v-img>
             <v-card-title> {{ room.title }}</v-card-title>
             <v-card-subtitle> {{ room.subtitle }} </v-card-subtitle>
@@ -21,8 +23,10 @@
             </v-card-actions>
           </v-card>
         </v-col>
+      
       </v-row>
-    </v-container>
+
+
   </div>
 </template>
 <script>
@@ -81,3 +85,9 @@ export default {
   }),
 }
 </script>
+<style scoped>
+.room1{
+  max-width: 1200px;
+  margin: auto;
+}
+</style>
