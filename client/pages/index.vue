@@ -24,8 +24,6 @@
     <indexRoom />
 
     <indexContact />
-
-    
   </div>
 </template>
 
