@@ -1,7 +1,7 @@
 <template>
   <v-app dark>
     <v-main>
-      <v-app-bar height="60px" color="#fbba00" :elevation="2">
+      <v-app-bar fixed app color="grey" elevation="0" hide-on-scroll>
         <img
           src="~/assets/logo/rsu-logo.png"
           class="ma-1"
@@ -10,17 +10,19 @@
         />
         <h3>FPPP</h3>
         <v-spacer></v-spacer>
-        <v-btn rounded text> Home</v-btn>
-        <v-btn rounded text>Room</v-btn>
-        <v-btn rounded text>Contact</v-btn>
-        <v-btn rounded depressed>Login</v-btn>
+        <v-btn rounded text to="/"> <h4>Home/หน้าหลัก</h4></v-btn>
+        <v-btn rounded text to="/rooms"> <h4>Room/ห้องแลป</h4></v-btn>
+        <v-btn rounded text><h4>Contact/ติดต่อ</h4></v-btn>
+        <v-btn rounded depressed to="/login"><h4>Login</h4></v-btn>
       </v-app-bar>
-        <Nuxt />
+      <Nuxt />
     </v-main>
 
-    <v-footer  class="pa-0" height="30">
+    <v-footer class="pa-0" height="30">
       <v-spacer></v-spacer>
-      <span class="mr-1">FPPP &copy; {{ new Date().getFullYear() }} developed by DIT CS</span>
+      <span class="mr-1"
+        >FPPP &copy; {{ new Date().getFullYear() }} developed by DIT CS</span
+      >
     </v-footer>
   </v-app>
 </template>
