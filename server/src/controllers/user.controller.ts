@@ -2,7 +2,7 @@ import Sequelize, { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import UserModel, { UserAttribute, UserType } from '../database/models/user.model';
+import UserModel, { UserAttribute, UserType } from '../database/models/users.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 

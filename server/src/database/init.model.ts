@@ -1,8 +1,10 @@
 import { Dialect, Sequelize } from 'sequelize';
 import debug from 'debug';
 import config from '../config/global.config';
-import { initUserModel } from './models/user.model';
-import { initTagsModel } from './models/tags.model';
+import { initUserModel } from './models/users.model';
+import { initRoomModel } from './models/rooms.model';
+import { initNewsModel } from './models/news.model';
+import { initGlobalEquipmentModel } from './models/global_equipments.model';
 import log from '../tools/log';
 
 const logDB = debug('app:db');
@@ -32,7 +34,9 @@ sequelizeConnection.authenticate().then(() => {
 const initDatabase = async () => {
     const models = [
         initUserModel,
-        initTagsModel,
+        initRoomModel,
+        initNewsModel,
+        initGlobalEquipmentModel
     ];
     models.forEach((initFunction) => {
         initFunction(sequelizeConnection);
