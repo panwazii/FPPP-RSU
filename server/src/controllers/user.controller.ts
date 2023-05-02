@@ -152,11 +152,7 @@ class UserController {
             password: password_hash,
             email: data.email,
             usergroup,
-            steam64: data.steam64,
-            steamhex: data.steamhex,
             avatar: data.avatar,
-            discord_id: data.discord_id,
-            discord_name: data.discord_name,
             user_mobile: data.mobile,
             user_address: data.address,
         };
@@ -187,11 +183,7 @@ class UserController {
             password: password_hash,
             email: data.email,
             usergroup,
-            steam64: data.steam64,
-            steamhex: data.steamhex,
             avatar: data.avatar,
-            discord_id: data.discord_id,
-            discord_name: data.discord_name,
             user_mobile: data.mobile,
             user_address: data.address,
         }, {
