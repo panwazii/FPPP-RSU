@@ -113,7 +113,7 @@ export const initUserModel = (connection: Sequelize) => {
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'user',
+            tableName: 'users',
         },
     );
 };

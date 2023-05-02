@@ -59,7 +59,7 @@ export const initNewsModel = (connection: Sequelize) => {
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'rooms',
+            tableName: 'news',
         },
     );
 };

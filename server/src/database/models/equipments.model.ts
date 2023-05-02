@@ -1,6 +1,7 @@
 import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
+import RoomModel from './rooms.model';
 
 export interface EquipmentAttribute {
     id?: number;
@@ -46,6 +47,10 @@ export const initEquipmentModel = (connection: Sequelize) => {
             room_id: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
+                references: {
+                    model: RoomModel,
+                    key: 'id',
+                },
             },
             name: {
                 allowNull: false,
@@ -74,7 +79,7 @@ export const initEquipmentModel = (connection: Sequelize) => {
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'rooms',
+            tableName: 'equipments',
         },
     );
 };

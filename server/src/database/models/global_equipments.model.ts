@@ -67,7 +67,7 @@ export const initGlobalEquipmentModel = (connection: Sequelize) => {
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'rooms',
+            tableName: 'global_equipments',
         },
     );
 };

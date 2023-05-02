@@ -31,7 +31,7 @@ export const UserType = {
     ADMIN: 'admin',
 };
 
-class UserModel extends Model<UserAttribute, UserAttributeCreation> implements UserAttribute {
+class AdminModel extends Model<UserAttribute, UserAttributeCreation> implements UserAttribute {
     public user_id!: number;
 
     public username!: string;
@@ -66,8 +66,8 @@ class UserModel extends Model<UserAttribute, UserAttributeCreation> implements U
     public latest_date!: Date;
 }
 
-export const initUserModel = (connection: Sequelize) => {
-    UserModel.init(
+export const initAdminModel = (connection: Sequelize) => {
+    AdminModel.init(
         {
             user_id: {
                 type: DataTypes.INTEGER,
@@ -149,9 +149,9 @@ export const initUserModel = (connection: Sequelize) => {
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'user',
+            tableName: 'admins',
         },
     );
 };
 
-export default UserModel;
+export default AdminModel;

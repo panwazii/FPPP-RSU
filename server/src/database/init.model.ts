@@ -3,7 +3,10 @@ import debug from 'debug';
 import config from '../config/global.config';
 import { initUserModel } from './models/users.model';
 import { initRoomModel } from './models/rooms.model';
+import { initReserveModel } from './models/reserve.model';
 import { initNewsModel } from './models/news.model';
+import { initEquipmentModel } from './models/equipments.model';
+import { initAdminModel } from './models/admins.model';
 import { initGlobalEquipmentModel } from './models/global_equipments.model';
 import log from '../tools/log';
 
@@ -36,7 +39,10 @@ const initDatabase = async () => {
         initUserModel,
         initRoomModel,
         initNewsModel,
-        initGlobalEquipmentModel
+        initGlobalEquipmentModel,
+        initReserveModel,
+        initEquipmentModel,
+        initAdminModel
     ];
     models.forEach((initFunction) => {
         initFunction(sequelizeConnection);

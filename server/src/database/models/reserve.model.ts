@@ -1,6 +1,8 @@
 import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
+import UserModel from './users.model';
+import RoomModel from './rooms.model';
 
 export interface ReserveAttribute {
     id?: number;
@@ -40,10 +42,18 @@ export const initReserveModel = (connection: Sequelize) => {
             user_id: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
+                references: {
+                    model: UserModel,
+                    key: 'user_id',
+                },
             },
             room_id: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
+                references: {
+                    model: RoomModel,
+                    key: 'id',
+                },
             },
             date_time: {
                 type: DataTypes.STRING,
@@ -57,7 +67,7 @@ export const initReserveModel = (connection: Sequelize) => {
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'rooms',
+            tableName: 'reserve',
         },
     );
 };
