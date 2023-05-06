@@ -3,7 +3,7 @@
     <v-row class="mb-12"><v-spacer></v-spacer></v-row>
     <v-row class="mb-12"><v-spacer></v-spacer></v-row>
     <v-row class="justify-center">
-      <v-card class="pa-6" outlined color="white" width="1100" height="500">
+      <v-card class="pa-6 rounded-lg" width="1100" height="400">
         <h1 align="left" class="amber--text pa-1"></h1>
         <v-form ref="form" lazy-validation>
           <v-row class="mt-2">
