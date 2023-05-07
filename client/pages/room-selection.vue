@@ -12,8 +12,8 @@
       v-for="(room, i) in room"
       :key="i"
     >
-      <v-card width="1020" height="220" outlined color="white">
-        <div class="d-flex flex-no-wrap justify-space-between">
+      <v-card width="1020" height="220">
+        <div class="d-flex flex-no-wrap justify-space-between rounded-lg">
           <div>
             <v-card-title class="text-h5"> {{ room }} </v-card-title>
 
