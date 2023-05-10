@@ -7,7 +7,7 @@ export const authValid = (req: Request, res: Response, next: NextFunction) => {
   const auth = req.headers.authorization;
   if (auth == null) {
     if (config.sandbox) {
-      res.locals.user = { user_id: 'randomUUID' };
+      res.locals.user = { id: 'randomUUID' };
       next();
     } else {
       res.json({ code: 403, desc: 'unauthorized' });
@@ -27,28 +27,6 @@ export const authValid = (req: Request, res: Response, next: NextFunction) => {
     });
   }
 };
-
-export const needGroup = (groupName: string) => async (req: Request, res: Response, next: NextFunction) => {
-  const userID = Number(res.locals?.user?.user_id);
-  if (Number.isNaN(userID)) {
-    res.json({
-      code: 403,
-      desc: 'unauthorized',
-    });
-    return;
-  }
-  const userData = await UserController.getByUserID(userID);
-  if (userData?.usergroup !== groupName) {
-    res.json({
-      code: 403,
-      desc: 'unauthorized',
-    });
-    return;
-  }
-  next();
-};
-
-export const adminOnly = needGroup('admin');
 
 export const checkBodyEmpty = (errMessage: any) => (req: Request, res: Response, next: NextFunction) => {
   if (!req.body) {

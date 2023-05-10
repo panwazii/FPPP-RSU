@@ -2,21 +2,12 @@ import Sequelize, { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import UserModel, { UserAttribute, UserType } from '../database/models/users.model';
+import UserModel, { UserAttribute } from '../database/models/users.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
 class UserController {
     public static readonly EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
-    public static async isGroup(userID: number, groupName: string) {
-        const userData = await UserController.getByUserID(userID);
-        return userData?.usergroup === groupName;
-    }
-
-    public static async isAdmin(userID: number) {
-        return UserController.isGroup(userID, UserType.ADMIN);
-    }
 
     public static async getUserByQuery(options: any) {
         log(options);
@@ -53,7 +44,7 @@ class UserController {
     public static async getByUserID(userID: number) {
         return UserModel.findOne({
             where: {
-                user_id: userID,
+                id: userID,
                 status: {
                     [Op.ne]: -1,
                 },
@@ -87,7 +78,7 @@ class UserController {
     public static async destroyUser(userID: number) {
         return UserModel.destroy({
             where: {
-                user_id: userID,
+                id: userID,
             },
         }).then((rowDeleted) => rowDeleted > 0);
     }
@@ -97,7 +88,7 @@ class UserController {
             status: -1,
         }, {
             where: {
-                user_id: userID,
+                id: userID,
             },
         }).then(() => true).catch(() => false);
     }
@@ -113,8 +104,8 @@ class UserController {
     public static async authCookie(token: string) {
         const decode = UserController.verifyJWT(token);
         // eslint-disable-next-line max-len
-        if (decode.verify && decode.result && decode.result?.user_id && !Number.isNaN(Number(decode.result?.user_id))) {
-            return Number(decode.result.user_id);
+        if (decode.verify && decode.result && decode.result?.id && !Number.isNaN(Number(decode.result?.id))) {
+            return Number(decode.result.id);
         }
         return null;
     }
@@ -126,7 +117,7 @@ class UserController {
 
         const valid = bcrypt.compareSync(password, data.password);
         if (valid) {
-            const userInfo = await UserController.getByUserID(data.user_id);
+            const userInfo = await UserController.getByUserID(data.id);
             return {
                 code: 200,
                 data: userInfo,
@@ -151,10 +142,8 @@ class UserController {
             username: data.username,
             password: password_hash,
             email: data.email,
-            usergroup,
             avatar: data.avatar,
-            user_mobile: data.mobile,
-            user_address: data.address,
+            tel: data.tel,
         };
 
         return UserModel.create(packet)
@@ -182,13 +171,11 @@ class UserController {
             username: data.username,
             password: password_hash,
             email: data.email,
-            usergroup,
             avatar: data.avatar,
-            user_mobile: data.mobile,
-            user_address: data.address,
+            tel: data.tel,
         }, {
             where: {
-                user_id: userID,
+                id: userID,
             },
         }).then(() => true)
             .catch(() => false);

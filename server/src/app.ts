@@ -13,8 +13,8 @@ initDatabase().then(() => {
     const app: Application = express();
     const router: express.Router = express.Router();
 
-    router.use('/api/v1/auth', authRouter);
-    router.use('/api/v1/user', userRouter);
+    router.use('/api/auth', authRouter);
+    router.use('/api/user', userRouter);
     router.get('/', ((req, res) => {
         res.json('You shall not pass!');
     }));

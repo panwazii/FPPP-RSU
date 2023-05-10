@@ -2,37 +2,22 @@ import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
 
-export interface UserAttribute {
-    user_id?: number;
+export interface AdminAttribute {
+    id?: number;
     username?: string;
     email?: string;
     password?: string;
-    usergroup?: string;
-
-    // Meta
-    user_address?: string;
-    user_mobile?: string;
-    steam64?: string;
-    discord_id?: string;
-    discord_name?: string;
-    steamhex?: string;
+    tel?: string;
     avatar?: string;
-    coin?: number;
     status?: number;
-    joined_date?: Date;
-    latest_date?: Date;
+    created_at?: Date;
+    update_at?: Date;
 }
 
-export interface UserAttributeCreation extends Optional<UserAttribute, 'user_id'> { }
+export interface AdminAttributeCreation extends Optional<AdminAttribute, 'id'> { }
 
-export const UserType = {
-    USER: 'user',
-    MODERATOR: 'moderator',
-    ADMIN: 'admin',
-};
-
-class AdminModel extends Model<UserAttribute, UserAttributeCreation> implements UserAttribute {
-    public user_id!: number;
+class AdminModel extends Model<AdminAttribute, AdminAttributeCreation> implements AdminAttribute {
+    public id!: number;
 
     public username!: string;
 
@@ -40,36 +25,21 @@ class AdminModel extends Model<UserAttribute, UserAttributeCreation> implements 
 
     public password!: string;
 
-    public usergroup!: string;
-
-    // Meta
-    public user_address!: string;
-
-    public user_mobile!: string;
-
-    public discord_id!: string;
-
-    public discord_name!: string;
-
-    public steam64!: string;
-
-    public steamhex!: string;
+    public tel!: string;
 
     public avatar!: string;
 
-    public coin!: number;
-
     public status!: number;
 
-    public joined_date!: Date;
+    public created_at!: Date;
 
-    public latest_date!: Date;
+    public update_at!: Date;
 }
 
 export const initAdminModel = (connection: Sequelize) => {
     AdminModel.init(
         {
-            user_id: {
+            id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 allowNull: false,
@@ -89,58 +59,25 @@ export const initAdminModel = (connection: Sequelize) => {
                 allowNull: false,
                 type: DataTypes.STRING,
             },
-            usergroup: {
-                allowNull: false,
-                type: DataTypes.ENUM('user', 'moderator', 'admin'),
-            },
-            user_address: {
+            tel: {
                 allowNull: true,
                 type: DataTypes.STRING,
-            },
-            user_mobile: {
-                allowNull: true,
-                type: DataTypes.STRING,
-            },
-            discord_name: {
-                allowNull: false,
-                type: DataTypes.STRING,
-                unique: true,
-            },
-            discord_id: {
-                allowNull: false,
-                type: DataTypes.STRING,
-                unique: true,
-            },
-            steam64: {
-                allowNull: false,
-                type: DataTypes.STRING,
-                unique: true,
-            },
-            steamhex: {
-                allowNull: false,
-                type: DataTypes.STRING,
-                unique: true,
             },
             avatar: {
                 allowNull: false,
                 type: DataTypes.STRING(500),
-            },
-            coin: {
-                allowNull: false,
-                type: DataTypes.DOUBLE,
-                defaultValue: 0,
             },
             status: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 defaultValue: 1,
             },
-            joined_date: {
+            created_at: {
                 allowNull: false,
                 type: DataTypes.DATE,
                 defaultValue: DataTypes.NOW,
             },
-            latest_date: {
+            update_at: {
                 allowNull: false,
                 type: DataTypes.DATE,
                 defaultValue: DataTypes.NOW,

@@ -3,31 +3,21 @@ import {
 } from 'sequelize';
 
 export interface UserAttribute {
-    user_id?: number;
+    id?: number;
     username?: string;
     email?: string;
     password?: string;
-    usergroup?: string;
-
-    // Meta
-    user_address?: string;
-    user_mobile?: string;
+    tel?: string;
     avatar?: string;
     status?: number;
-    joined_date?: Date;
-    latest_date?: Date;
+    created_at?: Date;
+    update_at?: Date;
 }
 
-export interface UserAttributeCreation extends Optional<UserAttribute, 'user_id'> { }
-
-export const UserType = {
-    USER: 'user',
-    MODERATOR: 'moderator',
-    ADMIN: 'admin',
-};
+export interface UserAttributeCreation extends Optional<UserAttribute, 'id'> { }
 
 class UserModel extends Model<UserAttribute, UserAttributeCreation> implements UserAttribute {
-    public user_id!: number;
+    public id!: number;
 
     public username!: string;
 
@@ -35,30 +25,21 @@ class UserModel extends Model<UserAttribute, UserAttributeCreation> implements U
 
     public password!: string;
 
-    public usergroup!: string;
-
-    // Meta
-    public user_address!: string;
-
-    public user_mobile!: string;
-
-    public steamhex!: string;
+    public tel!: string;
 
     public avatar!: string;
 
-    public coin!: number;
-
     public status!: number;
 
-    public joined_date!: Date;
+    public created_at!: Date;
 
-    public latest_date!: Date;
+    public update_at!: Date;
 }
 
 export const initUserModel = (connection: Sequelize) => {
     UserModel.init(
         {
-            user_id: {
+            id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 allowNull: false,
@@ -78,15 +59,7 @@ export const initUserModel = (connection: Sequelize) => {
                 allowNull: false,
                 type: DataTypes.STRING,
             },
-            usergroup: {
-                allowNull: false,
-                type: DataTypes.ENUM('user', 'moderator', 'admin'),
-            },
-            user_address: {
-                allowNull: true,
-                type: DataTypes.STRING,
-            },
-            user_mobile: {
+            tel: {
                 allowNull: true,
                 type: DataTypes.STRING,
             },
@@ -99,12 +72,12 @@ export const initUserModel = (connection: Sequelize) => {
                 allowNull: false,
                 defaultValue: 1,
             },
-            joined_date: {
+            created_at: {
                 allowNull: false,
                 type: DataTypes.DATE,
                 defaultValue: DataTypes.NOW,
             },
-            latest_date: {
+            update_at: {
                 allowNull: false,
                 type: DataTypes.DATE,
                 defaultValue: DataTypes.NOW,
