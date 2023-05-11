@@ -1,4 +1,5 @@
 import { Dialect, Sequelize } from 'sequelize';
+import yn from 'yn';
 import debug from 'debug';
 import config from '../config/global.config';
 import { initUserModel } from './models/users.model';
@@ -51,16 +52,16 @@ const initDatabase = async () => {
         initFunction(sequelizeConnection);
     });
 
-    if (config.database.dropAndCreateNew === "true") {
+    if (yn(config.database.dropAndCreateNew)) {
         log("Drop status :", config.database.dropAndCreateNew);
         log(sequelizeConnection.models);
         await sequelizeConnection.sync({ force: true });
-        if (config.database.insertInitData === "true") {           
+        if (yn(config.database.insertInitData)) {
             await SuperAdminController.createSuperAdmin();
             // await initSuperAdminSeeder();
         }
     } else {
-        await sequelizeConnection.sync(config.database.syncOption);
+        await sequelizeConnection.sync({ alter: config.database.syncOption.alter });
     }
 };
 

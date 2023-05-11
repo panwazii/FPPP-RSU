@@ -8,6 +8,10 @@ import authRouter from './routes/auth.route';
 import userRouter from './routes/user.route';
 import log from './tools/log';
 
+const corsOptions = {
+    origin: config.cors.origin,
+};
+
 initDatabase().then(() => {
     const app: Application = express();
     const router: express.Router = express.Router();
@@ -22,7 +26,7 @@ initDatabase().then(() => {
     app.use(express.urlencoded({ extended: true }));
     app.use(compression());
     app.use(helmet());
-    app.use(cors({ credentials: true, origin: true }));
+    app.use(cors(corsOptions));
     app.use('/', router);
 
 

@@ -1,15 +1,14 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-console.log(process.env.PORT);
-
 const config: any = {
   version: process.env.VERSION,
   port: process.env.PORT || 8080,
   sandbox: process.env.SANDBOX || false,
+  cors: { origin: process.env.CORS_ORIGIN },
   security: {
-    superadminusername:process.env.SUPER_ADMIN_USERNAME,
-    superadminpassword:process.env.SUPER_ADMIN_PASSWORD,
+    superadminusername: process.env.SUPER_ADMIN_USERNAME,
+    superadminpassword: process.env.SUPER_ADMIN_PASSWORD,
     salt: process.env.SEC_SALT,
     loginDuration: process.env.SEC_LOGIN_DURATION,
   },
