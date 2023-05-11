@@ -4,7 +4,8 @@ import {
 
 export interface UserAttribute {
     id?: number;
-    username?: string;
+    fname?: string;
+    lname?: string;
     email?: string;
     password?: string;
     tel?: string;
@@ -19,7 +20,9 @@ export interface UserAttributeCreation extends Optional<UserAttribute, 'id'> { }
 class UserModel extends Model<UserAttribute, UserAttributeCreation> implements UserAttribute {
     public id!: number;
 
-    public username!: string;
+    public fname!: string;
+
+    public lname!: string;
 
     public email!: string;
 
@@ -45,7 +48,12 @@ export const initUserModel = (connection: Sequelize) => {
                 allowNull: false,
                 primaryKey: true,
             },
-            username: {
+            fname: {
+                allowNull: false,
+                unique: true,
+                type: DataTypes.STRING,
+            },
+            lname: {
                 allowNull: false,
                 unique: true,
                 type: DataTypes.STRING,

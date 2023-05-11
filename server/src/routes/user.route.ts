@@ -38,14 +38,6 @@ userRouter.post('/register', async (req, res) => {
             return;
         }
 
-        const hasUser = await UserController.getByUsername(username);
-        if (hasUser) {
-            res.json({
-                code: 400,
-                err_message: 'Username are already in used.',
-            });
-        }
-
         UserController.register(req.body).then((state) => {
             res.json({ code: 200, state });
         });

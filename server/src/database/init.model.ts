@@ -6,8 +6,10 @@ import { initRoomModel } from './models/rooms.model';
 import { initReserveModel } from './models/reserve.model';
 import { initNewsModel } from './models/news.model';
 import { initEquipmentModel } from './models/equipments.model';
-import { initAdminModel } from './models/admins.model';
 import { initGlobalEquipmentModel } from './models/global_equipments.model';
+import { initAdminModel } from './models/admins.model';
+import { initSuperAdminModel } from './models/super_admins.model';
+import SuperAdminController from '../controllers/super_admin.controller';
 import log from '../tools/log';
 
 const logDB = debug('app:db');
@@ -42,19 +44,21 @@ const initDatabase = async () => {
         initGlobalEquipmentModel,
         initReserveModel,
         initEquipmentModel,
-        initAdminModel
+        initAdminModel,
+        initSuperAdminModel
     ];
     models.forEach((initFunction) => {
         initFunction(sequelizeConnection);
     });
 
-
-    if (config.database.dropAndCreateNew) {
+    if (config.database.dropAndCreateNew == true) {
+        log("Drop status :", config.database.dropAndCreateNew);
         log(sequelizeConnection.models);
         await sequelizeConnection.sync({ force: true });
-        if (config.database.insertInitData) {
-            //   await initCategorySeed();
-            //   await initTagSeeder();
+        if (config.database.insertInitData == true) {
+            log("Init on");
+            await SuperAdminController.createSuperAdmin();
+            // await initSuperAdminSeeder();
         }
     } else {
         await sequelizeConnection.sync(config.database.syncOption);

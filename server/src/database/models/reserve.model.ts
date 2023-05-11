@@ -44,7 +44,7 @@ export const initReserveModel = (connection: Sequelize) => {
                 allowNull: false,
                 references: {
                     model: UserModel,
-                    key: 'user_id',
+                    key: 'id',
                 },
             },
             room_id: {

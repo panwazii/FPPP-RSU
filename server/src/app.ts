@@ -2,7 +2,6 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import compression from 'compression';
 import helmet from 'helmet';
-import https from 'https';
 import initDatabase from './database/init.model';
 import config from './config/global.config';
 import authRouter from './routes/auth.route';
@@ -32,18 +31,6 @@ initDatabase().then(() => {
         log(`Express service is now online at port:${config.port}.`);
     });
 
-    // if (config.ssl) {
-    //     https.createServer({
-    //         key: 'privateKey',
-    //         cert: 'certificate',
-    //     }, app).listen(config.sslPort, () => {
-    //         log(`Express service is now online at port:${config.sslPort}. (SSL: ON)`);
-    //     });
-    // } else {
-    //     app.listen(config.port, () => {
-    //         log(`Express service is now online at port:${config.port}.`);
-    //     });
-    // }
 }).catch((err) => {
     console.log(err);
 });

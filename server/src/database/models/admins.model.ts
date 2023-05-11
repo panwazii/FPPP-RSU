@@ -4,7 +4,8 @@ import {
 
 export interface AdminAttribute {
     id?: number;
-    username?: string;
+    fname?: string;
+    lname?: string;
     email?: string;
     password?: string;
     tel?: string;
@@ -19,7 +20,9 @@ export interface AdminAttributeCreation extends Optional<AdminAttribute, 'id'> {
 class AdminModel extends Model<AdminAttribute, AdminAttributeCreation> implements AdminAttribute {
     public id!: number;
 
-    public username!: string;
+    public fname!: string;
+
+    public lname!: string;
 
     public email!: string;
 
@@ -45,7 +48,12 @@ export const initAdminModel = (connection: Sequelize) => {
                 allowNull: false,
                 primaryKey: true,
             },
-            username: {
+            fname: {
+                allowNull: false,
+                unique: true,
+                type: DataTypes.STRING,
+            },
+            lname: {
                 allowNull: false,
                 unique: true,
                 type: DataTypes.STRING,

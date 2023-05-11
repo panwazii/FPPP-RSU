@@ -64,17 +64,6 @@ class UserController {
         });
     }
 
-    public static async getByUsername(username: string) {
-        return UserModel.findOne({
-            where: {
-                username,
-                status: {
-                    [Op.ne]: -1,
-                },
-            },
-        });
-    }
-
     public static async destroyUser(userID: number) {
         return UserModel.destroy({
             where: {
@@ -139,7 +128,8 @@ class UserController {
             usergroup = data.usergroup;
         }
         const packet: UserAttribute = {
-            username: data.username,
+            fname: data.fname,
+            lname: data.lname,
             password: password_hash,
             email: data.email,
             avatar: data.avatar,
@@ -168,7 +158,8 @@ class UserController {
         }
 
         return UserModel.update({
-            username: data.username,
+            fname: data.fname,
+            lname: data.lname,
             password: password_hash,
             email: data.email,
             avatar: data.avatar,

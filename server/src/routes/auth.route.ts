@@ -8,7 +8,7 @@ import { authValid } from '../middleware/user.middleware';
 const authRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON('AUTH');
 
-authRouter.post('/user/', async (req, res) => {
+authRouter.post('/user/login', async (req, res) => {
   if (!req.body) {
     res.status(401).json(errorCode('LOGIN', 0));
     return;

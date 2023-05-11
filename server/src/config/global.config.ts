@@ -8,6 +8,8 @@ const config: any = {
   port: process.env.PORT || 8080,
   sandbox: process.env.SANDBOX || false,
   security: {
+    superadminusername:process.env.SUPER_ADMIN_USERNAME,
+    superadminpassword:process.env.SUPER_ADMIN_PASSWORD,
     salt: process.env.SEC_SALT,
     loginDuration: process.env.SEC_LOGIN_DURATION,
   },
