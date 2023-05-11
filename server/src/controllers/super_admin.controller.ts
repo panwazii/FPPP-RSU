@@ -16,7 +16,7 @@ class SuperAdminController {
         };
 
         return SuperAdminModel.create(Packet)
-            .then((res) => log("SuperAdmin has been created", res))
+            .then((res) => log("SuperAdmin has been created"))
             .catch((e) => {
                 log(e);
                 return false;

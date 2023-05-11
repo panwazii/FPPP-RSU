@@ -51,12 +51,11 @@ const initDatabase = async () => {
         initFunction(sequelizeConnection);
     });
 
-    if (config.database.dropAndCreateNew == true) {
+    if (config.database.dropAndCreateNew === "true") {
         log("Drop status :", config.database.dropAndCreateNew);
         log(sequelizeConnection.models);
         await sequelizeConnection.sync({ force: true });
-        if (config.database.insertInitData == true) {
-            log("Init on");
+        if (config.database.insertInitData === "true") {           
             await SuperAdminController.createSuperAdmin();
             // await initSuperAdminSeeder();
         }
