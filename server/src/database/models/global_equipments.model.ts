@@ -6,7 +6,8 @@ export interface GlobalEquipmentAttribute {
     id?: number;
     name?: string;
     details?: string;
-    price?: string;
+    price?: number;
+    rent_price?: number;
     picture?: string;
     available_status?: boolean;
     created_at?: string;
@@ -24,7 +25,9 @@ class GlobalEquipmentModel extends Model<GlobalEquipmentAttribute, GlobalEquipme
 
     public details!: string;
 
-    public price!: string;
+    public price!: number;
+
+    public rent_price!: number;
 
     public picture!: string;
 
@@ -42,18 +45,19 @@ export const initGlobalEquipmentModel = (connection: Sequelize) => {
             },
             name: {
                 allowNull: false,
-                unique: true,
                 type: DataTypes.STRING,
             },
             details: {
                 allowNull: false,
-                unique: true,
                 type: DataTypes.STRING,
             },
             price: {
                 allowNull: false,
-                unique: true,
-                type: DataTypes.STRING,
+                type: DataTypes.DECIMAL,
+            },
+            rent_price: {
+                allowNull: false,
+                type: DataTypes.DECIMAL,
             },
             picture: {
                 allowNull: false,

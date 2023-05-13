@@ -7,7 +7,7 @@ export interface RoomAttribute {
     name?: string;
     details?: string;
     picture?: string;
-    price?: string;
+    rent_price?: number;
     available_status?: boolean;
     created_at?: string;
     update_at?: string;
@@ -26,7 +26,7 @@ class RoomModel extends Model<RoomAttribute, RoomAttributeCreation> implements R
 
     public picture!: string;
 
-    public price!: string;
+    public rent_price!: number;
 
     public available_status!: boolean;
 }
@@ -42,21 +42,19 @@ export const initRoomModel = (connection: Sequelize) => {
             },
             name: {
                 allowNull: false,
-                unique: true,
                 type: DataTypes.STRING,
             },
             details: {
                 allowNull: false,
-                unique: true,
                 type: DataTypes.STRING,
             },
             picture: {
                 allowNull: false,
                 type: DataTypes.STRING,
             },
-            price: {
+            rent_price: {
                 allowNull: false,
-                type: DataTypes.STRING,
+                type: DataTypes.DECIMAL,
             },
             available_status: {
                 allowNull: false,
