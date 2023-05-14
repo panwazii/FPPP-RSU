@@ -3,13 +3,18 @@ import yn from 'yn';
 import debug from 'debug';
 import config from '../config/global.config';
 import { initUserModel } from './models/users.model';
+import { initUserTypeModel } from './models/user_types.model';
 import { initRoomModel } from './models/rooms.model';
-import { initReserveModel } from './models/reserve.model';
+import ReserveModel, { initReserveModel } from './models/reserve.model';
 import { initNewsModel } from './models/news.model';
 import { initEquipmentModel } from './models/equipments.model';
 import { initGlobalEquipmentModel } from './models/global_equipments.model';
 import { initAdminModel } from './models/admins.model';
 import { initSuperAdminModel } from './models/super_admins.model';
+
+import UserModel from './models/users.model';
+import UserTypeModel from './models/user_types.model';
+
 import SuperAdminController from '../controllers/super_admin.controller';
 import log from '../tools/log';
 
@@ -39,7 +44,9 @@ sequelizeConnection.authenticate().then(() => {
 
 const initDatabase = async () => {
     const models = [
+        initUserTypeModel,
         initUserModel,
+
         initRoomModel,
         initNewsModel,
         initGlobalEquipmentModel,
@@ -51,6 +58,12 @@ const initDatabase = async () => {
     models.forEach((initFunction) => {
         initFunction(sequelizeConnection);
     });
+
+    UserTypeModel.hasMany(UserModel, { foreignKey: 'type_id' });
+    UserModel.belongsTo(UserTypeModel, { foreignKey: 'type_id' });
+
+    UserModel.hasMany(ReserveModel, { foreignKey: 'user_id' });
+    ReserveModel.belongsTo(UserModel, { foreignKey: 'user_id' });
 
     if (yn(config.database.dropAndCreateNew)) {
         log("Drop status :", config.database.dropAndCreateNew);

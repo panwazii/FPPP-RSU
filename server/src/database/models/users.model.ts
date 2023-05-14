@@ -1,9 +1,11 @@
 import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
+import UserTypeModel from './user_types.model';
 
 export interface UserAttribute {
     id?: number;
+    type_id?: number;
     fname?: string;
     lname?: string;
     email?: string;
@@ -19,6 +21,8 @@ export interface UserAttributeCreation extends Optional<UserAttribute, 'id'> { }
 
 class UserModel extends Model<UserAttribute, UserAttributeCreation> implements UserAttribute {
     public id!: number;
+
+    public type_id!: number;
 
     public fname!: string;
 
@@ -47,6 +51,14 @@ export const initUserModel = (connection: Sequelize) => {
                 autoIncrement: true,
                 allowNull: false,
                 primaryKey: true,
+            },
+            type_id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: UserTypeModel,
+                    key: 'id',
+                },
             },
             fname: {
                 allowNull: false,

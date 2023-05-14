@@ -52,3 +52,5 @@ Thumbs.db
 firebase_storage_key.json
 
 .env
+
+package-lock.json
