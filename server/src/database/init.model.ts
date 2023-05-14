@@ -14,6 +14,8 @@ import { initSuperAdminModel } from './models/super_admins.model';
 
 import UserModel from './models/users.model';
 import UserTypeModel from './models/user_types.model';
+import RoomModel from './models/rooms.model';
+import EquipmentModel from './models/equipments.model';
 
 import SuperAdminController from '../controllers/super_admin.controller';
 import log from '../tools/log';
@@ -64,6 +66,12 @@ const initDatabase = async () => {
 
     UserModel.hasMany(ReserveModel, { foreignKey: 'user_id' });
     ReserveModel.belongsTo(UserModel, { foreignKey: 'user_id' });
+
+    RoomModel.hasMany(ReserveModel, { foreignKey: 'room_id' });
+    ReserveModel.belongsTo(RoomModel, { foreignKey: 'room_id' });
+
+    RoomModel.hasMany(EquipmentModel, { foreignKey: 'room_id' });
+    EquipmentModel.belongsTo(RoomModel, { foreignKey: 'room_id' });
 
     if (yn(config.database.dropAndCreateNew)) {
         log("Drop status :", config.database.dropAndCreateNew);
