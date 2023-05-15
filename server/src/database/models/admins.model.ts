@@ -53,7 +53,7 @@ export const initAdminModel = (connection: Sequelize) => {
                 primaryKey: true,
             },
             type_id: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.UUID,
                 allowNull: false,
                 references: {
                     model: AdminTypeModel,
