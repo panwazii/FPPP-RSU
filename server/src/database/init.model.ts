@@ -9,10 +9,13 @@ import ReserveModel, { initReserveModel } from './models/reserve.model';
 import EquipmentModel, { initEquipmentModel } from './models/equipments.model';
 import { initNewsModel } from './models/news.model';
 import { initGlobalEquipmentModel } from './models/global_equipments.model';
-import { initAdminModel } from './models/admins.model';
-import { initSuperAdminModel } from './models/super_admins.model';
+import AdminModel, { initAdminModel } from './models/admins.model';
+import AdminTypeModel, { initAdminTypeModel } from './models/admin_types.model';
 
-import SuperAdminController from '../controllers/super_admin.controller';
+import { initAdminTypeSeed } from 'seeders/admin_types.seed';
+import { initUserTypeSeed } from 'seeders/user_types.seed';
+
+import AdminController from '../controllers/admin.controller';
 import log from '../tools/log';
 
 const logDB = debug('app:db');
@@ -41,6 +44,7 @@ sequelizeConnection.authenticate().then(() => {
 
 const initDatabase = async () => {
     const models = [
+        //User
         initUserTypeModel,
         initUserModel,
 
@@ -49,8 +53,10 @@ const initDatabase = async () => {
         initGlobalEquipmentModel,
         initReserveModel,
         initEquipmentModel,
+
+        //Admin
+        initAdminTypeModel,
         initAdminModel,
-        initSuperAdminModel
     ];
     models.forEach((initFunction) => {
         initFunction(sequelizeConnection);
@@ -68,13 +74,17 @@ const initDatabase = async () => {
     RoomModel.hasMany(EquipmentModel, { foreignKey: 'room_id' });
     EquipmentModel.belongsTo(RoomModel, { foreignKey: 'room_id' });
 
+    AdminTypeModel.hasMany(AdminModel, { foreignKey: 'type_id' });
+    AdminModel.belongsTo(AdminTypeModel, { foreignKey: 'type_id' });
+
     if (yn(config.database.dropAndCreateNew)) {
         log("Drop status :", config.database.dropAndCreateNew);
         log(sequelizeConnection.models);
         await sequelizeConnection.sync({ force: true });
         if (yn(config.database.insertInitData)) {
-            await SuperAdminController.createSuperAdmin();
-            // await initSuperAdminSeeder();
+            await initAdminTypeSeed();
+            await initUserTypeSeed();
+            await AdminController.createSuperAdmin();
         }
     } else {
         await sequelizeConnection.sync({ alter: config.database.syncOption.alter });

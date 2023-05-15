@@ -1,9 +1,11 @@
 import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
+import AdminTypeModel from './admin_types.model';
 
 export interface AdminAttribute {
-    id?: number;
+    id?: string;
+    type_id?: number;
     fname?: string;
     lname?: string;
     email?: string;
@@ -18,7 +20,9 @@ export interface AdminAttribute {
 export interface AdminAttributeCreation extends Optional<AdminAttribute, 'id'> { }
 
 class AdminModel extends Model<AdminAttribute, AdminAttributeCreation> implements AdminAttribute {
-    public id!: number;
+    public id!: string;
+
+    public type_id!: number;
 
     public fname!: string;
 
@@ -43,10 +47,18 @@ export const initAdminModel = (connection: Sequelize) => {
     AdminModel.init(
         {
             id: {
-                type: DataTypes.INTEGER,
-                autoIncrement: true,
+                type: DataTypes.UUID,
+                defaultValue: DataTypes.UUIDV4,
                 allowNull: false,
                 primaryKey: true,
+            },
+            type_id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: AdminTypeModel,
+                    key: 'id',
+                },
             },
             fname: {
                 allowNull: false,

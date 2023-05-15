@@ -7,7 +7,7 @@ const config: any = {
   sandbox: process.env.SANDBOX || false,
   cors: { origin: process.env.CORS_ORIGIN },
   security: {
-    superadminusername: process.env.SUPER_ADMIN_USERNAME,
+    superadminemail: process.env.SUPER_ADMIN_EMAIL,
     superadminpassword: process.env.SUPER_ADMIN_PASSWORD,
     salt: process.env.SEC_SALT,
     loginDuration: process.env.SEC_LOGIN_DURATION,

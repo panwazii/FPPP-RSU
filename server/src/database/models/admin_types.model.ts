@@ -2,30 +2,27 @@ import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
 
-export interface SuperAdminAttribute {
+export interface AdminTypeAttribute {
     id?: number;
-    username?: string;
-    password?: string;
+    name?: string;
     created_at?: Date;
     update_at?: Date;
 }
 
-export interface SuperAdminAttributeCreation extends Optional<SuperAdminAttribute, 'id'> { }
+export interface AdminTypeAttributeCreation extends Optional<AdminTypeAttribute, 'id'> { }
 
-class SuperAdminModel extends Model<SuperAdminAttribute, SuperAdminAttributeCreation> implements SuperAdminAttribute {
+class AdminTypeModel extends Model<AdminTypeAttribute, AdminTypeAttributeCreation> implements AdminTypeAttribute {
     public id!: number;
 
-    public username!: string;
-
-    public password!: string;
+    public name!: string;
 
     public created_at!: Date;
 
     public update_at!: Date;
 }
 
-export const initSuperAdminModel = (connection: Sequelize) => {
-    SuperAdminModel.init(
+export const initAdminTypeModel = (connection: Sequelize) => {
+    AdminTypeModel.init(
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -33,12 +30,7 @@ export const initSuperAdminModel = (connection: Sequelize) => {
                 allowNull: false,
                 primaryKey: true,
             },
-            username: {
-                allowNull: false,
-                unique: true,
-                type: DataTypes.STRING,
-            },
-            password: {
+            name: {
                 allowNull: false,
                 type: DataTypes.STRING,
             },
@@ -56,9 +48,9 @@ export const initSuperAdminModel = (connection: Sequelize) => {
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'super_admins',
+            tableName: 'admin_types',
         },
     );
 };
 
-export default SuperAdminModel;
+export default AdminTypeModel;

@@ -3,7 +3,7 @@ import {
 } from 'sequelize';
 
 export interface NewsAttribute {
-    id?: number;
+    id?: string;
     title?: string;
     details?: string;
     picture?: string;
@@ -17,7 +17,7 @@ export interface NewsAttributeCreation extends Optional<NewsAttribute, 'id'> { }
 
 
 class NewsModel extends Model<NewsAttribute, NewsAttributeCreation> implements NewsAttribute {
-    public id!: number;
+    public id!: string;
 
     public title!: string;
 
@@ -32,7 +32,8 @@ export const initNewsModel = (connection: Sequelize) => {
     NewsModel.init(
         {
             id: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.UUID,
+                defaultValue: DataTypes.UUIDV4,
                 autoIncrement: true,
                 allowNull: false,
                 primaryKey: true,

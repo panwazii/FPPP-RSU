@@ -41,7 +41,7 @@ class UserController {
         return UserModel.findAndCountAll(packet);
     }
 
-    public static async getByUserID(userID: number) {
+    public static async getByUserID(userID: string) {
         return UserModel.findOne({
             where: {
                 id: userID,
@@ -172,7 +172,7 @@ class UserController {
             .catch(() => false);
     }
 
-    public static async resetPassword(userID: number, oldPass: string, newPass: string) {
+    public static async resetPassword(userID: string, oldPass: string, newPass: string) {
         const user = await UserController.getByUserID(userID);
         if (!user) {
             return false;
@@ -183,7 +183,7 @@ class UserController {
             return false;
         }
 
-        return UserController.update(userID, { password: newPass });
+        return UserModel.update({ password: newPass }, { where: { id: userID } });
     }
 }
 
