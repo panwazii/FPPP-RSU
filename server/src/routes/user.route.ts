@@ -80,7 +80,7 @@ userRouter.post('/update/password', authValid, (req, res) => {
         return;
     }
 
-    UserController.resetPassword(Number(user_id), old_pass, new_pass).then((state) => {
+    UserController.resetPassword(user_id, old_pass, new_pass).then((state) => {
         if (state) {
             res.json({ code: 200, state });
         } else {

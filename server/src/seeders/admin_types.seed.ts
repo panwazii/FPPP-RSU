@@ -1,4 +1,4 @@
-import AdminTypeModel, { AdminTypeAttribute } from 'database/models/admin_types.model';
+import AdminTypeModel, { AdminTypeAttribute } from '../database/models/admin_types.model';
 const entries: AdminTypeAttribute[] = [
     {
         id: 1,

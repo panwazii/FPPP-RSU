@@ -3,7 +3,7 @@ import {
 } from 'sequelize';
 
 export interface GlobalEquipmentAttribute {
-    id?: number;
+    id?: string;
     name?: string;
     details?: string;
     price?: number;
@@ -19,7 +19,7 @@ export interface GlobalEquipmentAttributeCreation extends Optional<GlobalEquipme
 
 
 class GlobalEquipmentModel extends Model<GlobalEquipmentAttribute, GlobalEquipmentAttributeCreation> implements GlobalEquipmentAttribute {
-    public id!: number;
+    public id!: string;
 
     public name!: string;
 
@@ -38,10 +38,10 @@ export const initGlobalEquipmentModel = (connection: Sequelize) => {
     GlobalEquipmentModel.init(
         {
             id: {
-                type: DataTypes.INTEGER,
-                autoIncrement: true,
+                type: DataTypes.UUID,
                 allowNull: false,
                 primaryKey: true,
+                defaultValue: DataTypes.UUIDV4,
             },
             name: {
                 allowNull: false,

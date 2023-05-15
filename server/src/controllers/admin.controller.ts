@@ -13,6 +13,8 @@ class AdminController {
         const Packet = {
             email: Email,
             password: HashedPassword,
+            fname: "Super",
+            lname: "Admin",
             type_id: 1
         };
 

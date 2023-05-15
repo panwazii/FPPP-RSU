@@ -1,4 +1,4 @@
-import UserTypeModel, { UserTypeAttribute } from 'database/models/user_types.model';
+import UserTypeModel, { UserTypeAttribute } from '../database/models/user_types.model';
 const entries: UserTypeAttribute[] = [
     {
         id: 1,

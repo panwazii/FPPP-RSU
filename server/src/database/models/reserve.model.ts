@@ -5,7 +5,7 @@ import UserModel from './users.model';
 import RoomModel from './rooms.model';
 
 export interface ReserveAttribute {
-    id?: number;
+    id?: string;
     user_id?: number;
     room_id?: number;
     date_time?: string;
@@ -19,7 +19,7 @@ export interface ReserveAttributeCreation extends Optional<ReserveAttribute, 'id
 
 
 class ReserveModel extends Model<ReserveAttribute, ReserveAttributeCreation> implements ReserveAttribute {
-    public id!: number;
+    public id!: string;
 
     public user_id!: number;
 
@@ -34,13 +34,13 @@ export const initReserveModel = (connection: Sequelize) => {
     ReserveModel.init(
         {
             id: {
-                type: DataTypes.INTEGER,
-                autoIncrement: true,
+                type: DataTypes.UUID,
                 allowNull: false,
                 primaryKey: true,
+                defaultValue: DataTypes.UUIDV4,
             },
             user_id: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.UUID,
                 allowNull: false,
                 references: {
                     model: UserModel,
@@ -48,7 +48,7 @@ export const initReserveModel = (connection: Sequelize) => {
                 },
             },
             room_id: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.UUID,
                 allowNull: false,
                 references: {
                     model: RoomModel,

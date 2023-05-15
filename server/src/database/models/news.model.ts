@@ -34,7 +34,6 @@ export const initNewsModel = (connection: Sequelize) => {
             id: {
                 type: DataTypes.UUID,
                 defaultValue: DataTypes.UUIDV4,
-                autoIncrement: true,
                 allowNull: false,
                 primaryKey: true,
             },

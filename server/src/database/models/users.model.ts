@@ -53,7 +53,7 @@ export const initUserModel = (connection: Sequelize) => {
                 primaryKey: true,
             },
             type_id: {
-                type: DataTypes.UUID,
+                type: DataTypes.INTEGER,
                 allowNull: false,
                 references: {
                     model: UserTypeModel,
@@ -84,13 +84,13 @@ export const initUserModel = (connection: Sequelize) => {
                 type: DataTypes.STRING,
             },
             avatar: {
-                allowNull: false,
+                allowNull: true,
                 type: DataTypes.STRING(500),
             },
             status: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
                 defaultValue: 1,
+                allowNull: false,
             },
             created_at: {
                 allowNull: false,

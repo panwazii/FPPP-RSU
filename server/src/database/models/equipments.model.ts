@@ -4,7 +4,7 @@ import {
 import RoomModel from './rooms.model';
 
 export interface EquipmentAttribute {
-    id?: number;
+    id?: string;
     room_id?: number;
     name?: string;
     details?: string;
@@ -21,7 +21,7 @@ export interface EquipmentAttributeCreation extends Optional<EquipmentAttribute,
 
 
 class EquipmentModel extends Model<EquipmentAttribute, EquipmentAttributeCreation> implements EquipmentAttribute {
-    public id!: number;
+    public id!: string;
 
     public room_id!: number;
 
@@ -42,13 +42,13 @@ export const initEquipmentModel = (connection: Sequelize) => {
     EquipmentModel.init(
         {
             id: {
-                type: DataTypes.INTEGER,
-                autoIncrement: true,
+                type: DataTypes.UUID,
                 allowNull: false,
                 primaryKey: true,
+                defaultValue: DataTypes.UUIDV4,
             },
             room_id: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.UUID,
                 allowNull: false,
                 references: {
                     model: RoomModel,

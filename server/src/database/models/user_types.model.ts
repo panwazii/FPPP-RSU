@@ -40,6 +40,7 @@ export const initUserTypeModel = (connection: Sequelize) => {
             verified: {
                 allowNull: false,
                 type: DataTypes.BOOLEAN,
+                defaultValue: false,
             },
             created_at: {
                 allowNull: false,

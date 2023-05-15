@@ -3,7 +3,7 @@ import {
 } from 'sequelize';
 
 export interface RoomAttribute {
-    id?: number;
+    id?: string;
     name?: string;
     details?: string;
     picture?: string;
@@ -18,7 +18,7 @@ export interface RoomAttributeCreation extends Optional<RoomAttribute, 'id'> { }
 
 
 class RoomModel extends Model<RoomAttribute, RoomAttributeCreation> implements RoomAttribute {
-    public id!: number;
+    public id!: string;
 
     public name!: string;
 
@@ -35,10 +35,10 @@ export const initRoomModel = (connection: Sequelize) => {
     RoomModel.init(
         {
             id: {
-                type: DataTypes.INTEGER,
-                autoIncrement: true,
+                type: DataTypes.UUID,
                 allowNull: false,
                 primaryKey: true,
+                defaultValue: DataTypes.UUIDV4,
             },
             name: {
                 allowNull: false,

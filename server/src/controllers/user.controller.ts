@@ -64,7 +64,7 @@ class UserController {
         });
     }
 
-    public static async destroyUser(userID: number) {
+    public static async destroyUser(userID: string) {
         return UserModel.destroy({
             where: {
                 id: userID,
@@ -72,7 +72,7 @@ class UserController {
         }).then((rowDeleted) => rowDeleted > 0);
     }
 
-    public static async safeDestroyUser(userID: number) {
+    public static async safeDestroyUser(userID: string) {
         return UserModel.update({
             status: -1,
         }, {
