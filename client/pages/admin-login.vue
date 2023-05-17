@@ -5,7 +5,7 @@
     max-height="800"
   >
     <v-spacer></v-spacer>
-    <h1>เข้าสู่ระบบ</h1>
+    <h1>Admin*</h1>
     <v-card-text>
       <v-row>
         <v-col cols="6"></v-col>

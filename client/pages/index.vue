@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-parallax height="750" :src="require('~/assets/index/index-bg.jpg')">
+    <v-parallax height="750" :src="require('~/static/img/index/index-bg.jpg')">
       <div
         class="d-flex flex-column fill-height justify-center align-center text-white"
       >
@@ -11,7 +11,7 @@
       </div>
     </v-parallax>
     <indexCarousel />
-    <v-card elevation="0" max-width="500" class="mx-auto justify-center">
+    <v-card color="transparent" elevation="0" max-width="500" class="mx-auto justify-center">
       <h1 class="text-h4 font-weight-bold mb-4 d-flex justify-center">Room</h1>
       <p class="mb-4 d-flex justify-center text-center">
         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia
@@ -22,8 +22,9 @@
     </v-card>
 
     <indexRoom />
-
-    <indexContact />
+    <div class="mt-15">
+      <indexContact />
+    </div>
   </div>
 </template>
 

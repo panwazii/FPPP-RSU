@@ -1,9 +1,9 @@
 <template>
   <v-app dark>
     <v-main>
-      <v-app-bar fixed app color="grey" elevation="0" hide-on-scroll>
+      <v-app-bar transparent fixed app :color="bg" elevation="3">
         <img
-          src="~/assets/logo/rsu-logo.png"
+          src="~/static/img/logo/rsu-logo.png"
           class="ma-1"
           width="auto"
           height="50"
@@ -32,25 +32,24 @@ export default {
   name: 'DefaultLayout',
   data() {
     return {
-      clipped: false,
-      drawer: false,
+      bg: '#78909C',
       fixed: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/',
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire',
-        },
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js',
+    }
+  },
+  methods: {
+    changeColor() {
+      if (document.documentElement.scrollTop <= 100) {
+        this.bg = '#78909C'
+      } else if (document.documentElement.scrollTop < 100) {
+        this.bg = 'transparent'
+      } else {
+        this.bg = 'transparent'
+      }
+    },
+  },
+  mounted() {
+    window.onscroll = () => {
+      this.changeColor()
     }
   },
 }
