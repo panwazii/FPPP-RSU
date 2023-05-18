@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import AdminModel from '../database/models/admins.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
+import { verify } from 'crypto';
 
 class AdminController {
     public static async createSuperAdmin() {
@@ -31,6 +32,7 @@ class AdminController {
             where: {
                 id: adminId,
             },
+            raw: true
         });
     }
 
@@ -39,9 +41,28 @@ class AdminController {
             where: {
                 email: email,
             },
+            raw: true
         });
     }
 
+    public static verifyJWT(token: string) {
+        try {
+            const Verify = jwt.verify(token, config.security.salt)
+            if (Verify) {
+                return { verify: true, result: Verify }
+            }
+        } catch (err) {
+            return { verify: false, result: null };
+        }
+    }
+
+    public static async authCookie(token: string) {
+        const Decode = AdminController.verifyJWT(token);
+        if (Decode?.verify) {
+            return Decode.result;
+        }
+        return null;
+    }
 
     public static async auth(email: string, password: string) {
         const data = await AdminController.getByEmail(email);
