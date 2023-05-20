@@ -13,7 +13,7 @@
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-text-field
               required
-              @keyup.enter="getlogin()"
+              @keyup.enter="login()"
               label="อีเมล"
               name="Email"
               :rules="emailRules"
@@ -26,7 +26,7 @@
             </v-text-field>
             <v-text-field
               required
-              @keyup.enter="getlogin()"
+              @keyup.enter="login()"
               label="รหัสผ่าน"
               name="password"
               prepend-inner-icon="mdi-lock"
@@ -39,7 +39,7 @@
             </v-text-field>
             <v-divider></v-divider>
             <v-btn
-              @click="getlogin()"
+              @click="login()"
               class="rounded-1 mt-10"
               color="secondary"
               large
@@ -49,7 +49,7 @@
             </v-btn>
             <h3 class="mt-2">หรือ</h3>
             <v-btn
-              @click="getlogin()"
+              @click="login()"
               class="rounded-1 mt-2"
               color="#78909C"
               large
@@ -96,27 +96,20 @@ export default {
     }
   },
   methods: {
-    getlogin() {
-      const valid = this.$refs.form.validate()
-      if (valid) {
-        this.login(this.email, this.password)
-      }
-    },
-    async login(email, password) {
+    async login() {
       try {
-        this.loading = true
-        let response = await this.$auth.loginWith('admin', {
-          data: {
-            email,
-            password,
-          },
-        })
-        if (response.status === 200) {
-          this.loading = false
-          this.$router.push('/admin/home')
-        }
+        const email = this.email
+        const password = this.password
+        this.loadingDialog
+        await this.$store
+          .dispatch('api/auth/adminLogin', { email, password })
+          .then((res) => {
+            console.log('this is res', res)
+            this.$store.dispatch('setToken', res.token)
+            this.$store.dispatch('setIsAdmin', res.admin)
+            // this.$store.dispatch('fetchUser')
+          })
       } catch (error) {
-        this.loading = false
         console.log(error)
       }
     },
