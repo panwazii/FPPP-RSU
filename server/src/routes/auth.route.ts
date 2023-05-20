@@ -27,7 +27,7 @@ authRouter.post('/admin/login', async (req, res) => {
           }, config.security.salt, {
             expiresIn: config.security.loginDuration,
           });
-          res.json({ code: 200, Token });
+          res.json({ code: 200, token: Token, admin: true });
         } else {
           res.status(401).json({ code: 400, desc_code: 'invalid-token' });
         }
@@ -51,6 +51,7 @@ authRouter.post('/admin/login', async (req, res) => {
       if (Result.code === 200) {
         Result.token = jwt.sign({
           id: Result.data.id,
+          admin: true,
           type_id: Result.data.type_id,
           email: Result.data.email,
           fname: Result.data.fname,

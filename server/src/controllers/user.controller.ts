@@ -45,9 +45,6 @@ class UserController {
         return UserModel.findOne({
             where: {
                 id: userID,
-                status: {
-                    [Op.ne]: -1,
-                },
             },
         });
     }
@@ -84,17 +81,19 @@ class UserController {
 
     public static verifyJWT(token: string) {
         try {
-            return { verify: true, result: <any>jwt.verify(token, config.security.salt) };
+            const Verify = jwt.verify(token, config.security.salt)
+            if (Verify) {
+                return { verify: true, result: Verify }
+            }
         } catch (err) {
             return { verify: false, result: null };
         }
     }
 
     public static async authCookie(token: string) {
-        const decode = UserController.verifyJWT(token);
-        // eslint-disable-next-line max-len
-        if (decode.verify && decode.result && decode.result?.id && !Number.isNaN(Number(decode.result?.id))) {
-            return Number(decode.result.id);
+        const Decode = UserController.verifyJWT(token);
+        if (Decode?.verify) {
+            return Decode.result;
         }
         return null;
     }
@@ -110,6 +109,7 @@ class UserController {
             return {
                 code: 200,
                 data: userInfo,
+                admin: false
             };
         }
 

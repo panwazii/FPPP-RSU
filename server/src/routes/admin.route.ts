@@ -1,16 +1,18 @@
 import express from 'express';
 import { createErrCodeJSON } from '../tools/lib';
 import log from '../tools/log';
+import AdminController from '../controllers/admin.controller';
 import UserController from '../controllers/user.controller';
-import { authValid } from '../middleware/user.middleware';
+import { authValid } from '../middleware/admin.middleware';
 
-const userRouter: express.Router = express.Router();
-const errorCode = createErrCodeJSON('USER');
+const adminRouter: express.Router = express.Router();
+const errorCode = createErrCodeJSON('ADMIN');
 
-userRouter.get('/getUserInfo', authValid, async (req, res) => {
+adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
     try {
-        const UserId = req.body.credentials.id;
-        UserController.getByUserID(UserId).then((user) => {
+        const AdminId = req.body.credentials.id;
+
+        AdminController.getByUserID(AdminId).then((user) => {
             if (user) {
                 res.status(200).json({
                     code: 200, admin: {
@@ -36,37 +38,8 @@ userRouter.get('/getUserInfo', authValid, async (req, res) => {
 });
 
 
-userRouter.post('/register', async (req, res) => {
-    if (!req.body) {
-        res.json(errorCode('RES', 1));
-        return;
-    }
 
-    try {
-        const {
-            email,
-            username,
-        } = req.body;
-        const hasMail = await UserController.getByEmail(email);
-        if (hasMail) {
-            res.json({
-                code: 400,
-                err_message: 'Email are already in used.',
-            });
-            return;
-        }
-
-        UserController.register(req.body).then((state) => {
-            res.json({ code: 200, state });
-        });
-        log('Successful');
-    } catch (e) {
-        log(e);
-        res.json(errorCode('RES', 3));
-    }
-});
-
-userRouter.post('/update', authValid, (req, res) => {
+adminRouter.post('/update', authValid, (req, res) => {
     if (!req.body) {
         res.json(errorCode('update', 0));
         return;
@@ -87,7 +60,7 @@ userRouter.post('/update', authValid, (req, res) => {
     });
 });
 
-userRouter.post('/update/password', authValid, (req, res) => {
+adminRouter.post('/update/password', authValid, (req, res) => {
     if (!req.body) {
         res.json(errorCode('pass', 0));
         return;
@@ -107,7 +80,7 @@ userRouter.post('/update/password', authValid, (req, res) => {
     });
 });
 
-// userRouter.post('/destroy', authValid, adminOnly, (req, res) => {
+// adminRouter.post('/destroy', authValid, adminOnly, (req, res) => {
 //     if (!req.body) {
 //         res.json(errorCode('destroy', 0));
 //         return;
@@ -127,4 +100,8 @@ userRouter.post('/update/password', authValid, (req, res) => {
 //     });
 // });
 
-export default userRouter;
+export default adminRouter;
+
+
+
+

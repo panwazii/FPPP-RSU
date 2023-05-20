@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import initDatabase from './database/init.model';
 import config from './config/global.config';
 import authRouter from './routes/auth.route';
+import adminRouter from './routes/admin.route';
 import userRouter from './routes/user.route';
 import log from './tools/log';
 
@@ -17,9 +18,10 @@ initDatabase().then(() => {
     const router: express.Router = express.Router();
 
     router.use('/api/auth', authRouter);
+    router.use('/api/admin', adminRouter);
     router.use('/api/user', userRouter);
     router.get('/', ((req, res) => {
-        res.json('You shall not pass!');
+        res.json('Hello from server!!!');
     }));
 
     app.use(express.json());

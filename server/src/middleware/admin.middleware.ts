@@ -11,8 +11,8 @@ export const authValid = (req: Request, res: Response, next: NextFunction) => {
         }
 
         if (Token !== 'undefined') {
-            const User = jwt.verify(Token!, config.security.salt);
-            req.body.credentials = User;
+            const Admin = jwt.verify(Token!, config.security.salt);
+            req.body.credentials = Admin;
             next();
         }
     } catch (error) {

@@ -1,11 +1,9 @@
 import Sequelize, { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
-import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import AdminModel from '../database/models/admins.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
-import { verify } from 'crypto';
 
 class AdminController {
     public static async createSuperAdmin() {
@@ -75,6 +73,7 @@ class AdminController {
             return {
                 code: 200,
                 data: userInfo,
+                admin: true
             };
         }
 
