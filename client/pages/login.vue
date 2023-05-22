@@ -49,7 +49,7 @@
             </v-btn>
             <h3 class="mt-2">หรือ</h3>
             <v-btn
-              @click="getlogin()"
+              to="/register"
               class="rounded-1 mt-2"
               color="#78909C"
               large
