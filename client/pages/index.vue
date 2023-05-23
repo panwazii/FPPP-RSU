@@ -11,7 +11,12 @@
       </div>
     </v-parallax>
     <indexCarousel />
-    <v-card color="transparent" elevation="0" max-width="500" class="mx-auto justify-center">
+    <v-card
+      color="transparent"
+      elevation="0"
+      max-width="500"
+      class="mx-auto justify-center"
+    >
       <h1 class="text-h4 font-weight-bold mb-4 d-flex justify-center">Room</h1>
       <p class="mb-4 d-flex justify-center text-center">
         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia
