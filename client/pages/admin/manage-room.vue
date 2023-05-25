@@ -29,6 +29,13 @@
 
 <script>
 export default {
+  layout: 'admin',
+  middleware: 'admin',
+  head() {
+    return {
+      title: 'manage room',
+    }
+  },
   data() {
     return {
       valid: true,

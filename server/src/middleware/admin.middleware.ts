@@ -13,6 +13,7 @@ export const authValid = (req: Request, res: Response, next: NextFunction) => {
         if (Token !== 'undefined') {
             const Admin = jwt.verify(Token!, config.security.salt);
             req.body.credentials = Admin;
+            log("this is admin middleware credentials",req.body.credentials)
             next();
         }
     } catch (error) {

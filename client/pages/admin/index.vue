@@ -1,3 +1,19 @@
 <template>
-  <div><adminManageUser /></div>
+  <v-container>
+    <div><adminManageUser /></div>
+  </v-container>
 </template>
+<script>
+export default {
+  layout: 'admin',
+  middleware: 'admin',
+  head() {
+    return {
+      title: 'admin home',
+    }
+  },
+  data() {
+    return {}
+  },
+}
+</script>

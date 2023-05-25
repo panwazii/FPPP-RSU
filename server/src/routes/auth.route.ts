@@ -4,7 +4,6 @@ import { createErrCodeJSON } from '../tools/lib';
 import UserController from '../controllers/user.controller';
 import AdminController from '../controllers/admin.controller';
 import config from '../config/global.config';
-import { authValid } from '../middleware/user.middleware';
 import { log } from '../tools/log';
 
 const authRouter: express.Router = express.Router();
@@ -70,6 +69,31 @@ authRouter.post('/admin/login', async (req, res) => {
   }
 });
 
+// authRouter.get('/admin/verify', async (req, res) => {
+//   try {
+//     const Token = req.query.token;
+//     log("res token", Token)
+
+//     if (Token === null) {
+//       res.status(403).json({ code: 403, desc: 'unauthorized' });
+//     }
+
+//     jwt.verify(Token as string, config.security.salt, (error: any, decoded: any) => {
+//       log("verify", decoded);
+//       if (decoded.admin === true && decoded.type_id === 1) {
+//         res.status(200).json({ type: "super-admin" });
+//       }
+//       else if (decoded.admin === true && decoded.type_id === 2) {
+//         res.status(200).json({ type: "admin" });
+//       }
+//     });
+
+//   } catch (error) {
+//     log("verify", error)
+//     res.status(401).json(error);
+//   }
+// });
+
 authRouter.post('/user/login', async (req, res) => {
   if (!req.body) {
     res.status(401).json(errorCode('LOGIN', 0));
@@ -122,21 +146,5 @@ authRouter.post('/logout', ((req, res) => {
   res.json({ code: 200 });
 }));
 
-authRouter.get('/user', authValid, (req, res) => {
-  const payload = res.locals.user;
-  const { user_id } = payload;
-  if (!user_id) {
-    res.json(errorCode('USER', 1));
-    return;
-  }
-
-  UserController.getByUserID(user_id).then((user) => {
-    if (user) {
-      res.json({ code: 200, user });
-    } else {
-      res.json(errorCode('USER', 2));
-    }
-  });
-});
 
 export default authRouter;

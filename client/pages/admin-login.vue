@@ -72,7 +72,7 @@
 <script>
 export default {
   layout: 'default',
-  // middleware: 'login',
+  middleware: 'login',
   head() {
     return {
       title: 'Admin Login',
@@ -107,7 +107,8 @@ export default {
             console.log('this is res', res)
             this.$store.dispatch('setToken', res.token)
             this.$store.dispatch('setIsAdmin', res.admin)
-            // this.$store.dispatch('fetchUser')
+            this.$store.dispatch('fetchAdmin')
+            this.$router.push('/admin')
           })
       } catch (error) {
         console.log(error)

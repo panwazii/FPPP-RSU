@@ -29,6 +29,13 @@
 
 <script>
 export default {
+  layout: 'admin',
+  middleware: 'admin',
+  head() {
+    return {
+      title: 'manage global equipment',
+    }
+  },
   data() {
     return {
       valid: true,

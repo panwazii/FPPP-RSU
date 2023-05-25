@@ -29,6 +29,13 @@
 
 <script>
 export default {
+  layout: 'admin',
+  middleware: 'super-admin',
+  head() {
+    return {
+      title: 'manage admin',
+    }
+  },
   data() {
     return {
       valid: true,

@@ -13,10 +13,10 @@ export const getters = {
     //         return false
     //     }
     // },
-    isAuth(state) {
-        console.log('auth :', state.token);
-        return (typeof state.token === "string") && !!state.user
-    },
+    // isAuth(state) {
+    //     console.log('auth :', state.token);
+    //     return (typeof state.token === "string") && !!state.user
+    // },
     getUser(state) {
         console.log('user :', state.user);
         return state.user
@@ -30,26 +30,26 @@ export const getters = {
 export const mutations = {
     setToken(state, token) {
         state.token = token
-        console.log('setToken muta:', token);
+        console.log('setToken muta:', state.token);
     },
     setIsAdmin(state, isAdmin) {
         state.isAdmin = isAdmin
-        console.log('setIsAdmin muta:', isAdmin);
+        console.log('setIsAdmin muta:', state.isAdmin);
     },
     setUser(state, user) {
-        console.log('setUser ', user);
         state.user = user
+        console.log('setUser ', state.user);
     },
     setAdmin(state, admin) {
-        console.log('setUser ', admin);
         state.admin = admin
+        console.log('setAdmin ', state.admin);
     }
 }
 
 export const actions = {
     async nuxtServerInit({ dispatch }) {
-        const token = this.$cookies.get('token');
-        const admin = this.$cookies.get('isAdmin');
+        const token = await this.$cookies.get('token');
+        const admin = await this.$cookies.get('isAdmin');
         await dispatch('setToken', token);
         if (typeof token === "string") {
             if (admin === true) {
@@ -60,15 +60,13 @@ export const actions = {
             }
 
         }
-        console.log('servinit token :', token);
-        console.log('servinit admin :', admin);
     },
 
-    setToken({ commit }, token) {
+    async setToken({ commit }, token) {
         if (typeof token === "string") {
             commit('setToken', token)
-            this.$axios.setHeader("authorization", token)
-            this.$cookies.set('token', token, {
+            await this.$axios.setHeader("authorization", token)
+            await this.$cookies.set('token', token, {
                 path: '/',
                 maxAge: 60 * 60 * 24 * 7
             })
@@ -77,11 +75,11 @@ export const actions = {
         }
     },
 
-    setIsAdmin({ commit }, isAdmin) {
+    async setIsAdmin({ commit }, isAdmin) {
         if (isAdmin === true) {
             commit('setIsAdmin', isAdmin)
-            this.$axios.setHeader("admin", isAdmin)
-            this.$cookies.set('isAdmin', isAdmin, {
+            // this.$axios.setHeader("admin", isAdmin)
+            await this.$cookies.set('isAdmin', isAdmin, {
                 path: '/',
                 maxAge: 60 * 60 * 24 * 7
             })
@@ -109,16 +107,28 @@ export const actions = {
     async fetchAdmin({ commit }) {
         let data = await this.$axios
             .get('/api/admin/getAdminInfo')
-            .then((res) => {
+            .then(async (res) => {
+                console.log("this is fech admin", res);
                 if (!res.data.admin) {
-                    this.$cookies.remove('token')
+                    await this.$cookies.remove('token')
                     redirect('/')
                 }
                 else {
                     var Admin = res.data.admin
-                    commit('setUser', Admin)
+                    await commit('setAdmin', Admin)
+                    await commit('setIsAdmin', true);
                 }
             }).catch((error) => { console.log(error); })
 
     },
+    async logout({ commit, dispatch }) {
+        console.log('[STORE ACTIONS] - logout');
+        await this.$cookies.remove('token');
+        await this.$cookies.remove('isAdmin');
+        await commit('setToken', null);
+        await commit('setAdmin', null);
+        await commit('setUser', null);
+        await commit('setIsAdmin', null);
+    }
 }
+
