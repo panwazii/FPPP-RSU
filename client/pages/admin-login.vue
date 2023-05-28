@@ -100,14 +100,13 @@ export default {
       try {
         const email = this.email
         const password = this.password
-        this.loadingDialog
         await this.$store
           .dispatch('api/auth/adminLogin', { email, password })
           .then((res) => {
             console.log('this is res', res)
+            this.$store.dispatch('setAdmin', res.data)
             this.$store.dispatch('setToken', res.token)
             this.$store.dispatch('setIsAdmin', res.admin)
-            this.$store.dispatch('fetchAdmin')
             this.$router.push('/admin')
           })
       } catch (error) {

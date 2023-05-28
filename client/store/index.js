@@ -5,28 +5,6 @@ export const state = () => ({
     admin: null,
 })
 
-export const getters = {
-    // isAdmin(state, getters) {
-    //     if (getters.isAuth && getters.getUser) {
-    //         return getters.getUser.role_id === 2
-    //     } else {
-    //         return false
-    //     }
-    // },
-    // isAuth(state) {
-    //     console.log('auth :', state.token);
-    //     return (typeof state.token === "string") && !!state.user
-    // },
-    getUser(state) {
-        console.log('user :', state.user);
-        return state.user
-    },
-    getAdmin(state) {
-        console.log('admin :', state.admin);
-        return state.admin
-    }
-}
-
 export const mutations = {
     setToken(state, token) {
         state.token = token
@@ -48,17 +26,23 @@ export const mutations = {
 
 export const actions = {
     async nuxtServerInit({ dispatch }) {
-        const token = await this.$cookies.get('token');
-        const admin = await this.$cookies.get('isAdmin');
-        await dispatch('setToken', token);
-        if (typeof token === "string") {
-            if (admin === true) {
-                await dispatch('fetchAdmin');
-            }
-            else if (admin === false) {
-                await dispatch('fetchUser');
-            }
+        try {
+            const token = await this.$cookies.get('token');
+            const admin = await this.$cookies.get('isAdmin');
+            await dispatch('setToken', token);
+            if (typeof token === "string") {
+                if (admin === true) {
+                    console.log("admin");
+                    return await dispatch('fetchAdmin');
+                }
+                else if (admin === false) {
+                    console.log("user");
+                    return await dispatch('fetchUser');
+                }
 
+            }
+        } catch (error) {
+            await dispatch('logout')
         }
     },
 
@@ -78,7 +62,6 @@ export const actions = {
     async setIsAdmin({ commit }, isAdmin) {
         if (isAdmin === true) {
             commit('setIsAdmin', isAdmin)
-            // this.$axios.setHeader("admin", isAdmin)
             await this.$cookies.set('isAdmin', isAdmin, {
                 path: '/',
                 maxAge: 60 * 60 * 24 * 7
@@ -86,6 +69,10 @@ export const actions = {
             console.log('setIsAdmin act:', isAdmin);
 
         }
+    },
+
+    async setAdmin({ commit }, admin) {
+        commit('setAdmin', admin)
     },
 
     async fetchUser({ commit }) {
@@ -104,22 +91,19 @@ export const actions = {
         console.log('fetchUser ', data);
 
     },
-    async fetchAdmin({ commit }) {
-        let data = await this.$axios
-            .get('/api/admin/getAdminInfo')
-            .then(async (res) => {
-                console.log("this is fech admin", res);
-                if (!res.data.admin) {
-                    await this.$cookies.remove('token')
-                    redirect('/')
-                }
-                else {
-                    var Admin = res.data.admin
-                    await commit('setAdmin', Admin)
-                    await commit('setIsAdmin', true);
-                }
-            }).catch((error) => { console.log(error); })
-
+    async fetchAdmin({ commit, dispatch }) {
+        let Response = await this.$axios.get('/api/admin/getAdminInfo')
+        console.log("this is fech admin", Response.data);
+        if (!Response.data.admin) {
+            await dispatch('logout')
+            await this.$cookies.remove('token')
+            redirect('/')
+        }
+        else {
+            var Admin = Response.data.admin
+            await commit('setAdmin', Admin)
+            await commit('setIsAdmin', true);
+        }
     },
     async logout({ commit, dispatch }) {
         console.log('[STORE ACTIONS] - logout');
@@ -132,3 +116,13 @@ export const actions = {
     }
 }
 
+export const getters = {
+    getUser(state) {
+        console.log('user :', state.user);
+        return state.user
+    },
+    getAdmin(state) {
+        console.log('admin :', state.admin);
+        return state.admin
+    }
+}
