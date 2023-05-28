@@ -1,15 +1,19 @@
 export default async function ({ store, $cookies, redirect }) {
-    // try {
-    //     const Token = await $cookies.get('token');
-    //     console.log("this is store super-admin",store.state);
-    //     if (!(Token && store.state.admin.status === 1 && store.state.admin.type_id === 1)) {
-    //         store.dispatch('logout')
-    //         return redirect('/admin-login')
-    //     }
-    // } catch (error) {
-    //     console.log(error)
-    //     store.dispatch('logout')
-    //     return redirect('/admin-login')
-    // }
+    try {
+        const Token = await $cookies.get('token')
+        const AdminStatus = await store.state.admin.status
+        const AdminVerify = await store.dispatch('api/auth/adminVerify', { params: { token: Token } })
+        console.log(AdminVerify);
+        if (!(Token && AdminStatus === 1)) {
+            store.dispatch('logout')
+            return redirect('/admin-login')
+        }
+        if (!(AdminVerify.type === "super-admin")) {
+            return redirect('/admin')
+        }
+    } catch (error) {
+        store.dispatch('logout')
+        return redirect('/admin-login')
+    }
 
 }
