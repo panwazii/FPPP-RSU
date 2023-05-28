@@ -69,30 +69,31 @@ authRouter.post('/admin/login', async (req, res) => {
   }
 });
 
-// authRouter.get('/admin/verify', async (req, res) => {
-//   try {
-//     const Token = req.query.token;
-//     log("res token", Token)
+authRouter.get('/admin/verify', async (req, res) => {
+  try {
+    const Token = req.query.token;
+    log("res token", Token)
 
-//     if (Token === null) {
-//       res.status(403).json({ code: 403, desc: 'unauthorized' });
-//     }
+    if (Token === null) {
+      res.status(403).json({ code: 403, desc: 'unauthorized' });
+    }
 
-//     jwt.verify(Token as string, config.security.salt, (error: any, decoded: any) => {
-//       log("verify", decoded);
-//       if (decoded.admin === true && decoded.type_id === 1) {
-//         res.status(200).json({ type: "super-admin" });
-//       }
-//       else if (decoded.admin === true && decoded.type_id === 2) {
-//         res.status(200).json({ type: "admin" });
-//       }
-//     });
+    jwt.verify(Token as string, config.security.salt, async (error: any, decoded: any) => {
+      const AdminId = decoded.id
+      const Data = await AdminController.getByUserID(AdminId)
+      if (Data!.type_id === 1) {
+        return res.status(200).json({ type: "super-admin" });
+      }
+      else if (Data!.type_id === 2) {
+        return res.status(200).json({ type: "admin" });
+      }
+    });
 
-//   } catch (error) {
-//     log("verify", error)
-//     res.status(401).json(error);
-//   }
-// });
+  } catch (error) {
+    log("verify", error)
+    res.status(401).json(error);
+  }
+});
 
 authRouter.post('/user/login', async (req, res) => {
   if (!req.body) {
