@@ -5,7 +5,7 @@ import { Storage } from '@google-cloud/storage';
 import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
 import { createErrCodeJSON } from '../tools/lib';
-import { corsAllow } from '../middleware/user.middleware';
+// import { corsAllow } from '../middleware/user.middleware';
 import config from '../config/global.config';
 import log from '../tools/log';
 
@@ -73,6 +73,6 @@ utilRouter.post('/upload/image', multerUpload.single('image'), async (req, res) 
     }
 });
 
-utilRouter.use('/static', corsAllow, express.static(path.join(rootDIR, 'static')));
+// utilRouter.use('/static', corsAllow, express.static(path.join(rootDIR, 'static')));
 
 export default utilRouter;

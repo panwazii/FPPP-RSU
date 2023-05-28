@@ -33,7 +33,6 @@ adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
             }
         });
     } catch (error) {
-        log("this is error from admin info", error)
         res.status(401).json(error);
     }
 });
