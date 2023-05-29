@@ -9,6 +9,7 @@
       :search="search"
     >
       <template v-slot:top>
+        <AdminAddAdmin />
         <v-toolbar flat>
           <v-icon class="mr-2" large>mdi-note-multiple</v-icon>
           <v-toolbar-title> แก้ไขแอดมิน</v-toolbar-title>

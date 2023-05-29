@@ -9,6 +9,7 @@
       :search="search"
     >
       <template v-slot:top>
+        <AdminAddUser />
         <v-toolbar flat>
           <v-icon class="mr-2" large>mdi-note-multiple</v-icon>
           <v-toolbar-title> จัดการผู้ใช้งาน</v-toolbar-title>
