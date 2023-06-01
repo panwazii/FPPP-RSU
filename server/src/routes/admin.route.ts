@@ -2,6 +2,8 @@ import express from 'express';
 import { createErrCodeJSON } from '../tools/lib';
 import log from '../tools/log';
 import AdminController from '../controllers/admin.controller';
+import NewsController from '../controllers/news.controller';
+import RoomController from '../controllers/room.controller';
 import UserController from '../controllers/user.controller';
 import { authValid } from '../middleware/admin.middleware';
 
@@ -37,6 +39,45 @@ adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
     }
 });
 
+adminRouter.post('/createNews',authValid, (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+    
+        NewsController.createNews(req.body).then((state) => {
+            if (state) {
+                res.json({ code: 200, state });
+            } else {
+                res.json(errorCode('CREATE', 2));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+    
+});
+
+adminRouter.post('/createRoom',authValid, (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+    
+        RoomController.createRoom(req.body).then((state) => {
+            if (state) {
+                res.json({ code: 200, state });
+            } else {
+                res.json(errorCode('CREATE', 2));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+    
+});
 
 
 adminRouter.post('/update', authValid, (req, res) => {
@@ -80,6 +121,59 @@ adminRouter.post('/update/password', authValid, (req, res) => {
     });
 });
 
+adminRouter.post('/updateNews',authValid, (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('update', 0));
+            return;
+        }
+    
+        const Data  = req.body;
+        if (!Data) {
+            res.json(errorCode('update', 1));
+            return;
+        }
+    
+        NewsController.update(Data).then((result) => {
+            if (result) {
+                res.json({ code: 200, result });
+            } else {
+                res.json(errorCode('UPDATE', 2));
+            }
+        });
+    } catch (error) {
+        log(error)
+        res.status(401).json(error);
+    }
+    
+});
+
+adminRouter.post('/updateRoom',authValid, (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('update', 0));
+            return;
+        }
+    
+        const Data  = req.body;
+        if (!Data) {
+            res.json(errorCode('update', 1));
+            return;
+        }
+    
+        RoomController.update(Data).then((result) => {
+            if (result) {
+                res.json({ code: 200, result });
+            } else {
+                res.json(errorCode('UPDATE', 2));
+            }
+        });
+    } catch (error) {
+        log(error)
+        res.status(401).json(error);
+    }
+    
+});
 // adminRouter.post('/destroy', authValid, adminOnly, (req, res) => {
 //     if (!req.body) {
 //         res.json(errorCode('destroy', 0));

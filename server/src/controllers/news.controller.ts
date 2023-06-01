@@ -1,11 +1,11 @@
 import Sequelize, { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import NewsModel from '../database/models/news.model';
+import NewsModel,{NewsAttribute} from '../database/models/news.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
-class AdminController {
+class NewsController {
     // public static async createSuperAdmin() {
     //     const Email = config.security.superadminemail
     //     const HashedPassword = await bcrypt.hash(config.security.superadminpassword, 12);
@@ -34,6 +34,37 @@ class AdminController {
         });
     }
 
+    public static async createNews(data: any) {
+ 
+        const packet: NewsAttribute = {
+            title: data.title,
+            details: data.details,
+            picture: data.picture,
+            available_status: true,
+        };
+
+        return NewsModel.create(packet)
+            .then(() => true)
+            .catch((e) => {
+                log(e);
+                return false;
+            });
+    }
+
+    public static async update(data: any) {
+
+        return NewsModel.update({
+            title: data.title,
+            details: data.details,
+            picture: data.picture,
+        }, {
+            where: {
+                id: data.id,
+            },
+        }).then(() => true)
+            .catch(() => false);
+    }
+
     public static verifyJWT(token: string) {
         try {
             const Verify = jwt.verify(token, config.security.salt)
@@ -43,14 +74,6 @@ class AdminController {
         } catch (err) {
             return { verify: false, result: null };
         }
-    }
-
-    public static async authCookie(token: string) {
-        const Decode = AdminController.verifyJWT(token);
-        if (Decode?.verify) {
-            return Decode.result;
-        }
-        return null;
     }
 
     // public static async auth(email: string, password: string) {
@@ -72,4 +95,4 @@ class AdminController {
     // }
 }
 
-export default AdminController;
+export default NewsController;
