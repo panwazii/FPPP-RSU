@@ -3,7 +3,7 @@ export default async function ({ store, $cookies, redirect }) {
         const Token = await $cookies.get('token');
         const AdminStatus = await store.state.admin.status
         if (Token && AdminStatus === 1) {
-            return redirect('/admin')
+            return redirect('/admin/home')
         }
     } catch (error) {
         console.log("login middleware", error)
