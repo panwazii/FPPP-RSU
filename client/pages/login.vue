@@ -65,6 +65,11 @@
           <a href="">ลืมรหัสผ่าน ?</a>
         </v-col>
       </v-row>
+      <v-row class="text-center">
+        <v-col>
+          <a href="/admin-login">admin only</a>
+        </v-col>
+      </v-row>
     </v-card-text>
   </v-card>
 </template>
