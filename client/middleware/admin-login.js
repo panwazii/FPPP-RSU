@@ -6,9 +6,7 @@ export default async function ({ store, $cookies, redirect }) {
             return redirect('/admin/home')
         }
     } catch (error) {
-        console.log("login middleware", error)
-        store.dispatch('logout')
-        return redirect('/admin-login')
+        // console.log("admin login middleware", error)
     }
 
 }
