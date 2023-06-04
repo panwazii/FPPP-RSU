@@ -64,5 +64,8 @@ export default {
       ],
     }
   },
+  mounted() {
+    this.$store.dispatch('setPathName',"manage admin")
+  },
 }
 </script>

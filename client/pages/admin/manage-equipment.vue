@@ -63,5 +63,8 @@ export default {
       ],
     }
   },
+  mounted() {
+    this.$store.dispatch('setPathName',"manage equipment")
+  },
 }
 </script>

@@ -64,5 +64,8 @@ export default {
       ],
     }
   },
+  mounted() {
+    this.$store.commit('setPathName',"manage user")
+  },
 }
 </script>

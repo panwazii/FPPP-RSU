@@ -1,19 +1,100 @@
 <template>
   <v-app dark>
     <v-main>
+      <ModalConfirmLogout
+        :open="logout_modal"
+        :method="logout"
+        message="are you sure about that son ?"
+        :confirmDialog.sync="logout_modal"
+      />
+      <v-navigation-drawer
+        v-model="drawer"
+        :mini-variant="miniVariant"
+        :clipped="clipped"
+        fixed
+        app
+      >
+        <v-list class="mt-0 pt-0">
+          <div>
+            <v-img
+              class="mx-auto justify-center mb-2"
+              width="100px"
+              height="130px"
+              :src="require('~/static/img/logo/rsu-logo.png')"
+            ></v-img>
+          </div>
+          <!-- <div class="mt-0 pt-0">
+            <v-img
+              :src="require('../assets/biofarm-bg.jpg')"
+              height="130px"
+              dark
+            ></v-img>
+          </div> -->
+          <v-divider></v-divider>
+          <v-list-item class="mt-2">
+            <v-icon class="mr-2">mdi-shield-lock</v-icon>
+            <h4>
+              {{ $store.getters.getAdmin.fname }}
+              {{ $store.getters.getAdmin.lname }}
+            </h4>
+          </v-list-item>
+        </v-list>
+        <v-divider></v-divider>
+        <v-list nav>
+          <v-list-item-group class="mb-1">
+            <div v-for="menus in menu" :key="menus.id" :value="menu">
+              <v-list-item :to="menus.path">
+                <v-list-item-icon>
+                  <v-icon>{{ menus.icon }} </v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title class="ml-2">
+                    {{ menus.name }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </div>
+          </v-list-item-group>
+        </v-list>
+        <div v-if="$store.getters.getAdmin.type_id === 1">
+          <v-list nav>
+            <v-list-item-group class="mb-1">
+              <div
+                v-for="super_admin_menus in super_admin_menu"
+                :key="super_admin_menus.id"
+                :value="menu"
+              >
+                <v-list-item :to="super_admin_menus.path">
+                  <v-list-item-icon>
+                    <v-icon>{{ super_admin_menus.icon }} </v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title class="ml-2">
+                      {{ super_admin_menus.name }}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </div>
+            </v-list-item-group>
+          </v-list>
+        </div>
+      </v-navigation-drawer>
       <v-app-bar transparent fixed app :color="bg" elevation="3">
-        <img
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+        <!-- <img
           src="~/static/img/logo/rsu-logo.png"
           class="ma-1"
           width="auto"
           height="50"
-        />
+        /> -->
         <h3>FPPP</h3>
+        <v-divider class="mx-4" inset vertical></v-divider>
+        <v-toolbar-title> {{ navPathName }}</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn rounded text to="/"> <h4>Home/หน้าหลัก</h4></v-btn>
-        <v-btn rounded text to="/room-selection"> <h4>Room/ห้องแลป</h4></v-btn>
-        <v-btn rounded text><h4>Contact/ติดต่อ</h4></v-btn>
-        <v-btn rounded depressed to="/login"><h4>Login</h4></v-btn>
+        <v-btn text rounded><v-icon>mdi-cog</v-icon></v-btn>
+        <v-btn @click="logout_modal = true" text rounded
+          ><v-icon>mdi-logout-variant</v-icon></v-btn
+        >
       </v-app-bar>
       <Nuxt />
     </v-main>
@@ -34,23 +115,49 @@ export default {
     return {
       bg: '#78909C',
       fixed: false,
+      drawer: false,
+      miniVariant: false,
+      clipped: false,
+      logout_modal: false,
+      menu: [
+        { id: 1, name: 'home', icon: 'mdi-shield-lock', path: '/admin/home' },
+        { id: 2, name: 'manage user', icon: '', path: '/admin/manage-user' },
+
+        {
+          id: 4,
+          name: 'manage equipment',
+          icon: '',
+          path: '/admin/manage-equipment',
+        },
+        {
+          id: 5,
+          name: 'manage global equipment',
+          icon: '',
+          path: '/admin/manage-global-equipment',
+        },
+      ],
+      super_admin_menu: [
+        {
+          id: 1,
+          name: 'manage room',
+          icon: '',
+          path: '/admin/manage-room',
+        },
+        { id: 2, name: 'manage admin', icon: '', path: '/admin/manage-admin' },
+      ],
+      path_name: '',
     }
   },
   methods: {
-    changeColor() {
-      if (document.documentElement.scrollTop <= 100) {
-        this.bg = '#78909C'
-      } else if (document.documentElement.scrollTop < 100) {
-        this.bg = 'transparent'
-      } else {
-        this.bg = 'transparent'
-      }
+    async logout() {
+      await this.$store.dispatch("logout")
+      this.$router.push('/admin-login')
     },
   },
-  mounted() {
-    window.onscroll = () => {
-      this.changeColor()
-    }
+  computed: {
+    navPathName() {
+      return this.$store.getters.getPathName
+    },
   },
 }
 </script>

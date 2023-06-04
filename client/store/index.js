@@ -3,9 +3,11 @@ export const state = () => ({
     isAdmin: null,
     user: null,
     admin: null,
+    path_name_th: ""
 })
 
 export const mutations = {
+    //Auth
     setToken(state, token) {
         state.token = token
         console.log('setToken muta:', state.token);
@@ -21,7 +23,11 @@ export const mutations = {
     setAdmin(state, admin) {
         state.admin = admin
         console.log('setAdmin ', state.admin);
-    }
+    },
+    //Path Name
+    setPathName(state, name) {
+        state.path_name_th = name
+    },
 }
 
 export const actions = {
@@ -42,7 +48,7 @@ export const actions = {
 
             }
         } catch (error) {
-            await dispatch('logout')
+            // await dispatch('logout')
         }
     },
 
@@ -113,16 +119,24 @@ export const actions = {
         await commit('setAdmin', null);
         await commit('setUser', null);
         await commit('setIsAdmin', null);
+    },
+    //Path Name
+    async setPathName({ commit }, pathName) {
+        commit('setPathName', pathName)
     }
 }
 
 export const getters = {
+    //Auth
     getUser(state) {
         console.log('user :', state.user);
         return state.user
     },
     getAdmin(state) {
-        console.log('admin :', state.admin);
         return state.admin
+    },
+    //Path Name
+    getPathName(state) {
+        return state.path_name_th
     }
 }

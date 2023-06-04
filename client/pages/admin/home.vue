@@ -15,5 +15,8 @@ export default {
   data() {
     return {}
   },
+  mounted() {
+    this.$store.dispatch('setPathName',"home")
+  },
 }
 </script>
