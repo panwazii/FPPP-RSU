@@ -72,7 +72,6 @@ authRouter.post('/admin/login', async (req, res) => {
 authRouter.get('/admin/verify', async (req, res) => {
   try {
     const Token = req.query.token;
-    log("res token", Token)
 
     if (Token === null) {
       res.status(403).json({ code: 403, desc: 'unauthorized' });
