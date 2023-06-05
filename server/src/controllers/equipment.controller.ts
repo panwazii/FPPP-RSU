@@ -1,11 +1,12 @@
 import Sequelize, { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import RoomModel,{RoomAttribute} from '../database/models/rooms.model';
+import EquipmentModel,{EquipmentAttribute} from '../database/models/equipments.model';
+import GlobalEquipmentModel,{GlobalEquipmentAttribute} from '../database/models/global_equipments.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
-class RoomController {
+class EquipmentController {
     // public static async createSuperAdmin() {
     //     const Email = config.security.superadminemail
     //     const HashedPassword = await bcrypt.hash(config.security.superadminpassword, 12);
@@ -24,18 +25,18 @@ class RoomController {
     //             return false;
     //         });
     // }
-
-    public static async getByID(roomId: string) {
-        return RoomModel.findOne({
+// EQUIPMENT
+    public static async getByID(equipmentId: string) {
+        return EquipmentModel.findOne({
             where: {
-                id: roomId,
+                id: equipmentId,
             },
             raw: true
         });
     }
 
-    public static async getAllRoom(limit:number,offset:number) {
-        return RoomModel.findAndCountAll({
+    public static async getAllEquipment(limit:number,offset:number) {
+        return EquipmentModel.findAndCountAll({
             where: { available_status : true  },
             limit,
             offset,
@@ -43,17 +44,19 @@ class RoomController {
         });
     }
 
-    public static async createRoom(data: any) {
+    public static async createEquipment(data: any) {
  
-        const packet: RoomAttribute = {
+        const packet: EquipmentAttribute = {
             name: data.name,
             details: data.details,
             picture: data.picture,
+            price: data.picture,
             rent_price: data.rent_price,
+            room_id:data.room_id,
             available_status: true,
         };
 
-        return RoomModel.create(packet)
+        return EquipmentModel.create(packet)
             .then(() => true)
             .catch((e) => {
                 log(e);
@@ -63,10 +66,65 @@ class RoomController {
 
     public static async update(data: any) {
 
-        return RoomModel.update({
+        return EquipmentModel.update({
             name: data.name,
             details: data.details,
             picture: data.picture,
+            price: data.picture,
+            rent_price: data.rent_price,
+            room_id:data.room_id,
+        }, {
+            where: {
+                id: data.id,
+            },
+        }).then(() => true)
+            .catch(() => false);
+    }
+// GLOBAL EQUIPMENT
+    public static async getByIDGEquip(equipmentId: string) {
+        return EquipmentModel.findOne({
+            where: {
+                id: equipmentId,
+            },
+            raw: true
+        });
+    }
+
+    public static async getAllGlobalEquipment(limit:number,offset:number) {
+        return GlobalEquipmentModel.findAndCountAll({
+            where: { available_status : true  },
+            limit,
+            offset,
+            raw: true
+        });
+    }
+
+    public static async createGlobalEquipment(data: any) {
+ 
+        const packet: GlobalEquipmentAttribute = {
+            name: data.name,
+            details: data.details,
+            picture: data.picture,
+            price: data.picture,
+            rent_price: data.rent_price,
+            available_status: true,
+        };
+
+        return GlobalEquipmentModel.create(packet)
+            .then(() => true)
+            .catch((e) => {
+                log(e);
+                return false;
+            });
+    }
+
+    public static async GlobalEquipUpdate(data: any) {
+
+        return GlobalEquipmentModel.update({
+            name: data.name,
+            details: data.details,
+            picture: data.picture,
+            price: data.picture,
             rent_price: data.rent_price,
         }, {
             where: {
@@ -75,18 +133,6 @@ class RoomController {
         }).then(() => true)
             .catch(() => false);
     }
-
-    public static verifyJWT(token: string) {
-        try {
-            const Verify = jwt.verify(token, config.security.salt)
-            if (Verify) {
-                return { verify: true, result: Verify }
-            }
-        } catch (err) {
-            return { verify: false, result: null };
-        }
-    }
-
 
     // public static async auth(email: string, password: string) {
     //     const data = await AdminController.getByEmail(email);
@@ -107,4 +153,4 @@ class RoomController {
     // }
 }
 
-export default RoomController;
+export default EquipmentController;

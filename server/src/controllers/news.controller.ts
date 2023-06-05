@@ -5,6 +5,7 @@ import NewsModel,{NewsAttribute} from '../database/models/news.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
+
 class NewsController {
     // public static async createSuperAdmin() {
     //     const Email = config.security.superadminemail
@@ -30,6 +31,15 @@ class NewsController {
             where: {
                 id: newsId,
             },
+            raw: true
+        });
+    }
+
+    public static async getAllNews(limit:number,offset:number) {
+        return NewsModel.findAndCountAll({
+            where: { available_status : true  },
+            limit,
+            offset,
             raw: true
         });
     }

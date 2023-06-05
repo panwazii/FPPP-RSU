@@ -6,6 +6,7 @@ import initDatabase from './database/init.model';
 import config from './config/global.config';
 import authRouter from './routes/auth.route';
 import adminRouter from './routes/admin.route';
+import publicRouter from './routes/public.route';
 import userRouter from './routes/user.route';
 import log from './tools/log';
 
@@ -19,6 +20,7 @@ initDatabase().then(() => {
 
     router.use('/api/auth', authRouter);
     router.use('/api/admin', adminRouter);
+    router.use('/api/public', publicRouter);
     router.use('/api/user', userRouter);
     router.get('/', ((req, res) => {
         res.json('Hello from server!!!');
