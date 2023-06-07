@@ -5,7 +5,7 @@
         :open="logout_modal"
         :method="logout"
         message="are you sure about that son ?"
-        :confirmDialog.sync="logout_modal"
+        :confirmLogout.sync="logout_modal"
       />
       <v-navigation-drawer
         v-model="drawer"
