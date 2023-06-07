@@ -1,30 +1,34 @@
 <template>
-  <div>
-    <v-data-table
-      height="300px"
-      width="1020"
-      :headers="headers"
-      sort-by="id"
-      class="elevation-1 mt-12 pa-6 ml-12 mr-12"
-      :search="search"
-    >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-icon class="mr-2" large>mdi-note-multiple</v-icon>
-          <v-toolbar-title> จัดการห้อง</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
-          <v-spacer></v-spacer>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="ค้นหา"
-            single-line
-            hide-details
-          ></v-text-field>
-        </v-toolbar>
-      </template>
-    </v-data-table>
-  </div>
+  <v-container>
+    <div class="d-flex justify-end">
+      <v-btn @click="registerDialog = true" class="mb-3" color="primary"
+        ><v-icon medium> mdi-plus </v-icon>
+        <h4>Add room</h4></v-btn
+      >
+    </div>
+    <div>
+      <v-data-table
+        :headers="headers"
+        :items="rooms"
+        :page.sync="page"
+        :items-per-page="itemsPerPage"
+        hide-default-footer
+        class="elevation-1"
+        @page-count="pageCount = $event"
+      ></v-data-table>
+      <div class="text-center pt-2">
+        <v-pagination v-model="page" :length="totalPages"></v-pagination>
+        <!-- <v-text-field
+          :value="itemsPerPage"
+          label="Items per page"
+          type="number"
+          min="-1"
+          max="15"
+          @input="itemsPerPage = parseInt($event, 10)"
+        ></v-text-field> -->
+      </div>
+    </div>
+  </v-container>
 </template>
 
 <script>
@@ -42,10 +46,18 @@ export default {
       loadingDialog: false,
       editDialog: false,
       deleteDialog: false,
-      confirmDialog: false,
-      confirmDialogMessage: '',
+      page: 1,
+      itemsPerPage: 10,
+      totalPages: 0,
       search: '',
+      rooms: [],
       headers: [
+        {
+          text: 'ID',
+          value: 'id',
+          sortable: true,
+          align: 'start',
+        },
         {
           text: 'ชื่อห้อง',
           value: 'roomname',
@@ -64,7 +76,26 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('setPathName',"manage room")
+    this.$store.dispatch('setPathName', 'manage room')
+    this.fetchRooms()
+  },
+  watch: {
+    page() {
+      this.fetchRooms()
+    },
+  },
+  methods: {
+    async fetchRooms() {
+      let Data = await this.$store.dispatch('api/admin/getAllRooms', {
+        params: {
+          limit: 5,
+          page: this.page,
+        },
+      })
+      console.log('this is room', Data)
+      this.rooms = Data.rooms
+      this.totalPages = Data.total_pages
+    },
   },
 }
 </script>
