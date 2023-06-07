@@ -49,10 +49,10 @@ export default {
   methods: {
     confirm() {
       this.method()
-      this.$emit('update:confirmDialog', false)
+      this.$emit('update:confirmLogout', false)
     },
     cancel() {
-      this.$emit('update:confirmDialog', false)
+      this.$emit('update:confirmLogout', false)
     },
   },
 }
