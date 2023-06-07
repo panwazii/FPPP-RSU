@@ -6,23 +6,23 @@ import NewsController from '../controllers/news.controller';
 import RoomController from '../controllers/room.controller';
 import UserController from '../controllers/user.controller';
 import EquipmentController from '../controllers/equipment.controller';
-import {numberOrDefault} from '../tools/util';
+import { numberOrDefault } from '../tools/util';
 
 const publicRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON('PUBLIC');
 
-publicRouter.get('/getAllNews' ,async (req, res) => {
+publicRouter.get('/getAllNews', async (req, res) => {
     try {
-        const limit = numberOrDefault(req.query.limit, 10);
-        const page = numberOrDefault(req.query.page, 0);
-        if(page != 0){
-            page - 1
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
         }
-        const offset = limit * page;
-        NewsController.getAllNews(limit,offset).then((Data) => {
+        const Offset = Limit * Page;
+        NewsController.getAllNews(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, news: Data.rows, totalpages: Math.ceil(Data.count / limit)
+                    code: 200, news: Data.rows, totalpages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -33,18 +33,18 @@ publicRouter.get('/getAllNews' ,async (req, res) => {
     }
 });
 
-publicRouter.get('/getAllRoom' ,async (req, res) => {
+publicRouter.get('/getAllRooms', async (req, res) => {
     try {
-        const limit = numberOrDefault(req.query.limit, 10);
-        const page = numberOrDefault(req.query.page, 0);
-        if(page != 0){
-            page - 1
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
         }
-        const offset = limit * page;
-        RoomController.getAllRoom(limit,offset).then((Data) => {
+        const Offset = Limit * Page;
+        RoomController.getAllRooms(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, news: Data.rows, totalpages: Math.ceil(Data.count / limit)
+                    code: 200, news: Data.rows, totalpages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -55,18 +55,18 @@ publicRouter.get('/getAllRoom' ,async (req, res) => {
     }
 });
 
-publicRouter.get('/getAllEquipment' ,async (req, res) => {
+publicRouter.get('/getAllEquipment', async (req, res) => {
     try {
-        const limit = numberOrDefault(req.query.limit, 10);
-        const page = numberOrDefault(req.query.page, 0);
-        if(page != 0){
-            page - 1
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
         }
-        const offset = limit * page;
-        EquipmentController.getAllEquipment(limit,offset).then((Data) => {
+        const Offset = Limit * Page;
+        EquipmentController.getAllEquipment(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, news: Data.rows, totalpages: Math.ceil(Data.count / limit)
+                    code: 200, news: Data.rows, totalpages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -77,18 +77,18 @@ publicRouter.get('/getAllEquipment' ,async (req, res) => {
     }
 });
 
-publicRouter.get('/getAllGlobalEquipment' ,async (req, res) => {
+publicRouter.get('/getAllGlobalEquipment', async (req, res) => {
     try {
-        const limit = numberOrDefault(req.query.limit, 10);
-        const page = numberOrDefault(req.query.page, 0);
-        if(page != 0){
-            page - 1
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
         }
-        const offset = limit * page;
-        EquipmentController.getAllGlobalEquipment(limit,offset).then((Data) => {
+        const Offset = Limit * Page;
+        EquipmentController.getAllGlobalEquipment(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, news: Data.rows, totalpages: Math.ceil(Data.count / limit)
+                    code: 200, news: Data.rows, totalpages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));

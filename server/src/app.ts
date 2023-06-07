@@ -11,7 +11,7 @@ import userRouter from './routes/user.route';
 import log from './tools/log';
 
 const corsOptions = {
-    origin: config.cors.origin,
+    origin: config.cors.origin
 };
 
 initDatabase().then(() => {

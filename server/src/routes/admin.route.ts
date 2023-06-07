@@ -6,6 +6,7 @@ import NewsController from '../controllers/news.controller';
 import RoomController from '../controllers/room.controller';
 import UserController from '../controllers/user.controller';
 import { authValid } from '../middleware/admin.middleware';
+import { numberOrDefault } from '../tools/util';
 
 const adminRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON('ADMIN');
@@ -39,13 +40,13 @@ adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
     }
 });
 
-adminRouter.post('/createNews',authValid, (req, res) => {
+adminRouter.post('/createNews', authValid, (req, res) => {
     try {
         if (!req.body) {
             res.json(errorCode('RES', 1));
             return;
         }
-    
+
         NewsController.createNews(req.body).then((state) => {
             if (state) {
                 res.json({ code: 200, state });
@@ -56,16 +57,16 @@ adminRouter.post('/createNews',authValid, (req, res) => {
     } catch (error) {
         res.status(401).json(error);
     }
-    
+
 });
 
-adminRouter.post('/createRoom',authValid, (req, res) => {
+adminRouter.post('/createRoom', authValid, (req, res) => {
     try {
         if (!req.body) {
             res.json(errorCode('RES', 1));
             return;
         }
-    
+
         RoomController.createRoom(req.body).then((state) => {
             if (state) {
                 res.json({ code: 200, state });
@@ -76,7 +77,7 @@ adminRouter.post('/createRoom',authValid, (req, res) => {
     } catch (error) {
         res.status(401).json(error);
     }
-    
+
 });
 
 
@@ -121,19 +122,19 @@ adminRouter.post('/update/password', authValid, (req, res) => {
     });
 });
 
-adminRouter.post('/updateNews',authValid, (req, res) => {
+adminRouter.post('/updateNews', authValid, (req, res) => {
     try {
         if (!req.body) {
             res.json(errorCode('update', 0));
             return;
         }
-    
-        const Data  = req.body;
+
+        const Data = req.body;
         if (!Data) {
             res.json(errorCode('update', 1));
             return;
         }
-    
+
         NewsController.update(Data).then((result) => {
             if (result) {
                 res.json({ code: 200, result });
@@ -145,22 +146,22 @@ adminRouter.post('/updateNews',authValid, (req, res) => {
         log(error)
         res.status(401).json(error);
     }
-    
+
 });
 
-adminRouter.post('/updateRoom',authValid, (req, res) => {
+adminRouter.post('/updateRoom', authValid, (req, res) => {
     try {
         if (!req.body) {
             res.json(errorCode('update', 0));
             return;
         }
-    
-        const Data  = req.body;
+
+        const Data = req.body;
         if (!Data) {
             res.json(errorCode('update', 1));
             return;
         }
-    
+
         RoomController.update(Data).then((result) => {
             if (result) {
                 res.json({ code: 200, result });
@@ -172,28 +173,31 @@ adminRouter.post('/updateRoom',authValid, (req, res) => {
         log(error)
         res.status(401).json(error);
     }
-    
+
 });
-// adminRouter.post('/destroy', authValid, adminOnly, (req, res) => {
-//     if (!req.body) {
-//         res.json(errorCode('destroy', 0));
-//         return;
-//     }
 
-//     const { user_id } = req.body;
-//     if (!user_id || Number.isNaN(Number(user_id))) {
-//         res.json(errorCode('destroy', 1));
-//     }
+adminRouter.get('/getAllRooms', authValid, (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        RoomController.getAllRooms(Limit, Offset).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, rooms: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
 
-//     UserController.safeDestroyUser(Number(user_id)).then((state) => {
-//         if (state) {
-//             res.json({ code: 200, state });
-//         } else {
-//             res.json(errorCode('destroy', 2));
-//         }
-//     });
-// });
-
+});
 export default adminRouter;
 
 
