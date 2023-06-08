@@ -7,6 +7,7 @@ import RoomController from '../controllers/room.controller';
 import UserController from '../controllers/user.controller';
 import { authValid } from '../middleware/admin.middleware';
 import { numberOrDefault } from '../tools/util';
+import EquipmentController from '../controllers/equipment.controller';
 
 const adminRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON('ADMIN');
@@ -222,6 +223,45 @@ adminRouter.get('/getSingleRoom', authValid, (req, res) => {
     }
 
 });
+
+adminRouter.post('/createEquipment', authValid, (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+    
+        EquipmentController.createEquipment(req.body).then((state) => {
+            if (state) {
+                res.json({ code: 200, state });
+            } else {
+                res.json(errorCode('CREATE', 2));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
+adminRouter.post('/createGlobalEquipment', authValid, (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+    
+        EquipmentController.createGlobalEquipment(req.body).then((state) => {
+            if (state) {
+                res.json({ code: 200, state });
+            } else {
+                res.json(errorCode('CREATE', 2));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
 export default adminRouter;
 
 
