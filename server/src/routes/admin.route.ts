@@ -198,6 +198,30 @@ adminRouter.get('/getAllRooms', authValid, (req, res) => {
     }
 
 });
+
+adminRouter.get('/getSingleRoom', authValid, (req, res) => {
+    try {
+        console.log("this params", req.query.id);
+
+        if (!req.query.id) {
+            res.json(errorCode('ADMIN', 1));
+            return;
+        }
+        const Id = req.query.id as string;
+        RoomController.getByID(Id).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, room: Data
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+
+});
 export default adminRouter;
 
 
