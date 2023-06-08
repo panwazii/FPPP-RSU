@@ -50,7 +50,7 @@ class EquipmentController {
             name: data.name,
             details: data.details,
             picture: data.picture,
-            price: data.picture,
+            price: data.price,
             rent_price: data.rent_price,
             room_id:data.room_id,
             available_status: true,
@@ -70,7 +70,7 @@ class EquipmentController {
             name: data.name,
             details: data.details,
             picture: data.picture,
-            price: data.picture,
+            price: data.price,
             rent_price: data.rent_price,
             room_id:data.room_id,
         }, {
@@ -105,7 +105,7 @@ class EquipmentController {
             name: data.name,
             details: data.details,
             picture: data.picture,
-            price: data.picture,
+            price: data.price,
             rent_price: data.rent_price,
             available_status: true,
         };
@@ -124,7 +124,7 @@ class EquipmentController {
             name: data.name,
             details: data.details,
             picture: data.picture,
-            price: data.picture,
+            price: data.price,
             rent_price: data.rent_price,
         }, {
             where: {
