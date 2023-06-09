@@ -1,10 +1,20 @@
 <template>
   <v-container>
+    <AdminEditRoom
+      :open="editRoom"
+      :data="room"
+      :editRoom.sync="editRoom"
+      v-if="room"
+    />
+    <AdminCreateRoom
+      :open="createRoom"
+      :createRoom.sync="createRoom"
+    />
     <div class="d-flex justify-end">
-      <v-btn @click="registerDialog = true" class="mb-3" color="primary"
-        ><v-icon medium> mdi-plus </v-icon>
-        <h4>Add room</h4></v-btn
-      >
+      <v-btn @click="createRoom = true" class="mb-3" color="primary">
+        <v-icon medium> mdi-plus </v-icon>
+        <h4>Add room</h4>
+      </v-btn>
     </div>
     <div>
       <v-data-table
@@ -15,17 +25,20 @@
         hide-default-footer
         class="elevation-1"
         @page-count="pageCount = $event"
-      ></v-data-table>
+      >
+        <template v-slot:[`item.edit`]="{ item }">
+          <v-icon small class="mr-2" @click="openEditRoomModal(item.id)">
+            mdi-pencil
+          </v-icon>
+        </template>
+        <template v-slot:[`item.delete`]="{ item }">
+          <v-icon small class="mr-2" @click="deleteRoom(item)">
+            mdi-delete
+          </v-icon>
+        </template>
+      </v-data-table>
       <div class="text-center pt-2">
         <v-pagination v-model="page" :length="totalPages"></v-pagination>
-        <!-- <v-text-field
-          :value="itemsPerPage"
-          label="Items per page"
-          type="number"
-          min="-1"
-          max="15"
-          @input="itemsPerPage = parseInt($event, 10)"
-        ></v-text-field> -->
       </div>
     </div>
   </v-container>
@@ -47,24 +60,27 @@ export default {
       editDialog: false,
       deleteDialog: false,
       page: 1,
-      itemsPerPage: 10,
+      itemsPerPage: 7,
       totalPages: 0,
       search: '',
       rooms: [],
+      room: null,
+      newRoom: null,
+      editRoom: false,
+      createRoom: false,
       headers: [
         {
-          text: 'ID',
-          value: 'id',
-          sortable: true,
+          text: 'ชื่อห้อง',
+          value: 'name',
+          sortable: false,
           align: 'start',
         },
         {
-          text: 'ชื่อห้อง',
-          value: 'roomname',
-          sortable: true,
+          text: 'Price',
+          value: 'rent_price',
+          sortable: false,
           align: 'start',
         },
-
         { text: 'แก้ไข', value: 'edit', sortable: false, align: 'center' },
         {
           text: 'ลบ',
@@ -88,13 +104,22 @@ export default {
     async fetchRooms() {
       let Data = await this.$store.dispatch('api/admin/getAllRooms', {
         params: {
-          limit: 5,
+          limit: this.itemsPerPage,
           page: this.page,
         },
       })
       console.log('this is room', Data)
       this.rooms = Data.rooms
       this.totalPages = Data.total_pages
+    },
+    async openEditRoomModal(id) {
+      const RoomData = await this.$store.dispatch('api/admin/getSingleRoom', {
+        params: {
+          id: id,
+        },
+      })
+      this.room = RoomData.room
+      this.editRoom = true
     },
   },
 }
