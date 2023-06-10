@@ -81,6 +81,44 @@ adminRouter.post('/createRoom', authValid, (req, res) => {
 
 });
 
+adminRouter.post('/createEquipment', authValid, (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+
+        EquipmentController.createEquipment(req.body).then((state) => {
+            if (state) {
+                res.json({ code: 200, state });
+            } else {
+                res.json(errorCode('CREATE', 2));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
+adminRouter.post('/createGlobalEquipment', authValid, (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+
+        EquipmentController.createGlobalEquipment(req.body).then((state) => {
+            if (state) {
+                res.json({ code: 200, state });
+            } else {
+                res.json(errorCode('CREATE', 2));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
 
 adminRouter.post('/update', authValid, (req, res) => {
     if (!req.body) {
@@ -316,25 +354,6 @@ adminRouter.get('/getSingleRoom', authValid, (req, res) => {
     }
 });
 
-adminRouter.post('/createEquipment', authValid, (req, res) => {
-    try {
-        if (!req.body) {
-            res.json(errorCode('RES', 1));
-            return;
-        }
-
-        EquipmentController.createEquipment(req.body).then((state) => {
-            if (state) {
-                res.json({ code: 200, state });
-            } else {
-                res.json(errorCode('CREATE', 2));
-            }
-        });
-    } catch (error) {
-        res.status(401).json(error);
-    }
-});
-
 adminRouter.get('/getSingleEquipment', authValid, (req, res) => {
     try {
         if (!req.query.id) {
@@ -345,29 +364,10 @@ adminRouter.get('/getSingleEquipment', authValid, (req, res) => {
         EquipmentController.getByID(Id, false).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, room: Data
+                    code: 200, equipment: Data
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
-            }
-        });
-    } catch (error) {
-        res.status(401).json(error);
-    }
-});
-
-adminRouter.post('/createGlobalEquipment', authValid, (req, res) => {
-    try {
-        if (!req.body) {
-            res.json(errorCode('RES', 1));
-            return;
-        }
-
-        EquipmentController.createGlobalEquipment(req.body).then((state) => {
-            if (state) {
-                res.json({ code: 200, state });
-            } else {
-                res.json(errorCode('CREATE', 2));
             }
         });
     } catch (error) {
@@ -385,7 +385,7 @@ adminRouter.get('/getSingleGlobalEquipment', authValid, (req, res) => {
         EquipmentController.getByID(Id, true).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, room: Data
+                    code: 200, global_equipment: Data
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
