@@ -73,21 +73,33 @@ class EquipmentController {
             });
     }
 
-    public static async update(data: any) {
-
-        return EquipmentModel.update({
+    public static async updateEquipment(data: any, global: boolean) {
+        if (global === false) {
+            return EquipmentModel.update({
+                name: data.name,
+                details: data.details,
+                picture: data.picture,
+                price: data.price,
+                rent_price: data.rent_price,
+                room_id: data.room_id,
+            }, {
+                where: {
+                    id: data.id,
+                },
+            })
+        }
+        return GlobalEquipmentModel.update({
             name: data.name,
             details: data.details,
             picture: data.picture,
             price: data.price,
             rent_price: data.rent_price,
-            room_id: data.room_id,
         }, {
             where: {
                 id: data.id,
             },
-        }).then(() => true)
-            .catch(() => false);
+        })
+
     }
 
     public static async getAllGlobalEquipment(limit: number, offset: number) {
@@ -118,21 +130,21 @@ class EquipmentController {
             });
     }
 
-    public static async GlobalEquipUpdate(data: any) {
+    // public static async GlobalEquipUpdate(data: any) {
 
-        return GlobalEquipmentModel.update({
-            name: data.name,
-            details: data.details,
-            picture: data.picture,
-            price: data.price,
-            rent_price: data.rent_price,
-        }, {
-            where: {
-                id: data.id,
-            },
-        }).then(() => true)
-            .catch(() => false);
-    }
+    //     return GlobalEquipmentModel.update({
+    //         name: data.name,
+    //         details: data.details,
+    //         picture: data.picture,
+    //         price: data.price,
+    //         rent_price: data.rent_price,
+    //     }, {
+    //         where: {
+    //             id: data.id,
+    //         },
+    //     }).then(() => true)
+    //         .catch(() => false);
+    // }
 
     // public static async auth(email: string, password: string) {
     //     const data = await AdminController.getByEmail(email);

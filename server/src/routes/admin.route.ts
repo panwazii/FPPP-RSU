@@ -177,6 +177,58 @@ adminRouter.post('/updateRoom', authValid, (req, res) => {
 
 });
 
+adminRouter.post('/updateEquipment', (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('update', 0));
+            return;
+        }
+
+        const Data = req.body;
+        if (!Data) {
+            res.json(errorCode('update', 1));
+            return;
+        }
+
+        EquipmentController.updateEquipment(Data,false).then((result) => {
+            if (result) {
+                res.json({ code: 200, result });
+            } else {
+                res.json(errorCode('UPDATE', 2));
+            }
+        });
+    } catch (error) {
+        log(error)
+        res.status(401).json(error);
+    }
+});
+
+adminRouter.post('/updateGlobalEquipment',  (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('update', 0));
+            return;
+        }
+
+        const Data = req.body;
+        if (!Data) {
+            res.json(errorCode('update', 1));
+            return;
+        }
+
+        EquipmentController.updateEquipment(Data,true).then((result) => {
+            if (result) {
+                res.json({ code: 200, result });
+            } else {
+                res.json(errorCode('UPDATE', 2));
+            }
+        });
+    } catch (error) {
+        log(error)
+        res.status(401).json(error);
+    }
+});
+
 adminRouter.get('/getAllRooms', authValid, (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
