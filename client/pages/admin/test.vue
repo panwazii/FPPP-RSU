@@ -1,17 +1,17 @@
 <template>
   <v-container>
-    <AdminEditEquipment
-      :open="editEquipment"
+    <AdminEditGlobalEquipment
+      :open="editGlobalEquipment"
       :data="equipment"
-      :editEquipment.sync="editEquipment"
+      :editGlobalEquipment.sync="editGlobalEquipment"
       v-if="equipment"
     />
-    <AdminCreateEquipment
-      :open="createEquipment"
-      :createEquipment.sync="createEquipment"
+    <AdminCreateGlobalEquipment
+      :open="createGlobalEquipment"
+      :createGlobalEquipment.sync="createGlobalEquipment"
     />
     <div class="d-flex justify-end">
-      <v-btn @click="createEquipment = true" class="mb-3" color="primary">
+      <v-btn @click="createGlobalEquipment = true" class="mb-3" color="primary">
         <v-icon medium> mdi-plus </v-icon>
         <h4>Add Equipment</h4>
       </v-btn>
@@ -19,7 +19,7 @@
     <div>
       <v-data-table
         :headers="headers"
-        :items="equipments"
+        :items="globalequipments"
         :page.sync="page"
         :items-per-page="itemsPerPage"
         hide-default-footer
@@ -27,7 +27,11 @@
         @page-count="pageCount = $event"
       >
         <template v-slot:[`item.edit`]="{ item }">
-          <v-icon small class="mr-2" @click="openEditEquipmentModal(item.id)">
+          <v-icon
+            small
+            class="mr-2"
+            @click="openeditGlobalEquipmentModal(item.id)"
+          >
             mdi-pencil
           </v-icon>
         </template>
@@ -63,11 +67,11 @@ export default {
       itemsPerPage: 7,
       totalPages: 0,
       search: '',
-      equipments: [],
+      globalequipments: [],
       equipment: null,
       newEquipment: null,
-      editEquipment: false,
-      createEquipment: false,
+      editGlobalEquipment: false,
+      createGlobalEquipment: false,
       headers: [
         {
           text: 'ชื่อเครื่องมือ',
@@ -93,28 +97,28 @@ export default {
   },
   mounted() {
     this.$store.dispatch('setPathName', 'manage equipment')
-    this.fetchEquipment()
+    this.fetchGlobalEquipment()
   },
   watch: {
     page() {
-      this.fetchEquipment()
+      this.fetchGlobalEquipment()
     },
   },
   methods: {
-    async fetchEquipment() {
-      let Data = await this.$store.dispatch('api/admin/getAllEquipment', {
+    async fetchGlobalEquipment() {
+      let Data = await this.$store.dispatch('api/admin/getAllGlobalEquipment', {
         params: {
           limit: this.itemsPerPage,
           page: this.page,
         },
       })
       console.log('this is equipment', Data)
-      this.equipments = Data.equipments
+      this.globalequipments = Data.globalequipment
       this.totalPages = Data.total_pages
     },
-    async openEditEquipmentModal(id) {
+    async openeditGlobalEquipmentModal(id) {
       const EquipmentData = await this.$store.dispatch(
-        'api/admin/getSingleEquipment',
+        'api/admin/getSingleGlobalEquipment',
         {
           params: {
             id: id,
@@ -122,7 +126,7 @@ export default {
         }
       )
       this.equipment = EquipmentData.equipment
-      this.editEquipment = true
+      this.editGlobalEquipment = true
     },
   },
 }

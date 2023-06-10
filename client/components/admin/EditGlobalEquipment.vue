@@ -3,7 +3,7 @@
     <ModalConfirm
       :open="confirmModal"
       :message="confirmMessage"
-      :method="updateEquipment"
+      :method="updateGlobalEquipment"
       :confirm.sync="confirmModal"
     />
     <ModalLoading :open="loading" :message="loadingMessage" />
@@ -17,7 +17,7 @@
       <v-card>
         <v-card-title class="text-h5">
           <v-icon justify="left" class="mr-3" size="50">mdi-pencil</v-icon>
-          Edit Equipment
+          Edit GlobalEquipment
         </v-card-title>
         <v-divider class="mb-3"></v-divider>
         <v-card-text>
@@ -119,18 +119,18 @@ export default {
       //   this.$emit('update:editRoom', false)
     },
     cancel() {
-      this.$emit('update:editEquipment', false)
+      this.$emit('update:editGlobalEquipment', false)
     },
-    async updateEquipment() {
+    async updateGlobalEquipment() {
       try {
         this.loading = true
-        await this.$store.dispatch('api/admin/updateEquipment', this.data)
-        this.$emit('update:editEquipment', false)
+        await this.$store.dispatch('api/admin/updateGlobalEquipment', this.data)
+        this.$emit('update:editGlobalEquipment', false)
         this.loading = false
       } catch (error) {
         this.loading = false
         console.log(error)
-        this.$emit('update:editEquipment', false)
+        this.$emit('update:editGlobalEquipment', false)
       }
     },
   },

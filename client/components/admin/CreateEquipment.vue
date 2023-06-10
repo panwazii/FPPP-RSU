@@ -3,7 +3,7 @@
     <ModalConfirm
       :open="confirmModal"
       :message="confirmMessage"
-      :method="updateEquipment"
+      :method="createEquipment"
       :confirm.sync="confirmModal"
     />
     <ModalLoading :open="loading" :message="loadingMessage" />
@@ -16,8 +16,8 @@
     >
       <v-card>
         <v-card-title class="text-h5">
-          <v-icon justify="left" class="mr-3" size="50">mdi-pencil</v-icon>
-          Edit Equipment
+          <v-icon justify="left" class="mr-3" size="50">mdi-home-plus</v-icon>
+          Create new Equipment.
         </v-card-title>
         <v-divider class="mb-3"></v-divider>
         <v-card-text>
@@ -25,23 +25,10 @@
             <v-col cols="8">
               <template>
                 <v-form ref="form" lazy-validation>
-                  <p>ID</p>
-                  <v-row class="mt-2">
-                    <v-col cols="12" sm="12">
-                      <v-text-field
-                        v-model="data.id"
-                        disabled
-                        label="ID"
-                        outlined
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <p>ชื่อผู้ใช้งาน</p>
                   <v-row class="mt-2">
                     <v-col cols="12" sm="6">
                       <v-text-field
-                        v-model="data.name"
+                        v-model="form.name"
                         :rules="[(v) => !!v || 'name required']"
                         label="Name"
                         outlined
@@ -50,7 +37,7 @@
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field
-                        v-model="data.details"
+                        v-model="form.details"
                         :rules="[(v) => !!v || 'details required']"
                         label="Details"
                         outlined
@@ -62,7 +49,7 @@
                   <v-row class="mt-2">
                     <v-col cols="12" sm="6">
                       <v-text-field
-                        v-model="data.rent_price"
+                        v-model="form.rent_price"
                         :rules="[(v) => !!v || 'price required']"
                         label="Rent price"
                         outlined
@@ -96,17 +83,19 @@
 <script>
 export default {
   props: {
-    // method: { type: Function },
     open: {
       required: true,
-    },
-    data: {
-      required: true,
-      //   type: String,
     },
   },
   data() {
     return {
+      form: {
+        name: null,
+        details: null,
+        rent_price: null,
+        picture: 'beta',
+        available_status: true,
+      },
       confirmModal: false,
       confirmMessage: 'Confirm this change',
       loading: false,
@@ -116,22 +105,31 @@ export default {
   methods: {
     confirm() {
       this.confirmModal = true
-      //   this.$emit('update:editRoom', false)
+      //   this.$emit('update:editRooms', false)
     },
     cancel() {
-      this.$emit('update:editEquipment', false)
+      this.clearForm()
+      this.$emit('update:createEquipment', false)
     },
-    async updateEquipment() {
+    async createEquipment() {
       try {
         this.loading = true
-        await this.$store.dispatch('api/admin/updateEquipment', this.data)
-        this.$emit('update:editEquipment', false)
+        await this.$store.dispatch('api/admin/createEquipment', this.form)
+        this.clearForm()
+        this.$emit('update:createEquipment', false)
         this.loading = false
       } catch (error) {
         this.loading = false
         console.log(error)
-        this.$emit('update:editEquipment', false)
+        this.$emit('update:createEquipment', false)
       }
+    },
+    clearForm() {
+      this.form.name = null
+      this.form.details = null
+      this.form.rent_price = null
+      this.form.picture = 'beta'
+      this.form.available_status = true
     },
   },
 }

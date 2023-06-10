@@ -120,37 +120,47 @@ export default {
       clipped: false,
       logout_modal: false,
       menu: [
-        { id: 1, name: 'home', icon: 'mdi-shield-lock', path: '/admin/home' },
-        { id: 2, name: 'manage user', icon: '', path: '/admin/manage-user' },
+        { id: 1, name: 'Home', icon: 'mdi-home', path: '/admin/home' },
+        {
+          id: 2,
+          name: 'Manage user',
+          icon: 'mdi-account-group',
+          path: '/admin/manage-user',
+        },
 
         {
           id: 4,
-          name: 'manage equipment',
-          icon: '',
+          name: 'Manage equipment',
+          icon: 'mdi-tools',
           path: '/admin/manage-equipment',
         },
         {
           id: 5,
-          name: 'manage global equipment',
-          icon: '',
+          name: 'Manage global equipment',
+          icon: 'mdi-hammer-wrench',
           path: '/admin/manage-global-equipment',
         },
       ],
       super_admin_menu: [
         {
           id: 1,
-          name: 'manage room',
-          icon: '',
+          name: 'Manage room',
+          icon: 'mdi-home-edit-outline',
           path: '/admin/manage-room',
         },
-        { id: 2, name: 'manage admin', icon: '', path: '/admin/manage-admin' },
+        {
+          id: 2,
+          name: 'Manage admin',
+          icon: 'mdi-account-supervisor',
+          path: '/admin/manage-admin',
+        },
       ],
       path_name: '',
     }
   },
   methods: {
     async logout() {
-      await this.$store.dispatch("logout")
+      await this.$store.dispatch('logout')
       this.$router.push('/admin-login')
     },
   },
