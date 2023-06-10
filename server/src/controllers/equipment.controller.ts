@@ -1,8 +1,8 @@
 import Sequelize, { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import EquipmentModel,{EquipmentAttribute} from '../database/models/equipments.model';
-import GlobalEquipmentModel,{GlobalEquipmentAttribute} from '../database/models/global_equipments.model';
+import EquipmentModel, { EquipmentAttribute } from '../database/models/equipments.model';
+import GlobalEquipmentModel, { GlobalEquipmentAttribute } from '../database/models/global_equipments.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
@@ -25,19 +25,28 @@ class EquipmentController {
     //             return false;
     //         });
     // }
-// EQUIPMENT
-    public static async getByID(equipmentId: string) {
-        return EquipmentModel.findOne({
+    // EQUIPMENT
+    public static async getByID(equipmentId: string, global: boolean) {
+        if (global === false) {
+            return EquipmentModel.findOne({
+                where: {
+                    id: equipmentId,
+                },
+                raw: true
+            });
+        }
+        return GlobalEquipmentModel.findOne({
             where: {
                 id: equipmentId,
             },
             raw: true
         });
+
     }
 
-    public static async getAllEquipment(limit:number,offset:number) {
+    public static async getAllEquipment(limit: number, offset: number) {
         return EquipmentModel.findAndCountAll({
-            where: { available_status : true  },
+            where: { available_status: true },
             limit,
             offset,
             raw: true
@@ -45,14 +54,14 @@ class EquipmentController {
     }
 
     public static async createEquipment(data: any) {
- 
+
         const packet: EquipmentAttribute = {
             name: data.name,
             details: data.details,
             picture: data.picture,
             price: data.price,
             rent_price: data.rent_price,
-            room_id:data.room_id,
+            room_id: data.room_id,
             available_status: true,
         };
 
@@ -72,7 +81,7 @@ class EquipmentController {
             picture: data.picture,
             price: data.price,
             rent_price: data.rent_price,
-            room_id:data.room_id,
+            room_id: data.room_id,
         }, {
             where: {
                 id: data.id,
@@ -80,19 +89,10 @@ class EquipmentController {
         }).then(() => true)
             .catch(() => false);
     }
-// GLOBAL EQUIPMENT
-    public static async getByIDGEquip(equipmentId: string) {
-        return EquipmentModel.findOne({
-            where: {
-                id: equipmentId,
-            },
-            raw: true
-        });
-    }
 
-    public static async getAllGlobalEquipment(limit:number,offset:number) {
+    public static async getAllGlobalEquipment(limit: number, offset: number) {
         return GlobalEquipmentModel.findAndCountAll({
-            where: { available_status : true  },
+            where: { available_status: true },
             limit,
             offset,
             raw: true
@@ -100,7 +100,7 @@ class EquipmentController {
     }
 
     public static async createGlobalEquipment(data: any) {
- 
+
         const packet: GlobalEquipmentAttribute = {
             name: data.name,
             details: data.details,
