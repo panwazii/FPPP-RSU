@@ -112,7 +112,6 @@ export default {
   async fetch() {
     const Rooms = await this.$store.dispatch('api/admin/getAllRooms')
     this.rooms = Rooms.rooms
-    console.log('rooms from fetch', this.rooms)
   },
   data() {
     return {
