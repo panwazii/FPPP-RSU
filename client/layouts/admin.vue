@@ -32,11 +32,16 @@
           </div> -->
           <v-divider></v-divider>
           <v-list-item class="mt-2">
-            <v-icon class="mr-2">mdi-shield-lock</v-icon>
+            <!-- <v-icon class="mr-2">mdi-shield-account</v-icon> -->
             <h4>
+              Name :
               {{ $store.getters.getAdmin.fname }}
               {{ $store.getters.getAdmin.lname }}
             </h4>
+          </v-list-item>
+          <v-list-item class="mt-2">
+            <!-- <v-icon class="mr-2">mdi-shield-account</v-icon> -->
+            <h4>Level : {{ getAdminLevel }}</h4>
           </v-list-item>
         </v-list>
         <v-divider></v-divider>
@@ -57,6 +62,7 @@
           </v-list-item-group>
         </v-list>
         <div v-if="$store.getters.getAdmin.type_id === 1">
+          <v-divider></v-divider>
           <v-list nav>
             <v-list-item-group class="mb-1">
               <div
@@ -77,6 +83,7 @@
               </div>
             </v-list-item-group>
           </v-list>
+          <v-divider></v-divider>
         </div>
       </v-navigation-drawer>
       <v-app-bar transparent fixed app :color="bg" elevation="3">
@@ -167,6 +174,13 @@ export default {
   computed: {
     navPathName() {
       return this.$store.getters.getPathName
+    },
+    getAdminLevel() {
+      if (this.$store.getters.getAdmin.type_id === 1) {
+        return 'super admin'
+      } else if (this.$store.getters.getAdmin.type_id === 2) {
+        return 'admin'
+      }
     },
   },
 }
