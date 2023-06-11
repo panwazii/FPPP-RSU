@@ -25,20 +25,17 @@
             <v-col cols="8">
               <template>
                 <v-form ref="form" lazy-validation>
-                  <p>ID</p>
                   <v-row class="mt-2">
-                    <v-col cols="12" sm="12">
-                      <v-text-field
-                        v-model="data.id"
-                        disabled
-                        label="ID"
+                    <v-col cols="12" sm="6">
+                      <v-select
+                        :items="rooms"
+                        v-model="data.room_id"
+                        item-text="name"
+                        item-value="id"
+                        label="room"
                         outlined
-                        required
-                      ></v-text-field>
+                      ></v-select>
                     </v-col>
-                  </v-row>
-                  <p>ชื่อผู้ใช้งาน</p>
-                  <v-row class="mt-2">
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="data.name"
@@ -48,11 +45,23 @@
                         required
                       ></v-text-field>
                     </v-col>
+                  </v-row>
+
+                  <v-row class="mt-2">
                     <v-col cols="12" sm="6">
                       <v-text-field
-                        v-model="data.details"
-                        :rules="[(v) => !!v || 'details required']"
-                        label="Details"
+                        v-model="data.price"
+                        :rules="[(v) => !!v || 'price required']"
+                        label="Price"
+                        outlined
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-text-field
+                        v-model="data.rent_price"
+                        :rules="[(v) => !!v || 'rent price required']"
+                        label="Rent price"
                         outlined
                         required
                       ></v-text-field>
@@ -62,9 +71,9 @@
                   <v-row class="mt-2">
                     <v-col cols="12" sm="6">
                       <v-text-field
-                        v-model="data.rent_price"
-                        :rules="[(v) => !!v || 'price required']"
-                        label="Rent price"
+                        v-model="data.details"
+                        :rules="[(v) => !!v || 'details required']"
+                        label="Details"
                         outlined
                         required
                       ></v-text-field>
@@ -105,8 +114,13 @@ export default {
       //   type: String,
     },
   },
+  async fetch() {
+    const Rooms = await this.$store.dispatch('api/admin/getAllRooms')
+    this.rooms = Rooms.rooms
+  },
   data() {
     return {
+      rooms: null,
       confirmModal: false,
       confirmMessage: 'Confirm this change',
       loading: false,
