@@ -49,8 +49,17 @@
                   <v-row class="mt-2">
                     <v-col cols="12" sm="6">
                       <v-text-field
-                        v-model="form.rent_price"
+                        v-model="form.price"
                         :rules="[(v) => !!v || 'price required']"
+                        label="Rent price"
+                        outlined
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-text-field
+                        v-model="form.rent_price"
+                        :rules="[(v) => !!v || 'rent price required']"
                         label="Rent price"
                         outlined
                         required
@@ -92,6 +101,7 @@ export default {
       form: {
         name: null,
         details: null,
+        price: null,
         rent_price: null,
         picture: 'beta',
         available_status: true,
