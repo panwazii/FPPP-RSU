@@ -25,7 +25,6 @@
             <v-col cols="8">
               <template>
                 <v-form ref="form" lazy-validation>
-                  <p>ID</p>
                   <v-row class="mt-2">
                     <v-col cols="12" sm="12">
                       <v-text-field
@@ -37,7 +36,6 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
-                  <p>ชื่อผู้ใช้งาน</p>
                   <v-row class="mt-2">
                     <v-col cols="12" sm="6">
                       <v-text-field

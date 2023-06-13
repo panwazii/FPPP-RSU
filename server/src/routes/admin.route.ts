@@ -323,7 +323,7 @@ adminRouter.get('/getAllGlobalEquipment', authValid, (req, res) => {
         EquipmentController.getAllGlobalEquipment(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, globalequipment: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                    code: 200, global_equipment: Data.rows, total_pages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));

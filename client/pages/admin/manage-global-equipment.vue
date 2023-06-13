@@ -2,9 +2,9 @@
   <v-container>
     <AdminEditGlobalEquipment
       :open="editGlobalEquipment"
-      :data="globalequipment"
+      :data="globalEquipment"
       :editGlobalEquipment.sync="editGlobalEquipment"
-      v-if="globalequipment"
+      v-if="globalEquipment"
     />
     <AdminCreateGlobalEquipment
       :open="createGlobalEquipment"
@@ -19,7 +19,7 @@
     <div>
       <v-data-table
         :headers="headers"
-        :items="globalequipments"
+        :items="globalEquipments"
         :page.sync="page"
         :items-per-page="itemsPerPage"
         hide-default-footer
@@ -67,8 +67,8 @@ export default {
       itemsPerPage: 7,
       totalPages: 0,
       search: '',
-      globalequipments: [],
-      globalequipment: null,
+      globalEquipments: [],
+      globalEquipment: null,
       newEquipment: null,
       editGlobalEquipment: false,
       createGlobalEquipment: false,
@@ -96,7 +96,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('setPathName', 'manage equipment')
+    this.$store.dispatch('setPathName', 'manage global equipment')
     this.fetchGlobalEquipment()
   },
   watch: {
@@ -112,12 +112,12 @@ export default {
           page: this.page,
         },
       })
-      console.log('this is equipment', Data)
-      this.globalequipments = Data.globalequipment
+      this.globalEquipments = Data.global_equipment
       this.totalPages = Data.total_pages
     },
     async openEditGlobalEquipmentModal(id) {
-      const EquipmentData = await this.$store.dispatch(
+      try {
+        const EquipmentData = await this.$store.dispatch(
         'api/admin/getSingleGlobalEquipment',
         {
           params: {
@@ -125,8 +125,13 @@ export default {
           },
         }
       )
-      this.equipment = EquipmentData.global_equipment
+      console.log(EquipmentData);
+      this.globalEquipment = EquipmentData.global_equipment
       this.editGlobalEquipment = true
+      } catch (error) {
+        console.log(error);
+      }
+      
     },
   },
 }
