@@ -37,11 +37,6 @@ export const initUserTypeModel = (connection: Sequelize) => {
                 allowNull: false,
                 type: DataTypes.STRING,
             },
-            verified: {
-                allowNull: false,
-                type: DataTypes.BOOLEAN,
-                defaultValue: false,
-            },
             created_at: {
                 allowNull: false,
                 type: DataTypes.DATE,

@@ -5,11 +5,28 @@ import AdminController from '../controllers/admin.controller';
 import NewsController from '../controllers/news.controller';
 import RoomController from '../controllers/room.controller';
 import UserController from '../controllers/user.controller';
+import UserTypesController from '../controllers/user_types.controller';
 import EquipmentController from '../controllers/equipment.controller';
 import { numberOrDefault } from '../tools/util';
 
 const publicRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON('PUBLIC');
+
+publicRouter.get('/getAllUserTypesDropdown', async (req, res) => {
+    try {
+        UserTypesController.getAllUserTypesRaw().then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, user_types: Data.rows
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
 
 publicRouter.get('/getAllNews', async (req, res) => {
     try {
