@@ -122,14 +122,10 @@ class UserController {
         }
 
         const password_hash = await bcrypt.hash(data.password, 10);
-
-        let usergroup = 'user';
-        if (data.usergroup === 'admin' || data.usergroup === 'moderator') {
-            usergroup = data.usergroup;
-        }
         const packet: UserAttribute = {
             fname: data.fname,
             lname: data.lname,
+            type_id: data.type_id,
             password: password_hash,
             email: data.email,
             avatar: data.avatar,
