@@ -5,4 +5,7 @@ export const actions = {
     async adminVerify({ getters }, data) {
         return await this.$axios.get('api/auth/admin/verify', data).then((res) => res.data)
     },
+    async userRegister({ getters }, data) {
+        return await this.$axios.post('api/auth/user/register', data).then((res) => res.data)
+    },
 }
