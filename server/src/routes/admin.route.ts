@@ -6,6 +6,7 @@ import NewsController from '../controllers/news.controller';
 import RoomController from '../controllers/room.controller';
 import UserController from '../controllers/user.controller';
 import EquipmentController from '../controllers/equipment.controller';
+import UserTypesController from '../controllers/user_types.controller';
 import { authValid } from '../middleware/admin.middleware';
 import { numberOrDefault } from '../tools/util';
 
@@ -386,6 +387,28 @@ adminRouter.get('/getSingleGlobalEquipment', authValid, (req, res) => {
             if (Data) {
                 res.status(200).json({
                     code: 200, global_equipment: Data
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
+adminRouter.get('/getAllUserTypes', async (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        UserTypesController.getAllUserTypes(Limit, Offset).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, user_types: Data.rows, totalpages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
