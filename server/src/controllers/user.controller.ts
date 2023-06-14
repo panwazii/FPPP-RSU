@@ -9,6 +9,14 @@ import { log } from '../tools/log';
 class UserController {
     public static readonly EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
+    public static async getAllUsers(limit: number, offset: number) {
+        return UserModel.findAndCountAll({
+            limit,
+            offset,
+            raw: true
+        });
+    }
+
     public static async getUserByQuery(options: any) {
         log(options);
         const orderBy = [
@@ -53,9 +61,7 @@ class UserController {
         return UserModel.findOne({
             where: {
                 email,
-                status: {
-                    [Op.ne]: -1,
-                },
+                available_status: true
             },
             raw: true,
         });
@@ -71,7 +77,7 @@ class UserController {
 
     public static async safeDestroyUser(userID: string) {
         return UserModel.update({
-            status: -1,
+            available_status: false,
         }, {
             where: {
                 id: userID,

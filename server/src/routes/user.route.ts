@@ -21,7 +21,6 @@ userRouter.get('/getUserInfo', authValid, async (req, res) => {
                         email: user.email,
                         tel: user.tel,
                         avatar: user.avatar,
-                        status: user.status,
                         created_at: user.created_at,
                         update_at: user.update_at
                     }

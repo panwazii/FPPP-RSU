@@ -397,6 +397,28 @@ adminRouter.get('/getSingleGlobalEquipment', authValid, (req, res) => {
     }
 });
 
+adminRouter.get('/getAllUsers', async (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        UserController.getAllUsers(Limit, Offset).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, users: Data.rows, totalpages: Math.ceil(Data.count / Limit)
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
 adminRouter.get('/getAllUserTypes', async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
