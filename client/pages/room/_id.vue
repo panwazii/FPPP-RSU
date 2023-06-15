@@ -3,7 +3,6 @@
     <v-row class="mb-12"><v-spacer></v-spacer></v-row>
     <v-row class="mb-12"><v-spacer></v-spacer></v-row>
     <v-row class="justify-center">
-      {{ tool }}
       <v-card class="pa-6 rounded-lg" width="1100" height="400">
         <h1 align="left" class="amber--text pa-1"></h1>
         <v-form ref="form" lazy-validation>
@@ -20,9 +19,7 @@
             </v-col>
             <v-col cols="12" sm="6">
               <v-avatar class="ml-16 rounded-xl" size="300">
-                <v-img
-                  :src="room.picture"
-                ></v-img>
+                <v-img :src="room.picture"></v-img>
               </v-avatar>
             </v-col>
           </v-row>
@@ -33,7 +30,24 @@
     <v-row class="justify-center mt-16">
       <h1>อุปกรณ์</h1>
     </v-row>
+
     <v-row class="justify-center mt-6 mb-16"> LOREM หล่อหลอม จอมพลหงอง </v-row>
+
+    <v-row class="justify-center mt-6 mb-16">
+      <v-col
+        class="pa-5 mx-0 d-flex justify-center"
+        xs="12"
+        sm="6"
+        md="3"
+        v-for="equipments in tool"
+        :key="equipments.id"
+      >
+        <roomEquipmentCard
+          :picture="equipments.picture"
+          :name="equipments.name"
+        />
+      </v-col>
+    </v-row>
 
     <!-- <v-row class="text-h4 font-weight-bold mt-12 justify-center">
       <v-col cols="12" sm="1" v-for="(tools, i) in tools" :key="i">
@@ -79,13 +93,12 @@ export default {
   },
   data() {
     return {
-      room:{},
+      room: {},
       tool: [],
+      pic: 'https://media.istockphoto.com/id/92042654/photo/cute-girl-in-shock.jpg?s=1024x1024&w=is&k=20&c=BiNPkb1OZMSF5hDAZ1r3ZNQr4BXNwj1f4j8wGZM_Q9U=',
     }
   },
-  methods:{
-
-  }
+  methods: {},
 }
 </script>
 

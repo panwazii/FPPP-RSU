@@ -35,7 +35,7 @@
           v-for="room in rooms"
           :key="room.id"
         >
-          <indexRoom :picture="room.picture" :name="room.name" />
+          <indexRoom :picture="room.picture" :name="room.name" :id="room.id" />
         </v-col>
       </v-row>
     </div>

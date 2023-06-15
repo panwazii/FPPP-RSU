@@ -4,7 +4,14 @@
     <v-card-title> {{ name }}</v-card-title>
     <!-- <v-card-subtitle> {{ room.subtitle }} </v-card-subtitle> -->
     <v-card-actions>
-      <v-btn color="orange lighten-2" text> Explore </v-btn>
+      <v-btn
+        class="rounded-xl"
+        variant="text"
+        color="white"
+        @click="$router.push('/room/' + id)"
+      >
+        รายละเอียดเพิ่มเติม
+      </v-btn>
       <v-spacer></v-spacer>
     </v-card-actions>
   </v-card>
@@ -17,6 +24,10 @@ export default {
       default: () => '',
     },
     name: {
+      type: String,
+      default: () => '',
+    },
+    id: {
       type: String,
       default: () => '',
     },
