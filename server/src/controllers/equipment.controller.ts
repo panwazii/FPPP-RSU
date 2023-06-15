@@ -53,6 +53,15 @@ class EquipmentController {
         });
     }
 
+    public static async getAllEquipmentByRoom(id: string,limit: number, offset: number) {
+        return EquipmentModel.findAndCountAll({
+            where: { room_id: id ,available_status: true },
+            limit,
+            offset,
+            raw: true
+        });
+    }
+
     public static async createEquipment(data: any) {
 
         const packet: EquipmentAttribute = {

@@ -94,6 +94,29 @@ publicRouter.get('/getAllEquipment', async (req, res) => {
     }
 });
 
+publicRouter.get('/getAllEquipmentByRoom', async (req, res) => {
+    try {
+        const id = req.query.id as string;
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        EquipmentController.getAllEquipmentByRoom(id,Limit, Offset).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, equip: Data.rows, totalpages: Math.ceil(Data.count / Limit)
+                });
+            } else {
+                res.json(errorCode('PUBLIC', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
 publicRouter.get('/getAllGlobalEquipment', async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
@@ -109,6 +132,21 @@ publicRouter.get('/getAllGlobalEquipment', async (req, res) => {
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
+publicRouter.get('/getSingleRoom', async (req, res) => {
+    try {
+        const id = req.query.id as string; 
+        RoomController.getByID(id).then((Data) => {
+            if (Data) {
+                res.status(200).json({Data});
+            } else {
+                res.json(errorCode('PUBLIC', 0));
             }
         });
     } catch (error) {
