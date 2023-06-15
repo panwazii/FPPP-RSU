@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <div><adminManageUser /></div>
   </v-container>
 </template>
 <script>
