@@ -61,7 +61,7 @@ publicRouter.get('/getAllRooms', async (req, res) => {
         RoomController.getAllRooms(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, news: Data.rows, totalpages: Math.ceil(Data.count / Limit)
+                    code: 200, rooms: Data.rows, totalpages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -83,7 +83,7 @@ publicRouter.get('/getAllEquipment', async (req, res) => {
         EquipmentController.getAllEquipment(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, news: Data.rows, totalpages: Math.ceil(Data.count / Limit)
+                    code: 200, equipments: Data.rows, totalpages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -128,7 +128,7 @@ publicRouter.get('/getAllGlobalEquipment', async (req, res) => {
         EquipmentController.getAllGlobalEquipment(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, news: Data.rows, totalpages: Math.ceil(Data.count / Limit)
+                    code: 200, global_equipments: Data.rows, totalpages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));

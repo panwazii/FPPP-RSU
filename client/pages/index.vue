@@ -10,7 +10,6 @@
         <v-btn rounded depressed>more</v-btn>
       </div>
     </v-parallax>
-    {{ rooms }}
     <indexCarousel />
     <v-card
       color="transparent"
@@ -36,10 +35,7 @@
           v-for="room in rooms"
           :key="room.id"
         >
-        <indexRoom
-          :picture="room.picture"
-          :name="room.name"
-        />
+          <indexRoom :picture="room.picture" :name="room.name" />
         </v-col>
       </v-row>
     </div>
@@ -53,7 +49,8 @@
 export default {
   name: 'IndexPage',
   async fetch() {
-    this.rooms = await this.$store.dispatch('api/public/getAllRooms')
+    const Rooms = await this.$store.dispatch('api/public/getAllRooms')
+    this.rooms = Rooms.rooms
   },
 
   data() {
@@ -73,7 +70,7 @@ export default {
 .paralax-text {
   text-shadow: 2px 2px #000000;
 }
-.room1{
+.room1 {
   max-width: 1200px;
   margin: auto;
 }
