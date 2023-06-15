@@ -9,10 +9,10 @@
 
     <v-row
       class="text-h4 font-weight-bold mt-12 mr-sm-16 d-flex justify-center"
-      v-for="(room, i) in room"
-      :key="i"
+      v-for="(rooms, index) in room"
+      :key="rooms.name"
     >
-      <v-card width="1020" height="220">
+      <!-- <v-card width="1020" height="220">
         <div class="d-flex flex-no-wrap justify-space-between rounded-lg">
           <div>
             <v-card-title class="text-h5"> {{ room }} </v-card-title>
@@ -41,16 +41,31 @@
             ></v-img>
           </v-avatar>
         </div>
-      </v-card>
+      </v-card> -->
+      <roomRoomselect
+        :id="rooms.id"
+        :picture="rooms.picture"
+        :name="rooms.name"
+        :detail="rooms.details"
+      />
     </v-row>
   </div>
 </template>
 <script>
 export default {
+  mounted(){
+    this.fetctrooms()
+  },
   data() {
     return {
-      room: ['ห้อง 101', 'ห้อง 102', 'ห้อง 103'],
+      room: [],
     }
+  },
+  methods: {
+    async fetctrooms() {
+      let data = await this.$store.dispatch('api/public/getAllRooms')
+      this.room = data.rooms
+    },
   },
 }
 </script>

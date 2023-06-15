@@ -3,16 +3,14 @@
     <v-row class="mb-12"><v-spacer></v-spacer></v-row>
     <v-row class="mb-12"><v-spacer></v-spacer></v-row>
     <v-row class="justify-center">
+      {{ tool }}
       <v-card class="pa-6 rounded-lg" width="1100" height="400">
         <h1 align="left" class="amber--text pa-1"></h1>
         <v-form ref="form" lazy-validation>
           <v-row class="mt-2">
             <v-col cols="12" sm="6">
-              <h1>{{ $route.params.id }}</h1>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi,
-              ratione debitis quis est labore voluptatibus! Eaque cupiditate
-              minima, at placeat totam, magni doloremque veniam neque porro
-              libero rerum unde voluptatem!
+              <h1>{{ room.name }}</h1>
+              {{ room.details }}
 
               <v-card-actions class="justify-left">
                 <v-btn class="rounded-xl" variant="text" color="white"
@@ -23,7 +21,7 @@
             <v-col cols="12" sm="6">
               <v-avatar class="ml-16 rounded-xl" size="300">
                 <v-img
-                  src="https://cdn.vuetifyjs.com/images/cards/halcyon.png"
+                  :src="room.picture"
                 ></v-img>
               </v-avatar>
             </v-col>
@@ -37,7 +35,7 @@
     </v-row>
     <v-row class="justify-center mt-6 mb-16"> LOREM หล่อหลอม จอมพลหงอง </v-row>
 
-    <v-row class="text-h4 font-weight-bold mt-12 justify-center">
+    <!-- <v-row class="text-h4 font-weight-bold mt-12 justify-center">
       <v-col cols="12" sm="1" v-for="(tools, i) in tools" :key="i">
         <v-card class="mx-auto rounded-xl" max-width="344">
           <v-img
@@ -51,17 +49,43 @@
           </v-card-title>
         </v-card>
       </v-col>
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      tools: ['DYNAMO', 'TNT', 'NUKE'],
+  async asyncData({ params }) {
+    const id = params.id
+    return { id }
+  },
+  async fetch() {
+    let room = await this.$store.dispatch('api/public/getSingleRoom', {
+      params: { id: this.id },
+    })
+    let tool = await this.$store.dispatch('api/public/getAllEquipmentByRoom', {
+      params: { id: this.id },
+    })
+    if (room == null) {
+      this.$nuxt.error({
+        statusCode: 404,
+        message: ' Room Not found ' + this.id,
+      })
+      return
+    } else {
+      this.room = room.Data
+      this.tool = tool.equip
     }
   },
+  data() {
+    return {
+      room:{},
+      tool: [],
+    }
+  },
+  methods:{
+
+  }
 }
 </script>
 
