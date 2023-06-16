@@ -128,7 +128,7 @@ class UserController {
         }
 
         const password_hash = await bcrypt.hash(data.password, 10);
-        const packet: UserAttribute = {
+        const packet = {
             fname: data.fname,
             lname: data.lname,
             type_id: data.type_id,
@@ -147,18 +147,13 @@ class UserController {
     }
 
     public static async update(data: any) {
-        return UserModel.update({
-            fname: data.fname,
-            lname: data.lname,
-            type_id: data.type_id,
-            email: data.email,
-            avatar: data.avatar,
-            tel: data.tel,
-        }, {
-            where: {
-                id: data.id,
-            },
-        }).then(() => true)
+        return UserModel.update(
+            data
+            , {
+                where: {
+                    id: data.id,
+                },
+            }).then(() => true)
             .catch(() => false);
     }
 

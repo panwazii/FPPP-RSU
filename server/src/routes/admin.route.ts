@@ -214,7 +214,7 @@ adminRouter.post('/updateRoom', authValid, (req, res) => {
 
 });
 
-adminRouter.post('/updateEquipment', (req, res) => {
+adminRouter.post('/updateEquipment', authValid, (req, res) => {
     try {
         if (!req.body) {
             res.json(errorCode('update', 0));
@@ -227,7 +227,7 @@ adminRouter.post('/updateEquipment', (req, res) => {
             return;
         }
 
-        EquipmentController.updateEquipment(Data,false).then((result) => {
+        EquipmentController.updateEquipment(Data, false).then((result) => {
             if (result) {
                 res.json({ code: 200, result });
             } else {
@@ -240,7 +240,7 @@ adminRouter.post('/updateEquipment', (req, res) => {
     }
 });
 
-adminRouter.post('/updateGlobalEquipment',  (req, res) => {
+adminRouter.post('/updateGlobalEquipment', authValid, (req, res) => {
     try {
         if (!req.body) {
             res.json(errorCode('update', 0));
@@ -253,7 +253,7 @@ adminRouter.post('/updateGlobalEquipment',  (req, res) => {
             return;
         }
 
-        EquipmentController.updateEquipment(Data,true).then((result) => {
+        EquipmentController.updateEquipment(Data, true).then((result) => {
             if (result) {
                 res.json({ code: 200, result });
             } else {
@@ -266,7 +266,7 @@ adminRouter.post('/updateGlobalEquipment',  (req, res) => {
     }
 });
 
-adminRouter.post('/updateUserType',  (req, res) => {
+adminRouter.post('/updateUserType', authValid, (req, res) => {
     try {
         if (!req.body) {
             res.json(errorCode('update', 0));
@@ -292,7 +292,7 @@ adminRouter.post('/updateUserType',  (req, res) => {
     }
 });
 
-adminRouter.post('/updateUser',  (req, res) => {
+adminRouter.post('/updateUser', authValid, (req, res) => {
     try {
         if (!req.body) {
             res.json(errorCode('update', 0));
@@ -305,14 +305,26 @@ adminRouter.post('/updateUser',  (req, res) => {
             return;
         }
 
-        UserController.update(Data).then((result) => {
+        UserController.update({
+            id: Data.id,
+            fname: Data.fname,
+            lname: Data.lname,
+            type_id: Data.type_id,
+            email: Data.email,
+            avatar: Data.avatar,
+            tel: Data.tel,
+            verify_status: Data.verify_status,
+            available_status: Data.available_status,
+        }).then((result) => {
             if (result) {
-                res.json({ code: 201, result });
+                return res.json({ code: 201, result });
             } else {
-                res.json(errorCode('UPDATE', 2));
+                return res.json(errorCode('UPDATE', 2));
             }
         });
     } catch (error) {
+        console.log("error here");
+
         log(error)
         res.status(401).json(error);
     }

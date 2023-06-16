@@ -89,25 +89,29 @@ authRouter.get('/admin/verify', async (req, res) => {
     });
 
   } catch (error) {
-    log("verify", error)
     res.status(401).json(error);
   }
 });
 
 authRouter.post('/user/register', async (req, res) => {
   try {
+    const Check = await UserController.getByEmail(req.body.email)
+    if (Check) {
+      return res.status(200).json({ code: 1, msg: "this email is not available" })
+    }
+
     const User = await UserController.register(req.body)
+
 
     if (User) {
       return res.status(201).json({ code: 201 });
     }
-    else{
+    else {
       return res.status(401).json({ code: 401 });
     }
 
   } catch (error) {
-    log(error)
-    res.status(401).json(error);
+    res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
   }
 });
 
