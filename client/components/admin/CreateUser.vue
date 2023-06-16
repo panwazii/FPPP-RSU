@@ -196,24 +196,24 @@ export default {
           this.clearForm()
           this.$emit('update:createUser', false)
           this.loading = false
-          this.errorMessage = ''
+          this.errorMessage = Response.msg
           this.errorModal = true
         }
       } catch (error) {
         this.loading = false
-        console.log(error)
+        this.clearForm()
         this.$emit('update:createUser', false)
-        this.errorMessage = error
+        this.errorMessage = String(error)
         this.errorModal = true
       }
     },
     clearForm() {
-      this.fname = null
-      this.lname = null
-      this.email = null
-      this.type_id = null
-      this.password = null
-      this.tel = null
+      this.form.fname = null
+      this.form.lname = null
+      this.form.email = null
+      this.form.type_id = null
+      this.form.password = null
+      this.form.tel = null
     },
   },
 }
