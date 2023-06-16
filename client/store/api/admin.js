@@ -45,5 +45,19 @@ export const actions = {
     async updateGlobalEquipment({ getters }, data) {
         return await this.$axios.post('api/admin/updateGlobalEquipment', data).then((res) => res.data)
     },
+    //User Types
+    async getAllUserTypes({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getAllUserTypes', data).then((res) => res.data)
+    },
+    async getSingleUserType({ getters }, data) {
+        return await this.$axios.get('api/admin/getSingleUserType', data).then((res) => res.data)
+    },
+    async createUserType({ getters }, data) {
+        return await this.$axios.post('api/admin/createUserType', data).then((res) => res.data)
+    },
+    async updateUserType({ getters }, data) {
+        return await this.$axios.post('api/admin/updateUserType', data).then((res) => res.data)
+    },
 
 }

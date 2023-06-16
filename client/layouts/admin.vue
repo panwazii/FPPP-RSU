@@ -161,6 +161,12 @@ export default {
           icon: 'mdi-account-supervisor',
           path: '/admin/manage-admin',
         },
+        {
+          id: 3,
+          name: 'Manage user types',
+          icon: 'mdi-account-star',
+          path: '/admin/manage-usertype',
+        },
       ],
       path_name: '',
     }
