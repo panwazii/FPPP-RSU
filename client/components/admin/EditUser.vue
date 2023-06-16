@@ -24,6 +24,14 @@
           <v-row class="d-flex justify-center mt-3">
             <v-col cols="8">
               <v-form ref="form" lazy-validation>
+                <v-text-field
+                  v-model="data.id"
+                  label="ID"
+                  required
+                  outlined
+                  disabled
+                >
+                </v-text-field>
                 <v-row class="mt-2">
                   <v-col cols="12" sm="6">
                     <v-text-field
@@ -74,6 +82,19 @@
                   :rules="[(v) => !!v || 'โปรดระบุหมายเลขโทรศัพท์']"
                 >
                 </v-text-field>
+                <v-switch
+                  v-model="data.verify_status"
+                  :label="`verify status : ${convertAvailableStatus(
+                    data.verify_status
+                  )}`"
+                >
+                </v-switch>
+                <v-switch
+                  v-model="data.available_status"
+                  :label="`available status : ${convertAvailableStatus(
+                    data.available_status
+                  )}`"
+                ></v-switch>
               </v-form>
             </v-col>
           </v-row>
@@ -141,6 +162,13 @@ export default {
         this.loading = false
         console.log(error)
         this.$emit('update:editUser', false)
+      }
+    },
+    convertAvailableStatus(status) {
+      if (status === true) {
+        return 'On'
+      } else if (status === false) {
+        return 'Off'
       }
     },
   },
