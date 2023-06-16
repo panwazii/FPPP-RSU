@@ -65,26 +65,26 @@ userRouter.post('/register', async (req, res) => {
     }
 });
 
-userRouter.post('/update', authValid, (req, res) => {
-    if (!req.body) {
-        res.json(errorCode('update', 0));
-        return;
-    }
+// userRouter.post('/update', authValid, (req, res) => {
+//     if (!req.body) {
+//         res.json(errorCode('update', 0));
+//         return;
+//     }
 
-    const { user_id, data } = req.body;
-    if (!user_id || Number.isNaN(Number(user_id)) || !data) {
-        res.json(errorCode('update', 1));
-        return;
-    }
+//     const { user_id, data } = req.body;
+//     if (!user_id || Number.isNaN(Number(user_id)) || !data) {
+//         res.json(errorCode('update', 1));
+//         return;
+//     }
 
-    UserController.update(Number(user_id), data).then((state) => {
-        if (state) {
-            res.json({ code: 200, state });
-        } else {
-            res.json(errorCode('UPDATE', 2));
-        }
-    });
-});
+//     UserController.update(Number(user_id), data).then((state) => {
+//         if (state) {
+//             res.json({ code: 200, state });
+//         } else {
+//             res.json(errorCode('UPDATE', 2));
+//         }
+//     });
+// });
 
 userRouter.post('/update/password', authValid, (req, res) => {
     if (!req.body) {
