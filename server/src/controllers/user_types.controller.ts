@@ -5,7 +5,7 @@ import UserTypeModel, { UserTypeAttribute } from '../database/models/user_types.
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
-class UserTypesController {
+class UserTypeController {
     public static async getByID(id: string) {
         return UserTypeModel.findOne({
             where: {
@@ -53,4 +53,4 @@ class UserTypesController {
 
 }
 
-export default UserTypesController;
+export default UserTypeController;

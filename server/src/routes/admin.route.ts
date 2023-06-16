@@ -6,7 +6,7 @@ import NewsController from '../controllers/news.controller';
 import RoomController from '../controllers/room.controller';
 import UserController from '../controllers/user.controller';
 import EquipmentController from '../controllers/equipment.controller';
-import UserTypesController from '../controllers/user_types.controller';
+import UserTypeController from '../controllers/user_types.controller';
 import { authValid } from '../middleware/admin.middleware';
 import { numberOrDefault } from '../tools/util';
 
@@ -116,6 +116,26 @@ adminRouter.post('/createGlobalEquipment', authValid, (req, res) => {
             }
         });
     } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
+adminRouter.post('/createUserType', authValid, (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+
+        UserTypeController.createUserType(req.body).then((state) => {
+            if (state) {
+                res.json({ code: 201, state });
+            } else {
+                res.json(errorCode('CREATE', 2));
+            }
+        });
+    } catch (error) {
+        console.log(error);
         res.status(401).json(error);
     }
 });
@@ -268,6 +288,32 @@ adminRouter.post('/updateGlobalEquipment',  (req, res) => {
     }
 });
 
+adminRouter.post('/updateUserType',  (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('update', 0));
+            return;
+        }
+
+        const Data = req.body;
+        if (!Data) {
+            res.json(errorCode('update', 1));
+            return;
+        }
+
+        UserTypeController.update(Data).then((result) => {
+            if (result) {
+                res.json({ code: 200, result });
+            } else {
+                res.json(errorCode('UPDATE', 2));
+            }
+        });
+    } catch (error) {
+        log(error)
+        res.status(401).json(error);
+    }
+});
+
 adminRouter.get('/getAllRooms', authValid, (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
@@ -397,6 +443,27 @@ adminRouter.get('/getSingleGlobalEquipment', authValid, (req, res) => {
     }
 });
 
+adminRouter.get('/getSingleUserType', authValid, (req, res) => {
+    try {
+        if (!req.query.id) {
+            res.json(errorCode('ADMIN', 1));
+            return;
+        }
+        const Id = req.query.id as string;
+        UserTypeController.getByID(Id).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, user_type: Data
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
 adminRouter.get('/getAllUsers', async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
@@ -427,7 +494,7 @@ adminRouter.get('/getAllUserTypes', async (req, res) => {
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        UserTypesController.getAllUserTypes(Limit, Offset).then((Data) => {
+        UserTypeController.getAllUserTypes(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
                     code: 200, user_types: Data.rows, totalpages: Math.ceil(Data.count / Limit)
