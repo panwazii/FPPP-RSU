@@ -21,9 +21,6 @@
         <v-btn color="primary" @click="confirm" class="font-weight-medium mt-3">
           ตกลง
         </v-btn>
-        <v-btn color="error" @click="cancel" class="font-weight-medium mt-3">
-          ยกเลิก
-        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -31,13 +28,13 @@
 <script>
 export default {
   props: {
-    method: { type: Function },
+    method: { type: Function, default: null },
     open: {
       required: true,
     },
     message: {
-      required: true,
       type: String,
+      default: 'Somthing went wrong.',
     },
   },
   data() {
@@ -45,11 +42,12 @@ export default {
   },
   methods: {
     confirm() {
-      this.method()
-      this.$emit('update:error', false)
-    },
-    cancel() {
-      this.$emit('update:error', false)
+      if (this.method === null) {
+        this.$emit('update:error', false)
+      } else {
+        this.method()
+        this.$emit('update:error', false)
+      }
     },
   },
 }
