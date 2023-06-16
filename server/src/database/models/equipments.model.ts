@@ -21,21 +21,21 @@ export interface EquipmentAttributeCreation extends Optional<EquipmentAttribute,
 
 
 class EquipmentModel extends Model<EquipmentAttribute, EquipmentAttributeCreation> implements EquipmentAttribute {
-    public id!: string;
+    declare id: string;
 
-    public room_id!: number;
+    declare room_id: number;
 
-    public name!: string;
+    declare name: string;
 
-    public details!: string;
+    declare details: string;
 
-    public price!: number;
+    declare price: number;
 
-    public rent_price!: number;
+    declare rent_price: number;
 
-    public picture!: string;
+    declare picture: string;
 
-    public available_status!: boolean;
+    declare available_status: boolean;
 }
 
 export const initEquipmentModel = (connection: Sequelize) => {

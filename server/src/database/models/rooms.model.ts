@@ -18,17 +18,17 @@ export interface RoomAttributeCreation extends Optional<RoomAttribute, 'id'> { }
 
 
 class RoomModel extends Model<RoomAttribute, RoomAttributeCreation> implements RoomAttribute {
-    public id!: string;
+    declare id: string;
 
-    public name!: string;
+    declare name: string;
 
-    public details!: string;
+    declare details: string;
 
-    public picture!: string;
+    declare picture: string;
 
-    public rent_price!: number;
+    declare rent_price: number;
 
-    public available_status!: boolean;
+    declare available_status: boolean;
 }
 
 export const initRoomModel = (connection: Sequelize) => {

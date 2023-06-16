@@ -12,13 +12,13 @@ export interface AdminTypeAttribute {
 export interface AdminTypeAttributeCreation extends Optional<AdminTypeAttribute, 'id'> { }
 
 class AdminTypeModel extends Model<AdminTypeAttribute, AdminTypeAttributeCreation> implements AdminTypeAttribute {
-    public id!: number;
+    declare id: number;
 
-    public name!: string;
+    declare name: string;
 
-    public created_at!: Date;
+    declare created_at: Date;
 
-    public update_at!: Date;
+    declare update_at: Date;
 }
 
 export const initAdminTypeModel = (connection: Sequelize) => {

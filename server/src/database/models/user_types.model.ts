@@ -13,15 +13,15 @@ export interface UserTypeAttribute {
 export interface UserTypeAttributeCreation extends Optional<UserTypeAttribute, 'id'> { }
 
 class UserTypeModel extends Model<UserTypeAttribute, UserTypeAttributeCreation> implements UserTypeAttribute {
-    public id!: number;
+    declare id: number;
 
-    public name!: string;
+    declare name: string;
 
-    public verified!: boolean;
+    declare verified: boolean;
 
-    public created_at!: Date;
+    declare created_at: Date;
 
-    public update_at!: Date;
+    declare update_at: Date;
 }
 
 export const initUserTypeModel = (connection: Sequelize) => {

@@ -19,15 +19,15 @@ export interface ReserveAttributeCreation extends Optional<ReserveAttribute, 'id
 
 
 class ReserveModel extends Model<ReserveAttribute, ReserveAttributeCreation> implements ReserveAttribute {
-    public id!: string;
+    declare id: string;
 
-    public user_id!: number;
+    declare user_id: number;
 
-    public room_id!: number;
+    declare room_id: number;
 
-    public date_time!: string;
+    declare date_time: string;
 
-    public available_status!: boolean;
+    declare available_status: boolean;
 }
 
 export const initReserveModel = (connection: Sequelize) => {

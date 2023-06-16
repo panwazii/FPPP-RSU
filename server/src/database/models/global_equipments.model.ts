@@ -19,19 +19,19 @@ export interface GlobalEquipmentAttributeCreation extends Optional<GlobalEquipme
 
 
 class GlobalEquipmentModel extends Model<GlobalEquipmentAttribute, GlobalEquipmentAttributeCreation> implements GlobalEquipmentAttribute {
-    public id!: string;
+    declare id: string;
 
-    public name!: string;
+    declare name: string;
 
-    public details!: string;
+    declare details: string;
 
-    public price!: number;
+    declare price: number;
 
-    public rent_price!: number;
+    declare rent_price: number;
 
-    public picture!: string;
+    declare picture: string;
 
-    public available_status!: boolean;
+    declare available_status: boolean;
 }
 
 export const initGlobalEquipmentModel = (connection: Sequelize) => {

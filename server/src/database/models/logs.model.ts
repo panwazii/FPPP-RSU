@@ -15,15 +15,15 @@ export interface LogsAttributeCreation extends Optional<LogsAttribute, 'id'> { }
 
 
 class LogsModel extends Model<LogsAttribute, LogsAttributeCreation> implements LogsAttribute {
-    public id!: string;
+    declare id: string;
 
-    public is_admin!: boolean;
+    declare is_admin: boolean;
 
-    public type!: string;
+    declare type: string;
 
-    public operation!: string;
+    declare operation: string;
 
-    public time!: string;
+    declare time: string;
 }
 
 export const initLogsModel = (connection: Sequelize) => {

@@ -17,15 +17,15 @@ export interface NewsAttributeCreation extends Optional<NewsAttribute, 'id'> { }
 
 
 class NewsModel extends Model<NewsAttribute, NewsAttributeCreation> implements NewsAttribute {
-    public id!: string;
+    declare id: string;
 
-    public title!: string;
+    declare title: string;
 
-    public details!: string;
+    declare details: string;
 
-    public picture!: string;
+    declare picture: string;
 
-    public available_status!: boolean;
+    declare available_status: boolean;
 }
 
 export const initNewsModel = (connection: Sequelize) => {

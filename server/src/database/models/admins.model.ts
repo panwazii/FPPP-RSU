@@ -20,27 +20,27 @@ export interface AdminAttribute {
 export interface AdminAttributeCreation extends Optional<AdminAttribute, 'id'> { }
 
 class AdminModel extends Model<AdminAttribute, AdminAttributeCreation> implements AdminAttribute {
-    public id!: string;
+    declare id: string;
 
-    public type_id!: number;
+    declare type_id: number;
 
-    public fname!: string;
+    declare fname: string;
 
-    public lname!: string;
+    declare lname: string;
 
-    public email!: string;
+    declare email: string;
 
-    public password!: string;
+    declare password: string;
 
-    public tel!: string;
+    declare tel: string;
 
-    public avatar!: string;
+    declare avatar: string;
 
-    public status!: number;
+    declare status: number;
 
-    public created_at!: Date;
+    declare created_at: Date;
 
-    public update_at!: Date;
+    declare update_at: Date;
 }
 
 export const initAdminModel = (connection: Sequelize) => {
