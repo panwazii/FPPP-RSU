@@ -49,7 +49,7 @@ class UserController {
         return UserModel.findAndCountAll(packet);
     }
 
-    public static async getByUserID(userID: string) {
+    public static async getByID(userID: string) {
         return UserModel.findOne({
             where: {
                 id: userID,
@@ -111,7 +111,7 @@ class UserController {
 
         const valid = bcrypt.compareSync(password, data.password);
         if (valid) {
-            const userInfo = await UserController.getByUserID(data.id);
+            const userInfo = await UserController.getByID(data.id);
             return {
                 code: 200,
                 data: userInfo,
@@ -146,36 +146,24 @@ class UserController {
             });
     }
 
-    public static async update(userID: number, data: any) {
-        log(data);
-        let password_hash;
-
-        if (data.password) {
-            password_hash = await bcrypt.hash(data.password, 10);
-        }
-
-        let usergroup = 'user';
-        if (data.usergroup === 'admin' || data.usergroup === 'moderator') {
-            usergroup = data.usergroup;
-        }
-
+    public static async update(data: any) {
         return UserModel.update({
             fname: data.fname,
             lname: data.lname,
-            password: password_hash,
+            type_id: data.type_id,
             email: data.email,
             avatar: data.avatar,
             tel: data.tel,
         }, {
             where: {
-                id: userID,
+                id: data.id,
             },
         }).then(() => true)
             .catch(() => false);
     }
 
     public static async resetPassword(userID: string, oldPass: string, newPass: string) {
-        const user = await UserController.getByUserID(userID);
+        const user = await UserController.getByID(userID);
         if (!user) {
             return false;
         }

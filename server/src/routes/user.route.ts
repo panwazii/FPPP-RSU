@@ -10,7 +10,7 @@ const errorCode = createErrCodeJSON('USER');
 userRouter.get('/getUserInfo', authValid, async (req, res) => {
     try {
         const UserId = req.body.credentials.id;
-        UserController.getByUserID(UserId).then((user) => {
+        UserController.getByID(UserId).then((user) => {
             if (user) {
                 res.status(200).json({
                     code: 200, admin: {

@@ -140,28 +140,6 @@ adminRouter.post('/createUserType', authValid, (req, res) => {
     }
 });
 
-
-adminRouter.post('/update', authValid, (req, res) => {
-    if (!req.body) {
-        res.json(errorCode('update', 0));
-        return;
-    }
-
-    const { user_id, data } = req.body;
-    if (!user_id || Number.isNaN(Number(user_id)) || !data) {
-        res.json(errorCode('update', 1));
-        return;
-    }
-
-    UserController.update(Number(user_id), data).then((state) => {
-        if (state) {
-            res.json({ code: 200, state });
-        } else {
-            res.json(errorCode('UPDATE', 2));
-        }
-    });
-});
-
 adminRouter.post('/update/password', authValid, (req, res) => {
     if (!req.body) {
         res.json(errorCode('pass', 0));
@@ -304,6 +282,32 @@ adminRouter.post('/updateUserType',  (req, res) => {
         UserTypeController.update(Data).then((result) => {
             if (result) {
                 res.json({ code: 200, result });
+            } else {
+                res.json(errorCode('UPDATE', 2));
+            }
+        });
+    } catch (error) {
+        log(error)
+        res.status(401).json(error);
+    }
+});
+
+adminRouter.post('/updateUser',  (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('update', 0));
+            return;
+        }
+
+        const Data = req.body;
+        if (!Data) {
+            res.json(errorCode('update', 1));
+            return;
+        }
+
+        UserController.update(Data).then((result) => {
+            if (result) {
+                res.json({ code: 201, result });
             } else {
                 res.json(errorCode('UPDATE', 2));
             }
@@ -464,6 +468,27 @@ adminRouter.get('/getSingleUserType', authValid, (req, res) => {
     }
 });
 
+adminRouter.get('/getSingleUser', authValid, (req, res) => {
+    try {
+        if (!req.query.id) {
+            res.json(errorCode('ADMIN', 1));
+            return;
+        }
+        const Id = req.query.id as string;
+        UserController.getByID(Id).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, user: Data
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
 adminRouter.get('/getAllUsers', async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
@@ -475,7 +500,7 @@ adminRouter.get('/getAllUsers', async (req, res) => {
         UserController.getAllUsers(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, users: Data.rows, totalpages: Math.ceil(Data.count / Limit)
+                    code: 200, users: Data.rows, total_pages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
