@@ -4,6 +4,12 @@ export const actions = {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
         return await this.$axios.get('api/admin/getAllUsers', data).then((res) => res.data)
     },
+    async getSingleUser({ getters }, data) {
+        return await this.$axios.get('api/admin/getSingleUser', data).then((res) => res.data)
+    },
+    async updateUser({ getters }, data) {
+        return await this.$axios.post('api/admin/updateUser', data).then((res) => res.data)
+    },
     //Rooms
     async getAllRooms({ getters }, data) {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
