@@ -1,33 +1,39 @@
 <template>
   <v-carousel max-height="400" :hide-delimiters="true" class="mt-4">
-    <v-carousel-item v-for="item in items" :key="item.id">
+    <v-carousel-item v-for="item in allNews" :key="item.id">
       <v-card
         max-width="800"
         min-height="300"
-        max-height="400"
+        max-height="800"
         class="d-flex justify-space-around mx-auto ma-10"
       >
-        <div class="d-flex flex-no-wrap justify-space-between mt-5">
-          <div>
-            <v-card-title class="text-h5">{{ item.title }}</v-card-title>
-
-            <v-card-subtitle>{{ item.subtitle }}</v-card-subtitle>
-            <v-card-text>{{ item.content }}</v-card-text>
-            <v-card-actions>
-              <v-btn
-                rounded
-                depressed
-                class="text-button"
-                right
+        <div>
+          <div class="justify-space-evenly">
+            <v-row class="mt-6">
+              <v-col cols="12" sm="6"
+                ><v-img
+                  class="ma-3"
+                  :src="item.picture"
+                  width="500"
+                  height="200"
+                ></v-img
+              ></v-col>
+              <v-col cols="12" sm="6"
+                ><v-card-title class="text-h4">{{ item.title }}</v-card-title>
+                <v-card-text>{{ item.details }}</v-card-text>
+                <v-card-actions>
+                  <v-btn
+                    class="rounded-xl"
+                    variant="text"
+                    color="white"
+                    @click="$router.push('/news/' + item.id)"
+                  >
+                    รายละเอียดเพิ่มเติม
+                  </v-btn>
+                </v-card-actions></v-col
               >
-                more
-              </v-btn>
-            </v-card-actions>
+            </v-row>
           </div>
-
-          <v-img class="ma-3" max-width="400" max-height="350" tile>
-            <v-img :src="item.src"></v-img>
-          </v-img>
         </div>
       </v-card>
     </v-carousel-item>
@@ -36,29 +42,58 @@
 
 <script>
 export default {
-  data: () => ({
-    items: [
-      {
-        id: 1,
-        color: '#1F7087',
-        src: 'https://cdn.vuetifyjs.com/images/cards/foster.jpg',
-        title: 'Supermodel',
-        subtitle: 'Foster the People',
-        content:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      },
-      {
-        id: 2,
-        color: '#952175',
-        src: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
-        title: 'Halcyon Days',
-        subtitle: 'Ellie Goulding',
-        content:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      },
-    ],
-  }),
+  layout: 'admin',
+  middleware: 'admin',
+  head() {
+    return {
+      title: 'manage news',
+    }
+  },
+  data() {
+    return {
+      valid: true,
+      loadingDialog: false,
+      editDialog: false,
+      deleteDialog: false,
+      page: 1,
+      itemsPerPage: 7,
+      totalPages: 0,
+      search: '',
+      allNews: [],
+      news: null,
+    }
+  },
+  mounted() {
+    this.$store.dispatch('setPathName', 'manage news')
+    this.fetchNews()
+  },
+  watch: {
+    page() {
+      this.fetchNews()
+    },
+  },
+  methods: {
+    async fetchNews() {
+      let Data = await this.$store.dispatch('api/admin/getAllNews', {
+        params: {
+          limit: this.itemsPerPage,
+          page: this.page,
+        },
+      })
+      console.log('this is equipment', Data)
+      this.allNews = Data.news
+      this.totalPages = Data.total_pages
+    },
+    async openEditNewsModal(id) {
+      const NewsData = await this.$store.dispatch('api/admin/getSingleNews', {
+        params: {
+          id: id,
+        },
+      })
+      this.news = NewsData.news
+      this.editNews = true
+    },
+  },
 }
 </script>
-<style scoped>
-</style>
+<style scoped></style>
