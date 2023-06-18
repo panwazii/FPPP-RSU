@@ -65,5 +65,19 @@ export const actions = {
     async updateUserType({ getters }, data) {
         return await this.$axios.post('api/admin/updateUserType', data).then((res) => res.data)
     },
+    //News
+    async getAllNews({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getAllNews', data).then((res) => res.data)
+    },
+    async getSingleNews({ getters }, data) {
+        return await this.$axios.get('api/admin/getSingleNews', data).then((res) => res.data)
+    },
+    async createNews({ getters }, data) {
+        return await this.$axios.post('api/admin/createNews', data).then((res) => res.data)
+    },
+    async updateNews({ getters }, data) {
+        return await this.$axios.post('api/admin/updateNews', data).then((res) => res.data)
+    },
 
 }

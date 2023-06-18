@@ -147,6 +147,12 @@ export default {
           icon: 'mdi-hammer-wrench',
           path: '/admin/manage-global-equipment',
         },
+        {
+          id: 6,
+          name: 'Manage news',
+          icon: 'mdi-newspaper',
+          path: '/admin/manage-news',
+        },
       ],
       super_admin_menu: [
         {

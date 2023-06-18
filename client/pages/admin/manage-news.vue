@@ -1,0 +1,128 @@
+<template>
+  <v-container>
+    <AdminEditNews
+      :open="editNews"
+      :data="news"
+      :editNews.sync="editNews"
+      v-if="news"
+    />
+    <AdminCreateNews
+      :open="createNews"
+      :createNews.sync="createNews"
+    />
+    <div class="d-flex justify-end">
+      <v-btn @click="createNews = true" class="mb-3" color="primary">
+        <v-icon medium> mdi-plus </v-icon>
+        <h4>Add News</h4>
+      </v-btn>
+    </div>
+    <div>
+      <v-data-table
+        :headers="headers"
+        :items="allNews"
+        :page.sync="page"
+        :items-per-page="itemsPerPage"
+        hide-default-footer
+        class="elevation-1"
+        @page-count="pageCount = $event"
+      >
+        <template v-slot:[`item.edit`]="{ item }">
+          <v-icon small class="mr-2" @click="openEditNewsModal(item.id)">
+            mdi-pencil
+          </v-icon>
+        </template>
+        <template v-slot:[`item.delete`]="{ item }">
+          <v-icon small class="mr-2" @click="deleteEquipment(item)">
+            mdi-delete
+          </v-icon>
+        </template>
+      </v-data-table>
+      <div class="text-center pt-2">
+        <v-pagination v-model="page" :length="totalPages"></v-pagination>
+      </div>
+    </div>
+  </v-container>
+</template>
+
+<script>
+export default {
+  layout: 'admin',
+  middleware: 'admin',
+  head() {
+    return {
+      title: 'manage news',
+    }
+  },
+  data() {
+    return {
+      valid: true,
+      loadingDialog: false,
+      editDialog: false,
+      deleteDialog: false,
+      page: 1,
+      itemsPerPage: 7,
+      totalPages: 0,
+      search: '',
+      allNews: [],
+      news: null,
+      editNews: false,
+      createNews: false,
+      headers: [
+        {
+          text: 'title',
+          value: 'title',
+          sortable: false,
+          align: 'start',
+        },
+        {
+          text: 'details',
+          value: 'details',
+          sortable: false,
+          align: 'start',
+        },
+        { text: 'แก้ไข', value: 'edit', sortable: false, align: 'center' },
+        {
+          text: 'ลบ',
+          value: 'delete',
+          sortable: false,
+          align: 'center',
+        },
+      ],
+    }
+  },
+  mounted() {
+    this.$store.dispatch('setPathName', 'manage news')
+    this.fetchNews()
+  },
+  watch: {
+    page() {
+      this.fetchNews()
+    },
+  },
+  methods: {
+    async fetchNews() {
+      let Data = await this.$store.dispatch('api/admin/getAllNews', {
+        params: {
+          limit: this.itemsPerPage,
+          page: this.page,
+        },
+      })
+      console.log('this is equipment', Data)
+      this.allNews = Data.news
+      this.totalPages = Data.total_pages
+    },
+    async openEditNewsModal(id) {
+      const NewsData = await this.$store.dispatch(
+        'api/admin/getSingleNews',
+        {
+          params: {
+            id: id,
+          },
+        }
+      )
+      this.news = NewsData.news
+      this.editNews = true
+    },
+  },
+}
+</script>
