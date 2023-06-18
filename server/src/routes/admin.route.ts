@@ -38,7 +38,7 @@ adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -51,13 +51,16 @@ adminRouter.post('/createNews', authValid, (req, res) => {
 
         NewsController.createNews(req.body).then((state) => {
             if (state) {
-                res.json({ code: 200, state });
+                log("this is state", state)
+                res.json({ code: 201, state });
             } else {
                 res.json(errorCode('CREATE', 2));
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        log(error);
+
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 
 });
@@ -77,7 +80,7 @@ adminRouter.post('/createRoom', authValid, (req, res) => {
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 
 });
@@ -97,7 +100,7 @@ adminRouter.post('/createEquipment', authValid, (req, res) => {
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -116,7 +119,7 @@ adminRouter.post('/createGlobalEquipment', authValid, (req, res) => {
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -136,7 +139,7 @@ adminRouter.post('/createUserType', authValid, (req, res) => {
         });
     } catch (error) {
         console.log(error);
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -182,7 +185,7 @@ adminRouter.post('/updateNews', authValid, (req, res) => {
         });
     } catch (error) {
         log(error)
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 
 });
@@ -209,7 +212,7 @@ adminRouter.post('/updateRoom', authValid, (req, res) => {
         });
     } catch (error) {
         log(error)
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 
 });
@@ -236,7 +239,7 @@ adminRouter.post('/updateEquipment', authValid, (req, res) => {
         });
     } catch (error) {
         log(error)
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -262,7 +265,7 @@ adminRouter.post('/updateGlobalEquipment', authValid, (req, res) => {
         });
     } catch (error) {
         log(error)
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -288,7 +291,7 @@ adminRouter.post('/updateUserType', authValid, (req, res) => {
         });
     } catch (error) {
         log(error)
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -326,7 +329,7 @@ adminRouter.post('/updateUser', authValid, (req, res) => {
         console.log("error here");
 
         log(error)
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -348,7 +351,7 @@ adminRouter.get('/getAllRooms', authValid, (req, res) => {
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -370,7 +373,7 @@ adminRouter.get('/getAllEquipment', authValid, (req, res) => {
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -392,7 +395,29 @@ adminRouter.get('/getAllGlobalEquipment', authValid, (req, res) => {
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+adminRouter.get('/getAllNews', authValid, (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        NewsController.getAllNews(Limit, Offset).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, news: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -413,7 +438,7 @@ adminRouter.get('/getSingleRoom', authValid, (req, res) => {
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -434,7 +459,7 @@ adminRouter.get('/getSingleEquipment', authValid, (req, res) => {
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -455,7 +480,7 @@ adminRouter.get('/getSingleGlobalEquipment', authValid, (req, res) => {
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -476,7 +501,7 @@ adminRouter.get('/getSingleUserType', authValid, (req, res) => {
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -497,7 +522,28 @@ adminRouter.get('/getSingleUser', authValid, (req, res) => {
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+adminRouter.get('/getSingleNews', authValid, (req, res) => {
+    try {
+        if (!req.query.id) {
+            res.json(errorCode('ADMIN', 1));
+            return;
+        }
+        const Id = req.query.id as string;
+        NewsController.getByID(Id).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, news: Data
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -519,7 +565,7 @@ adminRouter.get('/getAllUsers', async (req, res) => {
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
@@ -541,7 +587,7 @@ adminRouter.get('/getAllUserTypes', async (req, res) => {
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 

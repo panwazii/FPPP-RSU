@@ -1,31 +1,12 @@
 import Sequelize, { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import NewsModel,{NewsAttribute} from '../database/models/news.model';
+import NewsModel, { NewsAttribute } from '../database/models/news.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
 
 class NewsController {
-    // public static async createSuperAdmin() {
-    //     const Email = config.security.superadminemail
-    //     const HashedPassword = await bcrypt.hash(config.security.superadminpassword, 12);
-    //     const Packet = {
-    //         email: Email,
-    //         password: HashedPassword,
-    //         fname: "Super",
-    //         lname: "Admin",
-    //         type_id: 1
-    //     };
-
-    //     return NewsModel.create(Packet)
-    //         .then((res) => log("SuperAdmin has been created"))
-    //         .catch((e) => {
-    //             log(e);
-    //             return false;
-    //         });
-    // }
-
     public static async getByID(newsId: string) {
         return NewsModel.findOne({
             where: {
@@ -35,9 +16,9 @@ class NewsController {
         });
     }
 
-    public static async getAllNews(limit:number,offset:number) {
+    public static async getAllNews(limit: number, offset: number) {
         return NewsModel.findAndCountAll({
-            where: { available_status : true  },
+            where: { available_status: true },
             limit,
             offset,
             raw: true
@@ -45,7 +26,7 @@ class NewsController {
     }
 
     public static async createNews(data: any) {
- 
+
         const packet: NewsAttribute = {
             title: data.title,
             details: data.details,
