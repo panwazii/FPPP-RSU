@@ -2,6 +2,9 @@ export const actions = {
     async getAllUserTypesDropdown({ getters }, data) {
         return await this.$axios.get('api/public/getAllUserTypesDropdown', data).then((res) => res.data)
     },
+    async getAllNews({ getters }, data) {
+        return await this.$axios.get('api/public/getAllNews', data).then((res) => res.data)
+    },
     async getAllRooms({ getters }, data) {
         return await this.$axios.get('api/public/getAllRooms', data).then((res) => res.data)
     },
@@ -13,5 +16,8 @@ export const actions = {
     },
     async getSingleRoom({ getters }, data) {
         return await this.$axios.get('api/public/getSingleRoom', data).then((res) => res.data)
+    },
+    async getSingleNews({ getters }, data) {
+        return await this.$axios.get('api/public/getSingleNews', data).then((res) => res.data)
     },
 }

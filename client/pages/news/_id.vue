@@ -34,7 +34,7 @@ export default {
     return { id }
   },
   async fetch() {
-    let news = await this.$store.dispatch('api/admin/getSingleNews', {
+    let news = await this.$store.dispatch('api/public/getSingleNews', {
       params: { id: this.id },
     })
     if (news == null) {
