@@ -154,4 +154,19 @@ publicRouter.get('/getSingleRoom', async (req, res) => {
     }
 });
 
+publicRouter.get('/getSingleNews', async (req, res) => {
+    try {
+        const id = req.query.id as string; 
+        NewsController.getByID(id).then((Data) => {
+            if (Data) {
+                res.status(200).json({Data});
+            } else {
+                res.json(errorCode('PUBLIC', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
 export default publicRouter;
