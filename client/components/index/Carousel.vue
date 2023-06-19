@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     async fetchNews() {
-      let Data = await this.$store.dispatch('api/admin/getAllNews', {
+      let Data = await this.$store.dispatch('api/public/getAllNews', {
         params: {
           limit: this.itemsPerPage,
           page: this.page,
@@ -85,7 +85,7 @@ export default {
       this.totalPages = Data.total_pages
     },
     async openEditNewsModal(id) {
-      const NewsData = await this.$store.dispatch('api/admin/getSingleNews', {
+      const NewsData = await this.$store.dispatch('api/public/getSingleNews', {
         params: {
           id: id,
         },
