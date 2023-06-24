@@ -9,9 +9,12 @@ import EquipmentController from '../controllers/equipment.controller';
 import UserTypeController from '../controllers/user_types.controller';
 import { authValid } from '../middleware/admin.middleware';
 import { numberOrDefault } from '../tools/util';
+import { uploadSinglePicture } from '../tools/util';
+import multer from 'multer';
 
 const adminRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON('ADMIN');
+const multerUpload = multer();
 
 adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
     try {
@@ -42,21 +45,64 @@ adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
     }
 });
 
-adminRouter.post('/createNews', authValid, (req, res) => {
+// adminRouter.post('/createNews', authValid, (req, res) => {
+//     try {
+//         if (!req.body) {
+//             res.json(errorCode('RES', 1));
+//             return;
+//         }
+
+//         NewsController.createNews(req.body).then((state) => {
+//             if (state) {
+//                 log("this is state", state)
+//                 res.json({ code: 201, state });
+//             } else {
+//                 res.json(errorCode('CREATE', 2));
+//             }
+//         });
+//     } catch (error) {
+//         log(error);
+
+//         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+//     }
+
+// });
+
+adminRouter.post('/createNews', multerUpload.single("file"), authValid, async (req, res) => {
     try {
+        const picture = req.file;
         if (!req.body) {
             res.json(errorCode('RES', 1));
             return;
         }
+        if (!picture) {
+            req.body.picture = 'https://www.charlotteathleticclub.com/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png';
+            NewsController.createNews(req.body).then((state) => {
+                if (state) {
+                    log("this is state", state)
+                    res.json({ code: 201, state });
+                } else {
+                    res.json(errorCode('CREATE', 2));
+                }
+            });
+        }
+        else {
+            let pictureUrl = await uploadSinglePicture(
+                picture.originalname,
+                picture.mimetype,
+                picture.buffer);
+            req.body.picture = pictureUrl
+            
+            NewsController.createNews(req.body).then((state) => {
+                if (state) {
+                    log("this is state", state)
+                    res.json({ code: 201, state });
+                } else {
+                    res.json(errorCode('CREATE', 2));
+                }
+            });
+        }
 
-        NewsController.createNews(req.body).then((state) => {
-            if (state) {
-                log("this is state", state)
-                res.json({ code: 201, state });
-            } else {
-                res.json(errorCode('CREATE', 2));
-            }
-        });
     } catch (error) {
         log(error);
 
@@ -85,39 +131,79 @@ adminRouter.post('/createRoom', authValid, (req, res) => {
 
 });
 
-adminRouter.post('/createEquipment', authValid, (req, res) => {
+adminRouter.post('/createEquipment', multerUpload.single("file"), authValid, async (req, res) => {
     try {
+        const picture = req.file;
         if (!req.body) {
             res.json(errorCode('RES', 1));
             return;
         }
-
-        EquipmentController.createEquipment(req.body).then((state) => {
-            if (state) {
-                res.json({ code: 200, state });
-            } else {
-                res.json(errorCode('CREATE', 2));
-            }
-        });
+        if (!picture) {
+            req.body.picture = 'https://www.charlotteathleticclub.com/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png';
+            EquipmentController.createEquipment(req.body).then((state) => {
+                if (state) {
+                    log("this is state", state)
+                    res.json({ code: 201, state });
+                } else {
+                    res.json(errorCode('CREATE', 2));
+                }
+            });
+        }
+        else {
+            let pictureUrl = await uploadSinglePicture(
+                picture.originalname,
+                picture.mimetype,
+                picture.buffer);
+            req.body.picture = pictureUrl
+            
+            EquipmentController.createEquipment(req.body).then((state) => {
+                if (state) {
+                    log("this is state", state)
+                    res.json({ code: 201, state });
+                } else {
+                    res.json(errorCode('CREATE', 2));
+                }
+            });
+        }
     } catch (error) {
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
-adminRouter.post('/createGlobalEquipment', authValid, (req, res) => {
+adminRouter.post('/createGlobalEquipment', multerUpload.single("file"), authValid, async (req, res) => {
     try {
+        const picture = req.file;
         if (!req.body) {
             res.json(errorCode('RES', 1));
             return;
         }
-
-        EquipmentController.createGlobalEquipment(req.body).then((state) => {
-            if (state) {
-                res.json({ code: 200, state });
-            } else {
-                res.json(errorCode('CREATE', 2));
-            }
-        });
+        if (!picture) {
+            req.body.picture = 'https://www.charlotteathleticclub.com/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png';
+            EquipmentController.createGlobalEquipment(req.body).then((state) => {
+                if (state) {
+                    log("this is state", state)
+                    res.json({ code: 201, state });
+                } else {
+                    res.json(errorCode('CREATE', 2));
+                }
+            });
+        }
+        else {
+            let pictureUrl = await uploadSinglePicture(
+                picture.originalname,
+                picture.mimetype,
+                picture.buffer);
+            req.body.picture = pictureUrl
+            
+            EquipmentController.createGlobalEquipment(req.body).then((state) => {
+                if (state) {
+                    log("this is state", state)
+                    res.json({ code: 201, state });
+                } else {
+                    res.json(errorCode('CREATE', 2));
+                }
+            });
+        }
     } catch (error) {
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
@@ -163,26 +249,39 @@ adminRouter.post('/update/password', authValid, (req, res) => {
     });
 });
 
-adminRouter.post('/updateNews', authValid, (req, res) => {
+adminRouter.post('/updateNews', multerUpload.single("file"), authValid, async (req, res) => {
     try {
-        if (!req.body) {
-            res.json(errorCode('update', 0));
-            return;
-        }
-
+        const picture = req.file;
         const Data = req.body;
+        
         if (!Data) {
             res.json(errorCode('update', 1));
             return;
         }
 
-        NewsController.update(Data).then((result) => {
+        if (!picture) {
+            NewsController.update(Data).then((result) => {
+                if (result) {
+                    res.json({ code: 200, result });
+                } else {
+                    res.json(errorCode('UPDATE', 2));
+                }
+            });
+        }
+        else {
+            let pictureUrl = await uploadSinglePicture(
+                picture.originalname,
+                picture.mimetype,
+                picture.buffer);
+            Data.picture = pictureUrl;
+            NewsController.update(Data).then((result) => {
             if (result) {
                 res.json({ code: 200, result });
             } else {
                 res.json(errorCode('UPDATE', 2));
             }
-        });
+        });}
+        
     } catch (error) {
         log(error)
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
@@ -192,11 +291,6 @@ adminRouter.post('/updateNews', authValid, (req, res) => {
 
 adminRouter.post('/updateRoom', authValid, (req, res) => {
     try {
-        if (!req.body) {
-            res.json(errorCode('update', 0));
-            return;
-        }
-
         const Data = req.body;
         if (!Data) {
             res.json(errorCode('update', 1));
@@ -217,52 +311,76 @@ adminRouter.post('/updateRoom', authValid, (req, res) => {
 
 });
 
-adminRouter.post('/updateEquipment', authValid, (req, res) => {
+adminRouter.post('/updateEquipment', multerUpload.single("file"), authValid, async(req, res) => {
     try {
-        if (!req.body) {
-            res.json(errorCode('update', 0));
-            return;
-        }
-
+        const picture = req.file;
         const Data = req.body;
+        
         if (!Data) {
             res.json(errorCode('update', 1));
             return;
         }
 
-        EquipmentController.updateEquipment(Data, false).then((result) => {
+        if (!picture) {
+            EquipmentController.updateEquipment(Data,false).then((result) => {
+                if (result) {
+                    res.json({ code: 200, result });
+                } else {
+                    res.json(errorCode('UPDATE', 2));
+                }
+            });
+        }
+        else {
+            let pictureUrl = await uploadSinglePicture(
+                picture.originalname,
+                picture.mimetype,
+                picture.buffer);
+            Data.picture = pictureUrl;
+            EquipmentController.updateEquipment(Data,false).then((result) => {
             if (result) {
                 res.json({ code: 200, result });
             } else {
                 res.json(errorCode('UPDATE', 2));
             }
-        });
+        });}
     } catch (error) {
         log(error)
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
-adminRouter.post('/updateGlobalEquipment', authValid, (req, res) => {
+adminRouter.post('/updateGlobalEquipment', multerUpload.single("file"), authValid, async (req, res) => {
     try {
-        if (!req.body) {
-            res.json(errorCode('update', 0));
-            return;
-        }
-
+        const picture = req.file;
         const Data = req.body;
+        
         if (!Data) {
             res.json(errorCode('update', 1));
             return;
         }
 
-        EquipmentController.updateEquipment(Data, true).then((result) => {
+        if (!picture) {
+            EquipmentController.updateEquipment(Data,true).then((result) => {
+                if (result) {
+                    res.json({ code: 200, result });
+                } else {
+                    res.json(errorCode('UPDATE', 2));
+                }
+            });
+        }
+        else {
+            let pictureUrl = await uploadSinglePicture(
+                picture.originalname,
+                picture.mimetype,
+                picture.buffer);
+            Data.picture = pictureUrl;
+            EquipmentController.updateEquipment(Data,true).then((result) => {
             if (result) {
                 res.json({ code: 200, result });
             } else {
                 res.json(errorCode('UPDATE', 2));
             }
-        });
+        });}
     } catch (error) {
         log(error)
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
@@ -271,11 +389,6 @@ adminRouter.post('/updateGlobalEquipment', authValid, (req, res) => {
 
 adminRouter.post('/updateUserType', authValid, (req, res) => {
     try {
-        if (!req.body) {
-            res.json(errorCode('update', 0));
-            return;
-        }
-
         const Data = req.body;
         if (!Data) {
             res.json(errorCode('update', 1));
@@ -297,11 +410,6 @@ adminRouter.post('/updateUserType', authValid, (req, res) => {
 
 adminRouter.post('/updateUser', authValid, (req, res) => {
     try {
-        if (!req.body) {
-            res.json(errorCode('update', 0));
-            return;
-        }
-
         const Data = req.body;
         if (!Data) {
             res.json(errorCode('update', 1));
