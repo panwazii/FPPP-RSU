@@ -51,14 +51,19 @@
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="12">
-                        <v-text-field
-                          v-model="data.picture"
-                          :rules="[(v) => !!v || 'picture is required']"
-                          label="picture"
-                          outlined
-                          required
-                        ></v-text-field>
+                        <v-img
+                          class="mx-auto"
+                          :src="data.picture"
+                          height="250"
+                          width="300"
+                        ></v-img>
                       </v-col>
+                      <v-file-input
+                        v-model="data.file"
+                        label="รูปภาพ"
+                        filled
+                        prepend-icon="mdi-camera"
+                      ></v-file-input>
                     </v-row>
                   </v-form>
                 </v-col>
@@ -103,6 +108,7 @@ export default {
       loadingMessage: 'Loading',
       completeMessage: 'Create news complete',
       completeModal: false,
+      file: null,
     }
   },
   methods: {
@@ -116,7 +122,12 @@ export default {
     async updateUser() {
       try {
         this.loading = true
-        await this.$store.dispatch('api/admin/updateNews', this.data)
+        let file = new FormData()
+          file.append('file', this.data.file),
+          file.append('id', this.data.id),
+          file.append('title', this.data.title),
+          file.append('details', this.data.details),
+        await this.$store.dispatch('api/admin/updateNews', file)
         this.$emit('update:editNews', false)
         this.loading = false
         this.completeModal = true

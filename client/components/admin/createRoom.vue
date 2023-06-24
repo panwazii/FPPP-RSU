@@ -57,6 +57,14 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
+                  <v-row>
+                      <v-file-input
+                        v-model="form.file"
+                        label="รูปภาพ"
+                        filled
+                        prepend-icon="mdi-camera"
+                      ></v-file-input>
+                  </v-row>
                 </v-form>
               </template>
             </v-col>

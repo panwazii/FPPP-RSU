@@ -79,6 +79,22 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="12">
+                        <v-img
+                          class="mx-auto"
+                          :src="data.picture"
+                          height="250"
+                          width="300"
+                        ></v-img>
+                      </v-col>
+                      <v-file-input
+                        v-model="data.file"
+                        label="รูปภาพ"
+                        filled
+                        prepend-icon="mdi-camera"
+                      ></v-file-input>
+                  </v-row>
                 </v-form>
               </template>
             </v-col>
@@ -138,7 +154,15 @@ export default {
     async updateEquipment() {
       try {
         this.loading = true
-        await this.$store.dispatch('api/admin/updateEquipment', this.data)
+        let file = new FormData()
+          file.append('file', this.data.file),
+          file.append('room_id', this.data.room_id),
+          file.append('id', this.data.id),
+          file.append('name', this.data.name),
+          file.append('price', this.data.price),
+          file.append('rent_price', this.data.rent_price),
+          file.append('details', this.data.details),
+        await this.$store.dispatch('api/admin/updateEquipment', file)
         this.$emit('update:editEquipment', false)
         this.loading = false
       } catch (error) {

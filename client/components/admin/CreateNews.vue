@@ -56,13 +56,12 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="12">
-                    <v-text-field
-                      v-model="form.picture"
-                      :rules="[(v) => !!v || 'picture is required']"
-                      label="picture"
-                      outlined
-                      required
-                    ></v-text-field>
+                    <v-file-input
+                        v-model="form.file"
+                        label="รูปภาพ"
+                        filled
+                        prepend-icon="mdi-camera"
+                      ></v-file-input>
                   </v-col>
                 </v-row>
               </v-form>
@@ -109,6 +108,7 @@ export default {
       completeModal: false,
       errorMessage: '',
       errorModal: false,
+      file: null,
     }
   },
   methods: {
@@ -122,9 +122,13 @@ export default {
     async createNews() {
       try {
         this.loading = true
+        let file = new FormData()
+          file.append('file', this.form.file),
+          file.append('title', this.form.title),
+          file.append('details', this.form.details)
         const Response = await this.$store.dispatch(
-          'api/admin/createNews',
-          this.form
+        'api/admin/createNews',
+        file
         )
         if (Response.code === 201) {
           this.clearForm()

@@ -66,6 +66,14 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
+                  <v-col cols="12" sm="12">
+                    <v-file-input
+                        v-model="form.file"
+                        label="รูปภาพ"
+                        filled
+                        prepend-icon="mdi-camera"
+                      ></v-file-input>
+                  </v-col>
                 </v-form>
               </template>
             </v-col>
@@ -124,7 +132,13 @@ export default {
     async createGlobalEquipment() {
       try {
         this.loading = true
-        await this.$store.dispatch('api/admin/createGlobalEquipment', this.form)
+        let file = new FormData()
+          file.append('file', this.form.file),
+          file.append('name', this.form.name),
+          file.append('price', this.form.price),
+          file.append('rent_price', this.form.rent_price),
+          file.append('details', this.form.details)
+        await this.$store.dispatch('api/admin/createGlobalEquipment', file)
         this.clearForm()
         this.$emit('update:createGlobalEquipment', false)
         this.loading = false

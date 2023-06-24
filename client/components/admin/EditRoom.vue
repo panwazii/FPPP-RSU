@@ -70,6 +70,22 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="12">
+                        <v-img
+                          class="mx-auto"
+                          :src="data.picture"
+                          height="250"
+                          width="300"
+                        ></v-img>
+                      </v-col>
+                      <v-file-input
+                        v-model="data.file"
+                        label="รูปภาพ"
+                        filled
+                        prepend-icon="mdi-camera"
+                      ></v-file-input>
+                  </v-row>
                 </v-form>
               </template>
             </v-col>
