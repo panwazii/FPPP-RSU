@@ -3,6 +3,11 @@
     <v-row class="mb-12"><v-spacer></v-spacer></v-row>
     <v-row class="mb-12"><v-spacer></v-spacer></v-row>
     <v-row class="justify-center">
+      <IndexReservations
+        :open="Reservations"
+        :data="room"
+        :Reservations.sync="Reservations"
+      />
       <v-card class="pa-6 rounded-lg" width="1100" height="400">
         <h1 align="left" class="amber--text pa-1"></h1>
         <v-form ref="form" lazy-validation>
@@ -12,9 +17,10 @@
               {{ room.details }}
 
               <v-card-actions class="justify-left">
-                <v-btn class="rounded-xl" variant="text" color="white"
-                  >จองห้อง</v-btn
-                >
+                <v-btn color="primary" @click="openReservationsModal(room.id)">
+                  Reservations
+                </v-btn>
+                <IndexCalender class="mx-2" />
               </v-card-actions>
             </v-col>
             <v-col cols="12" sm="6">
@@ -31,14 +37,15 @@
       <h1>อุปกรณ์</h1>
     </v-row>
 
-    <v-row class="justify-center mt-6 mb-16"> LOREM หล่อหลอม จอมพลหงอง </v-row>
+    <v-row class="justify-center mt-6 mb-16">
+      อุปกรณ์ภายในห้องปฏิบัติการณ์
+    </v-row>
 
     <v-row class="justify-center mt-6 mb-16">
       <v-col
         class="pa-5 mx-0 d-flex justify-center"
         xs="12"
-        sm="6"
-        md="3"
+        md="1"
         v-for="equipments in tool"
         :key="equipments.id"
       >
@@ -95,10 +102,15 @@ export default {
     return {
       room: {},
       tool: [],
-      pic: 'https://media.istockphoto.com/id/92042654/photo/cute-girl-in-shock.jpg?s=1024x1024&w=is&k=20&c=BiNPkb1OZMSF5hDAZ1r3ZNQr4BXNwj1f4j8wGZM_Q9U=',
+      Reservations: false,
+      dialog: false,
     }
   },
-  methods: {},
+  methods: {
+    async openReservationsModal(id) {
+      this.Reservations = true
+    },
+  },
 }
 </script>
 
