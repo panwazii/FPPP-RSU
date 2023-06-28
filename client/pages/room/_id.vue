@@ -45,7 +45,7 @@
       <v-col
         class="pa-5 mx-0 d-flex justify-center"
         xs="12"
-        md="1"
+        md="2"
         v-for="equipments in tool"
         :key="equipments.id"
       >

@@ -5,7 +5,7 @@
         class="d-flex flex-column fill-height justify-center align-center text-white"
       >
         <h1 class="text-h4 font-weight-bold mb-4 paralax-text">
-          FACULTY OF AGRICULTURAL INNOVATION
+          
         </h1>
         <v-btn rounded depressed>more</v-btn>
       </div>
@@ -17,12 +17,9 @@
       max-width="500"
       class="mx-auto justify-center"
     >
-      <h1 class="text-h4 font-weight-bold mb-4 d-flex justify-center">Room</h1>
+      <h1 class="text-h4 font-weight-bold mb-4 d-flex justify-center">ห้องปฎิบัติการของเรา</h1>
       <p class="mb-4 d-flex justify-center text-center">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia
-        eaque, aliquam ipsum magnam aliquid cum earum ab ex dolore labore
-        quaerat maiores totam repellat id, delectus perspiciatis sunt maxime
-        hic.
+        ห้องปฎิบัติการของโรงงานต้นแบบ ที่ช่วยในการผลิตและทดลองอาหาร ในกระบวนการต่างๆ
       </p>
     </v-card>
     <div class="room1 mt-10 d-flex justify-center">

@@ -8,7 +8,7 @@
         class="rounded-xl"
         variant="text"
         color="white"
-        @click="$router.push('/room/' + id)"
+        
       >
         รายละเอียดเพิ่มเติม
       </v-btn>

@@ -31,7 +31,7 @@
               <div class="content">
                 <p>
                   <v-icon class="mr-2" large>mdi-map-marker</v-icon>
-                  794 Mcallister St San Francisco, 10510
+                  มหาวิทยาลัยรังสิต
                 </p>
               </div>
             </ul>
