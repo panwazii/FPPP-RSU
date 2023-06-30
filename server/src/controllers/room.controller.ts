@@ -18,6 +18,7 @@ class RoomController {
     public static async getAllRooms(limit:number,offset:number) {
         return RoomModel.findAndCountAll({
             where: { available_status : true  },
+            order: [["name", "ASC"]],
             limit,
             offset,
             raw: true
