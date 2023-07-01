@@ -80,21 +80,22 @@ export const actions = {
     async setAdmin({ commit }, admin) {
         commit('setAdmin', admin)
     },
+    async setUser({ commit }, admin) {
+        commit('setUser', admin)
+    },
 
     async fetchUser({ commit }) {
-        let data = await this.$axios
-            .post('/api/auth/getUserInfo')
-            .then((res) => {
-                if (!res.data.user) {
-                    this.$cookies.remove('token')
-                    redirect('/')
-                }
-                else {
-                    var User = res.data.user
-                    commit('setUser', User)
-                }
-            }).catch((error) => { console.log(error); })
-        console.log('fetchUser ', data);
+        let Response = await this.$axios.get('/api/user/getUserInfo')
+        console.log("this is fech user", Response.data);
+        if (!Response.data.admin) {
+            await dispatch('logout')
+            redirect('/')
+        }
+        else {
+            var User = Response.data.user
+            await commit('setUser', User)
+            await commit('setIsAdmin', false);
+        }
 
     },
     async fetchAdmin({ commit, dispatch }) {
@@ -102,7 +103,6 @@ export const actions = {
         console.log("this is fech admin", Response.data);
         if (!Response.data.admin) {
             await dispatch('logout')
-            await this.$cookies.remove('token')
             redirect('/')
         }
         else {

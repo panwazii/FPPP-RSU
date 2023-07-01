@@ -39,7 +39,7 @@
             </v-text-field>
             <v-divider></v-divider>
             <v-btn
-              @click="getlogin()"
+              @click="login()"
               class="rounded-1 mt-10"
               color="secondary"
               large
@@ -77,7 +77,7 @@
 <script>
 export default {
   layout: 'default',
-  // middleware: 'login',
+  middleware: 'user-login',
   head() {
     return {
       title: 'Admin Login',
@@ -107,21 +107,20 @@ export default {
         this.login(this.email, this.password)
       }
     },
-    async login(email, password) {
+    async login() {
       try {
-        this.loading = true
-        let response = await this.$auth.loginWith('admin', {
-          data: {
-            email,
-            password,
-          },
-        })
-        if (response.status === 200) {
-          this.loading = false
-          this.$router.push('/admin/home')
-        }
+        const email = this.email
+        const password = this.password
+        await this.$store
+          .dispatch('api/auth/userLogin', { email, password })
+          .then((res) => {
+            console.log('this is res', res)
+            this.$store.dispatch('setUser', res.user)
+            this.$store.dispatch('setToken', res.token)
+            this.$store.dispatch('setIsAdmin', res.admin)
+            this.$router.push('/user/home')
+          })
       } catch (error) {
-        this.loading = false
         console.log(error)
       }
     },
