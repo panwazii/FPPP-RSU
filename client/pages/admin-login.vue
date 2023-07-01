@@ -47,16 +47,6 @@
             >
               <div class="white--text font-weight-bold">เข้าสู่ระบบ</div>
             </v-btn>
-            <h3 class="mt-2">หรือ</h3>
-            <v-btn
-              @click="login()"
-              class="rounded-1 mt-2"
-              color="#78909C"
-              large
-              block
-            >
-              <div class="white--text font-weight-bold">ลงทะเบียน</div>
-            </v-btn>
           </v-form>
         </v-col>
       </v-row>
@@ -104,7 +94,7 @@ export default {
           .dispatch('api/auth/adminLogin', { email, password })
           .then((res) => {
             console.log('this is res', res)
-            this.$store.dispatch('setAdmin', res.data)
+            this.$store.dispatch('setAdmin', res.user)
             this.$store.dispatch('setToken', res.token)
             this.$store.dispatch('setIsAdmin', res.admin)
             this.$router.push('/admin/home')
