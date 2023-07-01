@@ -20,7 +20,7 @@ adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
     try {
         const AdminId = req.body.credentials.id;
 
-        AdminController.getByUserID(AdminId).then((user) => {
+        AdminController.getByID(AdminId).then((user) => {
             if (user) {
                 res.status(200).json({
                     code: 200, admin: {
@@ -44,29 +44,6 @@ adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
-
-// adminRouter.post('/createNews', authValid, (req, res) => {
-//     try {
-//         if (!req.body) {
-//             res.json(errorCode('RES', 1));
-//             return;
-//         }
-
-//         NewsController.createNews(req.body).then((state) => {
-//             if (state) {
-//                 log("this is state", state)
-//                 res.json({ code: 201, state });
-//             } else {
-//                 res.json(errorCode('CREATE', 2));
-//             }
-//         });
-//     } catch (error) {
-//         log(error);
-
-//         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
-//     }
-
-// });
 
 adminRouter.post('/createNews', multerUpload.single("file"), authValid, async (req, res) => {
     try {
@@ -92,7 +69,7 @@ adminRouter.post('/createNews', multerUpload.single("file"), authValid, async (r
                 picture.mimetype,
                 picture.buffer);
             req.body.picture = pictureUrl
-            
+
             NewsController.createNews(req.body).then((state) => {
                 if (state) {
                     log("this is state", state)
@@ -155,7 +132,7 @@ adminRouter.post('/createEquipment', multerUpload.single("file"), authValid, asy
                 picture.mimetype,
                 picture.buffer);
             req.body.picture = pictureUrl
-            
+
             EquipmentController.createEquipment(req.body).then((state) => {
                 if (state) {
                     log("this is state", state)
@@ -194,7 +171,7 @@ adminRouter.post('/createGlobalEquipment', multerUpload.single("file"), authVali
                 picture.mimetype,
                 picture.buffer);
             req.body.picture = pictureUrl
-            
+
             EquipmentController.createGlobalEquipment(req.body).then((state) => {
                 if (state) {
                     log("this is state", state)
@@ -253,7 +230,7 @@ adminRouter.post('/updateNews', multerUpload.single("file"), authValid, async (r
     try {
         const picture = req.file;
         const Data = req.body;
-        
+
         if (!Data) {
             res.json(errorCode('update', 1));
             return;
@@ -275,13 +252,14 @@ adminRouter.post('/updateNews', multerUpload.single("file"), authValid, async (r
                 picture.buffer);
             Data.picture = pictureUrl;
             NewsController.update(Data).then((result) => {
-            if (result) {
-                res.json({ code: 200, result });
-            } else {
-                res.json(errorCode('UPDATE', 2));
-            }
-        });}
-        
+                if (result) {
+                    res.json({ code: 200, result });
+                } else {
+                    res.json(errorCode('UPDATE', 2));
+                }
+            });
+        }
+
     } catch (error) {
         log(error)
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
@@ -311,18 +289,18 @@ adminRouter.post('/updateRoom', authValid, (req, res) => {
 
 });
 
-adminRouter.post('/updateEquipment', multerUpload.single("file"), authValid, async(req, res) => {
+adminRouter.post('/updateEquipment', multerUpload.single("file"), authValid, async (req, res) => {
     try {
         const picture = req.file;
         const Data = req.body;
-        
+
         if (!Data) {
             res.json(errorCode('update', 1));
             return;
         }
 
         if (!picture) {
-            EquipmentController.updateEquipment(Data,false).then((result) => {
+            EquipmentController.updateEquipment(Data, false).then((result) => {
                 if (result) {
                     res.json({ code: 200, result });
                 } else {
@@ -336,13 +314,14 @@ adminRouter.post('/updateEquipment', multerUpload.single("file"), authValid, asy
                 picture.mimetype,
                 picture.buffer);
             Data.picture = pictureUrl;
-            EquipmentController.updateEquipment(Data,false).then((result) => {
-            if (result) {
-                res.json({ code: 200, result });
-            } else {
-                res.json(errorCode('UPDATE', 2));
-            }
-        });}
+            EquipmentController.updateEquipment(Data, false).then((result) => {
+                if (result) {
+                    res.json({ code: 200, result });
+                } else {
+                    res.json(errorCode('UPDATE', 2));
+                }
+            });
+        }
     } catch (error) {
         log(error)
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
@@ -353,14 +332,14 @@ adminRouter.post('/updateGlobalEquipment', multerUpload.single("file"), authVali
     try {
         const picture = req.file;
         const Data = req.body;
-        
+
         if (!Data) {
             res.json(errorCode('update', 1));
             return;
         }
 
         if (!picture) {
-            EquipmentController.updateEquipment(Data,true).then((result) => {
+            EquipmentController.updateEquipment(Data, true).then((result) => {
                 if (result) {
                     res.json({ code: 200, result });
                 } else {
@@ -374,13 +353,14 @@ adminRouter.post('/updateGlobalEquipment', multerUpload.single("file"), authVali
                 picture.mimetype,
                 picture.buffer);
             Data.picture = pictureUrl;
-            EquipmentController.updateEquipment(Data,true).then((result) => {
-            if (result) {
-                res.json({ code: 200, result });
-            } else {
-                res.json(errorCode('UPDATE', 2));
-            }
-        });}
+            EquipmentController.updateEquipment(Data, true).then((result) => {
+                if (result) {
+                    res.json({ code: 200, result });
+                } else {
+                    res.json(errorCode('UPDATE', 2));
+                }
+            });
+        }
     } catch (error) {
         log(error)
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });

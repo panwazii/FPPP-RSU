@@ -22,11 +22,11 @@ authRouter.post('/admin/login', async (req, res) => {
       await AdminController.authCookie(AuthHeader).then((data) => {
         if (data) {
           const Token = jwt.sign({
-            data
+            id: data.user?.id
           }, config.security.salt, {
             expiresIn: config.security.loginDuration,
           });
-          res.json({ code: 200, token: Token, admin: true });
+          res.json({ code: 200, user: data.user, token: Token, admin: true });
         } else {
           res.status(401).json({ code: 400, desc_code: 'invalid-token' });
         }
@@ -51,11 +51,6 @@ authRouter.post('/admin/login', async (req, res) => {
         Result.token = jwt.sign({
           id: Result.data.id,
           admin: true,
-          type_id: Result.data.type_id,
-          email: Result.data.email,
-          fname: Result.data.fname,
-          lname: Result.data.lname,
-          avatar: Result.data.avatar
         }, config.security.salt, {
           expiresIn: config.security.loginDuration,
         });
@@ -76,17 +71,19 @@ authRouter.get('/admin/verify', async (req, res) => {
     if (Token === null) {
       res.status(403).json({ code: 403, desc: 'unauthorized' });
     }
-
-    jwt.verify(Token as string, config.security.salt, async (error: any, decoded: any) => {
-      const AdminId = decoded.id
-      const Data = await AdminController.getByUserID(AdminId)
-      if (Data!.type_id === 1) {
-        return res.status(200).json({ type: "super-admin" });
-      }
-      else if (Data!.type_id === 2) {
-        return res.status(200).json({ type: "admin" });
-      }
-    });
+    interface JwtPayload {
+      [key: string]: any;
+      verify: boolean
+    }
+    const Decode = AdminController.verifyJWT(Token as string) as JwtPayload
+    const AdminId = Decode.result.id
+    const Data = await AdminController.getByID(AdminId)
+    if (Data!.type_id === 1) {
+      return res.status(200).json({ type: "super-admin" });
+    }
+    else if (Data!.type_id === 2) {
+      return res.status(200).json({ type: "admin" });
+    }
 
   } catch (error) {
     res.status(401).json(error);
@@ -125,14 +122,14 @@ authRouter.post('/user/login', async (req, res) => {
     const AuthHeader = req.headers.authorization;
 
     if (AuthHeader) {
-      await AdminController.authCookie(AuthHeader).then((data) => {
+      await UserController.authCookie(AuthHeader).then((data) => {
         if (data) {
           const Token = jwt.sign({
-            data
+            id: data.user?.id
           }, config.security.salt, {
             expiresIn: config.security.loginDuration,
           });
-          res.json({ code: 200, token: Token, admin: true });
+          res.json({ code: 200, user: data.user, token: Token, admin: false });
         } else {
           res.status(401).json({ code: 400, desc_code: 'invalid-token' });
         }
@@ -149,19 +146,13 @@ authRouter.post('/user/login', async (req, res) => {
       return;
     }
 
-    AdminController.auth(email, password).then((user) => {
+    UserController.auth(email, password).then((user) => {
       log(user);
       let Result: any = user;
 
       if (Result.code === 200) {
         Result.token = jwt.sign({
-          id: Result.data.id,
-          admin: false,
-          type_id: Result.data.type_id,
-          email: Result.data.email,
-          fname: Result.data.fname,
-          lname: Result.data.lname,
-          avatar: Result.data.avatar
+          id: Result.user.id,
         }, config.security.salt, {
           expiresIn: config.security.loginDuration,
         });
@@ -175,5 +166,26 @@ authRouter.post('/user/login', async (req, res) => {
   }
 });
 
+authRouter.get('/user/verify', async (req, res) => {
+  try {
+    const Token = req.query.token;
+
+    if (Token === null) {
+      res.status(403).json({ code: 403, desc: 'unauthorized' });
+    }
+    interface JwtPayload {
+      [key: string]: any;
+      verify: boolean
+    }
+    const Decode = UserController.verifyJWT(Token as string) as JwtPayload
+    const UserId = Decode.result.id
+    const Data = await UserController.getByID(UserId)
+    return res.status(200).json({ verify: true });
+
+
+  } catch (error) {
+    return res.status(401).json(error);
+  }
+});
 
 export default authRouter;

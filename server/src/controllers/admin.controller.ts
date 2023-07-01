@@ -25,7 +25,7 @@ class AdminController {
             });
     }
 
-    public static async getByUserID(adminId: string) {
+    public static async getByID(adminId: string) {
         return AdminModel.findOne({
             where: {
                 id: adminId,
@@ -55,9 +55,19 @@ class AdminController {
     }
 
     public static async authCookie(token: string) {
-        const Decode = AdminController.verifyJWT(token);
-        if (Decode?.verify) {
-            return Decode.result;
+        interface JwtPayload {
+            [key: string]: any;
+            verify: boolean
+        }
+        const Decode = AdminController.verifyJWT(token) as JwtPayload
+        if (Decode.verify) {
+            const UserId = Decode.result.id
+            const userInfo = await AdminController.getByID(UserId);
+            return {
+                code: 200,
+                user: userInfo,
+                admin: false
+            };
         }
         return null;
     }
@@ -69,10 +79,10 @@ class AdminController {
 
         const valid = bcrypt.compareSync(password, data.password);
         if (valid) {
-            const userInfo = await AdminController.getByUserID(data.id);
+            const userInfo = await AdminController.getByID(data.id);
             return {
                 code: 200,
-                data: userInfo,
+                user: userInfo,
                 admin: true
             };
         }

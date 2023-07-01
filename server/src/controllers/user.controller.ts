@@ -54,6 +54,7 @@ class UserController {
             where: {
                 id: userID,
             },
+            raw: true,
         });
     }
 
@@ -97,9 +98,19 @@ class UserController {
     }
 
     public static async authCookie(token: string) {
-        const Decode = UserController.verifyJWT(token);
-        if (Decode?.verify) {
-            return Decode.result;
+        interface JwtPayload {
+            [key: string]: any;
+            verify: boolean
+        }
+        const Decode = UserController.verifyJWT(token) as JwtPayload
+        if (Decode.verify) {
+            const UserId = Decode.result.id
+            const userInfo = await UserController.getByID(UserId);
+            return {
+                code: 200,
+                user: userInfo,
+                admin: false
+            };
         }
         return null;
     }
@@ -114,7 +125,7 @@ class UserController {
             const userInfo = await UserController.getByID(data.id);
             return {
                 code: 200,
-                data: userInfo,
+                user: userInfo,
                 admin: false
             };
         }

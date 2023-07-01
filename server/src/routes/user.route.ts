@@ -13,7 +13,7 @@ userRouter.get('/getUserInfo', authValid, async (req, res) => {
         UserController.getByID(UserId).then((user) => {
             if (user) {
                 res.status(200).json({
-                    code: 200, admin: {
+                    code: 200, user: {
                         id: user.id,
                         type_id: user.type_id,
                         fname: user.fname,
@@ -26,7 +26,7 @@ userRouter.get('/getUserInfo', authValid, async (req, res) => {
                     }
                 });
             } else {
-                res.json(errorCode('ADMIN', 0));
+                res.json(errorCode('USER', 0));
             }
         });
     } catch (error) {
