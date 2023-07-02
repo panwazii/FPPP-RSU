@@ -7,6 +7,8 @@ import UserTypeModel, { initUserTypeModel } from './models/user_types.model';
 import RoomModel, { initRoomModel } from './models/rooms.model';
 import ReserveModel, { initReserveModel } from './models/reserve.model';
 import EquipmentModel, { initEquipmentModel } from './models/equipments.model';
+import EquipmentInfoModel, { initEquipmentInfoModel } from './models/equipment_info.model'
+import EquipmentStockModel, { initEquipmentStockModel } from './models/equipment_stock.model'
 import { initNewsModel } from './models/news.model';
 import { initGlobalEquipmentModel } from './models/global_equipments.model';
 import AdminModel, { initAdminModel } from './models/admins.model';
@@ -53,6 +55,8 @@ const initDatabase = async () => {
         initGlobalEquipmentModel,
         initReserveModel,
         initEquipmentModel,
+        initEquipmentInfoModel,
+        initEquipmentStockModel,
 
         //Admin
         initAdminTypeModel,
@@ -73,6 +77,12 @@ const initDatabase = async () => {
 
     RoomModel.hasMany(EquipmentModel, { foreignKey: 'room_id' });
     EquipmentModel.belongsTo(RoomModel, { foreignKey: 'room_id' });
+
+    RoomModel.hasMany(EquipmentStockModel, { foreignKey: 'room_id' });
+    EquipmentStockModel.belongsTo(RoomModel, { foreignKey: 'room_id' });
+
+    EquipmentInfoModel.hasMany(EquipmentStockModel, { foreignKey: 'equipment_info_id' });
+    EquipmentStockModel.belongsTo(EquipmentInfoModel, { foreignKey: 'equipment_info_id' });
 
     AdminTypeModel.hasMany(AdminModel, { foreignKey: 'type_id' });
     AdminModel.belongsTo(AdminTypeModel, { foreignKey: 'type_id' });
