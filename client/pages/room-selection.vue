@@ -8,7 +8,7 @@
     </h1>
 
     <v-row
-      class="text-h4 font-weight-bold mt-12 mr-sm-16 d-flex justify-center"
+      class="text-h4 font-weight-bold mt-2 mr-sm-16 d-flex justify-center"
       v-for="(rooms, index) in room"
       :key="rooms.name"
       ><roomRoomselect

@@ -4,38 +4,24 @@
       <div
         class="d-flex flex-column fill-height justify-center align-center text-white"
       >
-        <h1 class="text-h4 font-weight-bold mb-4 paralax-text">
-          
-        </h1>
-        <v-btn rounded depressed>more</v-btn>
+        <h1 class="text-h4 font-weight-bold mb-4 paralax-text"></h1>
       </div>
     </v-parallax>
     <indexCarousel />
-    <v-card
-      color="transparent"
-      elevation="0"
-      max-width="500"
-      class="mx-auto justify-center"
-    >
-      <h1 class="text-h4 font-weight-bold mb-4 d-flex justify-center">ห้องปฎิบัติการของเรา</h1>
-      <p class="mb-4 d-flex justify-center text-center">
-        ห้องปฎิบัติการของโรงงานต้นแบบ ที่ช่วยในการผลิตและทดลองอาหาร ในกระบวนการต่างๆ
-      </p>
-    </v-card>
-    <div class="room1 mt-10 d-flex justify-center">
-      <v-row>
-        <v-col
-          class="pa-5 mx-0 d-flex justify-center"
-          xs="12"
-          sm="6"
-          md="3"
-          v-for="room in rooms"
-          :key="room.id"
-        >
-          <indexRoom :picture="room.picture" :name="room.name" :id="room.id" />
-        </v-col>
+
+    <h1 class="text-h4 font-weight-bold mb-4 d-flex justify-center">
+      บริการของเรา
+    </h1>
+    <p class="mb-4 d-flex justify-center text-center">
+      ห้องปฎิบัติการของโรงงานต้นแบบ ที่ช่วยในการผลิตและทดลองอาหาร
+      ในกระบวนการต่างๆ
+    </p>
+    <div class="room1 justify-center">
+      <v-row class="justify-center mt-12">
+        <indexAboutUs />
       </v-row>
     </div>
+
     <div class="mt-15">
       <indexContact />
     </div>

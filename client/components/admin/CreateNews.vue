@@ -47,21 +47,21 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="12">
-                    <v-text-field
+                    <v-textarea
                       v-model="form.details"
                       :rules="[(v) => !!v || 'details is required']"
                       label="details"
                       outlined
                       required
-                    ></v-text-field>
+                    ></v-textarea>
                   </v-col>
                   <v-col cols="12" sm="12">
                     <v-file-input
-                        v-model="form.file"
-                        label="รูปภาพ"
-                        filled
-                        prepend-icon="mdi-camera"
-                      ></v-file-input>
+                      v-model="form.file"
+                      label="รูปภาพ"
+                      filled
+                      prepend-icon="mdi-camera"
+                    ></v-file-input>
                   </v-col>
                 </v-row>
               </v-form>
@@ -123,12 +123,12 @@ export default {
       try {
         this.loading = true
         let file = new FormData()
-          file.append('file', this.form.file),
+        file.append('file', this.form.file),
           file.append('title', this.form.title),
           file.append('details', this.form.details)
         const Response = await this.$store.dispatch(
-        'api/admin/createNews',
-        file
+          'api/admin/createNews',
+          file
         )
         if (Response.code === 201) {
           this.clearForm()

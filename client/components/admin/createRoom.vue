@@ -36,13 +36,13 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6">
-                      <v-text-field
+                      <v-textarea
                         v-model="form.details"
                         :rules="[(v) => !!v || 'details required']"
                         label="Details"
                         outlined
                         required
-                      ></v-text-field>
+                      ></v-textarea>
                     </v-col>
                   </v-row>
 
@@ -58,12 +58,12 @@
                     </v-col>
                   </v-row>
                   <v-row>
-                      <v-file-input
-                        v-model="form.file"
-                        label="รูปภาพ"
-                        filled
-                        prepend-icon="mdi-camera"
-                      ></v-file-input>
+                    <v-file-input
+                      v-model="form.file"
+                      label="รูปภาพ"
+                      filled
+                      prepend-icon="mdi-camera"
+                    ></v-file-input>
                   </v-row>
                 </v-form>
               </template>

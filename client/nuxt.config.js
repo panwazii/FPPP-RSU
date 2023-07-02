@@ -21,7 +21,8 @@ export default {
   css: [
     '~/assets/css/style.css',
     '~/assets/css/index/contact.css',
-    '~/assets/css/index/login.css'
+    '~/assets/css/index/login.css',
+    '~/assets/css/hover.css',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins

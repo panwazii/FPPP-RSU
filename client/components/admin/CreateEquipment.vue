@@ -70,22 +70,22 @@
 
                   <v-row class="mt-2">
                     <v-col cols="12" sm="6">
-                      <v-text-field
+                      <v-textarea
                         v-model="form.details"
                         :rules="[(v) => !!v || 'details required']"
                         label="Details"
                         outlined
                         required
-                      ></v-text-field>
+                      ></v-textarea>
                     </v-col>
                   </v-row>
                   <v-col cols="12" sm="12">
                     <v-file-input
-                        v-model="form.file"
-                        label="รูปภาพ"
-                        filled
-                        prepend-icon="mdi-camera"
-                      ></v-file-input>
+                      v-model="form.file"
+                      label="รูปภาพ"
+                      filled
+                      prepend-icon="mdi-camera"
+                    ></v-file-input>
                   </v-col>
                 </v-form>
               </template>
@@ -152,7 +152,7 @@ export default {
       try {
         this.loading = true
         let file = new FormData()
-          file.append('file', this.form.file),
+        file.append('file', this.form.file),
           file.append('room_id', this.form.room_id),
           file.append('name', this.form.name),
           file.append('price', this.form.price),

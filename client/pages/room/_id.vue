@@ -8,7 +8,7 @@
         :data="room"
         :Reservations.sync="Reservations"
       />
-      <v-card class="pa-6 rounded-lg" width="1100" height="400">
+      <v-card class="maincard pa-6 rounded-lg">
         <h1 align="left" class="amber--text pa-1"></h1>
         <v-form ref="form" lazy-validation>
           <v-row class="mt-2">
@@ -24,9 +24,7 @@
               </v-card-actions>
             </v-col>
             <v-col cols="12" sm="6">
-              <v-avatar class="ml-16 rounded-xl" size="300">
-                <v-img :src="room.picture"></v-img>
-              </v-avatar>
+              <v-img class="pictureincard" :src="room.picture"></v-img>
             </v-col>
           </v-row>
         </v-form>
@@ -49,10 +47,7 @@
         v-for="equipments in tool"
         :key="equipments.id"
       >
-        <roomEquipmentCard
-          :picture="equipments.picture"
-          :name="equipments.name"
-        />
+        <roomHoverCard :picture="equipments.picture" :name="equipments.name" />
       </v-col>
     </v-row>
 

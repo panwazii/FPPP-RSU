@@ -42,13 +42,13 @@
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="12">
-                        <v-text-field
+                        <v-textarea
                           v-model="data.details"
                           :rules="[(v) => !!v || 'details is required']"
                           label="details"
                           outlined
                           required
-                        ></v-text-field>
+                        ></v-textarea>
                       </v-col>
                       <v-col cols="12" sm="12">
                         <v-img
@@ -123,11 +123,11 @@ export default {
       try {
         this.loading = true
         let file = new FormData()
-          file.append('file', this.data.file),
+        file.append('file', this.data.file),
           file.append('id', this.data.id),
           file.append('title', this.data.title),
           file.append('details', this.data.details),
-        await this.$store.dispatch('api/admin/updateNews', file)
+          await this.$store.dispatch('api/admin/updateNews', file)
         this.$emit('update:editNews', false)
         this.loading = false
         this.completeModal = true

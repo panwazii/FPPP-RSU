@@ -1,0 +1,242 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.hoverbody {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	background: #161616;
+	min-height: 100vh;
+}
+
+.hoversection::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(#DA22FF, #9733EE);
+	clip-path: circle(30% at right 70%);
+}
+
+.hoversection::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(#E55D87, #5FC3E4);
+	clip-path: circle(20% at 10% 10%);
+}
+
+.hovercontainer {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	margin: 40px 0;
+}
+
+.hovercontainer .card {
+	position: relative;
+	width: 300px;
+	height: 400px;
+	background: rgba(255, 255, 255, 0.05);
+	margin: 20px;
+	box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+	border-radius: 15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	backdrop-filter: blur(10px);
+}
+
+.hovercontainer .card .content {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	transition: 0.5s;
+}
+
+.hovercontainer .card:hover .content {
+	transform: translateY(-20px);
+}
+
+.hovercontainer .card .content .imgBx {
+	position: relative;
+	width: 150px;
+	height: 150px;
+	overflow: hidden;
+}
+
+.hovercontainer .card .content .imgBx img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.hovercontainer .card .content .contentBx h3 {
+	color: #000000;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-weight: 500;
+	font-size: 18px;
+	text-align: center;
+	margin: 20px 0 10px;
+	line-height: 1.1em;
+}
+
+.hovercontainer .card .content .contentBx h3 span {
+	font-size: 12px;
+	font-weight: 300;
+	text-transform: initial;
+}
+
+.hovercontainer .card .sci {
+	position: absolute;
+	bottom: 50px;
+	display: flex;
+}
+
+.hovercontainer .card .sci li {
+	list-style: none;
+	margin: 0 10px;
+	transform: translateY(40px);
+	transition: 0.5s;
+	opacity: 0;
+}
+
+.hovercontainer .card:hover .sci li {
+	transform: translateY(0px);
+	opacity: 1;
+}
+
+.hovercontainer .card .sci li a {
+	color: #000000;
+	font-size: 20px;
+    justify-content: center;
+}
+
+
+
+.cta {
+	--shadowColor: 187 60% 40%;
+	display: flex;
+	flex-wrap: wrap;
+	background: hsl(187 70% 85%);
+	max-width: 50rem;
+	width: 100%;
+	box-shadow: 0.65rem 0.65rem 0 hsl(var(--shadowColor) / 1);
+	border-radius: 0.8rem;
+	overflow: hidden;
+	border: 0.5rem solid;
+}
+
+.cta img {
+	aspect-ratio: 3 / 2;
+	object-fit: cover;
+	flex: 1 1 300px;
+	outline: 0.5rem solid;
+}
+
+.cta__text-column {
+	padding: min(2rem, 5vw) min(2rem, 5vw) min(2.5rem, 5vw);
+	flex: 1 0 50%;
+}
+
+.cta__text-column > * + * {
+	margin: min(1.5rem, 2.5vw) 0 0 0;
+}
+
+.cta a {
+	display: inline-block;
+	color: black;
+	padding: 0.5rem 1rem;
+	text-decoration: none;
+	background: hsl(187 75% 64%);
+	border-radius: 0.6rem;
+	font-weight: 700;
+	border: 0.35rem solid;
+}
+
+
+
+.indexcard-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.indexcard{
+    width: 350px;
+    height: 400px;
+    position: relative;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    padding: 20px;
+    transition: all .3s ease-in;
+}
+.indexcard > *{
+    padding: 10px;
+}
+.indexcard .card-image{
+    height: 150px;
+    width: 150px;
+    background-position: center center;
+    background-size: cover;    
+}
+.indexcard .card-title{
+    padding: 20px 10px;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    text-shadow: 1px 0px 2px #262654;
+}
+.indexcard:nth-child(1) .card-image{
+    background-image: url(https://www.pswarehouse.com/images/product/Factory/Factory_38U155076154282.jpg);
+}
+.indexcard:nth-child(2) .card-image{
+    background-image: url(https://p2crires.cri.cn/yafei/p2/M00/A1/96/CqgNOl4A46iAbo6XAAAAAAAAAAA323.867x554.jpg);
+}
+.indexcard:nth-child(3) .card-image{
+    background-image: url(https://2.bp.blogspot.com/-yA52EC8QBFg/Wzr9R6TpgXI/AAAAAAAAADk/rib58Vkxstke4WojdkTYr1sO7D-eH5duwCLcBGAs/s1600/%25E0%25B8%25A3%25E0%25B8%25B9%25E0%25B8%259B%25E0%25B8%25A0%25E0%25B8%25B2%25E0%25B8%259E1.jpg);
+}
+.indexcard:hover{
+    background: #e84393;
+    color: #fff;
+    box-shadow: 0px 0px 11px 5px #000000;
+
+}
+
+.indexcard .card-text{
+    line-height: 20px;
+    font-size: 400;
+}
+
+.indexbanner-bg {
+    background-image: url(https://3.bp.blogspot.com/-QyrMdAmSahk/WQtGcZyoCaI/AAAAAAAAXL0/N0w9_7WJUU8XDU1eIwb98qLjSAW-tTbnACLcB/s1600/2.jpg);
+    background-position: center;
+    background-size: cover;
+    padding: 100px 0;
+    width: 100%;
+    height: 500px;
+    display: flex;
+    align-items: center;
+}
