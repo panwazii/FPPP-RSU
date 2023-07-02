@@ -49,7 +49,7 @@ authRouter.post('/admin/login', async (req, res) => {
 
       if (Result.code === 200) {
         Result.token = jwt.sign({
-          id: Result.data.id,
+          id: Result.user.id,
           admin: true,
         }, config.security.salt, {
           expiresIn: config.security.loginDuration,
