@@ -7,7 +7,7 @@
 
       <div class="control">
         <button class="btn">
-          <span class="buy" @click="$router.push('/room/' + id)">จองห้อง</span>
+          <span class="buy" @click="$router.push('/room/' + id)">รายละเอียดเพิ่มเติม</span>
         </button>
       </div>
     </div>

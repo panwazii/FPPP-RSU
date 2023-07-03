@@ -24,7 +24,7 @@
             <v-col cols="8">
               <template>
                 <v-form ref="form" lazy-validation>
-                  <p><h1>ชื่อห้อง</h1></p>
+                  <h1>ชื่อห้อง</h1>
                   <v-row class="mt-2">
                     <v-col cols="12" sm="6">
                       <v-text-field
@@ -47,7 +47,7 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
-                  <p><h1>ข้อมูลผู้จอง</h1></p>
+                  <h1>ข้อมูลผู้จอง</h1>
 
                   <v-row class="mt-2">
                     <v-col cols="12" sm="6">
@@ -91,9 +91,71 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
-                  <p><h1>วันที่ต้องการจอง</h1></p>
+                  <h1>วันที่ต้องการจอง</h1>
                   <v-row class="mt-2 justify-center">
                     <v-date-picker show-adjacent-months></v-date-picker>
+                  </v-row>
+
+                  <h1 class="mt-5">เวลา</h1>
+                  <v-row class="mt-2">
+                    <v-col cols="5" sm="5">
+                      <v-text-field
+                        v-model="start"
+                        label="เริ่มต้น"
+                        type="time"
+                        outlined
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="5" sm="5">
+                      <v-text-field
+                        v-model="end"
+                        label="สิ้นสุด"
+                        type="time"
+                        outlined
+                        required
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+
+                  <h1 class="mt-3">อุปกรณ์ที่ต้องการใช้งาน</h1>
+                  <v-row class="mt-2">
+                    <v-col cols="12" sm="12">
+                      <v-combobox
+                        v-model="equipment_select"
+                        :items="items"
+                        label="เลือกอุปกรณ์"
+                        multiple
+                        chips
+                      ></v-combobox>
+                    </v-col>
+                  </v-row>
+
+                  <v-row class="mt-3">
+                    <v-col cols="4" sm="4">
+                      <v-checkbox-btn
+                        v-model="enabled"
+                        class="pe-2"
+                      ></v-checkbox-btn>
+                      <p>ผู้ช่วย</p>
+                    </v-col>
+                    <v-col cols="6" sm="6">
+                      <v-text-field
+                        :disabled="!enabled"
+                        hide-details
+                        label="I only work if you check the box"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+
+                  <h1 class="mt-3">หมายเหตุ</h1>
+                  <v-row class="mt-2">
+                    <v-col cols="12" sm="12">
+                      <v-textarea 
+                      v-model="ext"
+                      label="หมายเหตุเพิ่มเติม"
+                      ></v-textarea>
+                    </v-col>
                   </v-row>
                 </v-form>
               </template>
@@ -140,6 +202,13 @@ export default {
       lname: '',
       tell: '',
       address: '',
+      items: [
+        'เครื่องปอกสับปะรด',
+        'เครื่องปอกมันฝรั่ง',
+        'เครื่องหั่นผัก',
+        'เครื่องบดย่อยชิ้นผลไม้-ผัก',
+      ],
+      enabled: false,
     }
   },
   methods: {
