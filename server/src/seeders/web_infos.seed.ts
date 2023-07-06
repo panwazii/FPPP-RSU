@@ -3,11 +3,10 @@ import { uuid } from 'uuidv4';
 const entries: WebInfoAttribute[] = [
     {
         id: uuid(),
-        details: 'super admin',
-        email: "",
-        tel: 'super admin',
-        location: 'super admin',
-
+        details: '',
+        email: "test.rsu.ac.th",
+        tel: '000-0000000',
+        location: '',
     },
 ];
 
