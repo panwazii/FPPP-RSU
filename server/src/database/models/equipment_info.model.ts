@@ -1,6 +1,7 @@
 import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
+import EquipmentRentRateModel from './equipment_rent_rate.model';
 
 export interface EquipmentInfoAttribute {
     id?: string;
@@ -9,6 +10,7 @@ export interface EquipmentInfoAttribute {
     price?: number;
     rent_price?: number;
     picture?: string;
+    equipment_rent_rate_id?: number;
     available_status?: boolean;
     created_at?: string;
     update_at?: string;
@@ -31,6 +33,8 @@ class EquipmentInfoModel extends Model<EquipmentInfoAttribute, EquipmentInfoAttr
 
     declare picture: string;
 
+    declare equipment_rent_rate_id: number;
+
     declare available_status: boolean;
 }
 
@@ -49,7 +53,7 @@ export const initEquipmentInfoModel = (connection: Sequelize) => {
             },
             details: {
                 allowNull: false,
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
             },
             price: {
                 allowNull: false,
@@ -62,6 +66,14 @@ export const initEquipmentInfoModel = (connection: Sequelize) => {
             picture: {
                 allowNull: false,
                 type: DataTypes.STRING,
+            },
+            equipment_rent_rate_id: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+                references: {
+                    model: EquipmentRentRateModel,
+                    key: 'id',
+                },
             },
             available_status: {
                 allowNull: false,

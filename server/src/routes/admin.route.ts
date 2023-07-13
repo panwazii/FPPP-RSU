@@ -679,6 +679,132 @@ adminRouter.get('/getAllUserTypes', async (req, res) => {
     }
 });
 
+// New Equipment
+
+adminRouter.get('/getAllEquipmentInfo', (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        EquipmentController.getAllEquipmentInfo(Limit, Offset).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, equipments: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+adminRouter.get('/getAllEquipmentInfoInRoom', (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        log(req.query.id)
+        const Offset = Limit * Page;
+        EquipmentController.getAllEquipmentInfoInRoom(req.query.id, Limit, Offset).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, equipments: Data.rows, total_pages: Math.ceil(Data.count / Limit),count: Data.count
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+adminRouter.post('/createEquipmentInfo', multerUpload.single("file"), async (req, res) => {
+    try {
+        const picture = req.file;
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+        if (!picture) {
+            req.body.picture = 'https://www.charlotteathleticclub.com/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png';
+            EquipmentController.createEquipmentInfo(req.body).then((state) => {
+                if (state) {
+                    log("this is state", state)
+                    res.json({ code: 201, state });
+                } else {
+                    res.json(errorCode('CREATE', 2));
+                }
+            });
+        }
+        else {
+            let pictureUrl = await uploadSinglePicture(
+                picture.originalname,
+                picture.mimetype,
+                picture.buffer);
+            req.body.picture = pictureUrl
+
+            EquipmentController.createEquipmentInfo(req.body).then((state) => {
+                if (state) {
+                    log("this is state", state)
+                    res.json({ code: 201, state });
+                } else {
+                    res.json(errorCode('CREATE', 2));
+                }
+            });
+        }
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+adminRouter.post('/createEquipmentStock', (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+
+        EquipmentController.createEquipmentStock(req.body).then((state) => {
+            if (state) {
+                res.json({ code: 200, state });
+            } else {
+                res.json(errorCode('CREATE', 2));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+
+});
+
+adminRouter.post('/createEquipmentRentRate', (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+
+        EquipmentController.createEquipmentRentRate(req.body).then((state) => {
+            if (state) {
+                res.json({ code: 200, state });
+            } else {
+                res.json(errorCode('CREATE', 2));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+
+});
+
 export default adminRouter;
 
 

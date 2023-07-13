@@ -3,6 +3,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import EquipmentModel, { EquipmentAttribute } from '../database/models/equipments.model';
 import GlobalEquipmentModel, { GlobalEquipmentAttribute } from '../database/models/global_equipments.model';
+import EquipmentInfoModel, { EquipmentInfoAttribute } from '../database/models/equipment_info.model';
+import EquipmentStockModel, { EquipmentStockAttribute } from '../database/models/equipment_stock.model';
+import EquipmentRentRateModel, { EquipmentRentRateAttribute } from '../database/models/equipment_rent_rate.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
@@ -53,9 +56,9 @@ class EquipmentController {
         });
     }
 
-    public static async getAllEquipmentByRoom(id: string,limit: number, offset: number) {
+    public static async getAllEquipmentByRoom(id: string, limit: number, offset: number) {
         return EquipmentModel.findAndCountAll({
-            where: { room_id: id ,available_status: true },
+            where: { room_id: id, available_status: true },
             limit,
             offset,
             raw: true
@@ -172,6 +175,140 @@ class EquipmentController {
 
     //     return { code: 401, desc_code: 'password-incorrect' };
     // }
+
+    // New equipment controller
+
+    // Equipment Info
+
+    public static async getAllEquipmentInfo(limit: number, offset: number) {
+        return EquipmentInfoModel.findAndCountAll({
+            where: { available_status: true },
+            limit,
+            offset,
+            raw: true
+        });
+    }
+
+    public static async getAllEquipmentInfoInRoom(id: any, limit: number, offset: number) {
+        return EquipmentInfoModel.findAndCountAll({
+            distinct: true,
+            where: {available_status:true},
+            include: [{
+                model: EquipmentStockModel, as: 'Stock',
+                where: { room_id: id, available_status: true, },
+            }],
+            limit,
+            offset,
+            
+        });
+    }
+
+    public static async createEquipmentInfo(data: any) {
+        const packet: EquipmentInfoAttribute = {
+            name: data.name,
+            details: data.details,
+            picture: data.picture,
+            price: data.price,
+            rent_price: data.rent_price,
+            available_status: true,
+        };
+
+        return EquipmentInfoModel.create(packet)
+            .then(() => true)
+            .catch((e) => {
+                log(e);
+                return false;
+            });
+    }
+
+    public static async updateEquipmentInfo(data: any) {
+        return EquipmentInfoModel.update({
+            name: data.name,
+            details: data.details,
+            picture: data.picture,
+            price: data.price,
+            rent_price: data.rent_price,
+        }, {
+            where: {
+                id: data.id,
+            },
+        })
+    }
+
+    // Equipment Stock
+
+    public static async getAllEquipmentStock(limit: number, offset: number) {
+        return EquipmentStockModel.findAndCountAll({
+            where: { available_status: true },
+            limit,
+            offset,
+            raw: true
+        });
+    }
+
+    public static async createEquipmentStock(data: any) {
+        const packet: EquipmentStockAttribute = {
+            serial_number: data.serial_number,
+            room_id: data.room_id,
+            equipment_info_id: data.equipment_info_id,
+            equipment_status: "available",
+            available_status: true,
+        };
+
+        return EquipmentStockModel.create(packet)
+            .then(() => true)
+            .catch((e) => {
+                log(e);
+                return false;
+            });
+    }
+
+    public static async updateEquipmentStock(data: any) {
+        return EquipmentStockModel.update({
+            serial_number: data.serial_number,
+            room_id: data.room_id,
+        }, {
+            where: {
+                id: data.id,
+            },
+        })
+    }
+
+    // Equipment Rent Rate
+
+    public static async getAllEquipmentRentRate(limit: number, offset: number) {
+        return EquipmentRentRateModel.findAndCountAll({
+            where: { available_status: true },
+            limit,
+            offset,
+            raw: true
+        });
+    }
+
+    public static async createEquipmentRentRate(data: any) {
+        const packet: EquipmentRentRateAttribute = {
+            name: data.name,
+            available_status: true,
+        };
+
+        return EquipmentRentRateModel.create(packet)
+            .then(() => true)
+            .catch((e) => {
+                log(e);
+                return false;
+            });
+    }
+
+    public static async updateEquipmentRentRate(data: any) {
+        return EquipmentRentRateModel.update({
+            name: data.name,
+        }, {
+            where: {
+                id: data.id,
+            },
+        })
+    }
+
 }
 
 export default EquipmentController;
