@@ -703,6 +703,28 @@ adminRouter.get('/getAllEquipmentInfo', (req, res) => {
     }
 });
 
+adminRouter.get('/getAllEquipmentStock', (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        EquipmentController.getAllEquipmentStock(Limit, Offset).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, equipmentStock: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
 adminRouter.get('/getAllEquipmentInfoInRoom', (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
@@ -805,6 +827,88 @@ adminRouter.post('/createEquipmentRentRate', (req, res) => {
 
 });
 
+adminRouter.post('/updateEquipmentInfo', multerUpload.single("file"), authValid, async (req, res) => {
+    try {
+        const picture = req.file;
+        const Data = req.body;
+
+        if (!Data) {
+            res.json(errorCode('update', 1));
+            return;
+        }
+
+        if (!picture) {
+            EquipmentController.updateEquipmentInfo(Data).then((result) => {
+                if (result) {
+                    res.json({ code: 200, result });
+                } else {
+                    res.json(errorCode('UPDATE', 2));
+                }
+            });
+        }
+        else {
+            let pictureUrl = await uploadSinglePicture(
+                picture.originalname,
+                picture.mimetype,
+                picture.buffer);
+            Data.picture = pictureUrl;
+            EquipmentController.updateEquipmentInfo(Data).then((result) => {
+                if (result) {
+                    res.json({ code: 200, result });
+                } else {
+                    res.json(errorCode('UPDATE', 2));
+                }
+            });
+        }
+    } catch (error) {
+        log(error)
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+adminRouter.post('/updateEquipmentStock', authValid, (req, res) => {
+    try {
+        const Data = req.body;
+        if (!Data) {
+            res.json(errorCode('update', 1));
+            return;
+        }
+
+        EquipmentController.updateEquipmentStock(Data).then((result) => {
+            if (result) {
+                res.json({ code: 200, result });
+            } else {
+                res.json(errorCode('UPDATE', 2));
+            }
+        });
+    } catch (error) {
+        log(error)
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+
+});
+
+adminRouter.post('/updateEquipmentRentRate', authValid, (req, res) => {
+    try {
+        const Data = req.body;
+        if (!Data) {
+            res.json(errorCode('update', 1));
+            return;
+        }
+
+        EquipmentController.updateEquipmentRentRate(Data).then((result) => {
+            if (result) {
+                res.json({ code: 200, result });
+            } else {
+                res.json(errorCode('UPDATE', 2));
+            }
+        });
+    } catch (error) {
+        log(error)
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+
+});
 export default adminRouter;
 
 
