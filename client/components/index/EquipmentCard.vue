@@ -11,12 +11,17 @@
       </div>
       <ul class="sci">
         <li>
-          <a href="">รายละเอียดเพิ่มเติม</a>
+          <a href=""><span class="mdi mdi-information-outline"></span></a>
+
+          <a href="" class="ma-2 pa-2"
+            ><span class="mdi mdi-cart-plus"></span
+          ></a>
         </li>
       </ul>
     </div>
   </div>
 </template>
+
 <script>
 export default {
   props: {
@@ -146,7 +151,6 @@ export default {
 
 .container .card .sci li a {
   color: #000000;
-  padding-right: 15px;
-  font-size: 1fr;
+  font-size: 30px;
 }
 </style>

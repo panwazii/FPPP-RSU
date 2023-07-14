@@ -11,7 +11,13 @@
         <h3>FPPP</h3>
         <v-spacer></v-spacer>
         <v-btn rounded text to="/"> <h4>Home/หน้าหลัก</h4></v-btn>
-        <v-btn class="ml-2" rounded text to="/room-selection"> <h4>Room/ห้องแลป</h4></v-btn>
+        <v-btn class="ml-2" rounded text to="/equipments">
+          <h4>Equipment/อุปกรณ์</h4></v-btn
+        >
+        <v-btn class="ml-2" rounded text to="/room-selection">
+          <h4>Room/ห้องแลป</h4></v-btn
+        >
+
         <v-btn class="ml-2" rounded depressed to="/login"><h4>Login</h4></v-btn>
       </v-app-bar>
       <Nuxt />
