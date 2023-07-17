@@ -45,7 +45,7 @@ export const initNewsModel = (connection: Sequelize) => {
             details: {
                 allowNull: false,
                 unique: true,
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
             },
             picture: {
                 allowNull: false,

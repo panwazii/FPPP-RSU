@@ -2,7 +2,7 @@ import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
 import RoomModel from './rooms.model';
-import EquipmentInfoModel from './equipment_info.model';
+import EquipmentInfoModel from './equipment_infos.model';
 
 export interface EquipmentStockAttribute {
     id?: string;
@@ -78,7 +78,7 @@ export const initEquipmentStockModel = (connection: Sequelize) => {
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'equipment_stock',
+            tableName: 'equipment_stocks',
         },
     );
 };

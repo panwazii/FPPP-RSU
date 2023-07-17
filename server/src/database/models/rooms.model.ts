@@ -46,7 +46,7 @@ export const initRoomModel = (connection: Sequelize) => {
             },
             details: {
                 allowNull: false,
-                type: DataTypes.STRING,
+                type: DataTypes.TEXT,
             },
             picture: {
                 allowNull: false,

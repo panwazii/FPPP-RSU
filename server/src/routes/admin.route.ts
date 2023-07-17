@@ -732,7 +732,6 @@ adminRouter.get('/getAllEquipmentInfoInRoom', (req, res) => {
         if (Page != 0) {
             Page = Page - 1
         }
-        log(req.query.id)
         const Offset = Limit * Page;
         EquipmentController.getAllEquipmentInfoInRoom(req.query.id, Limit, Offset).then((Data) => {
             if (Data) {

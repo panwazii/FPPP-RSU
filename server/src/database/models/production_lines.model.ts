@@ -2,7 +2,7 @@ import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
 
-export interface EquipmentRentRateAttribute {
+export interface ProductionLineAttribute {
     id?: number;
     name?: string;
     created_at?: Date;
@@ -10,9 +10,9 @@ export interface EquipmentRentRateAttribute {
     available_status?: boolean;
 }
 
-export interface EquipmentRentRateAttributeCreation extends Optional<EquipmentRentRateAttribute, 'id'> { }
+export interface ProductionLineAttributeCreation extends Optional<ProductionLineAttribute, 'id'> { }
 
-class EquipmentRentRateModel extends Model<EquipmentRentRateAttribute, EquipmentRentRateAttributeCreation> implements EquipmentRentRateAttribute {
+class ProductionLineModel extends Model<ProductionLineAttribute, ProductionLineAttributeCreation> implements ProductionLineAttribute {
     declare id: number;
 
     declare name: string;
@@ -24,8 +24,8 @@ class EquipmentRentRateModel extends Model<EquipmentRentRateAttribute, Equipment
     declare available_status: boolean;
 }
 
-export const initEquipmentRentRateModel = (connection: Sequelize) => {
-    EquipmentRentRateModel.init(
+export const initProductionLineModel = (connection: Sequelize) => {
+    ProductionLineModel.init(
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -55,9 +55,9 @@ export const initEquipmentRentRateModel = (connection: Sequelize) => {
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'equipment_rent_rate',
+            tableName: 'production_lines',
         },
     );
 };
 
-export default EquipmentRentRateModel;
+export default ProductionLineModel;

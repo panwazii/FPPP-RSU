@@ -3,9 +3,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import EquipmentModel, { EquipmentAttribute } from '../database/models/equipments.model';
 import GlobalEquipmentModel, { GlobalEquipmentAttribute } from '../database/models/global_equipments.model';
-import EquipmentInfoModel, { EquipmentInfoAttribute } from '../database/models/equipment_info.model';
-import EquipmentStockModel, { EquipmentStockAttribute } from '../database/models/equipment_stock.model';
-import EquipmentRentRateModel, { EquipmentRentRateAttribute } from '../database/models/equipment_rent_rate.model';
+import EquipmentInfoModel, { EquipmentInfoAttribute } from '../database/models/equipment_infos.model';
+import EquipmentStockModel, { EquipmentStockAttribute } from '../database/models/equipment_stocks.model';
+import EquipmentRentRateModel, { EquipmentRentRateAttribute } from '../database/models/equipment_rent_rates.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
