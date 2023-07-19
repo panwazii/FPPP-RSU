@@ -912,8 +912,12 @@ adminRouter.post('/updateEquipmentRentRate', authValid, (req, res) => {
 });
 
 adminRouter.get('/getFile', async (req, res) => {
-    let files = await bucket.getFiles();
-    res.status(200).json(files);
+    try {
+        let files = await bucket.file("picture/07f198fc-4473-4599-a5a6-9d0f971b2623.jpg").delete();
+        res.status(200).json(files);
+    } catch (error) {
+        log(error)
+    }
 })
 export default adminRouter;
 
