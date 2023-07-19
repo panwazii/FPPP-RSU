@@ -1,7 +1,8 @@
 import Sequelize, { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import RoomModel,{RoomAttribute} from '../database/models/rooms.model';
+import RoomModel, { RoomAttribute } from '../database/models/rooms.model';
+import RoomPictureModel, { RoomPictureAttribute } from '../database/models/room_pictures.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
@@ -11,17 +12,24 @@ class RoomController {
             where: {
                 id: roomId,
             },
-            raw: true
+            include: [{
+                model: RoomPictureModel, as: 'Picture',
+                where: { room_id: roomId, available_status: true }
+            }],
         });
     }
 
-    public static async getAllRooms(limit:number,offset:number) {
+    public static async getAllRooms(limit: number, offset: number) {
         return RoomModel.findAndCountAll({
-            where: { available_status : true  },
+            distinct: true,
+            where: { available_status: true },
+            include: [{
+                model: RoomPictureModel, as: 'Picture',
+                where: { available_status: true }
+            }],
             order: [["name", "ASC"]],
             limit,
             offset,
-            raw: true
         });
     }
 
@@ -29,7 +37,6 @@ class RoomController {
         const packet: RoomAttribute = {
             name: data.name,
             details: data.details,
-            picture: data.picture,
             rent_price: data.rent_price,
             available_status: true,
         };
@@ -46,7 +53,6 @@ class RoomController {
         return RoomModel.update({
             name: data.name,
             details: data.details,
-            picture: data.picture,
             rent_price: data.rent_price,
         }, {
             where: {
@@ -54,6 +60,21 @@ class RoomController {
             },
         }).then(() => true)
             .catch(() => false);
+    }
+
+    public static async createRoomPicture(url: string, id: number) {
+        const packet: RoomPictureAttribute = {
+            url: url,
+            room_id: id,
+            available_status: true,
+        };
+
+        return RoomPictureModel.create(packet)
+            .then(() => true)
+            .catch((e) => {
+                log(e);
+                return false;
+            });
     }
 
 }

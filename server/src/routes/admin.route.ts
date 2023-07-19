@@ -11,7 +11,9 @@ import { authValid } from '../middleware/admin.middleware';
 import { numberOrDefault } from '../tools/util';
 import { uploadSinglePicture } from '../tools/util';
 import multer from 'multer';
+import { Admin } from '../service/firebase';
 
+const bucket = Admin.storage().bucket()
 const adminRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON('ADMIN');
 const multerUpload = multer();
@@ -736,7 +738,7 @@ adminRouter.get('/getAllEquipmentInfoInRoom', (req, res) => {
         EquipmentController.getAllEquipmentInfoInRoom(req.query.id, Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, equipments: Data.rows, total_pages: Math.ceil(Data.count / Limit),count: Data.count
+                    code: 200, equipments: Data.rows, total_pages: Math.ceil(Data.count / Limit), count: Data.count
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -908,6 +910,11 @@ adminRouter.post('/updateEquipmentRentRate', authValid, (req, res) => {
     }
 
 });
+
+adminRouter.get('/getFile', async (req, res) => {
+    let files = await bucket.getFiles();
+    res.status(200).json(files);
+})
 export default adminRouter;
 
 
