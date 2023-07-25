@@ -25,32 +25,64 @@ export const actions = {
         return await this.$axios.post('api/admin/updateRoom', data).then((res) => res.data)
     },
     //Equipment
-    async getAllEquipment({ getters }, data) {
+
+    async getAllEquipmentInfo({ getters }, data) {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
-        return await this.$axios.get('api/admin/getAllEquipment', data).then((res) => res.data)
+        return await this.$axios.get('api/admin/getAllEquipmentInfo', data).then((res) => res.data)
     },
-    async getSingleEquipment({ getters }, data) {
-        return await this.$axios.get('api/admin/getSingleEquipment', data).then((res) => res.data)
-    },
-    async createEquipment({ getters }, data) {
-        return await this.$axios.post('api/admin/createEquipment', data).then((res) => res.data)
-    }, async updateEquipment({ getters }, data) {
-        return await this.$axios.post('api/admin/updateEquipment', data).then((res) => res.data)
-    },
-    //Global Equipments
-    async getAllGlobalEquipment({ getters }, data) {
+    async getAllEquipmentStock({ getters }, data) {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
-        return await this.$axios.get('api/admin/getAllGlobalEquipment', data).then((res) => res.data)
+        return await this.$axios.get('api/admin/getAllEquipmentStock', data).then((res) => res.data)
     },
-    async getSingleGlobalEquipment({ getters }, data) {
-        return await this.$axios.get('api/admin/getSingleGlobalEquipment', data).then((res) => res.data)
+    async getAllEquipmentInfoInRoom({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getAllEquipmentInfoInRoom', data).then((res) => res.data)
     },
-    async createGlobalEquipment({ getters }, data) {
-        return await this.$axios.post('api/admin/createGlobalEquipment', data).then((res) => res.data)
+    async createEquipmentInfo({ getters }, data) {
+        return await this.$axios.post('api/admin/createEquipmentInfo', data).then((res) => res.data)
     },
-    async updateGlobalEquipment({ getters }, data) {
-        return await this.$axios.post('api/admin/updateGlobalEquipment', data).then((res) => res.data)
+    async createEquipmentStock({ getters }, data) {
+        return await this.$axios.post('api/admin/createEquipmentStock', data).then((res) => res.data)
     },
+    async createEquipmentRentRate({ getters }, data) {
+        return await this.$axios.post('api/admin/createEquipmentRentRate', data).then((res) => res.data)
+    },
+    async updateEquipmentInfo({ getters }, data) {
+        return await this.$axios.post('api/admin/updateEquipmentInfo', data).then((res) => res.data)
+    },
+    async updateEquipmentStock({ getters }, data) {
+        return await this.$axios.post('api/admin/updateEquipmentStock', data).then((res) => res.data)
+    },
+    async updateEquipmentRentRate({ getters }, data) {
+        return await this.$axios.post('api/admin/updateEquipmentRentRate', data).then((res) => res.data)
+    },
+    // async getAllEquipment({ getters }, data) {
+    //     this.$axios.setHeader('authorization', this.$cookies.get('token'))
+    //     return await this.$axios.get('api/admin/getAllEquipment', data).then((res) => res.data)
+    // },
+    // async getSingleEquipment({ getters }, data) {
+    //     return await this.$axios.get('api/admin/getSingleEquipment', data).then((res) => res.data)
+    // },
+    // async createEquipment({ getters }, data) {
+    //     return await this.$axios.post('api/admin/createEquipment', data).then((res) => res.data)
+    // }, async updateEquipment({ getters }, data) {
+    //     return await this.$axios.post('api/admin/updateEquipment', data).then((res) => res.data)
+    // },
+
+    // //Global Equipments
+    // async getAllGlobalEquipment({ getters }, data) {
+    //     this.$axios.setHeader('authorization', this.$cookies.get('token'))
+    //     return await this.$axios.get('api/admin/getAllGlobalEquipment', data).then((res) => res.data)
+    // },
+    // async getSingleGlobalEquipment({ getters }, data) {
+    //     return await this.$axios.get('api/admin/getSingleGlobalEquipment', data).then((res) => res.data)
+    // },
+    // async createGlobalEquipment({ getters }, data) {
+    //     return await this.$axios.post('api/admin/createGlobalEquipment', data).then((res) => res.data)
+    // },
+    // async updateGlobalEquipment({ getters }, data) {
+    //     return await this.$axios.post('api/admin/updateGlobalEquipment', data).then((res) => res.data)
+    // },
     //User Types
     async getAllUserTypes({ getters }, data) {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
@@ -78,6 +110,23 @@ export const actions = {
     },
     async updateNews({ getters }, data) {
         return await this.$axios.post('api/admin/updateNews', data).then((res) => res.data)
+    },
+    //Reserve
+    async getAllReserve({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getAllReserve', data).then((res) => res.data)
+    },
+    async getSingleReserve({ getters }, data) {
+        return await this.$axios.get('api/admin/getSingleReserve', data).then((res) => res.data)
+    },
+    async createReserve({ getters }, data) {
+        return await this.$axios.post('api/admin/createReserve', data).then((res) => res.data)
+    },
+    async updateReserve({ getters }, data) {
+        return await this.$axios.post('api/admin/updateReserve', data).then((res) => res.data)
+    },
+    async updateReserveEquipment({ getters }, data) {
+        return await this.$axios.post('api/admin/updateReserveEquipment', data).then((res) => res.data)
     },
 
 }

@@ -102,7 +102,7 @@ export default {
   },
   methods: {
     async fetchEquipment() {
-      let Data = await this.$store.dispatch('api/admin/getAllEquipment', {
+      let Data = await this.$store.dispatch('api/admin/getAllEquipmentInfo', {
         params: {
           limit: this.itemsPerPage,
           page: this.page,

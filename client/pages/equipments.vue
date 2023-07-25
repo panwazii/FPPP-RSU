@@ -26,7 +26,7 @@
 <script>
 export default {
   mounted() {
-    this.fetctrooms()
+    this.fetchrooms()
   },
   data() {
     return {
@@ -34,8 +34,8 @@ export default {
     }
   },
   methods: {
-    async fetctrooms() {
-      let data = await this.$store.dispatch('api/public/getAllEquipment')
+    async fetchrooms() {
+      let data = await this.$store.dispatch('api/public/getAllEquipmentInfo')
       this.tool = data.equipments
     },
   },
