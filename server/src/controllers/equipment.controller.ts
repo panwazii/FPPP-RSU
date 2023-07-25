@@ -180,6 +180,13 @@ class EquipmentController {
 
     // Equipment Info
 
+    public static async getSingleEquipmentInfo(id: string) {
+        return EquipmentInfoModel.findOne({
+            where: { id: id },
+            raw: true
+        });
+    }
+
     public static async getAllEquipmentInfo(limit: number, offset: number) {
         return EquipmentInfoModel.findAndCountAll({
             where: { available_status: true },
@@ -192,14 +199,14 @@ class EquipmentController {
     public static async getAllEquipmentInfoInRoom(id: string, limit: number, offset: number) {
         return EquipmentInfoModel.findAndCountAll({
             distinct: true,
-            where: {available_status:true},
+            where: { available_status: true },
             include: [{
                 model: EquipmentStockModel, as: 'Stock',
                 where: { room_id: id, available_status: true, },
             }],
             limit,
             offset,
-            
+
         });
     }
 
