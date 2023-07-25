@@ -7,6 +7,7 @@ import RoomController from '../controllers/room.controller';
 import UserController from '../controllers/user.controller';
 import EquipmentController from '../controllers/equipment.controller';
 import UserTypeController from '../controllers/user_types.controller';
+import ReserveController from '../controllers/reserve.controller';
 import { authValid } from '../middleware/admin.middleware';
 import { numberOrDefault } from '../tools/util';
 import { uploadSinglePicture } from '../tools/util';
@@ -735,7 +736,7 @@ adminRouter.get('/getAllEquipmentInfoInRoom', (req, res) => {
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        EquipmentController.getAllEquipmentInfoInRoom(req.query.id, Limit, Offset).then((Data) => {
+        EquipmentController.getAllEquipmentInfoInRoom(req.query.id as string, Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
                     code: 200, equipments: Data.rows, total_pages: Math.ceil(Data.count / Limit), count: Data.count
@@ -919,6 +920,109 @@ adminRouter.get('/getFile', async (req, res) => {
         log(error)
     }
 })
+// reserve
+adminRouter.get('/getAllReserve', (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        ReserveController.getAllReserveAndChild(req.query.id as string, Limit, Offset).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, reserve: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+adminRouter.get('/getSingleReserve', async (req, res) => {
+    try {
+        const id = req.query.id as string;
+        ReserveController.getReserveByID(id).then((Data) => {
+            if (Data) {
+                res.status(200).json({ Data });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
+adminRouter.post('/createReserve', (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+
+        ReserveController.createReserve(req.body).then((state) => {
+            if (state) {
+                ReserveController.createReserveEquipment(req.body)
+                res.json({ code: 200, state });
+            } else {
+                res.json(errorCode('CREATE', 2));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+
+});
+
+adminRouter.post('/updateReserve', authValid, (req, res) => {
+    try {
+        const Data = req.body;
+        if (!Data) {
+            res.json(errorCode('update', 1));
+            return;
+        }
+
+        ReserveController.update(Data).then((result) => {
+            if (result) {
+                res.json({ code: 200, result });
+            } else {
+                res.json(errorCode('UPDATE', 2));
+            }
+        });
+    } catch (error) {
+        log(error)
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+
+});
+
+adminRouter.post('/updateReserveEquipment', authValid, (req, res) => {
+    try {
+        const Data = req.body;
+        if (!Data) {
+            res.json(errorCode('update', 1));
+            return;
+        }
+
+        ReserveController.updateReserveEquipment(Data).then((result) => {
+            if (result) {
+                res.json({ code: 200, result });
+            } else {
+                res.json(errorCode('UPDATE', 2));
+            }
+        });
+    } catch (error) {
+        log(error)
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+
+});
+
 export default adminRouter;
 
 

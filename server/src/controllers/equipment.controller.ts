@@ -189,7 +189,7 @@ class EquipmentController {
         });
     }
 
-    public static async getAllEquipmentInfoInRoom(id: any, limit: number, offset: number) {
+    public static async getAllEquipmentInfoInRoom(id: string, limit: number, offset: number) {
         return EquipmentInfoModel.findAndCountAll({
             distinct: true,
             where: {available_status:true},

@@ -3,6 +3,8 @@ import { createErrCodeJSON } from '../tools/lib';
 import log from '../tools/log';
 import UserController from '../controllers/user.controller';
 import { authValid } from '../middleware/user.middleware';
+import { numberOrDefault } from '../tools/util';
+import ReserveController from '../controllers/reserve.controller';
 
 const userRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON('USER');
@@ -125,5 +127,48 @@ userRouter.post('/update/password', authValid, (req, res) => {
 //         }
 //     });
 // });
+
+userRouter.get('/getAllReserve', (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        ReserveController.getAllReserveAndChildForUser(req.query.id as string, Limit, Offset).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, reserve: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                });
+            } else {
+                res.json(errorCode('USER', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+userRouter.post('/createReserve', (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+
+        ReserveController.createReserve(req.body).then((state) => {
+            if (state) {
+                ReserveController.createReserveEquipment(req.body)
+                res.json({ code: 200, state });
+            } else {
+                res.json(errorCode('CREATE', 2));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+
+});
 
 export default userRouter;

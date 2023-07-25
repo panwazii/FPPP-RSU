@@ -14,6 +14,7 @@ export interface ReserveAttribute {
     tel?: string;
     time_start?: string;
     time_end?: string;
+    detail?: string;
     approval_status?:boolean;
     available_status?: boolean;
     created_at?: string;
@@ -42,6 +43,8 @@ class ReserveModel extends Model<ReserveAttribute, ReserveAttributeCreation> imp
     declare time_start: string;
 
     declare time_end: string;
+
+    declare detail: string;
 
     declare approval_status: boolean;
 
@@ -75,17 +78,14 @@ export const initReserveModel = (connection: Sequelize) => {
             },
             fname: {
                 allowNull: false,
-                unique: true,
                 type: DataTypes.STRING,
             },
             lname: {
                 allowNull: false,
-                unique: true,
                 type: DataTypes.STRING,
             },
             email: {
                 allowNull: false,
-                unique: true,
                 type: DataTypes.STRING,
             },
             tel: {
@@ -99,6 +99,10 @@ export const initReserveModel = (connection: Sequelize) => {
             time_end: {
                 type: DataTypes.DATE,
                 allowNull: false,
+            },
+            detail: {
+                allowNull: false,
+                type: DataTypes.TEXT,
             },
             approval_status: {
                 allowNull: false,
