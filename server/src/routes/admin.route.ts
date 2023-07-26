@@ -91,8 +91,9 @@ adminRouter.post('/createNews', multerUpload.single("file"), authValid, async (r
 
 });
 
-adminRouter.post('/createRoom', authValid, (req, res) => {
+adminRouter.post('/createRoom', async (req, res) => {
     try {
+        const picture = req.file
         if (!req.body) {
             res.json(errorCode('RES', 1));
             return;
@@ -100,11 +101,46 @@ adminRouter.post('/createRoom', authValid, (req, res) => {
 
         RoomController.createRoom(req.body).then((state) => {
             if (state) {
-                res.json({ code: 200, state });
+                log("this is state", state)
+                res.json({ code: 201, state });
             } else {
                 res.json(errorCode('CREATE', 2));
             }
         });
+
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+
+});
+
+adminRouter.post('/createRoomPicture',multerUpload.single("file"), async (req, res) => {
+    try {
+        const picture = req.file;
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+        if (!picture) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+        else {
+        let pictureUrl = await uploadSinglePicture(
+            picture.originalname,
+            picture.mimetype,
+            picture.buffer);
+
+        RoomController.createRoomPicture(pictureUrl as string,req.body.room_id as number).then((state) => {
+            if (state) {
+                log("this is state", state)
+                res.json({ code: 201, state });
+            } else {
+                res.json(errorCode('CREATE', 2));
+            }
+        });
+    }
+
     } catch (error) {
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
@@ -753,6 +789,8 @@ adminRouter.get('/getAllEquipmentInfoInRoom', (req, res) => {
 adminRouter.post('/createEquipmentInfo', multerUpload.single("file"), async (req, res) => {
     try {
         const picture = req.file;
+        log("files :", req.file);
+
         if (!req.body) {
             res.json(errorCode('RES', 1));
             return;
