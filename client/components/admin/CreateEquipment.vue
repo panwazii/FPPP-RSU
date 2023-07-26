@@ -27,16 +27,6 @@
                 <v-form ref="form" lazy-validation>
                   <v-row class="mt-2">
                     <v-col cols="12" sm="6">
-                      <v-select
-                        :items="rooms"
-                        v-model="form.room_id"
-                        item-text="name"
-                        item-value="id"
-                        label="room"
-                        outlined
-                      ></v-select>
-                    </v-col>
-                    <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="form.name"
                         :rules="[(v) => !!v || 'name required']"
@@ -153,12 +143,11 @@ export default {
         this.loading = true
         let file = new FormData()
         file.append('file', this.form.file),
-          file.append('room_id', this.form.room_id),
           file.append('name', this.form.name),
           file.append('price', this.form.price),
           file.append('rent_price', this.form.rent_price),
           file.append('details', this.form.details)
-        await this.$store.dispatch('api/admin/createEquipment', file)
+        await this.$store.dispatch('api/admin/createEquipmentInfo', file)
         this.clearForm()
         this.$emit('update:createEquipment', false)
         this.loading = false

@@ -26,7 +26,7 @@
               <template>
                 <v-form ref="form" lazy-validation>
                   <v-row class="mt-2">
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" sm="12">
                       <v-text-field
                         v-model="form.name"
                         :rules="[(v) => !!v || 'name required']"
@@ -35,7 +35,7 @@
                         required
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" sm="12">
                       <v-textarea
                         v-model="form.details"
                         :rules="[(v) => !!v || 'details required']"
@@ -47,7 +47,7 @@
                   </v-row>
 
                   <v-row class="mt-2">
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" sm="12">
                       <v-text-field
                         v-model="form.rent_price"
                         :rules="[(v) => !!v || 'price required']"
@@ -61,8 +61,11 @@
                     <v-file-input
                       v-model="form.file"
                       label="รูปภาพ"
+                      multiple
+                      chips
                       filled
                       prepend-icon="mdi-camera"
+                      @change="addFiles"
                     ></v-file-input>
                   </v-row>
                 </v-form>
@@ -101,9 +104,10 @@ export default {
         name: null,
         details: null,
         rent_price: null,
-        picture: 'beta',
         available_status: true,
       },
+
+      readers: [],
       confirmModal: false,
       confirmMessage: 'Confirm this change',
       loading: false,
@@ -122,7 +126,12 @@ export default {
     async createRoom() {
       try {
         this.loading = true
-        await this.$store.dispatch('api/admin/createRoom', this.form)
+        let file = new FormData()
+        file.append('file[]', this.form.file),
+          file.append('name', this.form.name),
+          file.append('rent_price', this.form.rent_price),
+          file.append('details', this.form.details)
+        await this.$store.dispatch('api/admin/createRoom', file)
         this.clearForm()
         this.$emit('update:createRoom', false)
         this.loading = false

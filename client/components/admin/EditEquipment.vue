@@ -156,7 +156,6 @@ export default {
         this.loading = true
         let file = new FormData()
         file.append('file', this.data.file),
-          file.append('room_id', this.data.room_id),
           file.append('id', this.data.id),
           file.append('name', this.data.name),
           file.append('price', this.data.price),

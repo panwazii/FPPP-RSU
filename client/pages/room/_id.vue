@@ -79,7 +79,7 @@ export default {
     let room = await this.$store.dispatch('api/public/getSingleRoom', {
       params: { id: this.id },
     })
-    let tool = await this.$store.dispatch('api/public/getAllEquipmentByRoom', {
+    let tool = await this.$store.dispatch('api/public/getAllEquipmentInfoInRoom', {
       params: { id: this.id },
     })
     if (room == null) {
@@ -90,7 +90,7 @@ export default {
       return
     } else {
       this.room = room.Data
-      this.tool = tool.equip
+      this.tool = tool.equipments
     }
   },
   data() {
