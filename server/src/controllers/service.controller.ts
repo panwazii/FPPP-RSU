@@ -1,12 +1,12 @@
 import Sequelize, { Op } from 'sequelize';
 import jwt from 'jsonwebtoken';
-import WebInfoModel, { WebInfoAttribute } from '../database/models/web_info.model';
+import ServiceModel, { ServiceAttribute } from '../database/models/services.model';
 import { log } from '../tools/log';
 
 
-class WebInfoController {
+class ServiceController {
     public static async getByID(id: string) {
-        return WebInfoModel.findOne({
+        return ServiceModel.findOne({
             where: {
                 id: id,
             },
@@ -15,7 +15,7 @@ class WebInfoController {
     }
 
     public static async getAll(limit: number, offset: number) {
-        return WebInfoModel.findAndCountAll({
+        return ServiceModel.findAndCountAll({
             limit,
             offset,
             raw: true
@@ -24,15 +24,14 @@ class WebInfoController {
 
     public static async create(data: any) {
 
-        const packet: WebInfoAttribute = {
+        const packet: ServiceAttribute = {
             id: data.id,
+            title: data.title,
             details: data.details,
-            email: data.email,
-            tel: data.tel,
-            location: data.location,
+            picture: data.picture,
         };
 
-        return WebInfoModel.create(packet)
+        return ServiceModel.create(packet)
             .then(() => true)
             .catch((e) => {
                 log(e);
@@ -42,11 +41,10 @@ class WebInfoController {
 
     public static async update(data: any) {
 
-        return WebInfoModel.update({
+        return ServiceModel.update({
+            title: data.title,
             details: data.details,
-            email: data.email,
-            tel: data.tel,
-            location: data.location,
+            picture: data.picture,
         }, {
             where: {
                 id: data.id,
@@ -57,4 +55,4 @@ class WebInfoController {
 
 }
 
-export default WebInfoController;
+export default ServiceController;

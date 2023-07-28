@@ -8,6 +8,8 @@ import UserController from '../controllers/user.controller';
 import EquipmentController from '../controllers/equipment.controller';
 import UserTypeController from '../controllers/user_types.controller';
 import ReserveController from '../controllers/reserve.controller';
+import ServiceController from '../controllers/service.controller';
+import WebInfoController from '../controllers/web_info.controller';
 import { authValid } from '../middleware/admin.middleware';
 import { numberOrDefault } from '../tools/util';
 import { uploadSinglePicture } from '../tools/util';
@@ -114,7 +116,7 @@ adminRouter.post('/createRoom', async (req, res) => {
 
 });
 
-adminRouter.post('/createRoomPicture',multerUpload.single("file"), async (req, res) => {
+adminRouter.post('/createRoomPicture', multerUpload.single("file"), async (req, res) => {
     try {
         const picture = req.file;
         if (!req.body) {
@@ -126,20 +128,20 @@ adminRouter.post('/createRoomPicture',multerUpload.single("file"), async (req, r
             return;
         }
         else {
-        let pictureUrl = await uploadSinglePicture(
-            picture.originalname,
-            picture.mimetype,
-            picture.buffer);
+            let pictureUrl = await uploadSinglePicture(
+                picture.originalname,
+                picture.mimetype,
+                picture.buffer);
 
-        RoomController.createRoomPicture(pictureUrl as string,req.body.room_id as number).then((state) => {
-            if (state) {
-                log("this is state", state)
-                res.json({ code: 201, state });
-            } else {
-                res.json(errorCode('CREATE', 2));
-            }
-        });
-    }
+            RoomController.createRoomPicture(pictureUrl as string, req.body.room_id as number).then((state) => {
+                if (state) {
+                    log("this is state", state)
+                    res.json({ code: 201, state });
+                } else {
+                    res.json(errorCode('CREATE', 2));
+                }
+            });
+        }
 
     } catch (error) {
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
@@ -789,7 +791,6 @@ adminRouter.get('/getAllEquipmentInfoInRoom', (req, res) => {
 adminRouter.post('/createEquipmentInfo', multerUpload.single("file"), async (req, res) => {
     try {
         const picture = req.file;
-        log("files :", req.file);
 
         if (!req.body) {
             res.json(errorCode('RES', 1));
@@ -1048,6 +1049,136 @@ adminRouter.post('/updateReserveEquipment', authValid, (req, res) => {
         }
 
         ReserveController.updateReserveEquipment(Data).then((result) => {
+            if (result) {
+                res.json({ code: 200, result });
+            } else {
+                res.json(errorCode('UPDATE', 2));
+            }
+        });
+    } catch (error) {
+        log(error)
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+
+});
+
+//web info
+adminRouter.get('/getAllWebInfo', (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 1);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        WebInfoController.getAll(Limit, Offset).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, webinfo: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+adminRouter.post('/updateWebInfo', authValid, (req, res) => {
+    try {
+        const Data = req.body;
+        if (!Data) {
+            res.json(errorCode('update', 1));
+            return;
+        }
+
+        WebInfoController.update(Data).then((result) => {
+            if (result) {
+                res.json({ code: 200, result });
+            } else {
+                res.json(errorCode('UPDATE', 2));
+            }
+        });
+    } catch (error) {
+        log(error)
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+
+});
+
+//service
+adminRouter.get('/getAllService', (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        ServiceController.getAll(Limit, Offset).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, Service: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+adminRouter.post('/createService', multerUpload.single("file"), async (req, res) => {
+    try {
+        const picture = req.file;
+
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+        if (!picture) {
+            req.body.picture = 'https://www.charlotteathleticclub.com/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png';
+            ServiceController.create(req.body).then((state) => {
+                if (state) {
+                    log("this is state", state)
+                    res.json({ code: 201, state });
+                } else {
+                    res.json(errorCode('CREATE', 2));
+                }
+            });
+        }
+        else {
+            let pictureUrl = await uploadSinglePicture(
+                picture.originalname,
+                picture.mimetype,
+                picture.buffer);
+            req.body.picture = pictureUrl
+
+            ServiceController.create(req.body).then((state) => {
+                if (state) {
+                    log("this is state", state)
+                    res.json({ code: 201, state });
+                } else {
+                    res.json(errorCode('CREATE', 2));
+                }
+            });
+        }
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+adminRouter.post('/updateService', authValid, (req, res) => {
+    try {
+        const Data = req.body;
+        if (!Data) {
+            res.json(errorCode('update', 1));
+            return;
+        }
+
+        ServiceController.update(Data).then((result) => {
             if (result) {
                 res.json({ code: 200, result });
             } else {

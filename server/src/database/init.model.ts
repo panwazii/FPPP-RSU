@@ -18,6 +18,7 @@ import { initGlobalEquipmentModel } from './models/global_equipments.model';
 import AdminModel, { initAdminModel } from './models/admins.model';
 import AdminTypeModel, { initAdminTypeModel } from './models/admin_types.model';
 import { initWebInfoModel } from './models/web_info.model';
+import { initServiceModel } from './models/services.model';
 
 import { initAdminTypeSeed } from '../seeders/admin_types.seed';
 import { initUserTypeSeed } from '../seeders/user_types.seed';
@@ -73,6 +74,7 @@ const initDatabase = async () => {
 
         //Public
         initWebInfoModel,
+        initServiceModel,
 
     ];
     models.forEach((initFunction) => {
