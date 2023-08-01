@@ -133,7 +133,7 @@ adminRouter.post('/createRoomPicture', multerUpload.single("file"), async (req, 
                 picture.mimetype,
                 picture.buffer);
 
-            RoomController.createRoomPicture(pictureUrl as string, req.body.room_id as number).then((state) => {
+            RoomController.createRoomPicture(pictureUrl as string, req.body.room_id as string).then((state) => {
                 if (state) {
                     log("this is state", state)
                     res.json({ code: 201, state });
@@ -999,16 +999,21 @@ adminRouter.get('/getSingleReserve', async (req, res) => {
 
 adminRouter.post('/createReserve', (req, res) => {
     try {
+        const equipment = req.body.equipment_info_id;
         if (!req.body) {
             res.json(errorCode('RES', 1));
             return;
         }
 
         ReserveController.createReserve(req.body).then((data) => {
-            if (data.state) {
+            if (data.state && equipment) {
                 ReserveController.createReserveEquipment(data.id, req.body)
                 res.json({ code: 200, data });
-            } else {
+            }
+            else if(data.state){
+                res.json({ code: 200, data });
+            }
+            else {
                 res.json(errorCode('CREATE', 2));
             }
         });

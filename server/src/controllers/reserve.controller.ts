@@ -64,12 +64,10 @@ class ReserveController {
         };
         return ReserveModel.create(packet)
             .then((data) => {
-                console.log("Reserve controller", data);
                 return { state: true, id: data.id }
 
             })
             .catch((e) => {
-                log(e);
                 return { state: false, id: null };
             });
     }
