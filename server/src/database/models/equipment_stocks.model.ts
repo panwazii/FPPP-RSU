@@ -7,8 +7,8 @@ import EquipmentInfoModel from './equipment_infos.model';
 export interface EquipmentStockAttribute {
     id?: string;
     serial_number?: string;
-    room_id?: number;
-    equipment_info_id?: number;
+    room_id?: string;
+    equipment_info_id?: string;
     equipment_status?: string;
     available_status?: boolean;
     created_at?: string;
@@ -28,9 +28,9 @@ class EquipmentStockModel extends Model<EquipmentStockAttribute, EquipmentStockA
 
     declare serial_number: string;
 
-    declare room_id: number;
+    declare room_id: string;
 
-    declare equipment_info_id: number;
+    declare equipment_info_id: string;
 
     declare equipment_status: string;
 

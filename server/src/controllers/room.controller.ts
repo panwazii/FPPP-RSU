@@ -62,7 +62,7 @@ class RoomController {
             .catch(() => false);
     }
 
-    public static async createRoomPicture(url: string, id: number) {
+    public static async createRoomPicture(url: string, id: string) {
         const packet: RoomPictureAttribute = {
             url: url,
             room_id: id,

@@ -1004,10 +1004,10 @@ adminRouter.post('/createReserve', (req, res) => {
             return;
         }
 
-        ReserveController.createReserve(req.body).then((state) => {
-            if (state) {
-                ReserveController.createReserveEquipment(req.body)
-                res.json({ code: 200, state });
+        ReserveController.createReserve(req.body).then((data) => {
+            if (data.state) {
+                ReserveController.createReserveEquipment(data.id, req.body)
+                res.json({ code: 200, data });
             } else {
                 res.json(errorCode('CREATE', 2));
             }

@@ -24,7 +24,7 @@ class ReserveController {
     public static async getAllReserveAndChildForUser(id: string, limit: number, offset: number) {
         return ReserveModel.findAndCountAll({
             distinct: true,
-            where: { user_id: id,available_status: true },
+            where: { user_id: id, available_status: true },
             include: [{
                 model: ReserveEquipmentModel,
             }],
@@ -62,12 +62,15 @@ class ReserveController {
             approval_status: false,
             available_status: true,
         };
-
         return ReserveModel.create(packet)
-            .then(() => true)
+            .then((data) => {
+                console.log("Reserve controller", data);
+                return { state: true, id: data.id }
+
+            })
             .catch((e) => {
                 log(e);
-                return false;
+                return { state: false, id: null };
             });
     }
 
@@ -110,11 +113,11 @@ class ReserveController {
         });
     }
 
-    public static async createReserveEquipment(data: any) {
+    public static async createReserveEquipment(id: any, data: any) {
         const packet: ReserveEquipmentAttribute = {
             equipment_info_id: data.equipment_info_id,
             equipment_stock_id: data.equipment_stock_id,
-            reserve_id: data.reserve_id,
+            reserve_id: id,
             available_status: true,
         };
 

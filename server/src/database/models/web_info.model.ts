@@ -2,7 +2,7 @@ import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
 export interface WebInfoAttribute {
-    id?: string;
+    id?: number;
     details?: string;
     email?: string;
     tel?: string;
@@ -14,7 +14,7 @@ export interface WebInfoAttribute {
 export interface WebInfoAttributeCreation extends Optional<WebInfoAttribute, 'id'> { }
 
 class WebInfoModel extends Model<WebInfoAttribute, WebInfoAttributeCreation> implements WebInfoAttribute {
-    declare id: string;
+    declare id: number;
 
     declare details: string;
 
@@ -33,8 +33,8 @@ export const initWebInfoModel = (connection: Sequelize) => {
     WebInfoModel.init(
         {
             id: {
-                type: DataTypes.UUID,
-                defaultValue: DataTypes.UUIDV4,
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
                 allowNull: false,
                 primaryKey: true,
             },

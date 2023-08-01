@@ -6,8 +6,8 @@ import RoomModel from './rooms.model';
 
 export interface ReserveAttribute {
     id?: string;
-    user_id?: number;
-    room_id?: number;
+    user_id?: string;
+    room_id?: string;
     fname?: string;
     lname?: string;
     email?: string;
@@ -28,9 +28,9 @@ export interface ReserveAttributeCreation extends Optional<ReserveAttribute, 'id
 class ReserveModel extends Model<ReserveAttribute, ReserveAttributeCreation> implements ReserveAttribute {
     declare id: string;
 
-    declare user_id: number;
+    declare user_id: string;
 
-    declare room_id: number;
+    declare room_id: string;
 
     declare fname: string;
 
