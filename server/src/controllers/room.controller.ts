@@ -42,10 +42,12 @@ class RoomController {
         };
 
         return RoomModel.create(packet)
-            .then(() => true)
+            .then((data) => {
+                return { state: true, id: data.id }
+            })
             .catch((e) => {
                 log(e);
-                return false;
+                return { state: false, id: null };
             });
     }
 

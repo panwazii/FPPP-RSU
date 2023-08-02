@@ -15,6 +15,7 @@ import { numberOrDefault } from '../tools/util';
 import { uploadSinglePicture } from '../tools/util';
 import multer from 'multer';
 import { Admin } from '../service/firebase';
+import { url } from 'inspector';
 
 const bucket = Admin.storage().bucket()
 const adminRouter: express.Router = express.Router();
@@ -93,23 +94,38 @@ adminRouter.post('/createNews', multerUpload.single("file"), authValid, async (r
 
 });
 
-adminRouter.post('/createRoom', async (req, res) => {
+adminRouter.post('/createRoom',multerUpload.single("file"), async (req, res) => {
     try {
         const picture = req.file
         if (!req.body) {
             res.json(errorCode('RES', 1));
             return;
         }
-
-        RoomController.createRoom(req.body).then((state) => {
-            if (state) {
-                log("this is state", state)
-                res.json({ code: 201, state });
-            } else {
-                res.json(errorCode('CREATE', 2));
-            }
-        });
-
+        if (!picture) {
+            RoomController.createRoom(req.body).then((data) => {
+                if (data.state && picture) {
+                    res.json({ code: 200, data });
+                }
+                else {
+                    res.json(errorCode('CREATE', 2));
+                }
+            });
+        }
+        else {
+            let url = await uploadSinglePicture(
+                picture.originalname,
+                picture.mimetype,
+                picture.buffer);
+            RoomController.createRoom(req.body).then((data) => {
+                if (data.state) {
+                    RoomController.createRoomPicture(url as string, data.id as string)
+                    res.json({ code: 200, data });
+                }
+                else {
+                    res.json(errorCode('CREATE', 2));
+                }
+            });
+        }
     } catch (error) {
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
@@ -1010,7 +1026,7 @@ adminRouter.post('/createReserve', (req, res) => {
                 ReserveController.createReserveEquipment(data.id, req.body)
                 res.json({ code: 200, data });
             }
-            else if(data.state){
+            else if (data.state) {
                 res.json({ code: 200, data });
             }
             else {
