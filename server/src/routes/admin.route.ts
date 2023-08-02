@@ -103,7 +103,7 @@ adminRouter.post('/createRoom',multerUpload.single("file"), async (req, res) => 
         }
         if (!picture) {
             RoomController.createRoom(req.body).then((data) => {
-                if (data.state && picture) {
+                if (data.state) {
                     res.json({ code: 200, data });
                 }
                 else {
