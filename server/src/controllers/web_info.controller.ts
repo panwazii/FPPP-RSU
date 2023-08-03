@@ -47,6 +47,9 @@ class WebInfoController {
             email: data.email,
             tel: data.tel,
             location: data.location,
+            picture_name: data.name,
+            picture_url: data.url,
+
         }, {
             where: {
                 id: data.id,

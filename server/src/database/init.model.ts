@@ -25,6 +25,7 @@ import { initUserTypeSeed } from '../seeders/user_types.seed';
 
 import AdminController from '../controllers/admin.controller';
 import log from '../tools/log';
+import { initWebInfoSeed } from '../seeders/web_infos.seed';
 
 const logDB = debug('app:db');
 const logFunc = config.database.logging ? ((sql: string) => logDB(sql)) : false;
@@ -127,6 +128,7 @@ const initDatabase = async () => {
         if (yn(config.database.insertInitData)) {
             await initAdminTypeSeed();
             await initUserTypeSeed();
+            await initWebInfoSeed();
             await AdminController.createSuperAdmin();
         }
     } else {

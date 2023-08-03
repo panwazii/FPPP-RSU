@@ -6,6 +6,8 @@ export interface WebInfoAttribute {
     details?: string;
     email?: string;
     tel?: string;
+    picture_name?: string;
+    picture_url?: string;
     location?: string;
     created_at?: Date;
     update_at?: Date;
@@ -21,6 +23,10 @@ class WebInfoModel extends Model<WebInfoAttribute, WebInfoAttributeCreation> imp
     declare email: string;
 
     declare tel: string;
+
+    declare picture_name: string;
+
+    declare picture_url: string;
 
     declare location: string;
 
@@ -56,6 +62,14 @@ export const initWebInfoModel = (connection: Sequelize) => {
             location: {
                 allowNull: false,
                 unique: true,
+                type: DataTypes.STRING,
+            },
+            picture_name: {
+                allowNull: true,
+                type: DataTypes.STRING,
+            },
+            picture_url: {
+                allowNull: true,
                 type: DataTypes.STRING,
             },
             created_at: {

@@ -12,7 +12,7 @@ import ServiceController from '../controllers/service.controller';
 import WebInfoController from '../controllers/web_info.controller';
 import { authValid } from '../middleware/admin.middleware';
 import { numberOrDefault } from '../tools/util';
-import { uploadSinglePicture } from '../tools/util';
+import { uploadSinglePicture, uploadSinglePictureV2 } from '../tools/util';
 import multer from 'multer';
 import { Admin } from '../service/firebase';
 import { url } from 'inspector';
@@ -94,7 +94,7 @@ adminRouter.post('/createNews', multerUpload.single("file"), authValid, async (r
 
 });
 
-adminRouter.post('/createRoom',multerUpload.single("file"), async (req, res) => {
+adminRouter.post('/createRoom', multerUpload.single("file"), async (req, res) => {
     try {
         const picture = req.file
         if (!req.body) {
@@ -1106,21 +1106,40 @@ adminRouter.get('/getAllWebInfo', (req, res) => {
     }
 });
 
-adminRouter.post('/updateWebInfo', authValid, (req, res) => {
+adminRouter.post('/updateWebInfo', multerUpload.single("file"), async (req, res) => {
     try {
         const Data = req.body;
+        const picture = req.file;
         if (!Data) {
             res.json(errorCode('update', 1));
             return;
         }
+        if (!picture) {
+            WebInfoController.update(Data).then((result) => {
+                if (result) {
+                    res.json({ code: 200, result });
+                } else {
+                    res.json(errorCode('UPDATE', 2));
+                }
+            });
 
-        WebInfoController.update(Data).then((result) => {
-            if (result) {
-                res.json({ code: 200, result });
-            } else {
-                res.json(errorCode('UPDATE', 2));
-            }
-        });
+        }
+        else {
+            let pic: any = await uploadSinglePictureV2(
+                picture.originalname,
+                picture.mimetype,
+                picture.buffer);
+            Data.picture_name = pic.name;
+            Data.picture_url = pic.url;
+
+            WebInfoController.update(Data).then((result) => {
+                if (result) {
+                    res.json({ code: 200, result });
+                } else {
+                    res.json(errorCode('UPDATE', 2));
+                }
+            });
+        }
     } catch (error) {
         log(error)
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
