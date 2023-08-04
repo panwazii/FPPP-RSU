@@ -26,13 +26,14 @@
               <template>
                 <v-form ref="form" lazy-validation>
                   <v-row class="mt-2">
+                    {{ data }}
                     <v-col cols="12" sm="6">
                       <v-select
                         :items="rooms"
                         v-model="data.room_id"
                         item-text="name"
                         item-value="id"
-                        label="room"
+                        label="Select room"
                         outlined
                       ></v-select>
                     </v-col>

@@ -118,7 +118,8 @@ export default {
           id: id,
         },
       })
-      this.room = RoomData.room
+      console.log('here', RoomData);
+      this.room = RoomData.room[0]
       this.editRoom = true
     },
   },

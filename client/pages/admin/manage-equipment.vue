@@ -114,7 +114,7 @@ export default {
     },
     async openEditEquipmentModal(id) {
       const EquipmentData = await this.$store.dispatch(
-        'api/admin/getSingleEquipment',
+        'api/admin/getSingleEquipmentInfo',
         {
           params: {
             id: id,

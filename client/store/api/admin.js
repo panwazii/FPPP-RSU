@@ -25,7 +25,10 @@ export const actions = {
         return await this.$axios.post('api/admin/updateRoom', data).then((res) => res.data)
     },
     //Equipment
-
+    async getSingleEquipmentInfo({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getSingleEquipmentInfo', data).then((res) => res.data)
+    },
     async getAllEquipmentInfo({ getters }, data) {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
         return await this.$axios.get('api/admin/getAllEquipmentInfo', data).then((res) => res.data)

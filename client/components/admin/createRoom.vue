@@ -65,7 +65,6 @@
                       chips
                       filled
                       prepend-icon="mdi-camera"
-                      @change="addFiles"
                     ></v-file-input>
                   </v-row>
                 </v-form>
@@ -127,7 +126,7 @@ export default {
       try {
         this.loading = true
         let file = new FormData()
-        file.append('file[]', this.form.file),
+        file.append('file', this.form.file),
           file.append('name', this.form.name),
           file.append('rent_price', this.form.rent_price),
           file.append('details', this.form.details)
