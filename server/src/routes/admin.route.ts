@@ -16,6 +16,7 @@ import { uploadSinglePicture, uploadSinglePictureV2 } from '../tools/util';
 import multer from 'multer';
 import { Admin } from '../service/firebase';
 import { url } from 'inspector';
+import { error } from 'console';
 
 const bucket = Admin.storage().bucket()
 const adminRouter: express.Router = express.Router();
@@ -488,6 +489,7 @@ adminRouter.get('/getAllRooms', authValid, (req, res) => {
         const Offset = Limit * Page;
         RoomController.getAllRooms(Limit, Offset).then((Data) => {
             if (Data) {
+                log(Data);
                 res.status(200).json({
                     code: 200, rooms: Data.rows, total_pages: Math.ceil(Data.count / Limit)
                 });
@@ -566,13 +568,14 @@ adminRouter.get('/getAllNews', authValid, (req, res) => {
     }
 });
 
-adminRouter.get('/getSingleRoom', authValid, (req, res) => {
+adminRouter.get('/getSingleRoom',  (req, res) => {
     try {
         if (!req.query.id) {
             res.json(errorCode('ADMIN', 1));
             return;
         }
         const Id = req.query.id as string;
+        log(Id);
         RoomController.getByID(Id).then((Data) => {
             if (Data) {
                 res.status(200).json({
@@ -587,7 +590,7 @@ adminRouter.get('/getSingleRoom', authValid, (req, res) => {
     }
 });
 
-adminRouter.get('/getSingleEquipment', authValid, (req, res) => {
+adminRouter.get('/getSingleEquipment',  (req, res) => {
     try {
         if (!req.query.id) {
             res.json(errorCode('ADMIN', 1));
@@ -737,6 +740,26 @@ adminRouter.get('/getAllUserTypes', async (req, res) => {
 });
 
 // New Equipment
+adminRouter.get('/getSingleEquipmentInfo', authValid, (req, res) => {
+    try {
+        if (!req.query.id) {
+            res.json(errorCode('ADMIN', 1));
+            return;
+        }
+        const Id = req.query.id as string;
+        EquipmentController.getSingleEquipmentInfo(Id).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, equipment: Data
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
 
 adminRouter.get('/getAllEquipmentInfo', (req, res) => {
     try {

@@ -8,18 +8,29 @@ import { log } from '../tools/log';
 
 class RoomController {
     public static async getByID(roomId: string) {
-        return RoomModel.findOne({
+        return RoomModel.findAll({
             where: {
                 id: roomId,
             },
             include: [{
-                model: RoomPictureModel, as: 'Picture',
-                where: { room_id: roomId, available_status: true }
+                model: RoomPictureModel, as: 'Picture'
             }],
         });
     }
 
     public static async getAllRooms(limit: number, offset: number) {
+        return RoomModel.findAndCountAll({
+            distinct: true,
+            include: [{
+                model: RoomPictureModel, as: 'Picture',
+            }],
+            order: [["name", "ASC"]],
+            limit,
+            offset,
+        });
+    }
+
+    public static async getAllRoomsUser(limit: number, offset: number) {
         return RoomModel.findAndCountAll({
             distinct: true,
             where: { available_status: true },
