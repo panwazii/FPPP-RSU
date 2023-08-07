@@ -41,6 +41,22 @@ export const actions = {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
         return await this.$axios.get('api/admin/getAllEquipmentInfoInRoom', data).then((res) => res.data)
     },
+    async getAllProductionLine({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getAllProductionLine', data).then((res) => res.data)
+    },
+    async getAllEquipmentRentRate({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getAllEquipmentRentRate', data).then((res) => res.data)
+    },
+    async getSingleProductionLine({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getSingleProductionLine', data).then((res) => res.data)
+    },
+    async getSingleEquipmentRentRate({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getSingleEquipmentRentRate', data).then((res) => res.data)
+    },
     async createEquipmentInfo({ getters }, data) {
         return await this.$axios.post('api/admin/createEquipmentInfo', data).then((res) => res.data)
     },
@@ -49,6 +65,9 @@ export const actions = {
     },
     async createEquipmentRentRate({ getters }, data) {
         return await this.$axios.post('api/admin/createEquipmentRentRate', data).then((res) => res.data)
+    },
+    async createProductionLine({ getters }, data) {
+        return await this.$axios.post('api/admin/createProductionLine', data).then((res) => res.data)
     },
     async updateEquipmentInfo({ getters }, data) {
         return await this.$axios.post('api/admin/updateEquipmentInfo', data).then((res) => res.data)
@@ -59,6 +78,10 @@ export const actions = {
     async updateEquipmentRentRate({ getters }, data) {
         return await this.$axios.post('api/admin/updateEquipmentRentRate', data).then((res) => res.data)
     },
+    async updateProductionLine({ getters }, data) {
+        return await this.$axios.post('api/admin/updateProductionLine', data).then((res) => res.data)
+    },
+
     // async getAllEquipment({ getters }, data) {
     //     this.$axios.setHeader('authorization', this.$cookies.get('token'))
     //     return await this.$axios.get('api/admin/getAllEquipment', data).then((res) => res.data)

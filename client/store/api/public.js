@@ -30,4 +30,11 @@ export const actions = {
     async getSingleEquipmentInfo({ getters }, data) {
         return await this.$axios.get('api/public/getSingleEquipmentInfo', data).then((res) => res.data)
     },
+    // Web Info
+    async getSingleWebInfo({ getters }, data) {
+        return await this.$axios.get('api/public/getSingleWebInfo', data).then((res) => res.data)
+    },
+    async getAllService({ getters }, data) {
+        return await this.$axios.get('api/public/getAllService', data).then((res) => res.data)
+    },
 }
