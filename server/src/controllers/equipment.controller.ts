@@ -6,6 +6,7 @@ import GlobalEquipmentModel, { GlobalEquipmentAttribute } from '../database/mode
 import EquipmentInfoModel, { EquipmentInfoAttribute } from '../database/models/equipment_infos.model';
 import EquipmentStockModel, { EquipmentStockAttribute } from '../database/models/equipment_stocks.model';
 import EquipmentRentRateModel, { EquipmentRentRateAttribute } from '../database/models/equipment_rent_rates.model';
+import ProductionLineModel, { ProductionLineAttribute } from '../database/models/production_lines.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
@@ -282,6 +283,12 @@ class EquipmentController {
     }
 
     // Equipment Rent Rate
+    public static async getSingleEquipmentRentRate(id: string) {
+        return EquipmentInfoModel.findOne({
+            where: { id: id },
+            raw: true
+        });
+    }
 
     public static async getAllEquipmentRentRate(limit: number, offset: number) {
         return EquipmentRentRateModel.findAndCountAll({
@@ -316,6 +323,45 @@ class EquipmentController {
         })
     }
 
+    // production line
+    public static async getSingleProductionLine(id: string) {
+        return EquipmentInfoModel.findOne({
+            where: { id: id },
+            raw: true
+        });
+    }
+
+    public static async getAllProductionLine(limit: number, offset: number) {
+        return EquipmentRentRateModel.findAndCountAll({
+            limit,
+            offset,
+            raw: true
+        });
+    }
+
+    public static async createProductionLine(data: any) {
+        const packet: EquipmentRentRateAttribute = {
+            name: data.name,
+            available_status: true,
+        };
+
+        return EquipmentRentRateModel.create(packet)
+            .then(() => true)
+            .catch((e) => {
+                log(e);
+                return false;
+            });
+    }
+
+    public static async updateProductionLine(data: any) {
+        return EquipmentRentRateModel.update({
+            name: data.name,
+        }, {
+            where: {
+                id: data.id,
+            },
+        })
+    }
 }
 
 export default EquipmentController;

@@ -6,6 +6,7 @@ export interface ServiceAttribute {
     title:string;
     details?: string;
     picture?: string;
+    available_status?: boolean;
     created_at?: Date;
     update_at?: Date;
 }
@@ -20,6 +21,8 @@ class ServiceModel extends Model<ServiceAttribute, ServiceAttributeCreation> imp
     declare details: string;
 
     declare picture: string;
+
+    declare available_status: boolean;
 
     declare created_at: Date;
 
@@ -58,6 +61,10 @@ export const initServiceModel = (connection: Sequelize) => {
                 allowNull: false,
                 type: DataTypes.DATE,
                 defaultValue: DataTypes.NOW,
+            },
+            available_status: {
+                allowNull: false,
+                type: DataTypes.BOOLEAN,
             },
         },
         {

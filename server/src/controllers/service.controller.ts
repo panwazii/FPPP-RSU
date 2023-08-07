@@ -22,6 +22,17 @@ class ServiceController {
         });
     }
 
+    public static async getAllShow(limit: number, offset: number) {
+        return ServiceModel.findAndCountAll({
+            where: {
+                available_status: true,
+            },
+            limit,
+            offset,
+            raw: true
+        });
+    }
+
     public static async create(data: any) {
 
         const packet: ServiceAttribute = {
@@ -29,6 +40,7 @@ class ServiceController {
             title: data.title,
             details: data.details,
             picture: data.picture,
+            available_status: true,
         };
 
         return ServiceModel.create(packet)
@@ -45,6 +57,7 @@ class ServiceController {
             title: data.title,
             details: data.details,
             picture: data.picture,
+            available_status: data.available_status,
         }, {
             where: {
                 id: data.id,
