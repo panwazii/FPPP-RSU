@@ -1171,6 +1171,21 @@ adminRouter.post('/updateWebInfo', multerUpload.single("file"), async (req, res)
 });
 
 //service
+adminRouter.get('/getSingleService', async (req, res) => {
+    try {
+        const id = req.query.id as string;
+        ServiceController.getByID(id).then((Data) => {
+            if (Data) {
+                res.status(200).json({ Data });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
 adminRouter.get('/getAllService', (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
