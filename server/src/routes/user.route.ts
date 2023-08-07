@@ -129,28 +129,6 @@ userRouter.post('/update/password', authValid, (req, res) => {
 //     });
 // });
 
-userRouter.get('/getAllReserve', (req, res) => {
-    try {
-        const Limit = numberOrDefault(req.query.limit, 10);
-        let Page = numberOrDefault(req.query.page, 0);
-        if (Page != 0) {
-            Page = Page - 1
-        }
-        const Offset = Limit * Page;
-        ReserveController.getAllReserveAndChildForUser(req.query.id as string, Limit, Offset).then((Data) => {
-            if (Data) {
-                res.status(200).json({
-                    code: 200, reserve: Data.rows, total_pages: Math.ceil(Data.count / Limit)
-                });
-            } else {
-                res.json(errorCode('USER', 0));
-            }
-        });
-    } catch (error) {
-        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
-    }
-});
-
 userRouter.post('/createReserve', (req, res) => {
     try {
         if (!req.body) {
@@ -172,9 +150,7 @@ userRouter.post('/createReserve', (req, res) => {
 
 });
 
-// service
-
-userRouter.get('/getAllService', (req, res) => {
+userRouter.get('/getAllReserve', (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
@@ -182,13 +158,13 @@ userRouter.get('/getAllService', (req, res) => {
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        ServiceController.getAllShow(Limit, Offset).then((Data) => {
+        ReserveController.getAllReserveAndChildForUser(req.query.id as string, Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, service: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                    code: 200, reserve: Data.rows, total_pages: Math.ceil(Data.count / Limit)
                 });
             } else {
-                res.json(errorCode('ADMIN', 0));
+                res.json(errorCode('USER', 0));
             }
         });
     } catch (error) {

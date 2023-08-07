@@ -8,6 +8,8 @@ import UserController from '../controllers/user.controller';
 import UserTypesController from '../controllers/user_types.controller';
 import EquipmentController from '../controllers/equipment.controller';
 import WebInfoController from '../controllers/web_info.controller';
+import ReserveController from '../controllers/reserve.controller';
+import ServiceController from '../controllers/service.controller';
 import { numberOrDefault } from '../tools/util';
 
 const publicRouter: express.Router = express.Router();
@@ -249,6 +251,42 @@ publicRouter.get('/getAllEquipmentInfoInRoom', (req, res) => {
         });
     } catch (error) {
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+publicRouter.get('/getAllService', (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        ServiceController.getAllShow(Limit, Offset).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, service: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+publicRouter.get('/getSingleWebInfo', async (req, res) => {
+    try {
+        WebInfoController.getByID("1").then((Data) => {
+            if (Data) {
+                res.status(200).json({ Data });
+            } else {
+                res.json(errorCode('PUBLIC', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
     }
 });
 
