@@ -18,6 +18,7 @@
         <IndexEquipmentCard
           :picture="equipments.picture"
           :name="equipments.name"
+          :id="equipments.id"
         />
       </v-col>
     </v-row>

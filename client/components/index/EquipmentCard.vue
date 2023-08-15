@@ -11,7 +11,9 @@
       </div>
       <ul class="sci">
         <li>
-          <a href=""><span class="mdi mdi-information-outline"></span></a>
+          <a @click="$router.push('/equipment/' + id)"
+            ><span class="mdi mdi-information-outline"></span
+          ></a>
 
           <a href="" class="ma-2 pa-2"
             ><span class="mdi mdi-cart-plus"></span

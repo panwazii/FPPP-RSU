@@ -1,5 +1,19 @@
 <template>
-  <v-carousel max-height="400" :hide-delimiters="true" class="mt-4">
+  <v-carousel hide-delimiter-background show-arrows="hover" cycle height="800">
+    <v-carousel-item v-for="item in allNews" :key="item.id" :src="item.picture">
+      <div class="d-flex fill-height justify-center align-center">
+        <div class="text-h1">
+          <v-card-title class="text-h2">
+            <main @click="$router.push('/news/' + item.id)">
+              {{ item.title }}
+            </main></v-card-title
+          >
+        </div>
+      </div>
+    </v-carousel-item>
+  </v-carousel>
+
+  <!-- <v-carousel cycle max-height="400" :hide-delimiters="true" class="mt-4">
     <v-carousel-item v-for="item in allNews" :key="item.id">
       <v-card
         max-width="800"
@@ -37,7 +51,7 @@
         </div>
       </v-card>
     </v-carousel-item>
-  </v-carousel>
+  </v-carousel> -->
 </template>
 
 <script>
@@ -96,4 +110,55 @@ export default {
   },
 }
 </script>
-<style scoped></style>
+<style scoped>
+@font-face {
+  src: url('https://www.axis-praxis.org/fonts/webfonts/MetaVariableDemo-Set.woff2')
+    format('woff2');
+  font-family: 'Meta';
+  font-style: normal;
+  font-weight: normal;
+}
+
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: #8357eb;
+  width: 100vw;
+  height: 100vh;
+}
+
+main {
+  transition: all 0.5s;
+  -webkit-text-stroke: 4px #d6f4f4;
+  font-variation-settings: 'wght' 900, 'ital' 1;
+  font-size: 15rem;
+  text-align: center;
+  color: transparent;
+  font-family: 'Meta', sans-serif;
+  text-shadow: 10px 10px 0px #07bccc, 15px 15px 0px #e601c0,
+    20px 20px 0px #e9019a, 25px 25px 0px #f40468, 45px 45px 10px #482896;
+  cursor: pointer;
+}
+
+main:hover {
+  font-variation-settings: 'wght' 100, 'ital' 0;
+  text-shadow: none;
+}
+
+h1 {
+  text-shadow: 5px 5px #ffffff;
+}
+
+/* to make the header only as wide as the content and centering it */
+
+/* added by editor for deomnstration purpose */
+
+body {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/5b/St_Mary%27s_Church%2C_Castle_Street_1.jpg');
+  background-size: cover;
+}
+</style>

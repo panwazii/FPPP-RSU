@@ -143,12 +143,6 @@ export default {
         },
         {
           id: 5,
-          name: 'Manage global equipment',
-          icon: 'mdi-hammer-wrench',
-          path: '/admin/manage-global-equipment',
-        },
-        {
-          id: 6,
           name: 'Manage news',
           icon: 'mdi-newspaper',
           path: '/admin/manage-news',

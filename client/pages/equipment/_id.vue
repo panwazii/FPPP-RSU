@@ -8,18 +8,12 @@
         <v-form ref="form" lazy-validation>
           <v-row class="mt-2">
             <v-col cols="12" sm="6">
-              <h1>{{ news.title }}</h1>
-              {{ news.details }}
-
-              <v-card-actions class="justify-left">
-                <v-btn class="rounded-xl" variant="text" color="white"
-                  >จองห้อง</v-btn
-                >
-              </v-card-actions>
+              <h1>{{ equipment.name }}</h1>
+              {{ equipment.details }}
             </v-col>
             <v-col cols="12" sm="6">
               <v-avatar class="ml-16 rounded-xl" size="300">
-                <v-img :src="news.picture"></v-img>
+                <v-img :src="equipment.picture"></v-img>
               </v-avatar>
             </v-col>
           </v-row>
@@ -37,22 +31,25 @@ export default {
     return { id }
   },
   async fetch() {
-    let news = await this.$store.dispatch('api/public/getSingleNews', {
-      params: { id: this.id },
-    })
-    if (news == null) {
+    let equipment = await this.$store.dispatch(
+      'api/public/getSingleEquipmentInfo',
+      {
+        params: { id: this.id },
+      }
+    )
+    if (equipment == null) {
       this.$nuxt.error({
         statusCode: 404,
         message: ' Room Not found ' + this.id,
       })
       return
     } else {
-      this.news = news.Data
+      this.equipment = equipment.Data
     }
   },
   data() {
     return {
-      news: {},
+      equipment: {},
       tool: [],
     }
   },
