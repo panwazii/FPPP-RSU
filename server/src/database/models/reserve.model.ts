@@ -8,13 +8,9 @@ export interface ReserveAttribute {
     id?: string;
     user_id?: string;
     room_id?: string;
-    fname?: string;
-    lname?: string;
-    email?: string;
-    tel?: string;
     time_start?: string;
     time_end?: string;
-    detail?: string;
+    details?: string;
     approval_status?:boolean;
     available_status?: boolean;
     created_at?: string;
@@ -32,19 +28,11 @@ class ReserveModel extends Model<ReserveAttribute, ReserveAttributeCreation> imp
 
     declare room_id: string;
 
-    declare fname: string;
-
-    declare lname: string;
-
-    declare email: string;
-
-    declare tel: string;
-
     declare time_start: string;
 
     declare time_end: string;
 
-    declare detail: string;
+    declare details: string;
 
     declare approval_status: boolean;
 
@@ -76,22 +64,6 @@ export const initReserveModel = (connection: Sequelize) => {
                     key: 'id',
                 },
             },
-            fname: {
-                allowNull: false,
-                type: DataTypes.STRING,
-            },
-            lname: {
-                allowNull: false,
-                type: DataTypes.STRING,
-            },
-            email: {
-                allowNull: false,
-                type: DataTypes.STRING,
-            },
-            tel: {
-                allowNull: true,
-                type: DataTypes.STRING,
-            },
             time_start: {
                 type: DataTypes.DATE,
                 allowNull: false,
@@ -100,7 +72,7 @@ export const initReserveModel = (connection: Sequelize) => {
                 type: DataTypes.DATE,
                 allowNull: false,
             },
-            detail: {
+            details: {
                 allowNull: false,
                 type: DataTypes.TEXT,
             },

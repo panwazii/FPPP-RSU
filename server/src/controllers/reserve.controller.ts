@@ -52,13 +52,9 @@ class ReserveController {
         const packet: ReserveAttribute = {
             user_id: data.user_id,
             room_id: data.room_id,
-            fname: data.fname,
-            lname: data.lname,
-            email: data.email,
-            tel: data.tel,
             time_start: data.time_start,
             time_end: data.time_end,
-            detail: data.detail,
+            details: data.details,
             approval_status: false,
             available_status: true,
         };
@@ -74,13 +70,9 @@ class ReserveController {
 
     public static async update(data: any) {
         return ReserveModel.update({
-            fname: data.fname,
-            lname: data.lname,
-            email: data.email,
-            tel: data.tel,
             time_start: data.time_start,
             time_end: data.time_end,
-            detail: data.detail,
+            details: data.details,
             approval_status: data.approval_status,
             available_status: data.available_status,
         }, {
