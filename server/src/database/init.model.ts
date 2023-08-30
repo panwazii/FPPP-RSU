@@ -25,6 +25,7 @@ import { initUserTypeSeed } from '../seeders/user_types.seed';
 import { initRoomSeed } from '../seeders/room.seed';
 import { initRoomPictureSeed } from '../seeders/room_picture.seed';
 import { initEquipmentInfoSeed } from '../seeders/equipment_info.seed';
+import { initServiceSeed } from '../seeders/service.seed';
 
 import AdminController from '../controllers/admin.controller';
 import log from '../tools/log';
@@ -135,6 +136,7 @@ const initDatabase = async () => {
             await initRoomSeed();
             await initRoomPictureSeed();
             await initEquipmentInfoSeed();
+            await initServiceSeed();
             await AdminController.createSuperAdmin();
         }
     } else {
