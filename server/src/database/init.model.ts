@@ -22,6 +22,9 @@ import { initServiceModel } from './models/services.model';
 
 import { initAdminTypeSeed } from '../seeders/admin_types.seed';
 import { initUserTypeSeed } from '../seeders/user_types.seed';
+import { initRoomSeed } from '../seeders/room.seed';
+import { initRoomPictureSeed } from '../seeders/room_picture.seed';
+import { initEquipmentInfoSeed } from '../seeders/equipment_info.seed';
 
 import AdminController from '../controllers/admin.controller';
 import log from '../tools/log';
@@ -129,6 +132,9 @@ const initDatabase = async () => {
             await initAdminTypeSeed();
             await initUserTypeSeed();
             await initWebInfoSeed();
+            await initRoomSeed();
+            await initRoomPictureSeed();
+            await initEquipmentInfoSeed();
             await AdminController.createSuperAdmin();
         }
     } else {
