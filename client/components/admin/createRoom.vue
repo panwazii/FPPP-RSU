@@ -61,8 +61,6 @@
                     <v-file-input
                       v-model="form.file"
                       label="รูปภาพ"
-                      multiple
-                      chips
                       filled
                       prepend-icon="mdi-camera"
                     ></v-file-input>

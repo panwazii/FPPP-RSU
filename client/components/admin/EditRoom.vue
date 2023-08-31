@@ -47,7 +47,16 @@
                         outlined
                         required
                       ></v-text-field>
+
+                      <v-text-field
+                        v-model="data.rent_price"
+                        :rules="[(v) => !!v || 'price required']"
+                        label="Rent price"
+                        outlined
+                        required
+                      ></v-text-field>
                     </v-col>
+
                     <v-col cols="12" sm="6">
                       <v-textarea
                         v-model="data.details"
@@ -59,17 +68,6 @@
                     </v-col>
                   </v-row>
 
-                  <v-row class="mt-2">
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="data.rent_price"
-                        :rules="[(v) => !!v || 'price required']"
-                        label="Rent price"
-                        outlined
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
                   <v-row>
                     <v-col cols="12" sm="12">
                       <v-img

@@ -134,18 +134,23 @@ export default {
           icon: 'mdi-account-group',
           path: '/admin/manage-user',
         },
-
         {
-          id: 4,
+          id: 3,
           name: 'Manage equipment',
           icon: 'mdi-tools',
           path: '/admin/manage-equipment',
         },
         {
-          id: 5,
+          id: 4,
           name: 'Manage news',
           icon: 'mdi-newspaper',
           path: '/admin/manage-news',
+        },
+        {
+          id: 5,
+          name: 'Manage Service',
+          icon: 'mdi-hand-heart-outline',
+          path: '/admin/manage-service',
         },
       ],
       super_admin_menu: [
