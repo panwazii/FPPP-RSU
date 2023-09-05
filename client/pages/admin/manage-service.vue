@@ -113,7 +113,7 @@
           },
         })
         console.log('here', ServiceData);
-        this.service = ServiceData.service
+        this.service = ServiceData.Data
         this.editService = true
       },
     },
