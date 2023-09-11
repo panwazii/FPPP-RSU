@@ -26,10 +26,19 @@ class WebInfoController {
 
         const packet: WebInfoAttribute = {
             id: data.id,
-            details: data.details,
-            email: data.email,
-            tel: data.tel,
-            location: data.location,
+            logo: data.logo,
+            banner_picture: data.banner_picture,
+            banner_title: data.banner_title,
+            about_picture: data.about_picture,
+            about_title: data.about_title,
+            about_details: data.about_details,
+            service_title: data.service_title,
+            service_details: data.service_details,
+            contact_email: data.contact_email,
+            contact_description: data.contact_description,
+            contact_tel: data.contact_tel,
+            contact_address: data.contact_address,
+            contact_location: data.contact_location,
         };
 
         return WebInfoModel.create(packet)
@@ -43,12 +52,19 @@ class WebInfoController {
     public static async update(data: any) {
 
         return WebInfoModel.update({
-            details: data.details,
-            email: data.email,
-            tel: data.tel,
-            location: data.location,
-            picture_name: data.name,
-            picture_url: data.url,
+            logo: data.logo,
+            banner_picture: data.banner_picture,
+            banner_title: data.banner_title,
+            about_picture: data.about_picture,
+            about_title: data.about_title,
+            about_details: data.about_details,
+            service_title: data.service_title,
+            service_details: data.service_details,
+            contact_email: data.contact_email,
+            contact_description: data.contact_description,
+            contact_tel: data.contact_tel,
+            contact_address: data.contact_address,
+            contact_location: data.contact_location,
 
         }, {
             where: {

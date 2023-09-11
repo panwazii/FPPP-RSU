@@ -3,12 +3,19 @@ import {
 } from 'sequelize';
 export interface WebInfoAttribute {
     id?: number;
-    details?: string;
-    email?: string;
-    tel?: string;
-    picture_name?: string;
-    picture_url?: string;
-    location?: string;
+    logo?: string;
+    banner_picture?: string;
+    banner_title?: string;
+    about_picture?: string;
+    about_title?: string;
+    about_details?: string;
+    service_title?: string;
+    service_details?: string;
+    contact_email?: string;
+    contact_description?: string;
+    contact_tel?: string;
+    contact_address?: string;
+    contact_location?: string;
     created_at?: Date;
     update_at?: Date;
 }
@@ -18,17 +25,31 @@ export interface WebInfoAttributeCreation extends Optional<WebInfoAttribute, 'id
 class WebInfoModel extends Model<WebInfoAttribute, WebInfoAttributeCreation> implements WebInfoAttribute {
     declare id: number;
 
-    declare details: string;
+    declare logo: string;
 
-    declare email: string;
+    declare banner_picture: string;
 
-    declare tel: string;
+    declare banner_title: string;
 
-    declare picture_name: string;
+    declare about_picture: string;
 
-    declare picture_url: string;
+    declare about_title: string;
 
-    declare location: string;
+    declare about_details: string;
+
+    declare service_title: string;
+
+    declare service_details: string;
+
+    declare contact_email: string;
+
+    declare contact_description: string;
+
+    declare contact_tel: string;
+
+    declare contact_address: string;
+
+    declare contact_location: string;
 
     declare created_at: Date;
 
@@ -44,32 +65,69 @@ export const initWebInfoModel = (connection: Sequelize) => {
                 allowNull: false,
                 primaryKey: true,
             },
-            details: {
+            logo: {
                 allowNull: false,
                 unique: true,
                 type: DataTypes.STRING,
             },
-            email: {
+            banner_picture: {
                 allowNull: false,
                 unique: true,
                 type: DataTypes.STRING,
             },
-            tel: {
+            banner_title: {
                 allowNull: false,
                 unique: true,
                 type: DataTypes.STRING,
             },
-            location: {
+            about_picture: {
                 allowNull: false,
                 unique: true,
                 type: DataTypes.STRING,
             },
-            picture_name: {
-                allowNull: true,
+            about_title: {
+                allowNull: false,
+                unique: true,
                 type: DataTypes.STRING,
             },
-            picture_url: {
-                allowNull: true,
+            about_details: {
+                allowNull: false,
+                unique: true,
+                type: DataTypes.TEXT,
+            },
+            service_title: {
+                allowNull: false,
+                unique: true,
+                type: DataTypes.STRING,
+            },
+            service_details: {
+                allowNull: false,
+                unique: true,
+                type: DataTypes.STRING,
+            },
+            contact_email: {
+                allowNull: false,
+                unique: true,
+                type: DataTypes.STRING,
+            },
+            contact_description: {
+                allowNull: false,
+                unique: true,
+                type: DataTypes.STRING,
+            },
+            contact_tel: {
+                allowNull: false,
+                unique: true,
+                type: DataTypes.STRING,
+            },
+            contact_address: {
+                allowNull: false,
+                unique: true,
+                type: DataTypes.STRING,
+            },
+            contact_location: {
+                allowNull: false,
+                unique: true,
                 type: DataTypes.STRING,
             },
             created_at: {

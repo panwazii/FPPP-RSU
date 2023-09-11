@@ -244,6 +244,12 @@ class EquipmentController {
     }
 
     // Equipment Stock
+    public static async getSingleEquipmentStock(id: string) {
+        return EquipmentStockModel.findOne({
+            where: { id: id },
+            raw: true
+        });
+    }
 
     public static async getAllEquipmentStock(limit: number, offset: number) {
         return EquipmentStockModel.findAndCountAll({
@@ -284,7 +290,7 @@ class EquipmentController {
 
     // Equipment Rent Rate
     public static async getSingleEquipmentRentRate(id: string) {
-        return EquipmentInfoModel.findOne({
+        return EquipmentRentRateModel.findOne({
             where: { id: id },
             raw: true
         });
@@ -325,14 +331,14 @@ class EquipmentController {
 
     // production line
     public static async getSingleProductionLine(id: string) {
-        return EquipmentInfoModel.findOne({
+        return ProductionLineModel.findOne({
             where: { id: id },
             raw: true
         });
     }
 
     public static async getAllProductionLine(limit: number, offset: number) {
-        return EquipmentRentRateModel.findAndCountAll({
+        return ProductionLineModel.findAndCountAll({
             limit,
             offset,
             raw: true
@@ -340,12 +346,12 @@ class EquipmentController {
     }
 
     public static async createProductionLine(data: any) {
-        const packet: EquipmentRentRateAttribute = {
+        const packet: ProductionLineAttribute = {
             name: data.name,
             available_status: true,
         };
 
-        return EquipmentRentRateModel.create(packet)
+        return ProductionLineModel.create(packet)
             .then(() => true)
             .catch((e) => {
                 log(e);
@@ -354,7 +360,7 @@ class EquipmentController {
     }
 
     public static async updateProductionLine(data: any) {
-        return EquipmentRentRateModel.update({
+        return ProductionLineModel.update({
             name: data.name,
         }, {
             where: {

@@ -1,14 +1,21 @@
 import WebInfoModel, { WebInfoAttribute } from '../database/models/web_info.model';
-import { uuid } from 'uuidv4';
+
 const entries: WebInfoAttribute[] = [
     {
         id: 1,
-        details: '',
-        email: "test.rsu.ac.th",
-        tel: '000-0000000',
-        location: '',
-        picture_name: '',
-        picture_url: '',
+        logo: '',
+        banner_picture: '',
+        banner_title: '',
+        about_picture: '',
+        about_title: '',
+        about_details: '',
+        service_title: '',
+        service_details: '',
+        contact_email: "test.rsu.ac.th",
+        contact_description: '',
+        contact_tel: '000-0000000',
+        contact_address: '',
+        contact_location: '',
     },
 ];
 
