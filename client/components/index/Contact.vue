@@ -4,55 +4,58 @@
       <div class="container">
         <div class="center">
           <a>CONTAC US !</a>
-          <div class="container card">
-            <div class="row justify-content-center">
-              <div class="col-sm-12 col-lg-6 col-md-8 mb-2">
-                <div class="contact-info-wrap">
-                  <div class="contact-title">
-                    <h1>ติดต่อ</h1>
+          <v-container>
+            <v-row justify="space-around">
+              <v-card width="400">
+                <v-card-text>
+                  <div class="font-weight-bold ms-1 mb-2">ติดต่อ</div>
+                  <div density="compact" align="start">
                     <p>
-                      Prototypes may also be exempted from some requirements
-                      that will applt toPrototypes may also be exempted from
-                      some requirements that will applt toPrototypes may also be
-                      exempted from some requirements that will applt to
+                      <v-icon class="mr-2" large>mdi-email</v-icon>
+                      contact@company.com
                     </p>
                   </div>
-                  <ul>
-                    <div class="content">
-                      <p>
-                        <v-icon class="mr-2" large>mdi-email</v-icon>
-                        contact@company.com
-                      </p>
-                    </div>
 
-                    <div class="content">
-                      <p>
-                        <v-icon class="mr-2" large>mdi-phone</v-icon>
-                        0892783278
-                      </p>
-                    </div>
+                  <div density="compact" align="start">
+                    <p>
+                      <v-icon class="mr-2" large>mdi-phone</v-icon>
+                      0892783278
+                    </p>
+                  </div>
 
-                    <div class="content">
-                      <p>
+                  <div density="compact" align="start">
+                    <form action="https://goo.gl/maps/RJpNVzsw6NqJtpfy6">
+                      <button type="submit">
                         <v-icon class="mr-2" large>mdi-map-marker</v-icon>
-                        มหาวิทยาลัยรังสิต
-                      </p>
-                    </div>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <v-avatar class="justify-center" size="400" rounded="0">
-              <v-img
-                src="https://race.nstru.ac.th/home_ex/blog/pic/cover/s841.jpg"
-              ></v-img>
-            </v-avatar>
-          </div>
+                      </button>
+                      <span>มหาวิทยาลัยรังสิต</span>
+                    </form>
+                  </div>
+
+                  <div class="mt-5" density="compact" align="start">
+                    <p>
+                      52 347 ถ. พหลโยธิน ตำบล หลักหก อำเภอเมืองปทุมธานี ปทุมธานี
+                      12000
+                    </p>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-row>
+            <v-img width="600" max-width="600" :src="image" />
+          </v-container>
         </div>
       </div>
     </section>
   </div>
 </template>
+
+<script>
+export default {
+  data: () => ({
+    image: require('@/static/img/index/1071.png'),
+  }),
+}
+</script>
 
 <style scoped>
 section {
@@ -86,7 +89,7 @@ section {
 .center a {
   position: relative;
   font-size: 150px;
-  color: black;
+  color: rgb(106, 95, 73);
   text-align: center;
   vertical-align: top;
   font-family: Fantasy;
@@ -112,6 +115,13 @@ section {
   padding: 30px;
   color: white;
   margin-left: 50px;
+}
+
+.card {
+  background-color: #ffffff;
+  opacity: 0.8;
+  text-align: center;
+  text-justify: left;
 }
 
 @media only screen and (max-width: 768px) {

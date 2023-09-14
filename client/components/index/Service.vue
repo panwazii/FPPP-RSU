@@ -22,7 +22,7 @@
             height="460"
             width="1200"
             class="d-flex align-center justify-center ma-2 rounded-xl"
-            color="#CDC9C9"
+            color="#F2F2F2"
           >
             <div class="header header_home">{{ item.title }}</div>
             <div class="content content_home">
@@ -130,6 +130,7 @@ h1 {
   height: 100%;
   margin-top: 100px;
   font-family: Fantasy;
+  color: rgb(106, 95, 73);
 }
 p {
   width: 100%;
@@ -137,6 +138,7 @@ p {
   margin-top: 10px;
   margin-bottom: 30px;
   font-family: Fantasy;
+  color: rgb(106, 95, 73);
 }
 
 .left {
@@ -157,6 +159,7 @@ p {
 
   top: 25%;
   left: 4%;
+  color: rgb(106, 95, 73);
 }
 .header::after {
   content: '';
@@ -166,7 +169,7 @@ p {
   width: 100%;
   height: 5%;
   font-family: Fantasy;
-  background: black;
+  background: rgb(106, 95, 73);
 }
 
 /*************/
@@ -177,6 +180,7 @@ p {
   font-family: Fantasy;
   top: 45%;
   left: 4%;
+  color: rgb(106, 95, 73);
 }
 .image {
   position: absolute;

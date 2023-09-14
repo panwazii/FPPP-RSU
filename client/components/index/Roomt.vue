@@ -1,77 +1,42 @@
 <template>
-  <section>
-    <div class="container">
-      <div class="left">
-        <h1 class="center">ROOM</h1>
+  <div class="container">
+    <div class="card">
+      <h3 class="title">{{ title }}</h3>
+      <div class="bar">
+        <div class="emptybar"></div>
+        <div class="filledbar"></div>
       </div>
-
-      <body>
-        <div class="container">
-          <div class="card">
-            <h3 class="title">ห้อง 1</h3>
-            <div class="bar">
-              <div class="emptybar"></div>
-              <div class="filledbar"></div>
-            </div>
-            <div class="circle">
-              <v-avatar class="justify-center" size="200" rounded="0">
-                <v-img
-                  src="https://staticg.sportskeeda.com/editor/2022/10/b120c-16658538056259-1920.jpg"
-                ></v-img>
-              </v-avatar>
-            </div>
-          </div>
-          <div class="card">
-            <h3 class="title">ห้อง 2</h3>
-            <div class="bar">
-              <div class="emptybar"></div>
-              <div class="filledbar"></div>
-            </div>
-            <div class="circle">
-              <v-avatar class="justify-center" size="200" rounded="0">
-                <v-img
-                  src="https://image.bangkokbiznews.com/uploads/images/md/2023/09/0Y2XKk0Un0zqBDcBrmUi.webp?x-image-process=style/LG"
-                ></v-img>
-              </v-avatar>
-            </div>
-          </div>
-          <div class="card">
-            <h3 class="title">ห้อง 502</h3>
-            <div class="bar">
-              <div class="emptybar"></div>
-              <div class="filledbar"></div>
-            </div>
-            <div class="circle">
-              <v-avatar class="justify-center" size="200" rounded="0">
-                <v-img
-                  src="https://www.srisuvit.ac.th/sites/default/files/2019-06/class13_0.jpg"
-                ></v-img>
-              </v-avatar>
-            </div>
-          </div>
-          <div class="card">
-            <h3 class="title">ห้อง 782</h3>
-            <div class="bar">
-              <div class="emptybar"></div>
-              <div class="filledbar"></div>
-            </div>
-            <div class="circle">
-              <v-avatar class="justify-center" size="200" rounded="0">
-                <v-img
-                  src="https://i0.wp.com/9choke.com/wp-content/uploads/2017/04/aaDSC_0278.jpg?fit=1200%2C801"
-                ></v-img>
-              </v-avatar>
-            </div>
-          </div>
-        </div>
-
-        <v-row class="justify-center mt-12"
-          ><a href="#" class="btn">ROOM</a></v-row
-        >
-      </body>
+      <div class="circle">
+        <v-avatar class="justify-center" size="200" rounded="0">
+          <v-img :src="picture"></v-img>
+        </v-avatar>
+      </div>
     </div>
-  </section>
+  </div>
 </template>
+
+<script>
+export default {
+  props: {
+    picture: {
+      type: String,
+      default: () => '',
+    },
+    name: {
+      type: String,
+      default: () => '',
+    },
+    id: {
+      type: String,
+      default: () => '',
+    },
+    detail: {
+      type: String,
+      default: () => '',
+    },
+  },
+}
+</script>
 
 <style scoped>
 section {
@@ -197,6 +162,9 @@ svg {
   font-family: Fantasy;
   font-size: 40px;
   text-align: center;
+}
+.left h1 {
+  color: rgb(106, 95, 73);
 }
 .left {
   width: 50%;

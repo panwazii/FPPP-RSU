@@ -99,6 +99,7 @@ section {
   background-size: cover;
   margin-top: -300px;
   margin-right: 50px;
+  z-index: 1;
 }
 .left h1 {
   transform: translate(5%, 175%);
@@ -107,7 +108,7 @@ section {
   padding-left: 400px;
   font-size: 40px;
   font-weight: lighter;
-  color: #1e1f26;
+  color: rgb(106, 95, 73);
   font-family: Fantasy;
 }
 
