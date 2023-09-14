@@ -1,5 +1,5 @@
 <template>
-  <v-carousel hide-delimiter-background show-arrows="hover" cycle height="800">
+  <v-carousel hide-delimiter-background cycle height="800">
     <v-carousel-item v-for="item in allNews" :key="item.id" :src="item.picture">
       <div class="d-flex fill-height justify-center align-center">
         <div class="text-h1">

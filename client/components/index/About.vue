@@ -75,6 +75,7 @@ section {
   border-radius: 100px;
   margin-top: -150px;
   margin-right: 100px;
+  z-index: 1;
 }
 .right {
   width: 50%;
@@ -90,13 +91,13 @@ section {
 .right h1 {
   font-size: 40px;
   font-weight: lighter;
-  color: #1e1f26;
+  color: rgb(106, 95, 73);
 }
 .right p {
   margin: 20px 0;
   font-weight: 500;
   line-height: 25px;
-  color: #1e1f26;
+  color: rgb(106, 95, 73);
 }
 .right a {
   height: 35px;

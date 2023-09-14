@@ -13,7 +13,7 @@
       :key="rooms.name"
       ><roomRoomselect
         :id="rooms.id"
-        :picture="rooms.picture"
+        :picture="rooms.Picture[0].url"
         :name="rooms.name"
         :detail="rooms.details"
       />
@@ -34,6 +34,7 @@ export default {
     async fetctrooms() {
       let data = await this.$store.dispatch('api/public/getAllRooms')
       this.room = data.rooms
+      console.log(this.room)
     },
   },
 }
