@@ -3,7 +3,7 @@
       <ModalConfirm
         :open="confirmModal"
         :message="confirmMessage"
-        :method="updateService"
+        :method="updateEquipmentStock"
         :confirm.sync="confirmModal"
       />
       <ModalLoading :open="loading" :message="loadingMessage" />
@@ -17,7 +17,7 @@
         <v-card>
           <v-card-title class="text-h5">
             <v-icon justify="left" class="mr-3" size="50">mdi-pencil</v-icon>
-            Edit Service
+            Edit EquipmentStock
           </v-card-title>
           <v-divider class="mb-3"></v-divider>
           <v-card-text>
@@ -37,43 +37,36 @@
                         ></v-text-field>
                       </v-col>
                     </v-row>
-                    <p>บริการ</p>
+                    <p>equipment Stock</p>
                     <v-row class="mt-2">
-                      <v-col cols="12" sm="6">
+                      <v-col cols="12">
                         <v-text-field
-                          v-model="data.title"
-                          :rules="[(v) => !!v || 'title required']"
-                          label="Title"
+                          v-model="data.serial_number"
+                          :rules="[(v) => !!v || 'serial number required']"
+                          label="Serial"
                           outlined
                           required
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="6">
-                        <v-textarea
-                          v-model="data.details"
-                          :rules="[(v) => !!v || 'details required']"
-                          label="Details"
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="data.room_id"
+                          :rules="[(v) => !!v || 'room id required']"
+                          label="Room id"
                           outlined
                           required
-                        ></v-textarea>
+                        ></v-text-field>
                       </v-col>
-                    </v-row>
-  
-                    <v-row>
-                      <v-col cols="12" sm="12">
-                        <v-img
-                          class="mx-auto"
-                          :src="data.picture"
-                          height="250"
-                          width="300"
-                        ></v-img>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="data.equipment_info_id"
+                          :rules="[(v) => !!v || 'equipment info id required']"
+                          label="Equipment info id"
+                          outlined
+                          required
+                        ></v-text-field>
                       </v-col>
-                      <v-file-input
-                        v-model="data.file"
-                        label="รูปภาพ"
-                        filled
-                        prepend-icon="mdi-camera"
-                      ></v-file-input>
+                      
                     </v-row>
                   </v-form>
                 </template>
@@ -123,18 +116,18 @@
         this.confirmModal = true
       },
       cancel() {
-        this.$emit('update:editService', false)
+        this.$emit('update:editEquipmentStock', false)
       },
-      async updateService() {
+      async updateEquipmentStock() {
         try {
           this.loading = true
-          await this.$store.dispatch('api/admin/updateService', this.data)
-          this.$emit('update:editService', false)
+          await this.$store.dispatch('api/admin/updateEquipmentStock', this.data)
+          this.$emit('update:editEquipmentStock', false)
           this.loading = false
         } catch (error) {
           this.loading = false
           console.log(error)
-          this.$emit('update:editService', false)
+          this.$emit('update:editEquipmentStock', false)
         }
       },
     },

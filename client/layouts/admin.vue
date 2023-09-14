@@ -152,6 +152,30 @@ export default {
           icon: 'mdi-hand-heart-outline',
           path: '/admin/manage-service',
         },
+        {
+          id: 6,
+          name: 'Manage Web Info',
+          icon: 'mdi-information-box-outline',
+          path: '/admin/manage-webinfo',
+        },
+        {
+          id: 7,
+          name: 'Manage Production line',
+          icon: 'mdi-package-variant',
+          path: '/admin/manage-productionline',
+        },
+        {
+          id: 8,
+          name: 'Manage Equipment rent rate',
+          icon: 'mdi-cash-multiple',
+          path: '/admin/manage-equipmentrentrate',
+        },
+        {
+          id: 9,
+          name: 'Manage Equipment stock',
+          icon: 'mdi-toolbox-outline',
+          path: '/admin/manage-equipmentstock',
+        },
       ],
       super_admin_menu: [
         {

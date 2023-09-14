@@ -57,6 +57,10 @@ export const actions = {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
         return await this.$axios.get('api/admin/getSingleEquipmentRentRate', data).then((res) => res.data)
     },
+    async getSingleEquipmentStock({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getSingleEquipmentStock', data).then((res) => res.data)
+    },
     async createEquipmentInfo({ getters }, data) {
         return await this.$axios.post('api/admin/createEquipmentInfo', data).then((res) => res.data)
     },
@@ -167,5 +171,13 @@ export const actions = {
     },
     async updateService({ getters }, data) {
         return await this.$axios.post('api/admin/updateService', data).then((res) => res.data)
+    },
+    //Web info
+    async getAllWebInfo({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getAllWebInfo', data).then((res) => res.data)
+    },
+    async updateWebInfo({ getters }, data) {
+        return await this.$axios.post('api/admin/updateWebInfo', data).then((res) => res.data)
     },
 }
