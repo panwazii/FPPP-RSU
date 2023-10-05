@@ -24,7 +24,13 @@
               ลองใช้ดูสิแล้วจะรู้ซึ้งไอ่น้อง
             </h2>
           </v-card-text>
-          <v-btn class="rounded-xl mt-12" width="300" color="#6A5F49">
+
+          <v-btn
+            class="rounded-xl mt-12"
+            width="300"
+            color="#6A5F49"
+            @click="$router.push('/equipment/' + id)"
+          >
             <h1 class="text">ADD TO CART</h1></v-btn
           >
         </v-card>

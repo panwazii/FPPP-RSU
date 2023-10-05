@@ -1,29 +1,21 @@
 <template>
   <div>
-    <v-row class="mb-12"><v-spacer></v-spacer></v-row>
-    <v-row class="mb-12"><v-spacer></v-spacer></v-row>
-
-    <h1 class="text-h4 font-weight-bold mt-12 d-flex justify-center">
-      อุปกรณ์
-    </h1>
-
-    <v-row class="justify-center mt-6 mb-16">
-      <v-col
-        class="pa-5 mx-0 d-flex justify-center"
-        xs="12"
-        md="2"
-        v-for="equipments in tool"
-        :key="equipments.id"
-      >
-        <IndexEquipmentCard
-          :picture="equipments.picture"
-          :name="equipments.name"
-          :id="equipments.id"
-        />
-      </v-col>
-    </v-row>
+    <indexEquipmentFirst />
+    <section>
+      <v-img class="overlay" width="600" :src="image" />
+      <v-row class="justify-center">
+        <v-col v-for="equipments in tool" :key="equipments.id">
+          <indexEquipmentList
+            :picture="equipments.picture"
+            :name="equipments.name"
+            :id="equipments.id"
+          />
+        </v-col>
+      </v-row>
+    </section>
   </div>
 </template>
+
 <script>
 export default {
   mounted() {
@@ -32,6 +24,7 @@ export default {
   data() {
     return {
       tool: [],
+      image: require('@/static/img/index/clerk_man_mono.png'),
     }
   },
   methods: {
@@ -42,3 +35,28 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+section {
+  top: 0;
+  min-height: 100vh;
+  width: 100%;
+  display: grid;
+  background-color: #ffffff;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: -200px;
+  height: 2200px;
+  font-weight: bold;
+  z-index: 0;
+}
+
+.container {
+  max-width: 70%;
+  margin: 100px auto;
+}
+</style>

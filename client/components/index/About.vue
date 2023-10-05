@@ -41,14 +41,6 @@ export default {
 }
 </script>
 <style scoped>
-@font-face {
-  src: url('https://www.axis-praxis.org/fonts/webfonts/MetaVariableDemo-Set.woff2')
-    format('woff2');
-  font-family: 'Meta';
-  font-style: normal;
-  font-weight: normal;
-}
-
 section {
   min-height: 100vh;
   width: 100%;
@@ -92,12 +84,14 @@ section {
   font-size: 40px;
   font-weight: lighter;
   color: rgb(106, 95, 73);
+  font-family: Tahoma (sans-serif);
 }
 .right p {
   margin: 20px 0;
   font-weight: 500;
   line-height: 25px;
   color: rgb(106, 95, 73);
+  font-family: Tahoma (sans-serif);
 }
 .right a {
   height: 35px;

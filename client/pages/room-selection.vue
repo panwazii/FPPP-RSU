@@ -1,25 +1,21 @@
 <template>
   <div>
-    <v-row class="mb-12"><v-spacer></v-spacer></v-row>
-    <v-row class="mb-12"><v-spacer></v-spacer></v-row>
-
-    <h1 class="text-h4 font-weight-bold mt-12 d-flex justify-center">
-      ห้องปฏิบัติการ
-    </h1>
-
-    <v-row
-      class="text-h4 font-weight-bold mt-2 d-flex justify-center"
-      v-for="(rooms, index) in room"
-      :key="rooms.name"
-      ><roomRoomselect
-        :id="rooms.id"
-        :picture="rooms.Picture[0].url"
-        :name="rooms.name"
-        :detail="rooms.details"
-      />
-    </v-row>
+    <indexRoomFirst />
+    <section>
+      <v-row class="justify-center">
+        <v-col v-for="(rooms, index) in room" :key="rooms.name">
+          <indexRoomList
+            :id="rooms.id"
+            :picture="rooms.Picture[0].url"
+            :name="rooms.name"
+            :detail="rooms.details"
+          />
+        </v-col>
+      </v-row>
+    </section>
   </div>
 </template>
+
 <script>
 export default {
   mounted() {
@@ -28,6 +24,7 @@ export default {
   data() {
     return {
       room: [],
+      image: require('@/static/img/index/clerk_man_mono.png'),
     }
   },
   methods: {
@@ -39,3 +36,28 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+section {
+  top: 0;
+  min-height: 100vh;
+  width: 100%;
+  display: grid;
+  background-color: #ffffff;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: -200px;
+  height: 2200px;
+  font-weight: bold;
+  z-index: 0;
+}
+
+.container {
+  max-width: 70%;
+  margin: 100px auto;
+}
+</style>

@@ -129,7 +129,7 @@ h1 {
   width: 100%;
   height: 100%;
   margin-top: 100px;
-  font-family: Fantasy;
+  font-family: Tahoma (sans-serif);
   color: rgb(106, 95, 73);
 }
 p {
@@ -137,7 +137,7 @@ p {
   height: 100%;
   margin-top: 10px;
   margin-bottom: 30px;
-  font-family: Fantasy;
+  font-family: Tahoma (sans-serif);
   color: rgb(106, 95, 73);
 }
 
@@ -146,7 +146,7 @@ p {
   text-align: center;
 
   border-radius: 8px;
-  font-family: Fantasy;
+  font-family: Tahoma (sans-serif);
 }
 
 /*************/
@@ -154,7 +154,7 @@ p {
   position: absolute;
   width: max-content;
   font-size: 2.875rem;
-  font-family: Fantasy;
+  font-family: Tahoma (sans-serif);
   white-space: nowrap;
 
   top: 25%;
@@ -168,7 +168,7 @@ p {
   left: 0;
   width: 100%;
   height: 5%;
-  font-family: Fantasy;
+  font-family: Tahoma (sans-serif);
   background: rgb(106, 95, 73);
 }
 
@@ -177,7 +177,7 @@ p {
   position: absolute;
   font-size: 1.2rem;
   width: 23%;
-  font-family: Fantasy;
+  font-family: Tahoma (sans-serif);
   top: 45%;
   left: 4%;
   color: rgb(106, 95, 73);

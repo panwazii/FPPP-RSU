@@ -18,7 +18,12 @@
             <h1 class="bottom-right overlay">{{ name }}</h1>
           </v-img>
 
-          <v-btn class="rounded-xl mt-12" width="270" color="#6A5F49">
+          <v-btn
+            class="rounded-xl mt-12"
+            width="270"
+            color="#6A5F49"
+            @click="$router.push('/room/' + id)"
+          >
             <h1 class="text">ADD TO CART</h1></v-btn
           >
         </v-card>

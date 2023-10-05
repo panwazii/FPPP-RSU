@@ -101,7 +101,7 @@ a {
 
 .roomcenter {
   padding: 300px 260px;
-  font-family: Fantasy;
+  font-family: Tahoma (sans-serif);
   font-size: 40px;
   text-align: center;
   color: rgb(106, 95, 73);
@@ -109,7 +109,7 @@ a {
 }
 .center {
   padding: 180px 0;
-  font-family: Fantasy;
+  font-family: Tahoma (sans-serif);
   font-size: 40px;
   text-align: center;
 }

@@ -92,7 +92,7 @@ section {
   color: rgb(106, 95, 73);
   text-align: center;
   vertical-align: top;
-  font-family: Fantasy;
+  font-family: Tahoma (sans-serif);
 }
 
 .left {
