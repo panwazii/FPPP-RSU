@@ -216,8 +216,10 @@ class EquipmentController {
             name: data.name,
             details: data.details,
             picture: data.picture,
-            price: data.price,
+            average_price: data.price,
             rent_price: data.rent_price,
+            quantity: data.quantity,
+            type: data.type,
             available_status: true,
         };
 
@@ -234,8 +236,12 @@ class EquipmentController {
             name: data.name,
             details: data.details,
             picture: data.picture,
-            price: data.price,
+            average_price: data.price,
             rent_price: data.rent_price,
+            quantity: data.quantity,
+            type: data.type,
+            equipment_rent_rate_id: data.equipment_rent_rate_id,
+            production_line_id: data.production_line_id,
         }, {
             where: {
                 id: data.id,

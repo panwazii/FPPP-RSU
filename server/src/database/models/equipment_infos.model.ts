@@ -8,8 +8,10 @@ export interface EquipmentInfoAttribute {
     id?: string;
     name?: string;
     details?: string;
-    price?: number;
+    average_price?: number;
     rent_price?: number;
+    quantity?: number;
+    type?: string;
     picture?: string;
     equipment_rent_rate_id?: number;
     production_line_id?: number;
@@ -29,9 +31,13 @@ class EquipmentInfoModel extends Model<EquipmentInfoAttribute, EquipmentInfoAttr
 
     declare details: string;
 
-    declare price: number;
+    declare average_price: number;
 
     declare rent_price: number;
+
+    declare quantity: number;
+
+    declare type: string;
 
     declare picture: string;
 
@@ -59,13 +65,21 @@ export const initEquipmentInfoModel = (connection: Sequelize) => {
                 allowNull: false,
                 type: DataTypes.TEXT,
             },
-            price: {
+            average_price: {
                 allowNull: false,
                 type: DataTypes.DECIMAL,
             },
             rent_price: {
                 allowNull: false,
                 type: DataTypes.DECIMAL,
+            },
+            quantity: {
+                allowNull: false,
+                type: DataTypes.INTEGER,
+            },
+            type: {
+                allowNull: false,
+                type: DataTypes.STRING,
             },
             picture: {
                 allowNull: false,

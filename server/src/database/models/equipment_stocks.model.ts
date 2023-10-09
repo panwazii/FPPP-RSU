@@ -3,12 +3,15 @@ import {
 } from 'sequelize';
 import RoomModel from './rooms.model';
 import EquipmentInfoModel from './equipment_infos.model';
+import SupplierModel from './supplier.model';
 
 export interface EquipmentStockAttribute {
     id?: string;
     serial_number?: string;
+    price?: number;
     room_id?: string;
     equipment_info_id?: string;
+    supplier_id?: number;
     equipment_status?: string;
     available_status?: boolean;
     created_at?: string;
@@ -28,9 +31,13 @@ class EquipmentStockModel extends Model<EquipmentStockAttribute, EquipmentStockA
 
     declare serial_number: string;
 
+    declare price: number;
+
     declare room_id: string;
 
     declare equipment_info_id: string;
+
+    declare supplier_id: number;
 
     declare equipment_status: string;
 
@@ -50,6 +57,10 @@ export const initEquipmentStockModel = (connection: Sequelize) => {
                 allowNull: false,
                 type: DataTypes.STRING,
             },
+            price: {
+                allowNull: false,
+                type: DataTypes.DECIMAL,
+            },
             room_id: {
                 type: DataTypes.UUID,
                 allowNull: true,
@@ -63,6 +74,14 @@ export const initEquipmentStockModel = (connection: Sequelize) => {
                 allowNull: false,
                 references: {
                     model: EquipmentInfoModel,
+                    key: 'id',
+                },
+            },
+            supplier_id: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+                references: {
+                    model: SupplierModel,
                     key: 'id',
                 },
             },
