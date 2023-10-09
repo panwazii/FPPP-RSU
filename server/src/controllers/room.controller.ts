@@ -90,6 +90,14 @@ class RoomController {
             });
     }
 
+    // Drop down
+    public static async getDropdownRoom() {
+        return RoomModel.findAndCountAll({
+            attributes: { include: ['id', 'name'] },
+            raw: true
+        });
+    }
+
 }
 
 export default RoomController;

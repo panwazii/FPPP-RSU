@@ -17,6 +17,7 @@ import multer from 'multer';
 import { Admin } from '../service/firebase';
 import { url } from 'inspector';
 import { error } from 'console';
+import { IntegerDataType } from 'sequelize';
 
 const bucket = Admin.storage().bucket()
 const adminRouter: express.Router = express.Router();
@@ -1409,6 +1410,230 @@ adminRouter.post('/updateEquipmentRentRate', authValid, (req, res) => {
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 
+});
+//Supply
+adminRouter.get('/getSingleSupplyStock', async (req, res) => {
+    try {
+        const id = Number(req.query.id);
+        EquipmentController.getSingleSupplyStock(id).then((Data) => {
+            if (Data) {
+                res.status(200).json({ Data });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
+adminRouter.get('/getAllSupplyStock', (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        EquipmentController.getAllSupplyStock(Limit, Offset).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, supply: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+adminRouter.post('/createSupplyStock', (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+
+        EquipmentController.createSupplyStock(req.body).then((state) => {
+            if (state) {
+                res.json({ code: 200, state });
+            } else {
+                res.json(errorCode('CREATE', 2));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+
+});
+
+adminRouter.post('/updateSupplyStock', authValid, (req, res) => {
+    try {
+        const Data = req.body;
+        if (!Data) {
+            res.json(errorCode('update', 1));
+            return;
+        }
+
+        EquipmentController.updateSupplyStock(Data).then((result) => {
+            if (result) {
+                res.json({ code: 200, result });
+            } else {
+                res.json(errorCode('UPDATE', 2));
+            }
+        });
+    } catch (error) {
+        log(error)
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+
+});
+
+//Supplier
+adminRouter.get('/getSingleSupplier', async (req, res) => {
+    try {
+        const id = Number(req.query.id);
+        EquipmentController.getSingleSupplier(id).then((Data) => {
+            if (Data) {
+                res.status(200).json({ Data });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json(error);
+    }
+});
+
+adminRouter.get('/getAllSupplier', (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        EquipmentController.getAllSupplier(Limit, Offset).then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, supplier: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+adminRouter.post('/createSupplier', (req, res) => {
+    try {
+        if (!req.body) {
+            res.json(errorCode('RES', 1));
+            return;
+        }
+
+        EquipmentController.createSupplier(req.body).then((state) => {
+            if (state) {
+                res.json({ code: 200, state });
+            } else {
+                res.json(errorCode('CREATE', 2));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+
+});
+
+adminRouter.post('/updateSupplier', authValid, (req, res) => {
+    try {
+        const Data = req.body;
+        if (!Data) {
+            res.json(errorCode('update', 1));
+            return;
+        }
+
+        EquipmentController.updateSupplier(Data).then((result) => {
+            if (result) {
+                res.json({ code: 200, result });
+            } else {
+                res.json(errorCode('UPDATE', 2));
+            }
+        });
+    } catch (error) {
+        log(error)
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+
+});
+
+//Drop down
+adminRouter.get('/getDropdownRentRate', (req, res) => {
+    try {
+        EquipmentController.getDropdownRentRate().then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, rentrate: Data,
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+adminRouter.get('/getDropdownProductionLine', (req, res) => {
+    try {
+        EquipmentController.getDropdownProductionLine().then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, productionline: Data,
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+adminRouter.get('/getDropdownEquipmentInfo', (req, res) => {
+    try {
+        EquipmentController.getDropdownEquipmentInfo().then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, equipment: Data,
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+adminRouter.get('/getDropdownRoom', (req, res) => {
+    try {
+        RoomController.getDropdownRoom().then((Data) => {
+            if (Data) {
+                res.status(200).json({
+                    code: 200, room: Data,
+                });
+            } else {
+                res.json(errorCode('ADMIN', 0));
+            }
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
 });
 
 export default adminRouter;

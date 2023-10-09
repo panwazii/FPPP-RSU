@@ -7,6 +7,8 @@ import EquipmentInfoModel, { EquipmentInfoAttribute } from '../database/models/e
 import EquipmentStockModel, { EquipmentStockAttribute } from '../database/models/equipment_stocks.model';
 import EquipmentRentRateModel, { EquipmentRentRateAttribute } from '../database/models/equipment_rent_rates.model';
 import ProductionLineModel, { ProductionLineAttribute } from '../database/models/production_lines.model';
+import SupplierModel,{SupplierAttribute} from '../database/models/supplier.model';
+import SupplyStockModel,{SupplyStockAttribute} from '../database/models/supply_stock.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
@@ -270,6 +272,7 @@ class EquipmentController {
         const packet: EquipmentStockAttribute = {
             serial_number: data.serial_number,
             room_id: data.room_id,
+            price: data.price,
             equipment_info_id: data.equipment_info_id,
             equipment_status: "available",
             available_status: true,
@@ -287,6 +290,7 @@ class EquipmentController {
         return EquipmentStockModel.update({
             serial_number: data.serial_number,
             room_id: data.room_id,
+            price: data.price,
         }, {
             where: {
                 id: data.id,
@@ -373,6 +377,122 @@ class EquipmentController {
                 id: data.id,
             },
         })
+    }
+
+    //Supply
+    public static async getSingleSupplyStock(id: number) {
+        return SupplyStockModel.findOne({
+            where: { id: id },
+            raw: true
+        });
+    }
+
+    public static async getAllSupplyStock(limit: number, offset: number) {
+        return SupplyStockModel.findAndCountAll({
+            where: { available_status: true },
+            limit,
+            offset,
+            raw: true
+        });
+    }
+
+    public static async createSupplyStock(data: any) {
+        const packet: SupplyStockAttribute = {
+            quantity: data.quantity,
+            price: data.price,
+            date: data.date,
+            remark: data.remark,
+            supply_stock_id: data.supply_stock_id,
+            supplier_id: data.supplier_id,
+            available_status: true,
+        };
+
+        return SupplyStockModel.create(packet)
+            .then(() => true)
+            .catch((e) => {
+                log(e);
+                return false;
+            });
+    }
+
+    public static async updateSupplyStock(data: any) {
+        return SupplyStockModel.update({
+            quantity: data.quantity,
+            price: data.price,
+            date: data.date,
+            remark: data.remark,
+            supply_stock_id: data.supply_stock_id,
+            supplier_id: data.supplier_id,
+        }, {
+            where: {
+                id: data.id,
+            },
+        })
+    }
+
+    //Supplier
+    public static async getSingleSupplier(id: number) {
+        return SupplierModel.findOne({
+            where: { id: id },
+            raw: true
+        });
+    }
+
+    public static async getAllSupplier(limit: number, offset: number) {
+        return SupplierModel.findAndCountAll({
+            where: { available_status: true },
+            limit,
+            offset,
+            raw: true
+        });
+    }
+
+    public static async createSupplier(data: any) {
+        const packet: SupplierAttribute = {
+            name: data.name,
+            contact_info: data.contact_info,
+            available_status: true,
+        };
+
+        return SupplierModel.create(packet)
+            .then(() => true)
+            .catch((e) => {
+                log(e);
+                return false;
+            });
+    }
+
+    public static async updateSupplier(data: any) {
+        return SupplierModel.update({
+            name: data.name,
+            contact_info: data.contact_info,
+        }, {
+            where: {
+                id: data.id,
+            },
+        })
+    }
+
+    //Drop down
+    public static async getDropdownProductionLine() {
+        return ProductionLineModel.findAndCountAll({
+            attributes: { include: ['id', 'name'] },
+            raw: true
+        });
+    }
+
+    public static async getDropdownEquipmentInfo() {
+        return EquipmentInfoModel.findAndCountAll({
+            attributes: { include: ['id', 'name'] },
+            raw: true
+        });
+    }
+
+    public static async getDropdownRentRate() {
+        return EquipmentRentRateModel.findAndCountAll({
+            attributes: { include: ['id', 'name'] },
+            raw: true
+        });
     }
 }
 
