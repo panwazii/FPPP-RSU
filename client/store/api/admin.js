@@ -180,4 +180,32 @@ export const actions = {
     async updateWebInfo({ getters }, data) {
         return await this.$axios.post('api/admin/updateWebInfo', data).then((res) => res.data)
     },
+    //supply
+    async getAllSupplyStock({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getAllSupplyStock', data).then((res) => res.data)
+    },
+    async getSingleSupplyStock({ getters }, data) {
+        return await this.$axios.get('api/admin/getSingleSupplyStock', data).then((res) => res.data)
+    },
+    async createSupplyStock({ getters }, data) {
+        return await this.$axios.post('api/admin/createSupplyStock', data).then((res) => res.data)
+    },
+    async updateSupplyStock({ getters }, data) {
+        return await this.$axios.post('api/admin/updateSupplyStock', data).then((res) => res.data)
+    },
+    //supplier
+    async getAllSupplier({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getAllSupplier', data).then((res) => res.data)
+    },
+    async getSingleSupplier({ getters }, data) {
+        return await this.$axios.get('api/admin/getSingleSupplier', data).then((res) => res.data)
+    },
+    async createSupplier({ getters }, data) {
+        return await this.$axios.post('api/admin/createSupplier', data).then((res) => res.data)
+    },
+    async updateSupplier({ getters }, data) {
+        return await this.$axios.post('api/admin/updateSupplier', data).then((res) => res.data)
+    },
 }

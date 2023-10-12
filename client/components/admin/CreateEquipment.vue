@@ -17,7 +17,7 @@
       <v-card>
         <v-card-title class="text-h5">
           <v-icon justify="left" class="mr-3" size="50">mdi-home-plus</v-icon>
-          Create new Equipment.
+          เพิ่มเครื่องมือใหม่
         </v-card-title>
         <v-divider class="mb-3"></v-divider>
         <v-card-text>
@@ -26,7 +26,8 @@
               <template>
                 <v-form ref="form" lazy-validation>
                   <v-row class="mt-2">
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" sm="12">
+                      <h4>ชื่อเครื่องมือ</h4>
                       <v-text-field
                         v-model="form.name"
                         :rules="[(v) => !!v || 'name required']"
@@ -39,15 +40,17 @@
 
                   <v-row class="mt-2">
                     <v-col cols="12" sm="6">
+                      <h4>ราคาเฉลี่ย</h4>
                       <v-text-field
-                        v-model="form.price"
-                        :rules="[(v) => !!v || 'price required']"
-                        label="Price"
+                        v-model="form.average_price"
+                        :rules="[(v) => !!v || 'average price required']"
+                        label="Avrage price"
                         outlined
                         required
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6">
+                      <h4>ราคายืม</h4>
                       <v-text-field
                         v-model="form.rent_price"
                         :rules="[(v) => !!v || 'rent price required']"
@@ -60,6 +63,31 @@
 
                   <v-row class="mt-2">
                     <v-col cols="12" sm="6">
+                      <h4>ประเภท</h4>
+                      <v-combobox
+                        v-model="form.type"
+                        :rules="[(v) => !!v || 'type required']"
+                        label="Type"
+                        :items="['1', '2', '3']"
+                        outlined
+                        required
+                      ></v-combobox>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <h4>ปริมาณ</h4>
+                      <v-text-field
+                        v-model="form.quantity"
+                        :rules="[(v) => !!v || 'quantity required']"
+                        label="Quantity"
+                        outlined
+                        required
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+
+                  <v-row class="mt-2">
+                    <v-col cols="12" sm="12">
+                      <h4>รายละเอียด</h4>
                       <v-textarea
                         v-model="form.details"
                         :rules="[(v) => !!v || 'details required']"
@@ -118,8 +146,10 @@ export default {
         room_id: null,
         name: null,
         details: null,
-        price: null,
+        average_price: null,
         rent_price: null,
+        type: null,
+        quantity: null,
         picture: 'beta',
         available_status: true,
       },
@@ -144,8 +174,10 @@ export default {
         let file = new FormData()
         file.append('file', this.form.file),
           file.append('name', this.form.name),
-          file.append('price', this.form.price),
+          file.append('average_price', this.form.average_price),
           file.append('rent_price', this.form.rent_price),
+          file.append('type', this.form.type),
+          file.append('quantity', this.form.quantity),
           file.append('details', this.form.details)
         await this.$store.dispatch('api/admin/createEquipmentInfo', file)
         this.clearForm()
@@ -162,6 +194,8 @@ export default {
       this.form.name = null
       this.form.details = null
       this.form.rent_price = null
+      this.form.type = null
+      this.form.quantity = null
       this.form.picture = 'beta'
       this.form.available_status = true
     },

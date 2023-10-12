@@ -176,6 +176,24 @@ export default {
           icon: 'mdi-toolbox-outline',
           path: '/admin/manage-equipmentstock',
         },
+        // {
+        //   id: 10,
+        //   name: 'Manage Reserve',
+        //   icon: 'mdi-adjust',
+        //   path: '/admin/manage-reserve',
+        // },
+        {
+          id: 11,
+          name: 'Manage Supplier',
+          icon: 'mdi-adjust',
+          path: '/admin/manage-supplier',
+        },
+        {
+          id: 12,
+          name: 'Manage Supply stock',
+          icon: 'mdi-adjust',
+          path: '/admin/manage-supplystock',
+        },
       ],
       super_admin_menu: [
         {

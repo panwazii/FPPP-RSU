@@ -3,7 +3,7 @@
     <ModalConfirm
       :open="confirmModal"
       :message="confirmMessage"
-      :method="createRoom"
+      :method="createSupplier"
       :confirm.sync="confirmModal"
     />
     <ModalLoading :open="loading" :message="loadingMessage" />
@@ -17,7 +17,7 @@
       <v-card>
         <v-card-title class="text-h5">
           <v-icon justify="left" class="mr-3" size="50">mdi-home-plus</v-icon>
-          Create new room.
+          Create new supplier.
         </v-card-title>
         <v-divider class="mb-3"></v-divider>
         <v-card-text>
@@ -27,49 +27,27 @@
                 <v-form ref="form" lazy-validation>
                   <v-row class="mt-2">
                     <v-col cols="12" sm="12">
-                      <h4>ชื่อห้อง</h4>
+                      <h4>ชื่อผู้ผลิต</h4>
                       <v-text-field
                         v-model="form.name"
                         :rules="[(v) => !!v || 'name required']"
-                        label="Name"
+                        label="Serial number"
                         outlined
                         required
                       ></v-text-field>
                     </v-col>
-
                     <v-col cols="12" sm="12">
-                      <h4>ค่าเช่าห้อง</h4>
+                      <h4>ข้อมูลการติดต่อ</h4>
                       <v-text-field
-                        v-model="form.rent_price"
-                        :rules="[(v) => !!v || 'price required']"
-                        label="Rent price"
+                        v-model="form.contact_info"
+                        :rules="[(v) => !!v || 'contact info required']"
+                        label="Contact info"
                         outlined
                         required
                       ></v-text-field>
                     </v-col>
                   </v-row>
-
-                  <v-row class="mt-2">
-                    <v-col cols="12" sm="12">
-                      <h4>รายละเอียด</h4>
-                      <v-textarea
-                        v-model="form.details"
-                        :rules="[(v) => !!v || 'details required']"
-                        label="Details"
-                        outlined
-                        required
-                      ></v-textarea>
-                    </v-col>
-                  </v-row>
-
-                  <v-row>
-                    <v-file-input
-                      v-model="form.file"
-                      label="รูปภาพ"
-                      filled
-                      prepend-icon="mdi-camera"
-                    ></v-file-input>
-                  </v-row>
+                  
                 </v-form>
               </template>
             </v-col>
@@ -104,8 +82,7 @@ export default {
     return {
       form: {
         name: null,
-        details: null,
-        rent_price: null,
+        contact_info: null,
         available_status: true,
       },
 
@@ -119,35 +96,27 @@ export default {
   methods: {
     confirm() {
       this.confirmModal = true
-      //   this.$emit('update:editRooms', false)
     },
     cancel() {
       this.clearForm()
-      this.$emit('update:createRoom', false)
+      this.$emit('update:createSupplier', false)
     },
-    async createRoom() {
+    async createSupplier() {
       try {
         this.loading = true
-        let file = new FormData()
-        file.append('file', this.form.file),
-          file.append('name', this.form.name),
-          file.append('rent_price', this.form.rent_price),
-          file.append('details', this.form.details)
-        await this.$store.dispatch('api/admin/createRoom', file)
+        await this.$store.dispatch('api/admin/createSupplier', this.form)
         this.clearForm()
-        this.$emit('update:createRoom', false)
+        this.$emit('update:createSupplier', false)
         this.loading = false
       } catch (error) {
         this.loading = false
         console.log(error)
-        this.$emit('update:createRoom', false)
+        this.$emit('update:createSupplier', false)
       }
     },
     clearForm() {
       this.form.name = null
-      this.form.details = null
-      this.form.rent_price = null
-      this.form.picture = 'beta'
+      this.form.contact_info = null
       this.form.available_status = true
     },
   },
