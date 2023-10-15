@@ -1004,7 +1004,7 @@ adminRouter.get('/getAllReserve', (req, res) => {
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        ReserveController.getAllReserveAndChild(req.query.id as string, Limit, Offset).then((Data) => {
+        ReserveController.getAllReserveAndChild(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
                     code: 200, reserve: Data.rows, total_pages: Math.ceil(Data.count / Limit)

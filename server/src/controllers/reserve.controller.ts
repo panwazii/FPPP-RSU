@@ -34,13 +34,13 @@ class ReserveController {
         });
     }
 
-    public static async getAllReserveAndChild(id: string, limit: number, offset: number) {
+    public static async getAllReserveAndChild(limit: number, offset: number) {
         return ReserveModel.findAndCountAll({
             distinct: true,
             where: { available_status: true },
             include: [{
                 model: ReserveEquipmentModel,
-                where: { room_id: id, available_status: true, },
+                where: { available_status: true },
             }],
             limit,
             offset,
