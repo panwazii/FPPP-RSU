@@ -176,12 +176,12 @@ export default {
           icon: 'mdi-toolbox-outline',
           path: '/admin/manage-equipmentstock',
         },
-        // {
-        //   id: 10,
-        //   name: 'Manage Reserve',
-        //   icon: 'mdi-adjust',
-        //   path: '/admin/manage-reserve',
-        // },
+        {
+          id: 10,
+          name: 'Manage Reserve',
+          icon: 'mdi-adjust',
+          path: '/admin/manage-reserve',
+        },
         {
           id: 11,
           name: 'Manage Supplier',

@@ -70,8 +70,8 @@
         createReserve: false,
         headers: [
           {
-            text: 'title',
-            value: 'title',
+            text: 'id',
+            value: 'id',
             sortable: false,
             align: 'start',
           },

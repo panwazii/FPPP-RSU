@@ -28,23 +28,39 @@
                   <v-row class="mt-2">
                     <v-col cols="12" sm="12">
                       <h4>ผู้จอง</h4>
-                      <v-text-field
+                      <v-autocomplete
                         v-model="form.user_id"
                         :rules="[(v) => !!v || 'user id required']"
+                        :items="user"
+                        item-text="fname"
+                        item-value="id"
                         label="User id"
                         outlined
                         required
-                      ></v-text-field>
+                      ></v-autocomplete>
                     </v-col>
                     <v-col cols="12" sm="12">
                       <h4>ชื่อห้อง</h4>
-                      <v-text-field
+                      <v-autocomplete
                         v-model="form.room_id"
                         :rules="[(v) => !!v || 'room id required']"
+                        :items="rooms"
+                        item-text="name"
+                        item-value="id"
                         label="Room id"
                         outlined
                         required
-                      ></v-text-field>
+                      ></v-autocomplete>
+                    </v-col>
+                    <v-col cols="12" sm="12">
+                      <h4>วันที่</h4>
+                      <v-date-picker
+                        v-model="form.reservedate"
+                        :rules="[(v) => !!v || 'reserve date required']"
+                        label="Reserve date"
+                        outlined
+                        required
+                      ></v-date-picker>
                     </v-col>
                     <v-col cols="12" sm="12">
                       <h4>เริ่ม</h4>
@@ -68,13 +84,13 @@
                     </v-col>
                     <v-col cols="12" sm="12">
                       <h4>รายละเอียด</h4>
-                      <v-text-area
+                      <v-textarea
                         v-model="form.details"
                         :rules="[(v) => !!v || 'details required']"
                         label="Details"
                         outlined
                         required
-                      ></v-text-area>
+                      ></v-textarea>
                     </v-col>
                   </v-row>
                   
@@ -115,6 +131,8 @@ export default {
         contact_info: null,
         available_status: true,
       },
+      rooms: [],
+      users: [],
 
       readers: [],
       confirmModal: false,
@@ -123,7 +141,38 @@ export default {
       loadingMessage: 'Loading',
     }
   },
+  mounted() {
+    this.fetchRooms()
+    this.fetchUsers()
+  },
+  watch: {
+    page() {
+      this.fetchRooms()
+      this.fetchUsers()
+    },
+  },
   methods: {
+    async fetchRooms() {
+      let Data = await this.$store.dispatch('api/admin/getAllRooms', {
+        params: {
+          limit: this.itemsPerPage,
+          page: this.page,
+        },
+      })
+      console.log('this is room', Data)
+      this.rooms = Data.rooms
+      this.totalPages = Data.total_pages
+    },
+    async fetchUsers() {
+      let Data = await this.$store.dispatch('api/admin/getAllUsers', {
+        params: {
+          limit: this.itemsPerPage,
+          page: this.page,
+        },
+      })
+      this.users = Data.users
+      this.totalPages = Data.total_pages
+    },
     confirm() {
       this.confirmModal = true
     },
@@ -144,6 +193,7 @@ export default {
         this.$emit('update:createReserve', false)
       }
     },
+    
     clearForm() {
       this.form.name = null
       this.form.contact_info = null
