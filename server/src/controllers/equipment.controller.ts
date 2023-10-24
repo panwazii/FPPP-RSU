@@ -483,7 +483,7 @@ class EquipmentController {
 
     public static async getDropdownEquipmentInfo() {
         return EquipmentInfoModel.findAndCountAll({
-            attributes: { include: ['id', 'name'] },
+            attributes: { include: ['id', 'name', 'picture'] },
             raw: true
         });
     }
