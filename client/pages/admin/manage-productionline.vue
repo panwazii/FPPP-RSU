@@ -13,7 +13,7 @@
       <div class="d-flex justify-end">
         <v-btn @click="createProductionLine = true" class="mb-3" color="primary">
           <v-icon medium> mdi-plus </v-icon>
-          <h4>Add productionline</h4>
+          <h4>Add production line</h4>
         </v-btn>
       </div>
       <div>
@@ -50,7 +50,7 @@
     middleware: 'admin',
     head() {
       return {
-        title: 'manage productionline',
+        title: 'manage production line',
       }
     },
     data() {

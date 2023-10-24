@@ -81,13 +81,13 @@
                       </v-col>
                       <v-col cols="12" sm="12">
                         <h4>รายละเอียด</h4>
-                        <v-text-area
+                        <v-textarea
                           v-model="form.details"
                           :rules="[(v) => !!v || 'details required']"
                           label="Details"
                           outlined
                           required
-                        ></v-text-area>
+                        ></v-textarea>
                       </v-col>
                       
                     </v-row>
