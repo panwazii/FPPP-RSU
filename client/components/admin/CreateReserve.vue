@@ -50,7 +50,12 @@
                         label="Room id"
                         outlined
                         required
-                      ></v-autocomplete>
+                      >
+                        <template v-slot:item="{ item }">
+                          <v-img :src="item.Picture[0].url" class="itemimg"></v-img>
+                          {{item.name}}
+                        </template>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="12" sm="12">
                       <h4>วันที่</h4>
@@ -202,3 +207,14 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.itemimg{
+  min-width: 40px;
+  max-width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+</style>

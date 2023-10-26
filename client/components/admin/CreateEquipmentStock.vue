@@ -57,7 +57,13 @@
                           label="Room id"
                           outlined
                           required
-                        ></v-autocomplete>
+                          @change="onSelect"
+                        >
+                          <template v-slot:item="{ item }">
+                            <v-img :src="item.Picture[0].url" class="itemimg"></v-img>
+                            {{item.name}}
+                          </template>
+                        </v-autocomplete>
                       </v-col>
                       <v-col cols="12" sm="12">
                         <h4>อุปกรณ์</h4>
@@ -70,7 +76,12 @@
                           label="Equipment info id"
                           outlined
                           required
-                        ></v-autocomplete>
+                        >
+                          <template v-slot:item="{ item }">
+                            <v-img :src="item.picture" class="itemimg"></v-img>
+                            {{item.name}}
+                          </template>
+                        </v-autocomplete>
                       </v-col>
                       <v-col cols="12" sm="12">
                         <h4>ผู้ผลิต</h4>
@@ -130,6 +141,7 @@
         rooms: [],
         equipments: [],
         suppliers: [],
+        link: "https://www.pimfoodacademy.com/public/userfiles/images/Rooms-Pilot%20Plant%201%201760x920.jpg",
   
         readers: [],
         confirmModal: false,
@@ -213,7 +225,21 @@
         this.form.supplier_id = null
         this.form.available_status = true
       },
+      onSelect(value) {
+        console.log('Selected item:', this.selectedItem);
+        console.log(value);
+      },
     },
   }
   </script>
   
+  <style scoped>
+  .itemimg{
+    min-width: 40px;
+    max-width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  </style>

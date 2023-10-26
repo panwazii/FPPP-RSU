@@ -31,7 +31,7 @@
                       <v-text-field
                         v-model="form.name"
                         :rules="[(v) => !!v || 'name required']"
-                        label="Serial number"
+                        label="Name"
                         outlined
                         required
                       ></v-text-field>
