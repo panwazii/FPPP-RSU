@@ -1,35 +1,14 @@
 <template>
   <v-app dark>
     <v-main>
-      <ModalConfirmLogout
-        :open="logout_modal"
-        :method="logout"
-        message="are you sure about that son ?"
-        :confirmLogout.sync="logout_modal"
-      />
-      <v-navigation-drawer
-        v-model="drawer"
-        :mini-variant="miniVariant"
-        :clipped="clipped"
-        fixed
-        app
-      >
+      <ModalConfirmLogout :open="logout_modal" :method="logout" message="are you sure about that son ?"
+        :confirmLogout.sync="logout_modal" />
+      <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
         <v-list class="mt-0 pt-0">
           <div>
-            <v-img
-              class="mx-auto justify-center mb-2"
-              width="100px"
-              height="130px"
-              :src="require('~/static/img/logo/rsu-logo.png')"
-            ></v-img>
+            <v-img @click="goToHomePage('/')" class="mx-auto justify-center mb-2"
+              :src="require('~/static/img/logo/fppp-logo.png')"></v-img>
           </div>
-          <!-- <div class="mt-0 pt-0">
-            <v-img
-              :src="require('../assets/biofarm-bg.jpg')"
-              height="130px"
-              dark
-            ></v-img>
-          </div> -->
           <v-divider></v-divider>
           <v-list-item class="mt-2">
             <!-- <v-icon class="mr-2">mdi-shield-account</v-icon> -->
@@ -65,11 +44,7 @@
           <v-divider></v-divider>
           <v-list nav>
             <v-list-item-group class="mb-1">
-              <div
-                v-for="super_admin_menus in super_admin_menu"
-                :key="super_admin_menus.id"
-                :value="menu"
-              >
+              <div v-for="super_admin_menus in super_admin_menu" :key="super_admin_menus.id" :value="menu">
                 <v-list-item :to="super_admin_menus.path">
                   <v-list-item-icon>
                     <v-icon>{{ super_admin_menus.icon }} </v-icon>
@@ -99,23 +74,20 @@
         <v-toolbar-title> {{ navPathName }}</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn text rounded><v-icon>mdi-cog</v-icon></v-btn>
-        <v-btn @click="logout_modal = true" text rounded
-          ><v-icon>mdi-logout-variant</v-icon></v-btn
-        >
+        <v-btn @click="logout_modal = true" text rounded><v-icon>mdi-logout-variant</v-icon></v-btn>
       </v-app-bar>
       <Nuxt />
     </v-main>
 
     <v-footer class="pa-0" height="30">
       <v-spacer></v-spacer>
-      <span class="mr-1"
-        >FPPP &copy; {{ new Date().getFullYear() }} developed by DIT CS</span
-      >
+      <span class="mr-1">FPPP &copy; {{ new Date().getFullYear() }} developed by DIT CS</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
+import { goTo } from '../utils/general-utils'
 export default {
   name: 'AdminLayout',
   data() {
@@ -223,6 +195,9 @@ export default {
       await this.$store.dispatch('logout')
       this.$router.push('/admin-login')
     },
+    goToHomePage(){
+      goTo('/')
+    }
   },
   computed: {
     navPathName() {

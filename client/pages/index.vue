@@ -1,5 +1,6 @@
 <template>
   <div>
+    
     <section>
       <div class="container">
         <div class="left">
@@ -10,17 +11,17 @@
     </section>
     <indexAbout />
     <indexService />
+    <!-- <h1>{{ $store.getters.getCartItems }}</h1>
+    <v-btn @click="$store.dispatch('addCartItems', { id: 1, name: 'test1' })">cart add</v-btn>
+    <v-btn @click="$store.dispatch('removeCartItems', 1)">cart remove</v-btn> -->
     <section>
       <v-img class="overlay" width="600" :src="image" />
       <v-row class="justify-center">
-        <span class="roomcenter"> <h1>ROOM</h1></span>
+        <span class="roomcenter">
+          <h1>ROOM</h1>
+        </span>
         <v-col v-for="(rooms, index) in room.slice(0, 3)" :key="rooms.name">
-          <indexRoomIndex
-            :id="rooms.id"
-            :picture="rooms.Picture[0].url"
-            :name="rooms.name"
-            :detail="rooms.details"
-          />
+          <indexRoomIndex :id="rooms.id" :picture="rooms.Picture[0].url" :name="rooms.name" :detail="rooms.details" />
         </v-col>
       </v-row>
 
@@ -72,6 +73,7 @@ section {
   background-color: #ffffff;
   position: relative;
 }
+
 a {
   height: 35px;
   width: 200px;
@@ -89,6 +91,7 @@ a {
   font-size: 18px;
   z-index: 1;
 }
+
 .container {
   width: 90%;
   max-width: 1000px;
@@ -107,12 +110,14 @@ a {
   color: rgb(106, 95, 73);
   z-index: 1;
 }
+
 .center {
   padding: 180px 0;
   font-family: Tahoma (sans-serif);
   font-size: 40px;
   text-align: center;
 }
+
 .left {
   width: 50%;
   height: 600px;
@@ -121,6 +126,7 @@ a {
   background-color: #ffffff;
   border-radius: 8px;
 }
+
 .right {
   width: 200%;
   height: 800px;
@@ -141,10 +147,12 @@ a {
     width: 100%;
     margin: 0 20px;
   }
+
   .left {
     width: 100%;
     height: 400px;
   }
+
   .right {
     width: 90%;
     margin: 0;

@@ -1,9 +1,12 @@
+import { removeObjectWithId } from '../utils/general-utils'
+
 export const state = () => ({
     token: null,
     isAdmin: null,
     user: null,
     admin: null,
-    path_name_th: ""
+    path_name_th: "",
+    cartItems: []
 })
 
 export const mutations = {
@@ -28,6 +31,13 @@ export const mutations = {
     setPathName(state, name) {
         state.path_name_th = name
     },
+    //Cart
+    setCartItems(state, item) {
+        state.cartItems.push(item)
+    },
+    deleteCartItems(state, id) {
+        removeObjectWithId(state.cartItems, id)
+    }
 }
 
 export const actions = {
@@ -35,6 +45,10 @@ export const actions = {
         try {
             const token = await this.$cookies.get('token');
             const admin = await this.$cookies.get('isAdmin');
+            // await this.$cookies.set('cartItems', [] , {
+            //     path: '/',
+            //     maxAge: 60 * 60 * 24 * 7
+            // })
             await dispatch('setToken', token);
             if (typeof token === "string") {
                 if (admin === true) {
@@ -123,6 +137,13 @@ export const actions = {
     //Path Name
     async setPathName({ commit }, pathName) {
         commit('setPathName', pathName)
+    },
+    addCartItems({ commit }, item) {
+        this 
+        commit('setCartItems', item)
+    },
+    removeCartItems({ commit }, item) {
+        commit('deleteCartItems', item.id)
     }
 }
 
@@ -138,5 +159,9 @@ export const getters = {
     //Path Name
     getPathName(state) {
         return state.path_name_th
+    },
+    //Cart
+    getCartItems(state) {
+        return state.cartItems
     }
 }
