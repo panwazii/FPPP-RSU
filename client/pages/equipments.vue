@@ -2,7 +2,7 @@
   <div>
     <indexEquipmentFirst />
     <section>
-      <v-img class="overlay" width="600" :src="image" />
+      <a>รายการอุปกรณ์</a>
       <v-row class="justify-center">
         <v-col v-for="equipments in tool" :key="equipments.id">
           <indexEquipmentList
@@ -58,5 +58,14 @@ section {
 .container {
   max-width: 70%;
   margin: 100px auto;
+}
+
+a {
+  position: relative;
+  font-size: 100px;
+  color: rgb(106, 95, 73);
+  text-align: center;
+  vertical-align: top;
+  font-family: Fantasy;
 }
 </style>

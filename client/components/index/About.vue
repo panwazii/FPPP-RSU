@@ -3,13 +3,13 @@
     <div class="left"></div>
     <div class="right">
       <div class="content">
-        <h1>Processing Plant</h1>
+        <h1>ประวัติความเป็นมาของเรา</h1>
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia
           assumenda dolore reprehenderit ullam blanditiis ex sapiente pariatur
           tempore incidunt facilis?
         </p>
-        <a href="#" class="btn">ABOUT</a>
+        <a href="#" class="btn">ดูเพิ่มเติม</a>
       </div>
     </div>
   </div>
@@ -50,7 +50,7 @@ section {
   background-color: #1e1f26;
 }
 .container {
-  width: 90%;
+  width: 100%;
   max-width: 1000px;
   height: 270px;
   margin: 50px auto;
@@ -61,11 +61,10 @@ section {
 }
 .left {
   width: 35%;
-  height: 500px;
+  height: 300px;
   background: url(https://www.millconsteel.com/wp-content/uploads/2019/12/%E0%B8%AA%E0%B8%B4%E0%B8%97%E0%B8%98%E0%B8%B4%E0%B8%8A%E0%B8%B1%E0%B8%A2-%E0%B8%A5%E0%B8%B5%E0%B8%AA%E0%B8%A7%E0%B8%B1%E0%B8%AA%E0%B8%94%E0%B8%B4%E0%B9%8C%E0%B8%95%E0%B8%A3%E0%B8%B0%E0%B8%81%E0%B8%B9%E0%B8%A5-5-1200x800.jpg)
     no-repeat center / cover;
-  border-radius: 100px;
-  margin-top: -150px;
+  border-radius: 10px;
   margin-right: 100px;
   z-index: 1;
 }

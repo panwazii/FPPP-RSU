@@ -1,7 +1,7 @@
 <template>
   <div>
-    <indexRoomFirst />
     <section>
+      <a>รายการห้อง</a>
       <v-row class="justify-center">
         <v-col v-for="(rooms, index) in room" :key="rooms.name">
           <indexRoomList
@@ -59,5 +59,14 @@ section {
 .container {
   max-width: 70%;
   margin: 100px auto;
+}
+
+a {
+  position: relative;
+  font-size: 100px;
+  color: rgb(106, 95, 73);
+  text-align: center;
+  vertical-align: top;
+  font-family: Fantasy;
 }
 </style>

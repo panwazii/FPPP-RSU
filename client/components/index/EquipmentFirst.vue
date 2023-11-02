@@ -1,35 +1,5 @@
 <template>
-  <div>
-    <section>
-      <div class="bottom-right"></div>
-      <div class="container">
-        <div class="center">
-          <a>EQUIPMENT</a>
-          <div class="container card">
-            <v-card class="mx-auto rounded-xl" width="600">
-              <v-card-text>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Aperiam ex quam voluptate blanditiis. Libero mollitia reiciendis
-                facilis molestiae, vitae saepe distinctio, quae fugiat
-                perferendis doloremque provident debitis excepturi error enim!
-                Quo commodi deleniti quidem quam voluptatum cupiditate
-                distinctio ad perferendis eveniet dolor ea rerum numquam
-                explicabo consectetur corrupti eum et, hic autem error. Non
-                perspiciatis distinctio cumque, nostrum quidem hic molestias
-                quas ex unde illo odio repellendus neque, exercitationem cum
-                obcaecati pariatur. Enim, reiciendis illo nihil doloribus quos
-                veritatis, unde pariatur tenetur modi optio veniam accusamus
-                accusantium id ullam quis doloremque consectetur quasi ipsa aut
-                earum. Consequatur excepturi velit nesciunt.
-              </v-card-text>
-            </v-card>
-
-            <v-img width="600" max-width="600" :src="image" />
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+  <div></div>
 </template>
 
 <script>
@@ -45,7 +15,6 @@ export default {
 <style scoped>
 section {
   min-height: 100vh;
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
