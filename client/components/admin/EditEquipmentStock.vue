@@ -39,34 +39,76 @@
                     </v-row>
                     <p>equipment Stock</p>
                     <v-row class="mt-2">
-                      <v-col cols="12">
+                      <v-col cols="12" sm="12">
+                        <h4>หมายเลขซีเรียล</h4>
                         <v-text-field
                           v-model="data.serial_number"
                           :rules="[(v) => !!v || 'serial number required']"
-                          label="Serial"
+                          label="Serial number"
                           outlined
                           required
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12">
+                      <v-col cols="12" sm="12">
+                        <h4>ราคา</h4>
                         <v-text-field
+                          v-model="data.price"
+                          :rules="[(v) => !!v || 'price required']"
+                          label="Price"
+                          outlined
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="12">
+                        <h4>ห้อง</h4>
+                        <v-autocomplete
                           v-model="data.room_id"
                           :rules="[(v) => !!v || 'room id required']"
+                          :items="rooms"
+                          item-text="name"
+                          item-value="id"
                           label="Room id"
                           outlined
                           required
-                        ></v-text-field>
+                          @change="onSelect"
+                        >
+                          <template v-slot:item="{ item }">
+                            <v-img :src="item.Picture[0].url" class="itemimg"></v-img>
+                            {{item.name}}
+                          </template>
+                        </v-autocomplete>
                       </v-col>
-                      <v-col cols="12">
-                        <v-text-field
+                      <v-col cols="12" sm="12">
+                        <h4>อุปกรณ์</h4>
+                        <v-autocomplete
                           v-model="data.equipment_info_id"
                           :rules="[(v) => !!v || 'equipment info id required']"
+                          :items="equipments"
+                          item-text="name"
+                          item-value="id"
                           label="Equipment info id"
                           outlined
                           required
-                        ></v-text-field>
+                        >
+                          <template v-slot:item="{ item }">
+                            <v-img :src="item.picture" class="itemimg"></v-img>
+                            {{item.name}}
+                          </template>
+                        </v-autocomplete>
                       </v-col>
-                      
+                      <v-col cols="12" sm="12">
+                        <h4>ผู้ผลิต</h4>
+                        <v-autocomplete
+                          v-model="data.supplier_id"
+                          :rules="[(v) => !!v || 'supplier id required']"
+                          :items="suppliers"
+                          item-text="name"
+                          item-value="id"
+                          label="Supplier id"
+                          outlined
+                          required
+                        ></v-autocomplete>
+                      </v-col>
                     </v-row>
                   </v-form>
                 </template>
@@ -109,7 +151,22 @@
         confirmMessage: 'Confirm this change',
         loading: false,
         loadingMessage: 'Loading',
+        rooms: [],
+        equipments: [],
+        suppliers: [],
       }
+    },
+    mounted() {
+      this.fetchRooms()
+      this.fetchEquipment()
+      this.fetchSuppliers()
+    },
+    watch: {
+      page() {
+        this.fetchRooms()
+        this.fetchEquipment()
+        this.fetchSuppliers()
+      },
     },
     methods: {
       confirm() {
@@ -130,7 +187,54 @@
           this.$emit('update:editEquipmentStock', false)
         }
       },
+      async fetchRooms() {
+        let Data = await this.$store.dispatch('api/admin/getAllRooms', {
+          params: {
+            limit: this.itemsPerPage,
+            page: this.page,
+          },
+        })
+        console.log('this is room', Data)
+        this.rooms = Data.rooms
+        this.totalPages = Data.total_pages
+      },
+      async fetchEquipment() {
+        let Data = await this.$store.dispatch('api/admin/getAllEquipmentInfo', {
+          params: {
+            limit: this.itemsPerPage,
+            page: this.page,
+          },
+        })
+        console.log('this is equipment', Data)
+        this.equipments = Data.equipments
+        this.totalPages = Data.total_pages
+      },
+      async fetchSuppliers() {
+        let Data = await this.$store.dispatch('api/admin/getAllSupplier', {
+          params: {
+            limit: this.itemsPerPage,
+            page: this.page,
+          },
+        })
+        console.log('this is supplier', Data)
+        this.suppliers = Data.supplier
+        this.totalPages = Data.total_pages
+      },
+      onSelect(value) {
+        console.log('Selected item:', this.selectedItem);
+        console.log(value);
+      },
     },
   }
   </script>
   
+  <style scoped>
+  .itemimg{
+    min-width: 40px;
+    max-width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  </style>

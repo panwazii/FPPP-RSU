@@ -39,58 +39,78 @@
                     </v-row>
                     <p>equipment Stock</p>
                     <v-row class="mt-2">
-                      <v-col cols="12" sm="12">
-                        <h4>ผู้จอง</h4>
-                        <v-text-field
-                          v-model="form.user_id"
-                          :rules="[(v) => !!v || 'user id required']"
-                          label="User id"
-                          outlined
-                          required
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="12">
-                        <h4>ชื่อห้อง</h4>
-                        <v-text-field
-                          v-model="form.room_id"
-                          :rules="[(v) => !!v || 'room id required']"
-                          label="Room id"
-                          outlined
-                          required
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="12">
-                        <h4>เริ่ม</h4>
-                        <v-text-field
-                          v-model="form.time_start"
-                          :rules="[(v) => !!v || 'time start required']"
-                          label="Time start"
-                          outlined
-                          required
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="12">
-                        <h4>สิ้นสุด</h4>
-                        <v-text-field
-                          v-model="form.time_end"
-                          :rules="[(v) => !!v || 'time end required']"
-                          label="Time end"
-                          outlined
-                          required
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="12">
-                        <h4>รายละเอียด</h4>
-                        <v-textarea
-                          v-model="form.details"
-                          :rules="[(v) => !!v || 'details required']"
-                          label="Details"
-                          outlined
-                          required
-                        ></v-textarea>
-                      </v-col>
-                      
-                    </v-row>
+                    <v-col cols="12" sm="12">
+                      <h4>ผู้จอง</h4>
+                      <v-autocomplete
+                        v-model="data.user_id"
+                        :rules="[(v) => !!v || 'user id required']"
+                        :items="user"
+                        item-text="fname"
+                        item-value="id"
+                        label="User id"
+                        outlined
+                        required
+                      ></v-autocomplete>
+                    </v-col>
+                    <v-col cols="12" sm="12">
+                      <h4>ชื่อห้อง</h4>
+                      <v-autocomplete
+                        v-model="data.room_id"
+                        :rules="[(v) => !!v || 'room id required']"
+                        :items="rooms"
+                        item-text="name"
+                        item-value="id"
+                        label="Room id"
+                        outlined
+                        required
+                      >
+                        <template v-slot:item="{ item }">
+                          <v-img :src="item.Picture[0].url" class="itemimg"></v-img>
+                          {{item.name}}
+                        </template>
+                      </v-autocomplete>
+                    </v-col>
+                    <v-col cols="12" sm="12">
+                      <h4>วันที่</h4>
+                      <v-date-picker
+                        v-model="data.reservedate"
+                        :rules="[(v) => !!v || 'reserve date required']"
+                        label="Reserve date"
+                        outlined
+                        required
+                      ></v-date-picker>
+                    </v-col>
+                    <v-col cols="12" sm="12">
+                      <h4>เริ่ม</h4>
+                      <v-text-field
+                        v-model="data.time_start"
+                        :rules="[(v) => !!v || 'time start required']"
+                        label="Time start"
+                        outlined
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="12">
+                      <h4>สิ้นสุด</h4>
+                      <v-text-field
+                        v-model="data.time_end"
+                        :rules="[(v) => !!v || 'time end required']"
+                        label="Time end"
+                        outlined
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="12">
+                      <h4>รายละเอียด</h4>
+                      <v-textarea
+                        v-model="data.details"
+                        :rules="[(v) => !!v || 'details required']"
+                        label="Details"
+                        outlined
+                        required
+                      ></v-textarea>
+                    </v-col>
+                  </v-row>
                   </v-form>
                 </template>
               </v-col>
@@ -132,7 +152,19 @@
         confirmMessage: 'Confirm this change',
         loading: false,
         loadingMessage: 'Loading',
+        rooms: [],
+        users: [],
       }
+    },
+    mounted() {
+      this.fetchRooms()
+      this.fetchUsers()
+    },
+    watch: {
+      page() {
+        this.fetchRooms()
+        this.fetchUsers()
+      },
     },
     methods: {
       confirm() {
@@ -153,7 +185,38 @@
           this.$emit('update:editReserve', false)
         }
       },
+      async fetchRooms() {
+        let Data = await this.$store.dispatch('api/admin/getAllRooms', {
+          params: {
+            limit: this.itemsPerPage,
+            page: this.page,
+          },
+        })
+        console.log('this is room', Data)
+        this.rooms = Data.rooms
+        this.totalPages = Data.total_pages
+      },
+      async fetchUsers() {
+        let Data = await this.$store.dispatch('api/admin/getAllUsers', {
+          params: {
+            limit: this.itemsPerPage,
+            page: this.page,
+          },
+        })
+        this.users = Data.users
+        this.totalPages = Data.total_pages
+      },
     },
   }
   </script>
   
+<style scoped>
+.itemimg{
+  min-width: 40px;
+  max-width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+</style>

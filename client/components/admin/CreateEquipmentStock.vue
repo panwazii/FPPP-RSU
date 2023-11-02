@@ -141,7 +141,6 @@
         rooms: [],
         equipments: [],
         suppliers: [],
-        link: "https://www.pimfoodacademy.com/public/userfiles/images/Rooms-Pilot%20Plant%201%201760x920.jpg",
   
         readers: [],
         confirmModal: false,

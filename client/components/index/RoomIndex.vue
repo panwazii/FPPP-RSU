@@ -95,8 +95,9 @@ section {
 }
 
 .grid-items {
+  margin-top: -50px;
   text-align: center;
-  padding: 25px 0;
+  padding: 5px 0;
   z-index: 2;
 }
 

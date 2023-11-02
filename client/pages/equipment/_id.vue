@@ -1,7 +1,6 @@
 <template>
   <div>
     <section>
-      <div class="bottom-right"></div>
       <div class="card">
         <v-card class="cardinfo">
           <div class="cardcontainer">
@@ -72,6 +71,15 @@ export default {
 
 .textcategory {
   color: #080707;
+}
+
+a {
+  position: relative;
+  font-size: 70px;
+  color: rgb(106, 95, 73);
+  text-align: center;
+  vertical-align: top;
+  font-family: Fantasy;
 }
 
 section {
