@@ -10,42 +10,97 @@
         <h1 class="text-h4 font-weight-bold mb-4 paralax-text"></h1>
       </div>
     </v-parallax>
-    <indexService />
     <indexAbout />
+    <indexService />
 
     <h1 class="text-h4 font-weight-bold mb-4 d-flex justify-center">
-      บริการของเรา
-    </h1>
-    <p class="mb-4 d-flex justify-center text-center">
-      ห้องปฎิบัติการของโรงงานต้นแบบ ที่ช่วยในการผลิตและทดลองอาหาร
-      ในกระบวนการต่างๆ
-    </p>
-
-    <div class="room1 justify-center">
-      <v-row class="justify-center mt-12">
-        <indexAboutUs />
-      </v-row>
-    </div>
-
-    <h1 class="text-h4 font-weight-bold d-flex justify-center mt-12">
       บริการจองห้อง
     </h1>
     <p class="mb-4 d-flex justify-center text-center">
       จองห้องเพื่อใช้งานอุปกรณ์ต่างๆภายในห้อง
     </p>
-    <v-row class="justify-center">
-      <v-col v-for="(rooms, index) in room.slice(0, 3)" :key="rooms.name">
-        <indexRoomIndex
-          :id="rooms.id"
-          :picture="rooms.Picture[0].url"
-          :name="rooms.name"
-          :detail="rooms.details"
-        />
-      </v-col>
-    </v-row>
+
+    <div class="room1 justify-center">
+      <v-row class="justify-center mt-12">
+        <v-col v-for="(rooms, index) in room.slice(0, 3)" :key="rooms.name">
+          <indexAboutUs
+            :id="rooms.id"
+            :picture="rooms.Picture[0].url"
+            :name="rooms.name"
+            :detail="rooms.details"
+          />
+        </v-col>
+      </v-row>
+    </div>
+
     <v-row class="text-h4 font-weight-bold d-flex justify-center mt-12">
       <a href="/room-selection" class="btn justify-center">ROOMS</a>
     </v-row>
+
+    <v-row class="mt-12">
+      <v-card width="800" class="mx-auto" outlined>
+        <v-container>
+          <v-row dense>
+            <v-col cols="12">
+              <v-card outlined>
+                <v-card-title class="text-h5"> ข่าว 1 </v-card-title>
+
+                <v-card-subtitle
+                  >Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                  Consequatur quidem obcaecati reiciendis ipsum explicabo
+                  numquam ad pariatur nulla aperiam delectus.</v-card-subtitle
+                >
+
+                <v-card-actions>
+                  <v-btn variant="text"> อ่านเพิ่มเติม </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+
+          <v-row dense>
+            <v-col cols="12">
+              <v-card outlined>
+                <v-card-title class="text-h5"> ข่าว 1 </v-card-title>
+
+                <v-card-subtitle
+                  >Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                  Consequatur quidem obcaecati reiciendis ipsum explicabo
+                  numquam ad pariatur nulla aperiam delectus.</v-card-subtitle
+                >
+
+                <v-card-actions>
+                  <v-btn variant="text"> อ่านเพิ่มเติม </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+
+          <v-row dense>
+            <v-col cols="12">
+              <v-card outlined>
+                <v-card-title class="text-h5"> ข่าว 1 </v-card-title>
+
+                <v-card-subtitle
+                  >Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                  Consequatur quidem obcaecati reiciendis ipsum explicabo
+                  numquam ad pariatur nulla aperiam delectus.</v-card-subtitle
+                >
+
+                <v-card-actions>
+                  <v-btn variant="text"> อ่านเพิ่มเติม </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+
+          <v-row class="text-h4 font-weight-bold d-flex justify-center mb-1">
+            <a href="/room-selection" class="btn justify-center">NEWS</a>
+          </v-row>
+        </v-container>
+      </v-card>
+    </v-row>
+
     <div class="mt-15">
       <indexContact />
     </div>
@@ -61,6 +116,41 @@ export default {
     return {
       room: [],
       image: require('@/static/img/index/ventilation_mono.png'),
+      items: [
+        { type: 'subheader', title: 'Today' },
+        {
+          prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
+          title: 'Brunch this weekend?',
+          subtitle: `<span class="text-primary">Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
+        },
+        { type: 'divider', inset: true },
+        {
+          prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
+          title: 'Summer BBQ',
+          subtitle: `<span class="text-primary">to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend.`,
+        },
+        { type: 'divider', inset: true },
+        {
+          prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
+          title: 'Oui oui',
+          subtitle:
+            '<span class="text-primary">Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?',
+        },
+        { type: 'divider', inset: true },
+        {
+          prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
+          title: 'Birthday gift',
+          subtitle:
+            '<span class="text-primary">Trevor Hansen</span> &mdash; Have any ideas about what we should get Heidi for her birthday?',
+        },
+        { type: 'divider', inset: true },
+        {
+          prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
+          title: 'Recipe to try',
+          subtitle:
+            '<span class="text-primary">Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.',
+        },
+      ],
     }
   },
   methods: {
