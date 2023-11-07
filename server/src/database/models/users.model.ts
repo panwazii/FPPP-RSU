@@ -65,12 +65,12 @@ export const initUserModel = (connection: Sequelize) => {
             },
             fname: {
                 allowNull: false,
-                unique: true,
+                unique: false,
                 type: DataTypes.STRING,
             },
             lname: {
                 allowNull: false,
-                unique: true,
+                unique: false,
                 type: DataTypes.STRING,
             },
             email: {
