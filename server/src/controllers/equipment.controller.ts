@@ -475,21 +475,21 @@ class EquipmentController {
 
     //Drop down
     public static async getDropdownProductionLine() {
-        return ProductionLineModel.findAndCountAll({
+        return ProductionLineModel.findAll({
             attributes: { include: ['id', 'name'] },
             raw: true
         });
     }
 
     public static async getDropdownEquipmentInfo() {
-        return EquipmentInfoModel.findAndCountAll({
+        return EquipmentInfoModel.findAll({
             attributes: { include: ['id', 'name', 'picture'] },
             raw: true
         });
     }
 
     public static async getDropdownRentRate() {
-        return EquipmentRentRateModel.findAndCountAll({
+        return EquipmentRentRateModel.findAll({
             attributes: { include: ['id', 'name'] },
             raw: true
         });

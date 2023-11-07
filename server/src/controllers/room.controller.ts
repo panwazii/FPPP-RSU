@@ -92,7 +92,7 @@ class RoomController {
 
     // Drop down
     public static async getDropdownRoom() {
-        return RoomModel.findAndCountAll({
+        return RoomModel.findAll({
             attributes: { include: ['id', 'name'] },
             include: [{
                 model: RoomPictureModel, as: 'Picture',
