@@ -28,6 +28,8 @@ import { initRoomSeed } from '../seeders/room.seed';
 import { initRoomPictureSeed } from '../seeders/room_picture.seed';
 import { initEquipmentInfoSeed } from '../seeders/equipment_info.seed';
 import { initServiceSeed } from '../seeders/service.seed';
+import { initNewsSeed } from '../seeders/news.seed';
+import { initUserSeed } from '../seeders/user.seed';
 
 import AdminController from '../controllers/admin.controller';
 import log from '../tools/log';
@@ -145,11 +147,14 @@ const initDatabase = async () => {
         if (yn(config.database.insertInitData)) {
             await initAdminTypeSeed();
             await initUserTypeSeed();
+            await initUserSeed();
             await initWebInfoSeed();
             await initRoomSeed();
             await initRoomPictureSeed();
             await initEquipmentInfoSeed();
             await initServiceSeed();
+            await initNewsSeed();
+            
             await AdminController.createSuperAdmin();
         }
     } else {
