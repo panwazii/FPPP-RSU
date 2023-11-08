@@ -1,44 +1,36 @@
 <template>
   <main>
-    <section class="cards">
-      <div
-        class="card"
-        v-for="equipments in tool"
-        :key="equipments.id"
-        @click="$router.push('/equipment/' + equipments.id)"
-      >
-        <div class="card__image-container">
-          <img :src="equipments.picture" />
-        </div>
-        <div class="card__content">
-          <p class="card__title text--medium">
-            {{ equipments.name }}
-          </p>
-          <div class="card__info">
-            <p class="text--medium">30 Min</p>
-            <p class="card__price text--medium">Free</p>
-          </div>
+    <div class="card">
+      <div class="card__image-container">
+        <img :src="picture" />
+      </div>
+      <div class="card__content">
+        <p class="card__title text--medium">
+          {{ name }}
+        </p>
+        <div class="card__info">
+          <p class="text--medium">30 Min</p>
+          <p class="card__price text--medium">Free</p>
         </div>
       </div>
-    </section>
+    </div>
   </main>
 </template>
 
 <script>
 export default {
-  mounted() {
-    this.fetchrooms()
-  },
-  data() {
-    return {
-      tool: [],
-      image: require('@/static/img/index/clerk_man_mono.png'),
-    }
-  },
-  methods: {
-    async fetchrooms() {
-      let data = await this.$store.dispatch('api/public/getAllEquipmentInfo')
-      this.tool = data.equipments
+  props: {
+    picture: {
+      type: String,
+      default: () => '',
+    },
+    name: {
+      type: String,
+      default: () => '',
+    },
+    id: {
+      type: String,
+      default: () => '',
     },
   },
 }
