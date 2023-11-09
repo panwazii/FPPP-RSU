@@ -88,6 +88,9 @@
                       </v-autocomplete>
                     </v-col>
                     <v-col cols="12" sm="12">
+                      <v-img :src="equipmentDisplayImage" class="disimg" :contain="true"></v-img>
+                    </v-col>
+                    <v-col cols="12" sm="12">
                       <h4>ผู้ผลิต</h4>
                       <v-autocomplete
                         v-model="data.supplier_id"
@@ -146,8 +149,21 @@
         //   type: String,
       },
     },
+    async fetch() {
+      const getEquipment = await this.$store.dispatch('api/admin/getDropdownEquipmentInfo')
+      this.equipments = getEquipment.equipment
+      const getAllSupplier = await this.$store.dispatch('api/admin/getAllSupplier', {
+        params: {
+          limit: this.itemsPerPage,
+          page: this.page,
+        },
+      })
+      this.suppliers = getAllSupplier.supplier
+      this.totalPages = getAllSupplier.total_pages
+    },
     data() {
       return {
+        equipmentDisplayImage: null,
         confirmModal: false,
         confirmMessage: 'Confirm this change',
         loading: false,
@@ -157,15 +173,27 @@
       }
     },
     mounted() {
-      this.fetchSuppliers()
-      this.fetchEquipment()
+      
     },
-    watch: {
-      page() {
-        this.fetchSuppliers()
-        this.fetchEquipment()
+  computed: {
+    formWatched () {
+        return Object.assign({}, this.data)
+    }
+  },
+  watch: {
+    formWatched: {
+      handler(newValue, oldValue) {
+        if (newValue.supply_stock_id !== oldValue.supply_stock_id) {
+          this.equipments.forEach((equipment) => {
+            if (equipment.id === newValue.supply_stock_id) {
+              this.equipmentDisplayImage = equipment.picture
+            }
+          })
+        }
       },
+      deep: true,
     },
+  },
     methods: {
       confirm() {
         this.confirmModal = true
@@ -185,31 +213,9 @@
           this.$emit('update:editSupplyStock', false)
         }
       },
-      async fetchSuppliers() {
-        let Data = await this.$store.dispatch('api/admin/getAllSupplier', {
-          params: {
-            limit: this.itemsPerPage,
-            page: this.page,
-          },
-        })
-        console.log('this is supplier', Data)
-        this.suppliers = Data.supplier
-        this.totalPages = Data.total_pages
-      },
-      async fetchEquipment() {
-        let Data = await this.$store.dispatch('api/admin/getAllEquipmentInfo', {
-          params: {
-            limit: this.itemsPerPage,
-            page: this.page,
-          },
-        })
-        console.log('this is equipment', Data)
-        this.equipments = Data.equipments
-        this.totalPages = Data.total_pages
-      },
     },
   }
-  </script>
+</script>
   
 <style scoped>
 .itemimg{
@@ -218,6 +224,9 @@
   height: 40px;
   border-radius: 50%;
   margin-right: 10px;
+}
+.disimg {
+  max-height: 200px;
 }
 
 </style>

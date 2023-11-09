@@ -71,6 +71,9 @@
                       </v-autocomplete>
                     </v-col>
                     <v-col cols="12" sm="12">
+                      <v-img :src="roomDisplayImage" class="disimg" :contain="true"></v-img>
+                    </v-col>
+                    <v-col cols="12" sm="12">
                       <h4>วันที่</h4>
                       <v-date-picker
                         v-model="data.reservedate"
@@ -146,8 +149,21 @@
         //   type: String,
       },
     },
+    async fetch() {
+      const getRooms = await this.$store.dispatch('api/admin/getDropdownRoom')
+      this.rooms = getRooms.room
+      let getAllUsers = await this.$store.dispatch('api/admin/getAllUsers', {
+        params: {
+          limit: this.itemsPerPage,
+          page: this.page,
+        },
+      })
+      this.users = getAllUsers.users
+      this.totalPages = getAllUsers.total_pages
+    },
     data() {
       return {
+        roomDisplayImage: null,
         confirmModal: false,
         confirmMessage: 'Confirm this change',
         loading: false,
@@ -157,15 +173,27 @@
       }
     },
     mounted() {
-      this.fetchRooms()
-      this.fetchUsers()
+      
     },
-    watch: {
-      page() {
-        this.fetchRooms()
-        this.fetchUsers()
+  computed: {
+    formWatched () {
+        return Object.assign({}, this.data)
+    }
+  },
+  watch: {
+    formWatched: {
+      handler(newValue, oldValue) {
+        if (newValue.room_id !== oldValue.room_id) {
+          this.rooms.forEach((room) => {
+            if (room.id === newValue.room_id) {
+              this.roomDisplayImage = room.Picture[0].url
+            }
+          })
+        }
       },
+      deep: true,
     },
+  },
     methods: {
       confirm() {
         this.confirmModal = true
@@ -185,30 +213,9 @@
           this.$emit('update:editReserve', false)
         }
       },
-      async fetchRooms() {
-        let Data = await this.$store.dispatch('api/admin/getAllRooms', {
-          params: {
-            limit: this.itemsPerPage,
-            page: this.page,
-          },
-        })
-        console.log('this is room', Data)
-        this.rooms = Data.rooms
-        this.totalPages = Data.total_pages
-      },
-      async fetchUsers() {
-        let Data = await this.$store.dispatch('api/admin/getAllUsers', {
-          params: {
-            limit: this.itemsPerPage,
-            page: this.page,
-          },
-        })
-        this.users = Data.users
-        this.totalPages = Data.total_pages
-      },
     },
   }
-  </script>
+</script>
   
 <style scoped>
 .itemimg{
@@ -217,6 +224,9 @@
   height: 40px;
   border-radius: 50%;
   margin-right: 10px;
+}
+.disimg {
+  max-height: 200px;
 }
 
 </style>

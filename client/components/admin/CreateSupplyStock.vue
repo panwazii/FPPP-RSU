@@ -75,6 +75,9 @@
                       </v-autocomplete>
                     </v-col>
                     <v-col cols="12" sm="12">
+                      <v-img :src="equipmentDisplayImage" class="disimg" :contain="true"></v-img>
+                    </v-col>
+                    <v-col cols="12" sm="12">
                       <h4>ผู้ผลิต</h4>
                       <v-autocomplete
                         v-model="form.supplier_id"
@@ -129,8 +132,21 @@ export default {
       required: true,
     },
   },
+  async fetch() {
+    const getEquipment = await this.$store.dispatch('api/admin/getDropdownEquipmentInfo')
+    this.equipments = getEquipment.equipment
+    const getAllSupplier = await this.$store.dispatch('api/admin/getAllSupplier', {
+      params: {
+        limit: this.itemsPerPage,
+        page: this.page,
+      },
+    })
+    this.suppliers = getAllSupplier.supplier
+    this.totalPages = getAllSupplier.total_pages
+  },
   data() {
     return {
+      equipmentDisplayImage: null,
       form: {
         quantity: null,
         price: null,
@@ -151,13 +167,25 @@ export default {
     }
   },
   mounted() {
-    this.fetchSuppliers()
-    this.fetchEquipment()
+    
+  },
+  computed: {
+    formWatched () {
+        return Object.assign({}, this.form)
+    }
   },
   watch: {
-    page() {
-      this.fetchSuppliers()
-      this.fetchEquipment()
+    formWatched: {
+      handler(newValue, oldValue) {
+        if (newValue.supply_stock_id !== oldValue.supply_stock_id) {
+          this.equipments.forEach((equipment) => {
+            if (equipment.id === newValue.supply_stock_id) {
+              this.equipmentDisplayImage = equipment.picture
+            }
+          })
+        }
+      },
+      deep: true,
     },
   },
   methods: {
@@ -181,28 +209,6 @@ export default {
         this.$emit('update:createSupplyStock', false)
       }
     },
-    async fetchSuppliers() {
-      let Data = await this.$store.dispatch('api/admin/getAllSupplier', {
-        params: {
-          limit: this.itemsPerPage,
-          page: this.page,
-        },
-      })
-      console.log('this is supplier', Data)
-      this.suppliers = Data.supplier
-      this.totalPages = Data.total_pages
-    },
-    async fetchEquipment() {
-      let Data = await this.$store.dispatch('api/admin/getAllEquipmentInfo', {
-        params: {
-          limit: this.itemsPerPage,
-          page: this.page,
-        },
-      })
-      console.log('this is equipment', Data)
-      this.equipments = Data.equipments
-      this.totalPages = Data.total_pages
-    },
     clearForm() {
       this.form.quantity = null
       this.form.price = null
@@ -224,5 +230,7 @@ export default {
   border-radius: 50%;
   margin-right: 10px;
 }
-
+.disimg {
+  max-height: 200px;
+}
 </style>

@@ -15,6 +15,10 @@ export const actions = {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
         return await this.$axios.get('api/admin/getAllRooms', data).then((res) => res.data)
     },
+    async getDropdownRoom({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getDropdownRoom', data).then((res) => res.data)
+    },
     async getSingleRoom({ getters }, data) {
         return await this.$axios.get('api/admin/getSingleRoom', data).then((res) => res.data)
     },
@@ -33,6 +37,10 @@ export const actions = {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
         return await this.$axios.get('api/admin/getAllEquipmentInfo', data).then((res) => res.data)
     },
+    async getDropdownEquipmentInfo({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getDropdownEquipmentInfo', data).then((res) => res.data)
+    },
     async getAllEquipmentStock({ getters }, data) {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
         return await this.$axios.get('api/admin/getAllEquipmentStock', data).then((res) => res.data)
@@ -48,6 +56,10 @@ export const actions = {
     async getAllEquipmentRentRate({ getters }, data) {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
         return await this.$axios.get('api/admin/getAllEquipmentRentRate', data).then((res) => res.data)
+    },
+    async getDropdownRentRate({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getDropdownRentRate', data).then((res) => res.data)
     },
     async getSingleProductionLine({ getters }, data) {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))

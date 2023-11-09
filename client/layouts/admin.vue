@@ -151,19 +151,19 @@ export default {
         {
           id: 10,
           name: 'Manage Reserve',
-          icon: 'mdi-adjust',
+          icon: 'mdi-calendar-check',
           path: '/admin/manage-reserve',
         },
         {
           id: 11,
           name: 'Manage Supplier',
-          icon: 'mdi-adjust',
+          icon: 'mdi-briefcase-account-outline',
           path: '/admin/manage-supplier',
         },
         {
           id: 12,
           name: 'Manage Supply stock',
-          icon: 'mdi-adjust',
+          icon: 'mdi-warehouse',
           path: '/admin/manage-supplystock',
         },
       ],
