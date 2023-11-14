@@ -1,14 +1,16 @@
 <template>
   <div class="indexcard-container">
-    <div class="indexcard">
-      <div class="card-image">
-        <v-img :src="picture"> </v-img>
+    <a @click="$router.push('/room/' + id)">
+      <div class="indexcard">
+        <div class="card-image">
+          <v-img :src="picture"> </v-img>
+        </div>
+        <div class="card-title">{{ name }}</div>
+        <div class="card-text text-center">
+          {{ detail }}
+        </div>
       </div>
-      <div class="card-title">{{ name }}</div>
-      <div class="card-text text-center">
-        {{ detail }}
-      </div>
-    </div>
+    </a>
   </div>
 </template>
 
@@ -34,3 +36,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+a {
+  text-decoration: none;
+  color: black;
+}
+</style>

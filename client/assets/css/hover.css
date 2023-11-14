@@ -69,10 +69,11 @@
     padding: 10px;
 }
 .indexcard .card-image{
-    height: 150px;
-    width: 150px;
-    background-position: center center;
-    background-size: cover;    
+    height: 250px;
+    width: 250px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 .indexcard .card-title{
     padding: 20px 10px;
@@ -80,19 +81,10 @@
     text-transform: uppercase;
     text-shadow: 1px 0px 2px #262654;
 }
-.indexcard:nth-child(1) .card-image{
-    background-image: url(https://www.pswarehouse.com/images/product/Factory/Factory_38U155076154282.jpg);
-}
-.indexcard:nth-child(2) .card-image{
-    background-image: url(https://p2crires.cri.cn/yafei/p2/M00/A1/96/CqgNOl4A46iAbo6XAAAAAAAAAAA323.867x554.jpg);
-}
-.indexcard:nth-child(3) .card-image{
-    background-image: url(https://2.bp.blogspot.com/-yA52EC8QBFg/Wzr9R6TpgXI/AAAAAAAAADk/rib58Vkxstke4WojdkTYr1sO7D-eH5duwCLcBGAs/s1600/%25E0%25B8%25A3%25E0%25B8%25B9%25E0%25B8%259B%25E0%25B8%25A0%25E0%25B8%25B2%25E0%25B8%259E1.jpg);
-}
 .indexcard:hover{
-    background: #e84393;
+    background: #f49ac6;
     color: #fff;
-    box-shadow: 0px 0px 11px 5px #000000;
+
 
 }
 

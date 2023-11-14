@@ -45,6 +45,14 @@ export default {
 </script>
 
 <style scoped>
+main {
+  height: 100%;
+  width: 100%;
+  background-color: #ffffff;
+  background-repeat: no-repeat;
+  background-position: 100%;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;

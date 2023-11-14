@@ -3,17 +3,44 @@
     <!-- <h1>{{ $store.getters.getCartItems }}</h1>
     <v-btn @click="$store.dispatch('addCartItems', { id: 1, name: 'test1' })">cart add</v-btn>
     <v-btn @click="$store.dispatch('removeCartItems', 1)">cart remove</v-btn> -->
-    <v-parallax height="750" :src="require('~/static/img/index/index-bg.jpg')">
+    <v-parallax
+      class="rounded-lg"
+      height="750"
+      :src="require('~/static/img/index/index-bg.jpg')"
+    >
       <div
         class="d-flex flex-column fill-height justify-center align-center text-white"
       >
         <h1 class="text-h4 font-weight-bold mb-4 paralax-text"></h1>
       </div>
     </v-parallax>
-    <indexAbout />
+
+    <h1 class="text-h4 font-weight-bold d-flex justify-center mt-12">
+      ข่าวสาร
+    </h1>
+    <p class="d-flex justify-center text-center">ข่าวสารล่าสุดจากเว็บไซต์</p>
+    <div class="room1 justify-center">
+      <v-row class="justify-center">
+        <v-col
+          dense
+          v-for="(news, index) in datanew.slice(0, 3)"
+          :key="news.id"
+        >
+          <indexNewTest
+            :id="news.id"
+            :name="news.title"
+            :detail="news.details"
+          />
+        </v-col>
+      </v-row>
+      <v-row class="text-h4 font-weight-bold d-flex justify-center mt-12">
+        <a href="/room-selection" class="btn justify-center">SEE MORE</a>
+      </v-row>
+    </div>
+
     <indexService />
 
-    <h1 class="text-h4 font-weight-bold mb-4 d-flex justify-center">
+    <h1 class="text-h4 font-weight-bold mt-12 mb-4 d-flex justify-center">
       บริการจองห้อง
     </h1>
     <p class="mb-4 d-flex justify-center text-center">
@@ -43,29 +70,7 @@
     </div>
 
     <v-row class="text-h4 font-weight-bold d-flex justify-center mt-12">
-      <a href="/room-selection" class="btn justify-center">ROOMS</a>
-    </v-row>
-
-    <v-row class="mt-12">
-      <v-card width="800" class="mx-auto" outlined>
-        <v-container>
-          <v-row
-            dense
-            v-for="(news, index) in datanew.slice(0, 3)"
-            :key="news.id"
-          >
-            <indexNew
-              :id="news.id"
-              :title="news.title"
-              :details="news.details"
-            />
-          </v-row>
-
-          <v-row class="text-h4 font-weight-bold d-flex justify-center mb-1">
-            <a href="/room-selection" class="btn justify-center">NEWS</a>
-          </v-row>
-        </v-container>
-      </v-card>
+      <a href="/room-selection" class="btn justify-center">SEE MORE</a>
     </v-row>
 
     <div class="mt-15">
@@ -110,7 +115,7 @@ export default {
 .roomcenter {
   padding: 300px 260px;
   font-family: Tahoma (sans-serif);
-  font-size: 40px;
+  font-size: 30px;
   text-align: center;
   color: rgb(106, 95, 73);
   z-index: 1;
@@ -121,12 +126,13 @@ a {
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
-  background-color: rgb(58, 52, 52);
+  background-color: rgb(0, 0, 0);
   color: rgb(255, 255, 255);
   padding: 5px 20px;
   display: inline-block;
   letter-spacing: 2px;
   border-radius: 200px;
   justify-items: center;
+  font-size: 20px;
 }
 </style>

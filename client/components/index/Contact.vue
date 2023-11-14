@@ -63,16 +63,6 @@ export default {
 </script>
 
 <style scoped>
-section {
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #ffffff;
-  background-repeat: no-repeat;
-  background-position: 90%;
-}
 .container {
   width: 90%;
   max-width: 1000px;

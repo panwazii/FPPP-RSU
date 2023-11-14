@@ -110,9 +110,6 @@ export default {
   /* background-color: aqua; */
 }
 
-body {
-  background-color: white;
-}
 .wrapper {
   position: absolute;
   margin: auto;

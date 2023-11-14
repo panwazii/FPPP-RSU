@@ -6,7 +6,7 @@
       message="are you sure about that son ?"
       :confirmLogout.sync="logout_modal"
     />
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
@@ -35,11 +35,10 @@
           <h4>test</h4>
         </v-list-item>
         <v-list-item class="mt-2">
-          <!-- <v-icon class="mr-2">mdi-shield-account</v-icon> -->
-          <!-- <h4>Level : {{ getAdminLevel }}</h4> -->
+         
         </v-list-item>
       </v-list>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
     <v-main>
       <v-app-bar hide-on-scroll transparent fixed app :color="bg" elevation="3">
         <v-img
@@ -93,7 +92,6 @@
       <v-container>
         <Nuxt />
       </v-container>
-      
     </v-main>
 
     <v-footer class="pa-0" height="30">
