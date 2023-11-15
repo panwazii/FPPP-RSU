@@ -13,7 +13,7 @@ class RoomController {
                 id: roomId,
             },
             include: [{
-                model: RoomPictureModel, as: 'Picture'
+                model: RoomPictureModel, as: 'picture'
             }],
         });
     }
@@ -22,7 +22,7 @@ class RoomController {
         return RoomModel.findAndCountAll({
             distinct: true,
             include: [{
-                model: RoomPictureModel, as: 'Picture',
+                model: RoomPictureModel, as: 'picture',
             }],
             order: [["name", "ASC"]],
             limit,
@@ -35,7 +35,7 @@ class RoomController {
             distinct: true,
             where: { available_status: true },
             include: [{
-                model: RoomPictureModel, as: 'Picture',
+                model: RoomPictureModel, as: 'picture',
                 where: { available_status: true }
             }],
             order: [["name", "ASC"]],
@@ -95,7 +95,7 @@ class RoomController {
         return RoomModel.findAll({
             attributes: { include: ['id', 'name'] },
             include: [{
-                model: RoomPictureModel, as: 'Picture',
+                model: RoomPictureModel, as: 'picture',
                 where: { available_status: true }
             }],
         });

@@ -75,79 +75,12 @@ publicRouter.get('/getAllRooms', async (req, res) => {
     }
 });
 
-publicRouter.get('/getAllEquipment', async (req, res) => {
-    try {
-        const Limit = numberOrDefault(req.query.limit, 10);
-        let Page = numberOrDefault(req.query.page, 0);
-        if (Page != 0) {
-            Page = Page - 1
-        }
-        const Offset = Limit * Page;
-        EquipmentController.getAllEquipment(Limit, Offset).then((Data) => {
-            if (Data) {
-                res.status(200).json({
-                    code: 200, equipments: Data.rows, totalpages: Math.ceil(Data.count / Limit)
-                });
-            } else {
-                res.json(errorCode('ADMIN', 0));
-            }
-        });
-    } catch (error) {
-        res.status(401).json(error);
-    }
-});
-
-publicRouter.get('/getAllEquipmentByRoom', async (req, res) => {
-    try {
-        const id = req.query.id as string;
-        const Limit = numberOrDefault(req.query.limit, 10);
-        let Page = numberOrDefault(req.query.page, 0);
-        if (Page != 0) {
-            Page = Page - 1
-        }
-        const Offset = Limit * Page;
-        EquipmentController.getAllEquipmentByRoom(id, Limit, Offset).then((Data) => {
-            if (Data) {
-                res.status(200).json({
-                    code: 200, equip: Data.rows, totalpages: Math.ceil(Data.count / Limit)
-                });
-            } else {
-                res.json(errorCode('PUBLIC', 0));
-            }
-        });
-    } catch (error) {
-        res.status(401).json(error);
-    }
-});
-
-publicRouter.get('/getAllGlobalEquipment', async (req, res) => {
-    try {
-        const Limit = numberOrDefault(req.query.limit, 10);
-        let Page = numberOrDefault(req.query.page, 0);
-        if (Page != 0) {
-            Page = Page - 1
-        }
-        const Offset = Limit * Page;
-        EquipmentController.getAllGlobalEquipment(Limit, Offset).then((Data) => {
-            if (Data) {
-                res.status(200).json({
-                    code: 200, global_equipments: Data.rows, totalpages: Math.ceil(Data.count / Limit)
-                });
-            } else {
-                res.json(errorCode('ADMIN', 0));
-            }
-        });
-    } catch (error) {
-        res.status(401).json(error);
-    }
-});
-
 publicRouter.get('/getSingleRoom', async (req, res) => {
     try {
         const id = req.query.id as string;
         RoomController.getByID(id).then((Data) => {
             if (Data) {
-                res.status(200).json({ Data });
+                res.status(200).json({ code: 200, room: Data });
             } else {
                 res.json(errorCode('PUBLIC', 0));
             }
@@ -162,7 +95,7 @@ publicRouter.get('/getSingleNews', async (req, res) => {
         const id = req.query.id as string;
         NewsController.getByID(id).then((Data) => {
             if (Data) {
-                res.status(200).json({ Data });
+                res.status(200).json({ code: 200, news: Data });
             } else {
                 res.json(errorCode('PUBLIC', 0));
             }
@@ -200,7 +133,7 @@ publicRouter.get('/getSingleEquipmentInfo', async (req, res) => {
         const id = req.query.id as string;
         EquipmentController.getSingleEquipmentInfo(id).then((Data) => {
             if (Data) {
-                res.status(200).json({ Data });
+                res.status(200).json({ code: 200, equipment: Data });
             } else {
                 res.json(errorCode('PUBLIC', 0));
             }
@@ -265,7 +198,7 @@ publicRouter.get('/getAllService', (req, res) => {
         ServiceController.getAllShow(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, service: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                    code: 200, services: Data.rows, total_pages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -280,7 +213,7 @@ publicRouter.get('/getSingleWebInfo', async (req, res) => {
     try {
         WebInfoController.getByID("1").then((Data) => {
             if (Data) {
-                res.status(200).json({ Data });
+                res.status(200).json({ code: 200, web_info: Data });
             } else {
                 res.json(errorCode('PUBLIC', 0));
             }

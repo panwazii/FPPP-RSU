@@ -318,84 +318,7 @@ adminRouter.post('/updateRoom', authValid, (req, res) => {
 
 });
 
-adminRouter.post('/createEquipment', multerUpload.single("file"), authValid, async (req, res) => {
-    try {
-        const picture = req.file;
-        if (!req.body) {
-            res.json(errorCode('RES', 1));
-            return;
-        }
-        if (!picture) {
-            req.body.picture = 'https://www.charlotteathleticclub.com/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png';
-            EquipmentController.createEquipment(req.body).then((state) => {
-                if (state) {
-                    log("this is state", state)
-                    res.json({ code: 201, state });
-                } else {
-                    res.json(errorCode('CREATE', 2));
-                }
-            });
-        }
-        else {
-            let pictureUrl = await uploadSinglePicture(
-                picture.originalname,
-                picture.mimetype,
-                picture.buffer);
-            req.body.picture = pictureUrl
-
-            EquipmentController.createEquipment(req.body).then((state) => {
-                if (state) {
-                    log("this is state", state)
-                    res.json({ code: 201, state });
-                } else {
-                    res.json(errorCode('CREATE', 2));
-                }
-            });
-        }
-    } catch (error) {
-        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
-    }
-});
-
-adminRouter.post('/createGlobalEquipment', multerUpload.single("file"), authValid, async (req, res) => {
-    try {
-        const picture = req.file;
-        if (!req.body) {
-            res.json(errorCode('RES', 1));
-            return;
-        }
-        if (!picture) {
-            req.body.picture = 'https://www.charlotteathleticclub.com/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png';
-            EquipmentController.createGlobalEquipment(req.body).then((state) => {
-                if (state) {
-                    log("this is state", state)
-                    res.json({ code: 201, state });
-                } else {
-                    res.json(errorCode('CREATE', 2));
-                }
-            });
-        }
-        else {
-            let pictureUrl = await uploadSinglePicture(
-                picture.originalname,
-                picture.mimetype,
-                picture.buffer);
-            req.body.picture = pictureUrl
-
-            EquipmentController.createGlobalEquipment(req.body).then((state) => {
-                if (state) {
-                    log("this is state", state)
-                    res.json({ code: 201, state });
-                } else {
-                    res.json(errorCode('CREATE', 2));
-                }
-            });
-        }
-    } catch (error) {
-        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
-    }
-});
-
+// User
 adminRouter.post('/createUserType', authValid, (req, res) => {
     try {
         if (!req.body) {
@@ -436,83 +359,6 @@ adminRouter.post('/update/password', authValid, (req, res) => {
     });
 });
 
-adminRouter.post('/updateEquipment', multerUpload.single("file"), authValid, async (req, res) => {
-    try {
-        const picture = req.file;
-        const Data = req.body;
-
-        if (!Data) {
-            res.json(errorCode('update', 1));
-            return;
-        }
-
-        if (!picture) {
-            EquipmentController.updateEquipment(Data, false).then((result) => {
-                if (result) {
-                    res.json({ code: 200, result });
-                } else {
-                    res.json(errorCode('UPDATE', 2));
-                }
-            });
-        }
-        else {
-            let pictureUrl = await uploadSinglePicture(
-                picture.originalname,
-                picture.mimetype,
-                picture.buffer);
-            Data.picture = pictureUrl;
-            EquipmentController.updateEquipment(Data, false).then((result) => {
-                if (result) {
-                    res.json({ code: 200, result });
-                } else {
-                    res.json(errorCode('UPDATE', 2));
-                }
-            });
-        }
-    } catch (error) {
-        log(error)
-        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
-    }
-});
-
-adminRouter.post('/updateGlobalEquipment', multerUpload.single("file"), authValid, async (req, res) => {
-    try {
-        const picture = req.file;
-        const Data = req.body;
-
-        if (!Data) {
-            res.json(errorCode('update', 1));
-            return;
-        }
-
-        if (!picture) {
-            EquipmentController.updateEquipment(Data, true).then((result) => {
-                if (result) {
-                    res.json({ code: 200, result });
-                } else {
-                    res.json(errorCode('UPDATE', 2));
-                }
-            });
-        }
-        else {
-            let pictureUrl = await uploadSinglePicture(
-                picture.originalname,
-                picture.mimetype,
-                picture.buffer);
-            Data.picture = pictureUrl;
-            EquipmentController.updateEquipment(Data, true).then((result) => {
-                if (result) {
-                    res.json({ code: 200, result });
-                } else {
-                    res.json(errorCode('UPDATE', 2));
-                }
-            });
-        }
-    } catch (error) {
-        log(error)
-        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
-    }
-});
 
 adminRouter.post('/updateUserType', authValid, (req, res) => {
     try {
@@ -564,94 +410,6 @@ adminRouter.post('/updateUser', authValid, (req, res) => {
         console.log("error here");
 
         log(error)
-        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
-    }
-});
-
-
-
-adminRouter.get('/getAllEquipment', authValid, (req, res) => {
-    try {
-        const Limit = numberOrDefault(req.query.limit, 10);
-        let Page = numberOrDefault(req.query.page, 0);
-        if (Page != 0) {
-            Page = Page - 1
-        }
-        const Offset = Limit * Page;
-        EquipmentController.getAllEquipment(Limit, Offset).then((Data) => {
-            if (Data) {
-                res.status(200).json({
-                    code: 200, equipments: Data.rows, total_pages: Math.ceil(Data.count / Limit)
-                });
-            } else {
-                res.json(errorCode('ADMIN', 0));
-            }
-        });
-    } catch (error) {
-        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
-    }
-});
-
-adminRouter.get('/getAllGlobalEquipment', authValid, (req, res) => {
-    try {
-        const Limit = numberOrDefault(req.query.limit, 10);
-        let Page = numberOrDefault(req.query.page, 0);
-        if (Page != 0) {
-            Page = Page - 1
-        }
-        const Offset = Limit * Page;
-        EquipmentController.getAllGlobalEquipment(Limit, Offset).then((Data) => {
-            if (Data) {
-                res.status(200).json({
-                    code: 200, global_equipment: Data.rows, total_pages: Math.ceil(Data.count / Limit)
-                });
-            } else {
-                res.json(errorCode('ADMIN', 0));
-            }
-        });
-    } catch (error) {
-        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
-    }
-});
-
-adminRouter.get('/getSingleEquipment', (req, res) => {
-    try {
-        if (!req.query.id) {
-            res.json(errorCode('ADMIN', 1));
-            return;
-        }
-        const Id = req.query.id as string;
-        EquipmentController.getByID(Id, false).then((Data) => {
-            if (Data) {
-                res.status(200).json({
-                    code: 200, equipment: Data
-                });
-            } else {
-                res.json(errorCode('ADMIN', 0));
-            }
-        });
-    } catch (error) {
-        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
-    }
-});
-
-adminRouter.get('/getSingleGlobalEquipment', authValid, (req, res) => {
-    try {
-        if (!req.query.id) {
-            res.json(errorCode('ADMIN', 1));
-            return;
-        }
-        const Id = req.query.id as string;
-        EquipmentController.getByID(Id, true).then((Data) => {
-            if (Data) {
-                res.status(200).json({
-                    code: 200, global_equipment: Data
-                });
-            } else {
-                res.json(errorCode('ADMIN', 0));
-            }
-        });
-    } catch (error) {
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
@@ -897,7 +655,7 @@ adminRouter.get('/getSingleEquipmentStock', authValid, (req, res) => {
         EquipmentController.getSingleEquipmentStock(Id).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, equipmentStock: Data
+                    code: 200, equipment_stock: Data
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -919,7 +677,7 @@ adminRouter.get('/getAllEquipmentStock', (req, res) => {
         EquipmentController.getAllEquipmentStock(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, equipmentStock: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                    code: 200, equipment_stocks: Data.rows, total_pages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -986,7 +744,7 @@ adminRouter.get('/getSingleReserve', async (req, res) => {
         const id = req.query.id as string;
         ReserveController.getReserveByID(id).then((Data) => {
             if (Data) {
-                res.status(200).json({ Data });
+                res.status(200).json({ code: 200, reserve: Data });
             } else {
                 res.json(errorCode('ADMIN', 0));
             }
@@ -1007,7 +765,7 @@ adminRouter.get('/getAllReserve', (req, res) => {
         ReserveController.getAllReserveAndChild(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, reserve: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                    code: 200, reserves: Data.rows, total_pages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -1158,7 +916,7 @@ adminRouter.get('/getSingleService', async (req, res) => {
         const id = req.query.id as string;
         ServiceController.getByID(id).then((Data) => {
             if (Data) {
-                res.status(200).json({ Data });
+                res.status(200).json({ code: 200, service: Data });
             } else {
                 res.json(errorCode('ADMIN', 0));
             }
@@ -1179,7 +937,7 @@ adminRouter.get('/getAllService', (req, res) => {
         ServiceController.getAll(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, service: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                    code: 200, services: Data.rows, total_pages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -1258,7 +1016,7 @@ adminRouter.get('/getSingleProductionLine', async (req, res) => {
         const id = req.query.id as string;
         EquipmentController.getSingleEquipmentRentRate(id).then((Data) => {
             if (Data) {
-                res.status(200).json({ Data });
+                res.status(200).json({ code: 200, production_line: Data });
             } else {
                 res.json(errorCode('ADMIN', 0));
             }
@@ -1279,7 +1037,7 @@ adminRouter.get('/getAllProductionLine', (req, res) => {
         EquipmentController.getAllProductionLine(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, productionline: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                    code: 200, production_lines: Data.rows, total_pages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -1338,7 +1096,7 @@ adminRouter.get('/getSingleEquipmentRentRate', async (req, res) => {
         const id = req.query.id as string;
         EquipmentController.getSingleEquipmentRentRate(id).then((Data) => {
             if (Data) {
-                res.status(200).json({ Data });
+                res.status(200).json({ code: 200, equipment_rent_rate: Data });
             } else {
                 res.json(errorCode('ADMIN', 0));
             }
@@ -1359,7 +1117,7 @@ adminRouter.get('/getAllEquipmentRentRate', (req, res) => {
         EquipmentController.getAllEquipmentRentRate(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, rentrate: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                    code: 200, equipment_rent_rates: Data.rows, total_pages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -1417,7 +1175,7 @@ adminRouter.get('/getSingleSupplyStock', async (req, res) => {
         const id = Number(req.query.id);
         EquipmentController.getSingleSupplyStock(id).then((Data) => {
             if (Data) {
-                res.status(200).json({ Data });
+                res.status(200).json({ code: 200, supply_stock: Data });
             } else {
                 res.json(errorCode('ADMIN', 0));
             }
@@ -1438,7 +1196,7 @@ adminRouter.get('/getAllSupplyStock', (req, res) => {
         EquipmentController.getAllSupplyStock(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, supply: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                    code: 200, supply_stocks: Data.rows, total_pages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -1497,7 +1255,7 @@ adminRouter.get('/getSingleSupplier', async (req, res) => {
         const id = Number(req.query.id);
         EquipmentController.getSingleSupplier(id).then((Data) => {
             if (Data) {
-                res.status(200).json({ Data });
+                res.status(200).json({ code: 200, supplier: Data });
             } else {
                 res.json(errorCode('ADMIN', 0));
             }
@@ -1518,7 +1276,7 @@ adminRouter.get('/getAllSupplier', (req, res) => {
         EquipmentController.getAllSupplier(Limit, Offset).then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, supplier: Data.rows, total_pages: Math.ceil(Data.count / Limit)
+                    code: 200, suppliers: Data.rows, total_pages: Math.ceil(Data.count / Limit)
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -1577,7 +1335,7 @@ adminRouter.get('/getDropdownRentRate', (req, res) => {
         EquipmentController.getDropdownRentRate().then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, rentrate: Data,
+                    code: 200, equipment_rent_rates: Data,
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -1593,7 +1351,7 @@ adminRouter.get('/getDropdownProductionLine', (req, res) => {
         EquipmentController.getDropdownProductionLine().then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, productionline: Data,
+                    code: 200, production_lines: Data,
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -1609,7 +1367,7 @@ adminRouter.get('/getDropdownEquipmentInfo', (req, res) => {
         EquipmentController.getDropdownEquipmentInfo().then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, equipment: Data,
+                    code: 200, equipments: Data,
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));
@@ -1625,7 +1383,7 @@ adminRouter.get('/getDropdownRoom', (req, res) => {
         RoomController.getDropdownRoom().then((Data) => {
             if (Data) {
                 res.status(200).json({
-                    code: 200, room: Data,
+                    code: 200, rooms: Data,
                 });
             } else {
                 res.json(errorCode('ADMIN', 0));

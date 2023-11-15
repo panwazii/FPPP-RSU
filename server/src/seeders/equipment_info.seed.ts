@@ -1,8 +1,9 @@
+import { v4 } from "uuid";
 import EquipmentInfoModel, {EquipmentInfoAttribute} from "../database/models/equipment_infos.model";
-import { uuid } from 'uuidv4';
+
 const entries: EquipmentInfoAttribute[] = [
     {
-        id: uuid(),
+        id: v4(),
         name: 'Can seamer',
         details: 'อุปกรณ์',
         average_price: 2000,
@@ -13,7 +14,7 @@ const entries: EquipmentInfoAttribute[] = [
         available_status: true,
     },
     {
-        id: uuid(),
+        id: v4(),
         name: 'Pin mill',
         details: 'อุปกรณ์',
         average_price: 2500,
@@ -24,7 +25,7 @@ const entries: EquipmentInfoAttribute[] = [
         available_status: true,
     },
     {
-        id: uuid(),
+        id: v4(),
         name: 'Pasta maker',
         details: 'อุปกรณ์',
         average_price: 3000,

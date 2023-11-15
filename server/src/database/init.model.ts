@@ -104,17 +104,17 @@ const initDatabase = async () => {
     RoomModel.hasMany(EquipmentModel, { foreignKey: 'room_id' });
     EquipmentModel.belongsTo(RoomModel, { foreignKey: 'room_id' });
 
-    RoomModel.hasMany(RoomPictureModel, { as: 'Picture', foreignKey: 'room_id' });
-    RoomPictureModel.belongsTo(RoomModel, { as: 'Picture', foreignKey: 'room_id' });
+    RoomModel.hasMany(RoomPictureModel, { as: 'picture', foreignKey: 'room_id' });
+    RoomPictureModel.belongsTo(RoomModel, { as: 'picture', foreignKey: 'room_id' });
 
     RoomModel.hasMany(EquipmentModel, { foreignKey: 'room_id' });
     EquipmentModel.belongsTo(RoomModel, { foreignKey: 'room_id' });
 
-    ProductionLineModel.hasMany(EquipmentInfoModel, { as: 'Equipments', foreignKey: 'production_line_id' });
-    EquipmentInfoModel.belongsTo(ProductionLineModel, { as: 'Equipments', foreignKey: 'production_line_id' });
+    ProductionLineModel.hasMany(EquipmentInfoModel, { as: 'equipments', foreignKey: 'production_line_id' });
+    EquipmentInfoModel.belongsTo(ProductionLineModel, { as: 'equipments', foreignKey: 'production_line_id' });
 
-    EquipmentInfoModel.hasMany(EquipmentStockModel, { as: 'Stock', foreignKey: 'equipment_info_id' });
-    EquipmentStockModel.belongsTo(EquipmentInfoModel, { as: 'Stock', foreignKey: 'equipment_info_id' });
+    EquipmentInfoModel.hasMany(EquipmentStockModel, { as: 'stock', foreignKey: 'equipment_info_id' });
+    EquipmentStockModel.belongsTo(EquipmentInfoModel, { as: 'stock', foreignKey: 'equipment_info_id' });
 
     EquipmentRentRateModel.hasMany(EquipmentInfoModel, { foreignKey: 'equipment_rent_rate_id' });
     EquipmentInfoModel.belongsTo(EquipmentRentRateModel, { foreignKey: 'equipment_rent_rate_id' });
