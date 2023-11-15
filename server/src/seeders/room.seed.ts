@@ -1,5 +1,5 @@
 import RoomModel, {RoomAttribute} from "../database/models/rooms.model";
-import { uuid } from 'uuidv4';
+
 const entries: RoomAttribute[] = [
     {
         id: '06bddb33-7e5a-476a-942c-cce5cd87f980',
