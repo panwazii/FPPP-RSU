@@ -160,6 +160,11 @@
       })
       this.users = getAllUsers.users
       this.totalPages = getAllUsers.total_pages
+      this.rooms.forEach((room) => {
+        if (room.id === this.data.room_id) {
+          this.roomDisplayImage = room.Picture[0].url
+        }
+      })
     },
     data() {
       return {

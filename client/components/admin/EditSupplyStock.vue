@@ -160,6 +160,11 @@
       })
       this.suppliers = getAllSupplier.supplier
       this.totalPages = getAllSupplier.total_pages
+      this.equipments.forEach((equipment) => {
+        if (equipment.id === this.data.equipment_info_id) {
+          this.equipmentDisplayImage = equipment.picture
+        }
+      })
     },
     data() {
       return {

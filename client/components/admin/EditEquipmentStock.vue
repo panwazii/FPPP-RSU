@@ -20,6 +20,9 @@
           <v-icon justify="left" class="mr-3" size="50">mdi-pencil</v-icon>
           Edit EquipmentStock
         </v-card-title>
+        {{ data }}
+        <hr>
+        {{equipments}}
         <v-divider class="mb-3"></v-divider>
         <v-card-text>
           <v-row class="d-flex justify-center mt-3">
@@ -170,16 +173,31 @@ export default {
     const getRooms = await this.$store.dispatch('api/admin/getDropdownRoom')
     // console.log(getRooms);
     this.rooms = getRooms.room
-    const getEquipment = await this.$store.dispatch('api/admin/getDropdownEquipmentInfo')
+    const getEquipment = await this.$store.dispatch(
+      'api/admin/getDropdownEquipmentInfo'
+    )
     this.equipments = getEquipment.equipment
-    const getAllSupplier = await this.$store.dispatch('api/admin/getAllSupplier', {
-      params: {
-        limit: this.itemsPerPage,
-        page: this.page,
-      },
-    })
+    const getAllSupplier = await this.$store.dispatch(
+      'api/admin/getAllSupplier',
+      {
+        params: {
+          limit: this.itemsPerPage,
+          page: this.page,
+        },
+      }
+    )
     this.suppliers = getAllSupplier.supplier
     this.totalPages = getAllSupplier.total_pages
+    this.equipments.forEach((equipment) => {
+      if (equipment.id === this.data.equipment_info_id) {
+        this.equipmentDisplayImage = equipment.picture
+      }
+    })
+    this.rooms.forEach((room) => {
+      if (room.id === this.data.room_id) {
+        this.roomDisplayImage = room.Picture[0].url
+      }
+    })
   },
   data() {
     return {
@@ -195,20 +213,19 @@ export default {
     }
   },
   async mounted() {
-    try {
-      this.equipments.forEach((equipment) => {
-        if (equipment.id === data.supply_stock_id) {
-          console.log('hi')
-          this.equipmentDisplayImage = equipment.picture
-        }
-      })
-    } catch (error) {
-      console.log('error', error)
-    }
+    
   },
   computed: {
     formWatched() {
       return Object.assign({}, this.data)
+    },
+    getRoomPicture() {
+      this.rooms.forEach((room) => {
+        if (room.id === data.room_id) {
+          console.log('this is room',room);
+          return room.Picture[0].url
+        }
+      })
     },
   },
   watch: {
