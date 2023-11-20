@@ -33,11 +33,6 @@ class UserTypeController {
         };
 
         return UserTypeModel.create(packet)
-            .then(() => true)
-            .catch((e) => {
-                log(e);
-                return false;
-            });
     }
 
     public static async update(data: any) {
@@ -47,8 +42,7 @@ class UserTypeController {
             where: {
                 id: data.id,
             },
-        }).then(() => true)
-            .catch(() => false);
+        })
     }
 
 }

@@ -2,12 +2,16 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '../config/global.config';
 import { log } from 'console';
+import { createErrCodeJSON, createUnknownErrCodeJSON, HttpStatusCode } from '../tools/lib';
+
+const errorCode = createErrCodeJSON();
+const unknownErrorCode = createUnknownErrCodeJSON()
 
 export const authValid = (req: Request, res: Response, next: NextFunction) => {
     try {
         const Token = req.headers.authorization;
         if (Token === null) {
-            return res.status(403).json({ code: 403, desc: 'unauthorized' });
+            return res.status(200).json(errorCode(HttpStatusCode.UNAUTHORIZED, 'TOKEN', 'NOTFOUND'));
         }
 
         if (Token !== 'undefined') {
@@ -16,7 +20,7 @@ export const authValid = (req: Request, res: Response, next: NextFunction) => {
             next();
         }
     } catch (error) {
-        res.status(403).json({ code: 403, desc: 'unknow error' });
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 
 };

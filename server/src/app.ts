@@ -9,7 +9,6 @@ import adminRouter from './routes/admin.route';
 import publicRouter from './routes/public.route';
 import userRouter from './routes/user.route';
 import utilRouter from './routes/util.route';
-import testRouter from './routes/test.route';
 import log from './tools/log';
 
 const corsOptions = {
@@ -25,7 +24,6 @@ initDatabase().then(() => {
     router.use('/api/public', publicRouter);
     router.use('/api/user', userRouter);
     router.use('/api/util', utilRouter);
-    router.use('/api/test', testRouter);
     router.get('/', ((req, res) => {
         res.json('Hello from server!!!');
     }));

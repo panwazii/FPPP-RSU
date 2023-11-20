@@ -59,13 +59,6 @@ class ReserveController {
             available_status: true,
         };
         return ReserveModel.create(packet)
-            .then((data) => {
-                return { state: true, id: data.id }
-
-            })
-            .catch((e) => {
-                return { state: false, id: null };
-            });
     }
 
     public static async update(data: any) {
@@ -79,8 +72,7 @@ class ReserveController {
             where: {
                 id: data.id,
             },
-        }).then(() => true)
-            .catch(() => false);
+        })
     }
 
     // reserve equipment
@@ -112,11 +104,6 @@ class ReserveController {
         };
 
         return ReserveEquipmentModel.create(packet)
-            .then(() => true)
-            .catch((e) => {
-                log(e);
-                return false;
-            });
     }
 
     public static async updateReserveEquipment(data: any) {
@@ -128,8 +115,7 @@ class ReserveController {
             where: {
                 id: data.id,
             },
-        }).then(() => true)
-            .catch(() => false);
+        })
     }
 }
 

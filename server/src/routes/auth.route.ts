@@ -1,18 +1,20 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import { createErrCodeJSON } from '../tools/lib';
+import { createErrCodeJSON, createUnknownErrCodeJSON, HttpStatusCode } from '../tools/lib';
 import UserController from '../controllers/user.controller';
 import AdminController from '../controllers/admin.controller';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
 const authRouter: express.Router = express.Router();
-const errorCode = createErrCodeJSON('AUTH');
+
+const errorCode = createErrCodeJSON();
+const unknownErrorCode = createUnknownErrCodeJSON()
 
 authRouter.post('/admin/login', async (req, res) => {
   try {
     if (!req.body) {
-      res.status(401).json(errorCode('LOGIN', 0));
+      res.status(200).json(errorCode(HttpStatusCode.UNAUTHORIZED, 'BODY', 'EMPTY'));
       return;
     }
     const { email, password } = req.body;
@@ -35,11 +37,11 @@ authRouter.post('/admin/login', async (req, res) => {
     }
 
     if (!email || email.length === 0) {
-      res.status(401).json(errorCode('LOGIN', 1));
+      res.status(200).json(errorCode(HttpStatusCode.UNAUTHORIZED, 'EMAIL', 'EMPTY'));
       return;
     }
     if (!password || password.length === 0) {
-      res.status(401).json(errorCode('LOGIN', 2));
+      res.status(200).json(errorCode(HttpStatusCode.UNAUTHORIZED, 'PASSWORD', 'EMPTY'));
       return;
     }
 
@@ -115,7 +117,7 @@ authRouter.post('/user/register', async (req, res) => {
 authRouter.post('/user/login', async (req, res) => {
   try {
     if (!req.body) {
-      res.status(401).json(errorCode('LOGIN', 0));
+      res.status(401).json(errorCode(HttpStatusCode.UNAUTHORIZED, 'BODY', 'EMPTY'));
       return;
     }
     const { email, password } = req.body;
@@ -138,11 +140,11 @@ authRouter.post('/user/login', async (req, res) => {
     }
 
     if (!email || email.length === 0) {
-      res.status(401).json(errorCode('LOGIN', 1));
+      res.status(200).json(errorCode(HttpStatusCode.UNAUTHORIZED, 'EMAIL', 'EMPTY'));
       return;
     }
     if (!password || password.length === 0) {
-      res.status(401).json(errorCode('LOGIN', 2));
+      res.status(200).json(errorCode(HttpStatusCode.UNAUTHORIZED, 'PASSWORD', 'EMPTY'));
       return;
     }
 

@@ -164,8 +164,7 @@ class UserController {
                 where: {
                     id: data.id,
                 },
-            }).then(() => true)
-            .catch(() => false);
+            })
     }
 
     public static async resetPassword(userID: string, oldPass: string, newPass: string) {

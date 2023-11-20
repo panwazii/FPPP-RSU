@@ -1,5 +1,5 @@
 import express from 'express';
-import { createErrCodeJSON } from '../tools/lib';
+import { createErrCodeJSON, createUnknownErrCodeJSON, HttpStatusCode } from '../tools/lib';
 import log from '../tools/log';
 import UserController from '../controllers/user.controller';
 import { authValid } from '../middleware/user.middleware';
@@ -8,39 +8,35 @@ import ReserveController from '../controllers/reserve.controller';
 import ServiceController from '../controllers/service.controller';
 
 const userRouter: express.Router = express.Router();
-const errorCode = createErrCodeJSON('USER');
+const errorCode = createErrCodeJSON();
+const unknownErrorCode = createUnknownErrCodeJSON()
 
 userRouter.get('/getUserInfo', authValid, async (req, res) => {
     try {
         const UserId = req.body.credentials.id;
-        UserController.getByID(UserId).then((user) => {
-            if (user) {
-                res.status(200).json({
-                    code: 200, user: {
-                        id: user.id,
-                        type_id: user.type_id,
-                        fname: user.fname,
-                        lname: user.lname,
-                        email: user.email,
-                        tel: user.tel,
-                        avatar: user.avatar,
-                        created_at: user.created_at,
-                        update_at: user.update_at
-                    }
-                });
-            } else {
-                res.json(errorCode('USER', 0));
+        const userInfo = await UserController.getByID(UserId)
+        res.status(200).json({
+            code: 200, user: {
+                id: userInfo!.id,
+                type_id: userInfo!.type_id,
+                fname: userInfo!.fname,
+                lname: userInfo!.lname,
+                email: userInfo!.email,
+                tel: userInfo!.tel,
+                avatar: userInfo!.avatar,
+                created_at: userInfo!.created_at,
+                update_at: userInfo!.update_at
             }
         });
     } catch (error) {
-        res.status(401).json(error);
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
 
 
 userRouter.post('/register', async (req, res) => {
     if (!req.body) {
-        res.json(errorCode('RES', 1));
+        res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
         return;
     }
 
@@ -61,10 +57,8 @@ userRouter.post('/register', async (req, res) => {
         UserController.register(req.body).then((state) => {
             res.json({ code: 200, state });
         });
-        log('Successful');
-    } catch (e) {
-        log(e);
-        res.json(errorCode('RES', 3));
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
 
@@ -90,23 +84,28 @@ userRouter.post('/register', async (req, res) => {
 // });
 
 userRouter.post('/update/password', authValid, (req, res) => {
-    if (!req.body) {
-        res.json(errorCode('pass', 0));
-        return;
-    }
-    const { user_id, old_pass, new_pass } = req.body;
-    if (!user_id || !old_pass || !new_pass) {
-        res.json(errorCode('pass', 1));
-        return;
+    try {
+        if (!req.body) {
+            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
+            return;
+        }
+        const { user_id, old_pass, new_pass } = req.body;
+        if (!user_id || !old_pass || !new_pass) {
+            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'ALLPASSWORD', 'REQUIRED'));
+            return;
+        }
+
+        UserController.resetPassword(user_id, old_pass, new_pass).then((state) => {
+            if (state) {
+                res.json({ code: 200, state });
+            } else {
+                res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'PASSWORD', 'MISMATCH'));
+            }
+        });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 
-    UserController.resetPassword(user_id, old_pass, new_pass).then((state) => {
-        if (state) {
-            res.json({ code: 200, state });
-        } else {
-            res.json(errorCode('pass', 2));
-        }
-    });
 });
 
 // userRouter.post('/destroy', authValid, adminOnly, (req, res) => {
@@ -129,28 +128,27 @@ userRouter.post('/update/password', authValid, (req, res) => {
 //     });
 // });
 
-userRouter.post('/createReserve', (req, res) => {
+userRouter.post('/createReserve', async (req, res) => {
     try {
         if (!req.body) {
-            res.json(errorCode('RES', 1));
+            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
             return;
         }
 
-        ReserveController.createReserve(req.body).then((data) => {
-            if (data.state) {
-                ReserveController.createReserveEquipment(data.id, req.body)
-                res.json({ code: 200, data });
-            } else {
-                res.json(errorCode('CREATE', 2));
-            }
-        });
+        const newReserve = await ReserveController.createReserve(req.body)
+        if (newReserve) {
+            ReserveController.createReserveEquipment(newReserve.id, req.body)
+            res.json({ code: 200 });
+        } else {
+            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'RESERVE', 'ERROR'));
+        }
     } catch (error) {
-        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 
 });
 
-userRouter.get('/getAllReserve', (req, res) => {
+userRouter.get('/getAllReserve', async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
@@ -158,17 +156,12 @@ userRouter.get('/getAllReserve', (req, res) => {
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        ReserveController.getAllReserveAndChildForUser(req.query.id as string, Limit, Offset).then((Data) => {
-            if (Data) {
-                res.status(200).json({
-                    code: 200, reserve: Data.rows, total_pages: Math.ceil(Data.count / Limit)
-                });
-            } else {
-                res.json(errorCode('USER', 0));
-            }
+        const allReserve = await ReserveController.getAllReserveAndChildForUser(req.query.id as string, Limit, Offset)
+        res.status(200).json({
+            code: 200, reserve: allReserve.rows, total_pages: Math.ceil(allReserve.count / Limit)
         });
     } catch (error) {
-        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
 

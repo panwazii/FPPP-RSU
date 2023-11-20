@@ -78,11 +78,6 @@ class EquipmentController {
         };
 
         return EquipmentInfoModel.create(packet)
-            .then(() => true)
-            .catch((e) => {
-                log(e);
-                return false;
-            });
     }
 
     public static async updateEquipmentInfo(data: any) {
@@ -131,11 +126,6 @@ class EquipmentController {
         };
 
         return EquipmentStockModel.create(packet)
-            .then(() => true)
-            .catch((e) => {
-                log(e);
-                return false;
-            });
     }
 
     public static async updateEquipmentStock(data: any) {
@@ -174,11 +164,6 @@ class EquipmentController {
         };
 
         return EquipmentRentRateModel.create(packet)
-            .then(() => true)
-            .catch((e) => {
-                log(e);
-                return false;
-            });
     }
 
     public static async updateEquipmentRentRate(data: any) {
@@ -214,11 +199,6 @@ class EquipmentController {
         };
 
         return ProductionLineModel.create(packet)
-            .then(() => true)
-            .catch((e) => {
-                log(e);
-                return false;
-            });
     }
 
     public static async updateProductionLine(data: any) {
@@ -260,11 +240,6 @@ class EquipmentController {
         };
 
         return SupplyStockModel.create(packet)
-            .then(() => true)
-            .catch((e) => {
-                log(e);
-                return false;
-            });
     }
 
     public static async updateSupplyStock(data: any) {
@@ -307,11 +282,6 @@ class EquipmentController {
         };
 
         return SupplierModel.create(packet)
-            .then(() => true)
-            .catch((e) => {
-                log(e);
-                return false;
-            });
     }
 
     public static async updateSupplier(data: any) {

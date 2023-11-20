@@ -53,13 +53,6 @@ class RoomController {
         };
 
         return RoomModel.create(packet)
-            .then((data) => {
-                return { state: true, id: data.id }
-            })
-            .catch((e) => {
-                log(e);
-                return { state: false, id: null };
-            });
     }
 
     public static async update(data: any) {
@@ -83,11 +76,6 @@ class RoomController {
         };
 
         return RoomPictureModel.create(packet)
-            .then(() => true)
-            .catch((e) => {
-                log(e);
-                return false;
-            });
     }
 
     // Drop down

@@ -44,11 +44,6 @@ class ServiceController {
         };
 
         return ServiceModel.create(packet)
-            .then(() => true)
-            .catch((e) => {
-                log(e);
-                return false;
-            });
     }
 
     public static async update(data: any) {
@@ -62,8 +57,7 @@ class ServiceController {
             where: {
                 id: data.id,
             },
-        }).then(() => true)
-            .catch(() => false);
+        })
     }
 
 }

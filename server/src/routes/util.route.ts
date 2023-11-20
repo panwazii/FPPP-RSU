@@ -4,7 +4,7 @@ import path from 'path';
 import { Admin } from '../service/firebase'
 import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
-import { createErrCodeJSON } from '../tools/lib';
+import { createErrCodeJSON, createUnknownErrCodeJSON, HttpStatusCode } from '../tools/lib';
 // import { corsAllow } from '../middleware/user.middleware';
 import config from '../config/global.config';
 import log from '../tools/log';
@@ -12,13 +12,14 @@ import { uploadSinglePicture } from '../tools/util';
 
 const utilRouter: express.Router = express.Router();
 const multerUpload = multer();
-const errorCode = createErrCodeJSON('UTIL');
+const errorCode = createErrCodeJSON();
+const unknownErrorCode = createUnknownErrCodeJSON()
 
 utilRouter.post('/uploadSinglePicture',multerUpload.single("file"), async (req, res) => {
     try {
         const picture = req.file
         if (!picture) {
-            res.json(errorCode('UPLOAD DONT HAVE FILE', 0));
+            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'FILE', 'REQUIRED'));
         }
         else {
             let pictureUrl = await uploadSinglePicture(
@@ -29,7 +30,7 @@ utilRouter.post('/uploadSinglePicture',multerUpload.single("file"), async (req, 
         }
 
     } catch (error) {
-        res.status(401).json(error);
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
 // utilRouter.post('/upload/image', multerUpload.single('image'), async (req, res) => {
