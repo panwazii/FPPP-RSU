@@ -60,16 +60,13 @@
       <div class="card">
         <v-card class="cardinfo">
           <div class="cardcontainer">
-            <v-img :src="room[0].Picture[0].url" cover class="img"> </v-img>
-
             <v-card-text>
               <div>
-                <span class="h1">{{ room[0].name }}</span>
                 <!-- <span class="right h1">{{ equipment.name }}</span> -->
               </div>
               <div class="mt-5">
                 <h2>
-                  {{ room[0].details }}
+                  {{ room }}
                 </h2>
               </div>
             </v-card-text>

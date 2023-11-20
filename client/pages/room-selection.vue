@@ -6,7 +6,7 @@
         <v-col v-for="(rooms, index) in room" :key="rooms.name">
           <indexRoomList
             :id="rooms.id"
-            :picture="rooms.Picture[0].url"
+            :picture="rooms.picture[0].url"
             :name="rooms.name"
             :detail="rooms.details"
           />

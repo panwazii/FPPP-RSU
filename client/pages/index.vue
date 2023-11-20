@@ -61,7 +61,7 @@
         <v-col v-for="(rooms, index) in room.slice(0, 3)" :key="rooms.name">
           <indexAboutUs
             :id="rooms.id"
-            :picture="rooms.Picture[0].url"
+            :picture="rooms.picture[0].url"
             :name="rooms.name"
             :detail="rooms.details"
           />

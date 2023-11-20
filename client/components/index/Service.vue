@@ -12,11 +12,7 @@
         >
       </div>
       <v-window v-model="onboarding" show-arrows class="d-flex justify-center">
-        <v-window-item
-          v-for="item in allServices"
-          :key="item.id"
-          :src="item.picture"
-        >
+        <v-window-item v-for="(item, index) in allServices" :key="item.id">
           <v-card
             elevation="2"
             height="460"
