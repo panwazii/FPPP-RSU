@@ -101,7 +101,7 @@ export const actions = {
     async fetchUser({ commit }) {
         let Response = await this.$axios.get('/api/user/getUserInfo')
         console.log("this is fech user", Response.data);
-        if (!Response.data.admin) {
+        if (!Response.data.user) {
             await dispatch('logout')
             redirect('/')
         }
@@ -139,7 +139,6 @@ export const actions = {
         commit('setPathName', pathName)
     },
     addCartItems({ commit }, item) {
-        this 
         commit('setCartItems', item)
     },
     removeCartItems({ commit }, item) {
