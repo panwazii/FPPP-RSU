@@ -1,6 +1,6 @@
 <template>
   <div class="icard-container">
-    <a @click="$router.push('/news/' + id)">
+    <a @click="$router.push('/new/' + id)">
       <div class="icard">
         <div class="card-title line-clamp">{{ name }}</div>
         <div class="card-text text-left desc">
@@ -38,6 +38,10 @@ export default {
 a {
   text-decoration: none;
   color: black;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 .line-clamp {

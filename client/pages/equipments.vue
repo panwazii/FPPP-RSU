@@ -1,5 +1,8 @@
 <template>
   <main>
+    <h1 class="text-h4 font-weight-bold d-flex justify-center mt-12">
+      รายการอุปกรณ์
+    </h1>
     <section class="cards">
       <div
         class="card"
@@ -15,8 +18,8 @@
             {{ equipments.name }}
           </p>
           <div class="card__info">
-            <p class="text--medium">30 Min</p>
-            <p class="card__price text--medium">Free</p>
+            <p class="text--medium">ราคา</p>
+            <p class="card__price text--medium">{{ equipments.rent_price }}</p>
           </div>
         </div>
       </div>

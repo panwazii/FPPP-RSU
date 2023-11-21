@@ -61,9 +61,10 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 4px;
+    border-radius: 10px;
     padding: 20px;
     transition: all .3s ease-in;
+    border: 2px solid rgb(0, 0, 0);
 }
 .indexcard > *{
     padding: 10px;
@@ -91,6 +92,7 @@
 .indexcard .card-text{
     line-height: 20px;
     font-size: 400;
+    font-weight: 700;
 }
 
 .indexbanner-bg {

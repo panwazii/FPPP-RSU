@@ -2,15 +2,15 @@
   <body>
     <div>
       <div>
-        <v-row class="justify-center"><h1 class="left">SERVICE</h1></v-row>
+        <v-row class="justify-center"><h1 class="left">บริการของเรา</h1></v-row>
         <v-row class="justify-center"
           ><p class="left">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia
-            assumenda dolore reprehenderit ullam blanditiis ex sapiente pariatur
-            tempore incidunt facilis?
+            ทางเรามีบริการเยอะแยะมากมายทั้ง การจองห้อง การผลิต และการรับคำปรึกษา
+            ผู้ใช้งานเว็บไซต์สามารถติดต่อทางเราเพื่อรับบริการเหล่านี้ได้เลย
           </p></v-row
         >
       </div>
+
       <v-window v-model="onboarding" show-arrows class="d-flex justify-center">
         <v-window-item v-for="(item, index) in allServices" :key="item.id">
           <v-card
@@ -86,7 +86,7 @@ export default {
         },
       })
       console.log('this is equipment', Data)
-      this.allServices = Data.service
+      this.allServices = Data.services
       this.totalPages = Data.total_pages
     },
   },

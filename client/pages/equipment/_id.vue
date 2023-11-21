@@ -1,31 +1,37 @@
 <template>
   <div>
     <section>
-      <div class="card">
-        <v-card class="cardinfo">
-          <div class="cardcontainer">
-            <v-img :src="equipment.picture" cover class="img"> </v-img>
-
-            <v-card-text>
-              <div>
-                <span class="h1">{{ equipment.name }}</span>
-                <!-- <span class="right h1">{{ equipment.name }}</span> -->
-              </div>
-              <div class="mt-5">
-                <h2>
-                  {{ equipment.details }}
-                </h2>
-              </div>
-            </v-card-text>
-
-            <v-btn class="rounded-xl mt-12 mx-2" width="300" color="yellow">
-              <h1 class="textcategory">CATEGORIES</h1></v-btn
-            >
-            <v-btn class="right mt-12 mx-12" width="500" color="#6A5F49">
-              <h1 class="text">ADD TO CART</h1></v-btn
-            >
+      <div class="grid">
+        <header class="page-header content-header">
+          <H3
+            >CATEGORIES / <a href="">{{ equipmentInfo.type }}</a></H3
+          >
+        </header>
+        <footer class="page-footer content-footer">
+          <div class="box footerHeader"><H1>คุณสมบัติ</H1></div>
+          <div>
+            <h3 class="footerHeader">รายละเอียด {{ equipmentInfo.details }}</h3>
+            <h3 class="footerHeader">ชนิด {{ equipmentInfo.type }}</h3>
           </div>
-        </v-card>
+        </footer>
+        <div class="page-leftbar content-left">
+          <H1>{{ equipmentInfo.name }}</H1>
+          <img class="centerimg" :src="equipmentInfo.picture" />
+        </div>
+        <div class="page-main content-main">
+          <H3>{{ equipmentInfo.name }}</H3>
+          <div class="box">
+            <h2>จำนวน {{ equipmentInfo.quantity }}</h2>
+          </div>
+          <div id="textbox">
+            <p class="alignleft">ราคา</p>
+            <p class="aligncenter">{{ equipmentInfo.rent_price }}</p>
+            <p class="alignright">บาท</p>
+          </div>
+          <v-divider></v-divider>
+          <button class="button-28" role="button">จองเลย</button>
+          <v-divider class="mt-5"></v-divider>
+        </div>
       </div>
     </section>
   </div>
@@ -51,12 +57,13 @@ export default {
       })
       return
     } else {
-      this.equipment = equipment.Data
+      this.equipmentInfo = equipment.equipment
+      console.log('this is equipment', equipment)
     }
   },
   data() {
     return {
-      equipment: {},
+      equipmentInfo: {},
       tool: [],
     }
   },
@@ -65,103 +72,153 @@ export default {
 </script>
 
 <style scoped>
-.text {
-  color: #ffffff;
+.footerHeader {
+  padding-left: 10px;
 }
-
-.textcategory {
-  color: #080707;
-}
-
-a {
-  position: relative;
-  font-size: 70px;
-  color: rgb(106, 95, 73);
+.button-28 {
+  appearance: none;
+  background-color: transparent;
+  border: 2px solid #1a1a1a;
+  border-radius: 15px;
+  box-sizing: border-box;
+  color: #3b3b3b;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Roobert, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-size: 20px;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
+  min-height: 60px;
+  min-width: 0;
+  outline: none;
+  padding: 16px 24px;
   text-align: center;
-  vertical-align: top;
-  font-family: Fantasy;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 150px;
+  will-change: transform;
+  margin-top: 20px;
 }
 
-section {
-  top: 0;
-  min-height: 100vh;
-  width: 100%;
-  display: grid;
-  background-color: #ffffff;
-  position: relative;
+.button-28:disabled {
+  pointer-events: none;
 }
 
-section .bottom-right {
-  top: 100px;
-  right: -40px;
-  padding: 1rem;
-  position: absolute;
-  background: rgb(106, 95, 73);
-  border-radius: 40px;
-  width: 80%;
-  height: 15%;
-  color: #ffffff;
-  /* center overlay text */
+.button-28:hover {
+  color: #fff;
+  background-color: #1a1a1a;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+
+.button-28:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+#textbox {
   display: flex;
-  align-items: center;
+  flex-flow: row wrap;
+}
+
+.alignleft {
+  padding-left: 20px;
+  padding-top: 30px;
+  width: 33.33333%;
+  text-align: left;
+  font-size: 30px;
+  font-weight: 700;
+}
+.aligncenter {
+  width: 33.33333%;
+  text-align: center;
+  font-size: 50px;
+  font-weight: 900;
+  padding-top: 10px;
+}
+.alignright {
+  font-size: 30px;
+  padding-right: 20px;
+  padding-top: 30px;
+  width: 33.33333%;
+  text-align: right;
+  font-weight: 700;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(600px, auto) auto;
+  grid-template-rows: 50px minmax(600px, auto) 200px;
+  grid-template-areas: 'header header' 'leftbar main' 'footer footer';
+}
+
+.page-header {
+  grid-area: header;
+}
+.page-leftbar {
+  grid-area: leftbar;
+}
+.page-main {
+  grid-area: main;
+}
+.page-footer {
+  grid-area: footer;
+}
+
+.content-header {
+  background-color: white;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.content-left {
+  background-color: white;
+  box-sizing: border-box;
+  display: flex;
   justify-content: center;
-  z-index: 0;
+  padding-top: 10px;
+  padding-left: 30px;
 }
 
-.overlay {
-  position: absolute;
-  bottom: 0;
-  left: -200px;
-  height: 2200px;
-  font-weight: bold;
-  z-index: 0;
-}
-
-.container {
-  max-width: 70%;
-  margin: 100px auto;
-}
-
-.img {
+.centerimg {
   display: block;
   margin-left: auto;
   margin-right: auto;
   width: 50%;
-  height: 70%;
-  max-height: 500px;
 }
 
-.card {
-  margin: auto;
-  width: 80%;
-  height: 80%;
-  padding: 10px;
+.box {
+  background-color: #d1d0d0;
 }
 
-.cardinfo {
-  margin: auto;
-  width: 100%;
-  height: 100%;
-  border: 1px solid rgb(0, 0, 0);
-  padding: 10px;
-  border-radius: 100px;
+img {
+  object-fit: fill;
+  border-radius: 50px;
+  max-width: 550px;
+  max-height: 550px;
 }
 
-.cardcontainer {
-  margin: auto;
-  margin-top: 50px;
-  width: 80%;
-  height: 90%;
-  position: relative;
-}
-.right {
-  position: absolute;
-  right: 0px;
-  width: 300px;
+.content-main {
+  background-color: white;
+  border: 4px solid rgb(117, 117, 203);
+  box-sizing: border-box;
   padding: 10px;
+  justify-items: center;
+  text-align: center;
 }
-.h1 {
-  font-family: verdana;
-  font-size: 150%;
+
+.content-main h3 {
+  font-size: 30px;
+}
+
+.content-footer {
+  background-color: white;
+  box-sizing: border-box;
+  padding: 10px;
 }
 </style>

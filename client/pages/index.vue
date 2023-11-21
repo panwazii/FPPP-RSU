@@ -1,53 +1,54 @@
 <template>
-  <div>
-    <!-- <h1>{{ $store.getters.getCartItems }}</h1>
+  <section>
+    <div>
+      <!-- <h1>{{ $store.getters.getCartItems }}</h1>
     <v-btn @click="$store.dispatch('addCartItems', { id: 1, name: 'test1' })">cart add</v-btn>
     <v-btn @click="$store.dispatch('removeCartItems', 1)">cart remove</v-btn> -->
-    <v-parallax
-      class="rounded-lg"
-      height="750"
-      :src="require('~/static/img/index/index-bg.jpg')"
-    >
-      <div
-        class="d-flex flex-column fill-height justify-center align-center text-white"
+      <v-parallax
+        class="rounded-lg"
+        height="750"
+        :src="require('~/static/img/index/index-bg.jpg')"
       >
-        <h1 class="text-h4 font-weight-bold mb-4 paralax-text"></h1>
-      </div>
-    </v-parallax>
-
-    <h1 class="text-h4 font-weight-bold d-flex justify-center mt-12">
-      ข่าวสาร
-    </h1>
-    <p class="d-flex justify-center text-center">ข่าวสารล่าสุดจากเว็บไซต์</p>
-    <div class="room1 justify-center">
-      <v-row class="justify-center">
-        <v-col
-          dense
-          v-for="(news, index) in datanew.slice(0, 3)"
-          :key="news.id"
+        <div
+          class="d-flex flex-column fill-height justify-center align-center text-white"
         >
-          <indexNewTest
-            :id="news.id"
-            :name="news.title"
-            :detail="news.details"
-          />
-        </v-col>
-      </v-row>
-      <v-row class="text-h4 font-weight-bold d-flex justify-center mt-12">
-        <a href="/room-selection" class="btn justify-center">SEE MORE</a>
-      </v-row>
-    </div>
+          <h1 class="text-h4 font-weight-bold mb-4 paralax-text"></h1>
+        </div>
+      </v-parallax>
 
-    <indexService />
+      <h1 class="text-h4 font-weight-bold d-flex justify-center mt-12">
+        ข่าวสาร
+      </h1>
+      <p class="d-flex justify-center text-center">ข่าวสารล่าสุดจากเว็บไซต์</p>
+      <div class="room1 justify-center">
+        <v-row class="justify-center">
+          <v-col
+            dense
+            v-for="(news, index) in datanew.slice(0, 3)"
+            :key="news.id"
+          >
+            <indexNewTest
+              :id="news.id"
+              :name="news.title"
+              :detail="news.details"
+            />
+          </v-col>
+        </v-row>
+        <v-row class="text-h4 font-weight-bold d-flex justify-center mt-12">
+          <a href="/news" class="btn justify-center">SEE MORE</a>
+        </v-row>
+      </div>
 
-    <h1 class="text-h4 font-weight-bold mt-12 mb-4 d-flex justify-center">
-      บริการจองห้อง
-    </h1>
-    <p class="mb-4 d-flex justify-center text-center">
-      จองห้องเพื่อใช้งานอุปกรณ์ต่างๆภายในห้อง
-    </p>
+      <indexService />
 
-    <!-- <v-row dense v-for="(news, index) in datanew.slice(0, 3)" :key="news.title">
+      <h1 class="text-h4 font-weight-bold mt-12 mb-4 d-flex justify-center">
+        บริการจองห้อง
+      </h1>
+      <p class="mb-4 d-flex justify-center text-center">
+        จองห้องเพื่อใช้งานอุปกรณ์ต่างๆภายในห้อง
+      </p>
+
+      <!-- <v-row dense v-for="(news, index) in datanew.slice(0, 3)" :key="news.title">
             <indexNew
             :id="news.id"
             :picture="rooms.Picture[0].url"
@@ -56,27 +57,28 @@
           />
           </v-row> -->
 
-    <div class="room1 justify-center">
-      <v-row class="justify-center mt-12">
-        <v-col v-for="(rooms, index) in room.slice(0, 3)" :key="rooms.name">
-          <indexAboutUs
-            :id="rooms.id"
-            :picture="rooms.picture[0].url"
-            :name="rooms.name"
-            :detail="rooms.details"
-          />
-        </v-col>
+      <div class="room1 justify-center">
+        <v-row class="justify-center mt-12">
+          <v-col v-for="(rooms, index) in room.slice(0, 3)" :key="rooms.name">
+            <indexAboutUs
+              :id="rooms.id"
+              :picture="rooms.picture[0].url"
+              :name="rooms.name"
+              :detail="rooms.details"
+            />
+          </v-col>
+        </v-row>
+      </div>
+
+      <v-row class="text-h4 font-weight-bold d-flex justify-center mt-12">
+        <a href="/room-selection" class="btn justify-center">SEE MORE</a>
       </v-row>
-    </div>
 
-    <v-row class="text-h4 font-weight-bold d-flex justify-center mt-12">
-      <a href="/room-selection" class="btn justify-center">SEE MORE</a>
-    </v-row>
-
-    <div class="mt-15">
-      <indexContact />
+      <div class="mt-15">
+        <indexContact />
+      </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -97,8 +99,8 @@ export default {
       let datanew = await this.$store.dispatch('api/public/getAllNews')
       this.room = data.rooms
       this.datanew = datanew.news
-      console.log(this.room)
-      console.log(this.new)
+      console.log('this is room,', this.room)
+      console.log('this is new', this.new)
     },
   },
 }
@@ -134,5 +136,13 @@ a {
   border-radius: 200px;
   justify-items: center;
   font-size: 20px;
+}
+section {
+  top: 0;
+  min-height: 100vh;
+  width: 100%;
+  display: grid;
+  background-color: #ffffff;
+  position: relative;
 }
 </style>

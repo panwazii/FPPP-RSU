@@ -1,17 +1,24 @@
 <template>
   <main>
+    <h1 class="text-h4 font-weight-bold d-flex justify-center mt-12">
+      รายการข่าว
+    </h1>
     <section class="cards">
-      <div class="card" v-for="equipments in tool" :key="equipments.id">
+      <div
+        class="card"
+        v-for="(news, index) in datanew"
+        :key="news.id"
+        @click="$router.push('/new/' + news.id)"
+      >
         <div class="card__image-container">
-          <img :src="equipments.picture" />
+          <img :src="news.picture" />
         </div>
         <div class="card__content">
           <p class="card__title text--medium">
-            {{ equipments.name }}
+            {{ news.title }}
           </p>
           <div class="card__info">
-            <p class="text--medium">30 Min</p>
-            <p class="card__price text--medium">Free</p>
+            <p class="text--medium">{{ news.details }}</p>
           </div>
         </div>
       </div>
@@ -26,20 +33,27 @@ export default {
   },
   data() {
     return {
-      tool: [],
-      image: require('@/static/img/index/clerk_man_mono.png'),
+      datanew: [],
     }
   },
   methods: {
     async fetchrooms() {
-      let data = await this.$store.dispatch('api/public/getAllEquipmentInfo')
-      this.tool = data.equipments
+      let datanew = await this.$store.dispatch('api/public/getAllNews')
+      this.datanew = datanew.news
     },
   },
 }
 </script>
 
 <style scoped>
+main {
+  height: 100%;
+  width: 100%;
+  background-color: #ffffff;
+  background-repeat: no-repeat;
+  background-position: 100%;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -63,6 +77,13 @@ main {
   line-height: 20px;
   font-weight: 400;
   color: #ecf0f1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  /* autoprefixer: ignore next */
+  -webkit-box-orient: vertical;
+  max-height: 70px;
 }
 
 .cards {
@@ -118,7 +139,7 @@ main {
   margin-left: auto;
   padding: 5px 20px;
   background-color: #303032;
-  border-radius: 20px;
+  border-radius: 10px;
 }
 
 @media only screen and (max-width: 1000px) {
