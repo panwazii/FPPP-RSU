@@ -11,6 +11,7 @@ import WebInfoController from '../controllers/web_info.controller';
 import ReserveController from '../controllers/reserve.controller';
 import ServiceController from '../controllers/service.controller';
 import { numberOrDefault } from '../tools/util';
+import { checkBodyEmpty, checkParamsEmpty } from '../middleware/validator.middleware';
 
 const publicRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON();
@@ -62,7 +63,7 @@ publicRouter.get('/getAllRooms', async (req, res) => {
     }
 });
 
-publicRouter.get('/getSingleRoom', async (req, res) => {
+publicRouter.get('/getSingleRoom', checkParamsEmpty, async (req, res) => {
     try {
         const id = req.query.id as string;
         const room = await RoomController.getByID(id)
@@ -72,7 +73,7 @@ publicRouter.get('/getSingleRoom', async (req, res) => {
     }
 });
 
-publicRouter.get('/getSingleNews', async (req, res) => {
+publicRouter.get('/getSingleNews', checkParamsEmpty, async (req, res) => {
     try {
         const id = req.query.id as string;
         const news = await NewsController.getByID(id)
@@ -100,7 +101,7 @@ publicRouter.get('/getAllWebInfos', async (req, res) => {
     }
 });
 
-publicRouter.get('/getSingleEquipmentInfo', async (req, res) => {
+publicRouter.get('/getSingleEquipmentInfo', checkParamsEmpty, async (req, res) => {
     try {
         const id = req.query.id as string;
         const data = await EquipmentController.getSingleEquipmentInfo(id)
@@ -127,7 +128,7 @@ publicRouter.get('/getAllEquipmentInfo', async (req, res) => {
     }
 });
 
-publicRouter.get('/getAllEquipmentInfoInRoom', async (req, res) => {
+publicRouter.get('/getAllEquipmentInfoInRoom', checkParamsEmpty, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);

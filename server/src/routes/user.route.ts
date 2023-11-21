@@ -6,6 +6,7 @@ import { authValid } from '../middleware/user.middleware';
 import { numberOrDefault } from '../tools/util';
 import ReserveController from '../controllers/reserve.controller';
 import ServiceController from '../controllers/service.controller';
+import { checkBodyEmpty, checkParamsEmpty } from '../middleware/validator.middleware';
 
 const userRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON();
@@ -34,12 +35,7 @@ userRouter.get('/getUserInfo', authValid, async (req, res) => {
 });
 
 
-userRouter.post('/register', async (req, res) => {
-    if (!req.body) {
-        res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-        return;
-    }
-
+userRouter.post('/register', checkBodyEmpty, async (req, res) => {
     try {
         const {
             email,
@@ -83,12 +79,8 @@ userRouter.post('/register', async (req, res) => {
 //     });
 // });
 
-userRouter.post('/update/password', authValid, (req, res) => {
+userRouter.post('/update/password', checkBodyEmpty, authValid, (req, res) => {
     try {
-        if (!req.body) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
         const { user_id, old_pass, new_pass } = req.body;
         if (!user_id || !old_pass || !new_pass) {
             res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'ALLPASSWORD', 'REQUIRED'));
@@ -128,13 +120,8 @@ userRouter.post('/update/password', authValid, (req, res) => {
 //     });
 // });
 
-userRouter.post('/createReserve', async (req, res) => {
+userRouter.post('/createReserve', checkBodyEmpty, async (req, res) => {
     try {
-        if (!req.body) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         const newReserve = await ReserveController.createReserve(req.body)
         if (newReserve) {
             ReserveController.createReserveEquipment(newReserve.id, req.body)
@@ -148,7 +135,7 @@ userRouter.post('/createReserve', async (req, res) => {
 
 });
 
-userRouter.get('/getAllReserve', async (req, res) => {
+userRouter.get('/getAllReserve', checkParamsEmpty, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);

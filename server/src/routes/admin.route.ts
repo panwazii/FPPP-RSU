@@ -92,13 +92,9 @@ adminRouter.get('/getAllNews', authValid, async (req, res) => {
     }
 });
 
-adminRouter.post('/createNews', multerUpload.single("file"), authValid, async (req, res) => {
+adminRouter.post('/createNews', checkBodyEmpty, multerUpload.single("file"), authValid, async (req, res) => {
     try {
         const picture = req.file;
-        if (!req.body) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
         if (!picture) {
             req.body.picture = 'https://www.charlotteathleticclub.com/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png';
             await NewsController.createNews(req.body)
@@ -120,16 +116,10 @@ adminRouter.post('/createNews', multerUpload.single("file"), authValid, async (r
 
 });
 
-adminRouter.post('/updateNews', multerUpload.single("file"), authValid, async (req, res) => {
+adminRouter.post('/updateNews', checkBodyEmpty, multerUpload.single("file"), authValid, async (req, res) => {
     try {
         const picture = req.file;
         const Data = req.body;
-
-        if (!Data) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         if (!picture) {
             await NewsController.update(Data)
             res.status(200).json({ code: 200 });
@@ -143,7 +133,6 @@ adminRouter.post('/updateNews', multerUpload.single("file"), authValid, async (r
             await NewsController.update(Data)
             res.status(200).json({ code: 200 });
         }
-
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
@@ -151,12 +140,8 @@ adminRouter.post('/updateNews', multerUpload.single("file"), authValid, async (r
 });
 
 //Room
-adminRouter.get('/getSingleRoom', async (req, res) => {
+adminRouter.get('/getSingleRoom', checkParamsEmpty, async (req, res) => {
     try {
-        if (!req.query.id) {
-            res.status(200).json(errorCode(HttpStatusCode.NOT_FOUND, 'PARAMS', 'EMPTY'));
-            return;
-        }
         const Id = req.query.id as string;
         const room = await RoomController.getByID(Id)
         res.status(200).json({
@@ -183,13 +168,10 @@ adminRouter.get('/getAllRooms', authValid, async (req, res) => {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
-adminRouter.post('/createRoom', multerUpload.single("file"), async (req, res) => {
+
+adminRouter.post('/createRoom', checkBodyEmpty, multerUpload.single("file"), async (req, res) => {
     try {
         const picture = req.file
-        if (!req.body) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
         if (!picture) {
             await RoomController.createRoom(req.body)
             res.status(200).json({ code: 201 });
@@ -209,13 +191,9 @@ adminRouter.post('/createRoom', multerUpload.single("file"), async (req, res) =>
 
 });
 
-adminRouter.post('/createRoomPicture', multerUpload.single("file"), async (req, res) => {
+adminRouter.post('/createRoomPicture', checkBodyEmpty, multerUpload.single("file"), async (req, res) => {
     try {
         const picture = req.file;
-        if (!req.body) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
         if (!picture) {
             res.status(200).json(errorCode(HttpStatusCode.NOT_FOUND, 'PICTURE', 'EMPTY'));
             return;
@@ -236,14 +214,9 @@ adminRouter.post('/createRoomPicture', multerUpload.single("file"), async (req, 
 
 });
 
-adminRouter.post('/updateRoom', authValid, async (req, res) => {
+adminRouter.post('/updateRoom', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
-        if (!Data) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await RoomController.update(Data)
         res.status(200).json({ code: 200 });
     } catch (error) {
@@ -253,13 +226,8 @@ adminRouter.post('/updateRoom', authValid, async (req, res) => {
 });
 
 // User
-adminRouter.post('/createUserType', authValid, async (req, res) => {
+adminRouter.post('/createUserType', checkBodyEmpty, authValid, async (req, res) => {
     try {
-        if (!req.body) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await UserTypeController.createUserType(req.body)
         res.status(200).json({ code: 201 });
     } catch (error) {
@@ -267,12 +235,8 @@ adminRouter.post('/createUserType', authValid, async (req, res) => {
     }
 });
 
-adminRouter.post('/update/password', authValid, (req, res) => {
+adminRouter.post('/update/password', checkBodyEmpty, authValid, (req, res) => {
     try {
-        if (!req.body) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
         const { user_id, old_pass, new_pass } = req.body;
         if (!user_id || !old_pass || !new_pass) {
             res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'PASSWORD', 'REQUIRED'));
@@ -293,14 +257,9 @@ adminRouter.post('/update/password', authValid, (req, res) => {
 });
 
 
-adminRouter.post('/updateUserType', authValid, async (req, res) => {
+adminRouter.post('/updateUserType', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
-        if (!Data) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await UserTypeController.update(Data)
         res.status(200).json({ code: 200 });
     } catch (error) {
@@ -308,14 +267,9 @@ adminRouter.post('/updateUserType', authValid, async (req, res) => {
     }
 });
 
-adminRouter.post('/updateUser', authValid, async (req, res) => {
+adminRouter.post('/updateUser', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
-        if (!Data) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await UserController.update({
             id: Data.id,
             fname: Data.fname,
@@ -333,12 +287,8 @@ adminRouter.post('/updateUser', authValid, async (req, res) => {
     }
 });
 
-adminRouter.get('/getSingleUserType', authValid, async (req, res) => {
+adminRouter.get('/getSingleUserType', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        if (!req.query.id) {
-            res.json(errorCode(HttpStatusCode.NOT_FOUND, 'BODY', 'EMPTY'));
-            return;
-        }
         const id = req.query.id as string;
         const user = await UserTypeController.getByID(id)
         res.status(200).json({
@@ -349,12 +299,8 @@ adminRouter.get('/getSingleUserType', authValid, async (req, res) => {
     }
 });
 
-adminRouter.get('/getSingleUser', authValid, async (req, res) => {
+adminRouter.get('/getSingleUser', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        if (!req.query.id) {
-            res.json(errorCode(HttpStatusCode.NOT_FOUND, 'BODY', 'EMPTY'));
-            return;
-        }
         const Id = req.query.id as string;
         const user = await UserController.getByID(Id)
         res.status(200).json({
@@ -400,12 +346,8 @@ adminRouter.get('/getAllUserTypes', async (req, res) => {
 });
 
 // Equipment Info
-adminRouter.get('/getSingleEquipmentInfo', authValid, async (req, res) => {
+adminRouter.get('/getSingleEquipmentInfo', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        if (!req.query.id) {
-            res.json(errorCode(HttpStatusCode.NOT_FOUND, 'BODY', 'EMPTY'));
-            return;
-        }
         const Id = req.query.id as string;
         const equipment = await EquipmentController.getSingleEquipmentInfo(Id)
         res.status(200).json({
@@ -433,7 +375,7 @@ adminRouter.get('/getAllEquipmentInfo', async (req, res) => {
     }
 });
 
-adminRouter.get('/getAllEquipmentInfoInRoom', async (req, res) => {
+adminRouter.get('/getAllEquipmentInfoInRoom', checkParamsEmpty, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
@@ -450,14 +392,9 @@ adminRouter.get('/getAllEquipmentInfoInRoom', async (req, res) => {
     }
 });
 
-adminRouter.post('/createEquipmentInfo', multerUpload.single("file"), async (req, res) => {
+adminRouter.post('/createEquipmentInfo', checkBodyEmpty, multerUpload.single("file"), async (req, res) => {
     try {
         const picture = req.file;
-
-        if (!req.body) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
         if (!picture) {
             req.body.picture = 'https://www.charlotteathleticclub.com/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png';
             await EquipmentController.createEquipmentInfo(req.body)
@@ -478,16 +415,10 @@ adminRouter.post('/createEquipmentInfo', multerUpload.single("file"), async (req
     }
 });
 
-adminRouter.post('/updateEquipmentInfo', multerUpload.single("file"), authValid, async (req, res) => {
+adminRouter.post('/updateEquipmentInfo', checkBodyEmpty, multerUpload.single("file"), authValid, async (req, res) => {
     try {
         const picture = req.file;
         const Data = req.body;
-
-        if (!Data) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         if (!picture) {
             await EquipmentController.updateEquipmentInfo(Data)
             res.status(200).json({ code: 200 });
@@ -506,12 +437,8 @@ adminRouter.post('/updateEquipmentInfo', multerUpload.single("file"), authValid,
     }
 });
 //Equipment Stock
-adminRouter.get('/getSingleEquipmentStock', authValid, async (req, res) => {
+adminRouter.get('/getSingleEquipmentStock', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        if (!req.query.id) {
-            res.json(errorCode(HttpStatusCode.BAD_REQUEST, 'QUERY', 'EMPTY'));
-            return;
-        }
         const Id = req.query.id as string;
         const equipmentStock = await EquipmentController.getSingleEquipmentStock(Id)
         res.status(200).json({
@@ -539,13 +466,8 @@ adminRouter.get('/getAllEquipmentStock', async (req, res) => {
     }
 });
 
-adminRouter.post('/createEquipmentStock', async (req, res) => {
+adminRouter.post('/createEquipmentStock', checkBodyEmpty, async (req, res) => {
     try {
-        if (!req.body) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await EquipmentController.createEquipmentStock(req.body)
         res.status(200).json({ code: 200 });
     } catch (error) {
@@ -554,14 +476,9 @@ adminRouter.post('/createEquipmentStock', async (req, res) => {
 
 });
 
-adminRouter.post('/updateEquipmentStock', authValid, async (req, res) => {
+adminRouter.post('/updateEquipmentStock', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
-        if (!Data) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await EquipmentController.updateEquipmentStock(Data)
         res.status(200).json({ code: 200 });
     } catch (error) {
@@ -571,7 +488,7 @@ adminRouter.post('/updateEquipmentStock', authValid, async (req, res) => {
 });
 
 // reserve
-adminRouter.get('/getSingleReserve', async (req, res) => {
+adminRouter.get('/getSingleReserve', checkParamsEmpty, async (req, res) => {
     try {
         const id = req.query.id as string;
         const reserve = await ReserveController.getReserveByID(id)
@@ -598,14 +515,9 @@ adminRouter.get('/getAllReserve', async (req, res) => {
     }
 });
 
-adminRouter.post('/createReserve', async (req, res) => {
+adminRouter.post('/createReserve', checkBodyEmpty, async (req, res) => {
     try {
         const equipment = req.body.equipment_info_id;
-        if (!req.body) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         const newReserve = await ReserveController.createReserve(req.body)
         if (newReserve && equipment) {
             ReserveController.createReserveEquipment(newReserve.id, req.body)
@@ -623,14 +535,9 @@ adminRouter.post('/createReserve', async (req, res) => {
 
 });
 
-adminRouter.post('/updateReserve', authValid, async (req, res) => {
+adminRouter.post('/updateReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
-        if (!Data) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await ReserveController.update(Data)
         res.status(200).json({ code: 200 });
     } catch (error) {
@@ -639,14 +546,9 @@ adminRouter.post('/updateReserve', authValid, async (req, res) => {
 
 });
 
-adminRouter.post('/updateReserveEquipment', authValid, async (req, res) => {
+adminRouter.post('/updateReserveEquipment', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
-        if (!Data) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await ReserveController.updateReserveEquipment(Data)
         res.status(200).json({ code: 200 });
     } catch (error) {
@@ -673,14 +575,10 @@ adminRouter.get('/getAllWebInfo', async (req, res) => {
     }
 });
 
-adminRouter.post('/updateWebInfo', multerUpload.single("file"), async (req, res) => {
+adminRouter.post('/updateWebInfo', checkBodyEmpty, multerUpload.single("file"), async (req, res) => {
     try {
         const Data = req.body;
         const picture = req.file;
-        if (!Data) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
         if (!picture) {
             await WebInfoController.update(Data)
             res.status(200).json({ code: 200 });
@@ -703,7 +601,7 @@ adminRouter.post('/updateWebInfo', multerUpload.single("file"), async (req, res)
 });
 
 //service
-adminRouter.get('/getSingleService', async (req, res) => {
+adminRouter.get('/getSingleService', checkParamsEmpty, async (req, res) => {
     try {
         const id = req.query.id as string;
         const service = await ServiceController.getByID(id)
@@ -730,14 +628,9 @@ adminRouter.get('/getAllService', async (req, res) => {
     }
 });
 
-adminRouter.post('/createService', multerUpload.single("file"), async (req, res) => {
+adminRouter.post('/createService', checkBodyEmpty, multerUpload.single("file"), async (req, res) => {
     try {
         const picture = req.file;
-
-        if (!req.body) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
         if (!picture) {
             req.body.picture = 'https://www.charlotteathleticclub.com/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png';
             await ServiceController.create(req.body)
@@ -758,14 +651,9 @@ adminRouter.post('/createService', multerUpload.single("file"), async (req, res)
     }
 });
 
-adminRouter.post('/updateService', authValid, async (req, res) => {
+adminRouter.post('/updateService', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
-        if (!Data) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await ServiceController.update(Data)
         res.status(200).json({ code: 200 });
     } catch (error) {
@@ -775,7 +663,7 @@ adminRouter.post('/updateService', authValid, async (req, res) => {
 });
 
 // Production Line
-adminRouter.get('/getSingleProductionLine', async (req, res) => {
+adminRouter.get('/getSingleProductionLine', checkParamsEmpty, async (req, res) => {
     try {
         const id = req.query.id as string;
         const productionLine = await EquipmentController.getSingleEquipmentRentRate(id)
@@ -802,13 +690,8 @@ adminRouter.get('/getAllProductionLine', async (req, res) => {
     }
 });
 
-adminRouter.post('/createProductionLine', async (req, res) => {
+adminRouter.post('/createProductionLine', checkBodyEmpty, async (req, res) => {
     try {
-        if (!req.body) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await EquipmentController.createProductionLine(req.body)
         res.status(200).json({ code: 200 });
     } catch (error) {
@@ -816,14 +699,9 @@ adminRouter.post('/createProductionLine', async (req, res) => {
     }
 });
 
-adminRouter.post('/updateProductionLine', authValid, async (req, res) => {
+adminRouter.post('/updateProductionLine', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
-        if (!Data) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await EquipmentController.updateProductionLine(Data)
         res.status(200).json({ code: 200 });
     } catch (error) {
@@ -832,7 +710,7 @@ adminRouter.post('/updateProductionLine', authValid, async (req, res) => {
 });
 
 //Equipment Rent Rate
-adminRouter.get('/getSingleEquipmentRentRate', async (req, res) => {
+adminRouter.get('/getSingleEquipmentRentRate', checkParamsEmpty, async (req, res) => {
     try {
         const id = req.query.id as string;
         const equipmentRentRate = await EquipmentController.getSingleEquipmentRentRate(id)
@@ -859,13 +737,8 @@ adminRouter.get('/getAllEquipmentRentRate', async (req, res) => {
     }
 });
 
-adminRouter.post('/createEquipmentRentRate', async (req, res) => {
+adminRouter.post('/createEquipmentRentRate', checkBodyEmpty, async (req, res) => {
     try {
-        if (!req.body) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await EquipmentController.createEquipmentRentRate(req.body)
         res.status(200).json({ code: 200 });
     } catch (error) {
@@ -873,14 +746,9 @@ adminRouter.post('/createEquipmentRentRate', async (req, res) => {
     }
 });
 
-adminRouter.post('/updateEquipmentRentRate', authValid, async (req, res) => {
+adminRouter.post('/updateEquipmentRentRate', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
-        if (!Data) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await EquipmentController.updateEquipmentRentRate(Data)
         res.status(200).json({ code: 200 });
     } catch (error) {
@@ -915,13 +783,8 @@ adminRouter.get('/getAllSupplyStock', async (req, res) => {
     }
 });
 
-adminRouter.post('/createSupplyStock', async (req, res) => {
+adminRouter.post('/createSupplyStock', checkBodyEmpty, async (req, res) => {
     try {
-        if (!req.body) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await EquipmentController.createSupplyStock(req.body)
         res.status(200).json({ code: 200 });
     } catch (error) {
@@ -930,24 +793,18 @@ adminRouter.post('/createSupplyStock', async (req, res) => {
 
 });
 
-adminRouter.post('/updateSupplyStock', authValid, async (req, res) => {
+adminRouter.post('/updateSupplyStock', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
-        if (!Data) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await EquipmentController.updateSupplyStock(Data)
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
-
 });
 
 //Supplier
-adminRouter.get('/getSingleSupplier', async (req, res) => {
+adminRouter.get('/getSingleSupplier', checkParamsEmpty, async (req, res) => {
     try {
         const id = Number(req.query.id);
         const supplier = await EquipmentController.getSingleSupplier(id)
@@ -974,13 +831,8 @@ adminRouter.get('/getAllSupplier', async (req, res) => {
     }
 });
 
-adminRouter.post('/createSupplier', async (req, res) => {
+adminRouter.post('/createSupplier', checkBodyEmpty, async (req, res) => {
     try {
-        if (!req.body) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await EquipmentController.createSupplier(req.body)
         res.status(200).json({ code: 200 });
     } catch (error) {
@@ -989,14 +841,9 @@ adminRouter.post('/createSupplier', async (req, res) => {
 
 });
 
-adminRouter.post('/updateSupplier', authValid, async (req, res) => {
+adminRouter.post('/updateSupplier', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
-        if (!Data) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'BODY', 'EMPTY'));
-            return;
-        }
-
         await EquipmentController.updateSupplier(Data)
         res.status(200).json({ code: 200 });
     } catch (error) {
