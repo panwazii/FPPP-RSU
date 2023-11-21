@@ -11,6 +11,7 @@ import ReserveController from '../controllers/reserve.controller';
 import ServiceController from '../controllers/service.controller';
 import WebInfoController from '../controllers/web_info.controller';
 import { authValid } from '../middleware/admin.middleware';
+import { checkBodyEmpty, checkParamsEmpty } from '../middleware/validator.middleware';
 import { numberOrDefault } from '../tools/util';
 import { uploadSinglePicture, uploadSinglePictureV2 } from '../tools/util';
 import multer from 'multer';
@@ -54,12 +55,8 @@ adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
     }
 });
 //News
-adminRouter.get('/getSingleNews', authValid, async (req, res) => {
+adminRouter.get('/getSingleNews', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        if (!req.query.id) {
-            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'ID', 'REQUIRED'));
-            return;
-        }
         const Id = req.query.id as string;
         const singleNews = await NewsController.getByID(Id)
         if (singleNews) {

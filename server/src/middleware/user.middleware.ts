@@ -24,12 +24,3 @@ export const authValid = (req: Request, res: Response, next: NextFunction) => {
     }
 
 };
-
-export const checkBodyEmpty = (errMessage: any) => (req: Request, res: Response, next: NextFunction) => {
-    if (!req.body) {
-        res.json(errMessage);
-    } else {
-        next();
-    }
-};
-
