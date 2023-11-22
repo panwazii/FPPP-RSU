@@ -1,12 +1,12 @@
 <template>
     <v-container>
-      <AdminEditEquipmentRentRate
+      <AdminEquipmentRentRateEdit
         :open="editEquipmentRentRate"
         :data="equipmentrentrate"
         :editEquipmentRentRate.sync="editEquipmentRentRate"
         v-if="equipmentrentrate"
       />
-      <AdminCreateEquipmentRentRate
+      <AdminEquipmentRentRateCreate
         :open="createEquipmentRentRate"
         :createEquipmentRentRate.sync="createEquipmentRentRate"
       />
@@ -103,7 +103,7 @@
           },
         })
         console.log('this is equipmentrentrate', Data)
-        this.equipmentrentrates = Data.rentrate
+        this.equipmentrentrates = Data.equipment_rent_rates
         this.totalPages = Data.total_pages
       },
       async openEditEquipmentRentRateModal(id) {
@@ -113,7 +113,7 @@
           },
         })
         console.log('here', EquipmentRentRateData);
-        this.equipmentrentrate = EquipmentRentRateData.Data
+        this.equipmentrentrate = EquipmentRentRateData.equipment_rent_rate
         this.editEquipmentRentRate = true
       },
     },

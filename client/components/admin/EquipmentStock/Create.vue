@@ -3,7 +3,7 @@
     <ModalConfirm
       :open="confirmModal"
       :message="confirmMessage"
-      :method="createSupplyStock"
+      :method="createEquipmentStock"
       :confirm.sync="confirmModal"
     />
     <ModalLoading :open="loading" :message="loadingMessage" />
@@ -17,7 +17,7 @@
       <v-card>
         <v-card-title class="text-h5">
           <v-icon justify="left" class="mr-3" size="50">mdi-home-plus</v-icon>
-          Create new supply stock.
+          Create new equipment stock.
         </v-card-title>
         <v-divider class="mb-3"></v-divider>
         <v-card-text>
@@ -26,17 +26,17 @@
               <template>
                 <v-form ref="form" lazy-validation>
                   <v-row class="mt-2">
-                    <v-col cols="12" sm="6">
-                      <h4>ปริมาณ</h4>
+                    <v-col cols="12" sm="12">
+                      <h4>หมายเลขซีเรียล</h4>
                       <v-text-field
-                        v-model="form.quantity"
-                        :rules="[(v) => !!v || 'quantity required']"
-                        label="Quantity"
+                        v-model="form.serial_number"
+                        :rules="[(v) => !!v || 'serial number required']"
+                        label="Serial number"
                         outlined
                         required
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12" sm="12">
                       <h4>ราคา</h4>
                       <v-text-field
                         v-model="form.price"
@@ -47,30 +47,46 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="12">
-                      <h4>วันที่</h4>
-                      <v-date-picker
-                        v-model="form.date"
-                        :rules="[(v) => !!v || 'date required']"
-                        label="Date"
+                      <h4>ห้อง</h4>
+                      <v-autocomplete
+                        v-model="form.room_id"
+                        :rules="[(v) => !!v || 'room id required']"
+                        :items="rooms"
+                        item-text="name"
+                        item-value="id"
+                        label="Room id"
                         outlined
                         required
-                      ></v-date-picker>
+                      >
+                        <template v-slot:item="{ item }">
+                          <v-img
+                            :src="item.picture[0].url"
+                            class="itemimg"
+                          ></v-img>
+                          {{ item.name }}
+                        </template>
+                      </v-autocomplete>
                     </v-col>
+                    <v-col cols="12" sm="12">
+                      <v-img :src="roomDisplayImage" class="disimg" :contain="true"></v-img>
+                    </v-col>
+                    <v-col cols="12" sm="12"><v-divider class="mb-3"></v-divider></v-col>
+                    
                     <v-col cols="12" sm="12">
                       <h4>อุปกรณ์</h4>
                       <v-autocomplete
-                        v-model="form.supply_stock_id"
-                        :rules="[(v) => !!v || 'supply stock id required']"
+                        v-model="form.equipment_info_id"
+                        :rules="[(v) => !!v || 'equipment info id required']"
                         :items="equipments"
                         item-text="name"
                         item-value="id"
-                        label="Supply stock id"
+                        label="Equipment info id"
                         outlined
                         required
                       >
                         <template v-slot:item="{ item }">
                           <v-img :src="item.picture" class="itemimg"></v-img>
-                          {{item.name}}
+                          {{ item.name }}
                         </template>
                       </v-autocomplete>
                     </v-col>
@@ -90,18 +106,7 @@
                         required
                       ></v-autocomplete>
                     </v-col>
-                    <v-col cols="12" sm="12">
-                      <h4>หมายเหตุ</h4>
-                      <v-text-field
-                        v-model="form.remark"
-                        :rules="[(v) => !!v || 'remark required']"
-                        label="Remark"
-                        outlined
-                        required
-                      ></v-text-field>
-                    </v-col>
                   </v-row>
-                  
                 </v-form>
               </template>
             </v-col>
@@ -125,7 +130,7 @@
     </v-dialog>
   </div>
 </template>
-<script>
+  <script>
 export default {
   props: {
     open: {
@@ -133,31 +138,34 @@ export default {
     },
   },
   async fetch() {
+    const getRooms = await this.$store.dispatch('api/admin/getDropdownRoom')
+    this.rooms = getRooms.rooms
     const getEquipment = await this.$store.dispatch('api/admin/getDropdownEquipmentInfo')
-    this.equipments = getEquipment.equipment
+    this.equipments = getEquipment.equipments
     const getAllSupplier = await this.$store.dispatch('api/admin/getAllSupplier', {
       params: {
         limit: this.itemsPerPage,
         page: this.page,
       },
     })
-    this.suppliers = getAllSupplier.supplier
+    this.suppliers = getAllSupplier.suppliers
     this.totalPages = getAllSupplier.total_pages
   },
   data() {
     return {
+      roomDisplayImage: null,
       equipmentDisplayImage: null,
       form: {
-        quantity: null,
+        serial_number: null,
         price: null,
-        date: null,
-        remark: null,
-        supply_stock_id: null,
+        room_id: null,
+        equipment_info_id: null,
         supplier_id: null,
         available_status: true,
       },
-      suppliers: [],
+      rooms: [],
       equipments: [],
+      suppliers: [],
 
       readers: [],
       confirmModal: false,
@@ -167,7 +175,7 @@ export default {
     }
   },
   mounted() {
-    
+
   },
   computed: {
     formWatched () {
@@ -177,9 +185,16 @@ export default {
   watch: {
     formWatched: {
       handler(newValue, oldValue) {
-        if (newValue.supply_stock_id !== oldValue.supply_stock_id) {
+        if (newValue.room_id !== oldValue.room_id) {
+          this.rooms.forEach((room) => {
+            if (room.id === newValue.room_id) {
+              this.roomDisplayImage = room.picture[0].url
+            }
+          })
+        }
+        if (newValue.equipment_info_id !== oldValue.equipment_info_id) {
           this.equipments.forEach((equipment) => {
-            if (equipment.id === newValue.supply_stock_id) {
+            if (equipment.id === newValue.equipment_info_id) {
               this.equipmentDisplayImage = equipment.picture
             }
           })
@@ -194,36 +209,36 @@ export default {
     },
     cancel() {
       this.clearForm()
-      this.$emit('update:createSupplyStock', false)
+      this.$emit('update:createEquipmentStock', false)
     },
-    async createSupplyStock() {
+    async createEquipmentStock() {
       try {
         this.loading = true
-        await this.$store.dispatch('api/admin/createSupplyStock', this.form)
+        console.log("I'm :", this.form)
+        await this.$store.dispatch('api/admin/createEquipmentStock', this.form)
         this.clearForm()
-        this.$emit('update:createSupplyStock', false)
+        this.$emit('update:createEquipmentStock', false)
         this.loading = false
       } catch (error) {
         this.loading = false
         console.log(error)
-        this.$emit('update:createSupplyStock', false)
+        this.$emit('update:createEquipmentStock', false)
       }
     },
     clearForm() {
-      this.form.quantity = null
+      this.form.serial_number = null
       this.form.price = null
-      this.form.date = null
-      this.form.remark = null
-      this.form.supply_stock_id = null
+      this.form.room_id = null
+      this.form.equipment_info_id = null
       this.form.supplier_id = null
       this.form.available_status = true
     },
   },
 }
 </script>
-
-<style scoped>
-.itemimg{
+  
+  <style scoped>
+.itemimg {
   min-width: 40px;
   max-width: 40px;
   height: 40px;

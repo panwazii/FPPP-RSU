@@ -13,10 +13,12 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
+    "apexcharts": "^3.44.0",
     "cookie-universal-nuxt": "^2.2.2",
     "core-js": "^3.25.3",
     "nuxt": "2.16.2",
     "vue": "^2.7.10",
+    "vue-apexcharts": "^1.6.2",
     "vue-server-renderer": "^2.7.10",
     "vue-template-compiler": "^2.7.10",
     "vuetify": "^2.6.10"

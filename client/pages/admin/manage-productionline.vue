@@ -1,12 +1,12 @@
 <template>
     <v-container>
-      <AdminEditProductionLine
+      <AdminProductionLineEdit
         :open="editProductionLine"
         :data="productionline"
         :editProductionLine.sync="editProductionLine"
         v-if="productionline"
       />
-      <AdminCreateProductionLine
+      <AdminProductionLineCreate
         :open="createProductionLine"
         :createProductionLine.sync="createProductionLine"
       />
@@ -103,7 +103,7 @@
           },
         })
         console.log('this is productionline', Data)
-        this.productionlines = Data.productionline
+        this.productionlines = Data.production_lines
         this.totalPages = Data.total_pages
       },
       async openEditProductionLineModal(id) {
@@ -113,7 +113,7 @@
           },
         })
         console.log('here', ProductionLineData);
-        this.productionline = ProductionLineData.Data
+        this.productionline = ProductionLineData.production_line
         this.editProductionLine = true
       },
     },

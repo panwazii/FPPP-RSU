@@ -20,9 +20,9 @@
           <v-icon justify="left" class="mr-3" size="50">mdi-pencil</v-icon>
           Edit EquipmentStock
         </v-card-title>
-        {{ data }}
-        <hr>
-        {{equipments}}
+        <!-- {{ data }} -->
+        <!-- <hr> -->
+        <!-- {{equipments}} -->
         <v-divider class="mb-3"></v-divider>
         <v-card-text>
           <v-row class="d-flex justify-center mt-3">
@@ -77,7 +77,7 @@
                       >
                         <template v-slot:item="{ item }">
                           <v-img
-                            :src="item.Picture[0].url"
+                            :src="item.picture[0].url"
                             class="itemimg"
                           ></v-img>
                           {{ item.name }}
@@ -172,11 +172,11 @@ export default {
   async fetch() {
     const getRooms = await this.$store.dispatch('api/admin/getDropdownRoom')
     // console.log(getRooms);
-    this.rooms = getRooms.room
+    this.rooms = getRooms.rooms
     const getEquipment = await this.$store.dispatch(
       'api/admin/getDropdownEquipmentInfo'
     )
-    this.equipments = getEquipment.equipment
+    this.equipments = getEquipment.equipments
     const getAllSupplier = await this.$store.dispatch(
       'api/admin/getAllSupplier',
       {
@@ -186,7 +186,7 @@ export default {
         },
       }
     )
-    this.suppliers = getAllSupplier.supplier
+    this.suppliers = getAllSupplier.suppliers
     this.totalPages = getAllSupplier.total_pages
     this.equipments.forEach((equipment) => {
       if (equipment.id === this.data.equipment_info_id) {
@@ -195,7 +195,7 @@ export default {
     })
     this.rooms.forEach((room) => {
       if (room.id === this.data.room_id) {
-        this.roomDisplayImage = room.Picture[0].url
+        this.roomDisplayImage = room.picture[0].url
       }
     })
   },
@@ -223,7 +223,7 @@ export default {
       this.rooms.forEach((room) => {
         if (room.id === data.room_id) {
           console.log('this is room',room);
-          return room.Picture[0].url
+          return room.picture[0].url
         }
       })
     },
@@ -234,7 +234,7 @@ export default {
         if (newValue.room_id !== oldValue.room_id) {
           this.rooms.forEach((room) => {
             if (room.id === newValue.room_id) {
-              this.roomDisplayImage = room.Picture[0].url
+              this.roomDisplayImage = room.picture[0].url
             }
           })
         }

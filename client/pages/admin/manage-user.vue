@@ -1,12 +1,12 @@
 <template>
   <v-container>
-    <AdminEditUser
+    <AdminUserEdit
       :open="editUser"
       :data="user"
       :editUser.sync="editUser"
       v-if="user"
     />
-    <AdminCreateUser :open="createUser" :createUser.sync="createUser" />
+    <AdminUserCreate :open="createUser" :createUser.sync="createUser" />
     <div class="d-flex justify-end">
       <v-btn @click="createUser = true" class="mb-3" color="primary">
         <v-icon medium> mdi-plus </v-icon>

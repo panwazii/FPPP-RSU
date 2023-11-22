@@ -1,12 +1,12 @@
 <template>
     <v-container>
-      <AdminEditService
+      <AdminServiceEdit
         :open="editService"
         :data="service"
         :editService.sync="editService"
         v-if="service"
       />
-      <AdminCreateService
+      <AdminServiceCreate
         :open="createService"
         :createService.sync="createService"
       />
@@ -103,7 +103,7 @@
           },
         })
         console.log('this is service', Data)
-        this.services = Data.service
+        this.services = Data.services
         this.totalPages = Data.total_pages
       },
       async openEditServiceModal(id) {
@@ -113,7 +113,7 @@
           },
         })
         console.log('here', ServiceData);
-        this.service = ServiceData.Data
+        this.service = ServiceData.service
         this.editService = true
       },
     },

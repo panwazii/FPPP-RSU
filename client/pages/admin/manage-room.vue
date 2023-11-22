@@ -1,12 +1,12 @@
 <template>
   <v-container>
-    <AdminEditRoom
+    <AdminRoomEdit
       :open="editRoom"
       :data="room"
       :editRoom.sync="editRoom"
       v-if="room"
     />
-    <AdminCreateRoom
+    <AdminRoomCreate
       :open="createRoom"
       :createRoom.sync="createRoom"
     />

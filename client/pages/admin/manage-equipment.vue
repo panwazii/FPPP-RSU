@@ -1,12 +1,12 @@
 <template>
   <v-container>
-    <AdminEditEquipment
+    <AdminEquipmentEdit
       :open="editEquipment"
       :data="equipment"
       :editEquipment.sync="editEquipment"
       v-if="equipment"
     />
-    <AdminCreateEquipment
+    <AdminEquipmentCreate
       :open="createEquipment"
       :createEquipment.sync="createEquipment"
     />

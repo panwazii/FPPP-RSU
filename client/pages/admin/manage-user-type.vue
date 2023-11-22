@@ -1,12 +1,12 @@
 <template>
   <v-container>
-    <AdminEditUserType
+    <AdminUserTypeEdit
       :open="editUserType"
       :data="userType"
       :editUserType.sync="editUserType"
       v-if="userType"
     />
-    <AdminCreateUserType
+    <AdminUserTypeCreate
       :open="createUserType"
       :createUserType.sync="createUserType"
     />

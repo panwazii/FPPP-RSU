@@ -39,7 +39,7 @@
                     </v-row>
                     <p>บริการ</p>
                     <v-row class="mt-2">
-                      <v-col cols="12" sm="6">
+                      <v-col cols="12" sm="12">
                         <v-text-field
                           v-model="data.title"
                           :rules="[(v) => !!v || 'title required']"
@@ -48,7 +48,9 @@
                           required
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="6">
+                    </v-row>
+                    <v-row class="mt-2">
+                      <v-col cols="12" sm="12">
                         <v-textarea
                           v-model="data.details"
                           :rules="[(v) => !!v || 'details required']"

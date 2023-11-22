@@ -42,7 +42,7 @@
                       <v-col cols="12" sm="12">
                         <h4>ชื่อผู้ผลิต</h4>
                         <v-text-field
-                          v-model="form.name"
+                          v-model="data.name"
                           :rules="[(v) => !!v || 'name required']"
                           label="Serial number"
                           outlined
@@ -52,7 +52,7 @@
                       <v-col cols="12" sm="12">
                         <h4>ข้อมูลการติดต่อ</h4>
                         <v-text-field
-                          v-model="form.contact_info"
+                          v-model="data.contact_info"
                           :rules="[(v) => !!v || 'contact info required']"
                           label="Contact info"
                           outlined

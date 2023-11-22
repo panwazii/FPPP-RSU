@@ -52,7 +52,7 @@
                         required
                       >
                         <template v-slot:item="{ item }">
-                          <v-img :src="item.Picture[0].url" class="itemimg"></v-img>
+                          <v-img :src="item.picture[0].url" class="itemimg"></v-img>
                           {{item.name}}
                         </template>
                       </v-autocomplete>
@@ -134,7 +134,7 @@ export default {
   },
   async fetch() {
     const getRooms = await this.$store.dispatch('api/admin/getDropdownRoom')
-    this.rooms = getRooms.room
+    this.rooms = getRooms.rooms
     let getAllUsers = await this.$store.dispatch('api/admin/getAllUsers', {
       params: {
         limit: this.itemsPerPage,
@@ -176,7 +176,7 @@ export default {
         if (newValue.room_id !== oldValue.room_id) {
           this.rooms.forEach((room) => {
             if (room.id === newValue.room_id) {
-              this.roomDisplayImage = room.Picture[0].url
+              this.roomDisplayImage = room.picture[0].url
             }
           })
         }

@@ -151,7 +151,7 @@
     },
     async fetch() {
       const getEquipment = await this.$store.dispatch('api/admin/getDropdownEquipmentInfo')
-      this.equipments = getEquipment.equipment
+      this.equipments = getEquipment.equipments
       const getAllSupplier = await this.$store.dispatch('api/admin/getAllSupplier', {
         params: {
           limit: this.itemsPerPage,

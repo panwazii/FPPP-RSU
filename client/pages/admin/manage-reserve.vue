@@ -1,12 +1,12 @@
 <template>
     <v-container>
-      <AdminEditReserve
+      <AdminReserveEdit
         :open="editReserve"
         :data="reserve"
         :editReserve.sync="editReserve"
         v-if="reserve"
       />
-      <AdminCreateReserve
+      <AdminReserveCreate
         :open="createReserve"
         :createReserve.sync="createReserve"
       />
@@ -103,7 +103,7 @@
           },
         })
         console.log('this is reserve', Data)
-        this.reserves = Data.reserve
+        this.reserves = Data.reserves
         this.totalPages = Data.total_pages
       },
       async openEditReserveModal(id) {
@@ -113,7 +113,7 @@
           },
         })
         console.log('here', ReserveData);
-        this.reserve = ReserveData.Data
+        this.reserve = ReserveData.reserve
         this.editReserve = true
       },
     },

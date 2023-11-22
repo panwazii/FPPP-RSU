@@ -1,12 +1,12 @@
 <template>
     <v-container>
-      <AdminEditSupplyStock
+      <AdminSupplyStockEdit
         :open="editSupplyStock"
         :data="supplystock"
         :editSupplyStock.sync="editSupplyStock"
         v-if="supplystock"
       />
-      <AdminCreateSupplyStock
+      <AdminSupplyStockCreate
         :open="createSupplyStock"
         :createSupplyStock.sync="createSupplyStock"
       />
@@ -103,7 +103,7 @@
           },
         })
         console.log('this is supplystock', Data)
-        this.supplystocks = Data.supply
+        this.supplystocks = Data.supply_stocks
         this.totalPages = Data.total_pages
       },
       async openEditSupplyStockModal(id) {
@@ -113,7 +113,7 @@
           },
         })
         console.log('here', SupplyStockData);
-        this.supplystock = SupplyStockData.Data
+        this.supplystock = SupplyStockData.supply_stock
         this.editSupplyStock = true
       },
     },

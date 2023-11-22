@@ -1,12 +1,12 @@
 <template>
   <v-container>
-    <AdminEditNews
+    <AdminNewsEdit
       :open="editNews"
       :data="news"
       :editNews.sync="editNews"
       v-if="news"
     />
-    <AdminCreateNews
+    <AdminNewsCreate
       :open="createNews"
       :createNews.sync="createNews"
     />
