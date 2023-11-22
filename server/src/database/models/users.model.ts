@@ -12,6 +12,7 @@ export interface UserAttribute {
     password?: string;
     tel?: string;
     avatar?: string;
+    cart?: string;
     verify_status?: boolean;
     available_status?: boolean;
     created_at?: Date;
@@ -36,6 +37,8 @@ class UserModel extends Model<UserAttribute, UserAttributeCreation> implements U
     declare tel: string;
 
     declare avatar: string;
+
+    declare cart: string;
 
     declare verify_status: boolean;
 
@@ -89,6 +92,10 @@ export const initUserModel = (connection: Sequelize) => {
             avatar: {
                 allowNull: true,
                 type: DataTypes.STRING(500),
+            },
+            cart: {
+                allowNull: true,
+                type: DataTypes.JSON,
             },
             verify_status: {
                 type: DataTypes.BOOLEAN,

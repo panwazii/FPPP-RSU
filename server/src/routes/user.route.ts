@@ -34,6 +34,16 @@ userRouter.get('/getUserInfo', authValid, async (req, res) => {
     }
 });
 
+userRouter.post('/updateCart', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const data = req.body
+        const userId = req.body.credentials.id;
+        await UserController.updateCart(userId, data)
+        res.status(200).json({ code: 200, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
 
 userRouter.post('/register', checkBodyEmpty, async (req, res) => {
     try {
