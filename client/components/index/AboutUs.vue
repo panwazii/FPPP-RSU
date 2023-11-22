@@ -1,17 +1,11 @@
 <template>
-  <div class="indexcard-container">
-    <a @click="$router.push('/room/' + id)">
-      <div class="indexcard">
-        <div class="card-image">
-          <v-img :src="picture"> </v-img>
-        </div>
-        <div class="card-title">{{ name }}</div>
-        <div class="card-text text-center">
-          {{ detail }}
-        </div>
-      </div>
-    </a>
-  </div>
+  <v-card class="card ma-2 rounded-xl" height="400px" @click="gotoRoom">
+    <v-img height="250px" :src="picture" />
+    <v-card-title class="justify-center">{{ name }} </v-card-title>
+    <v-card-text class="justify-center">
+      <div class="line-clamp-text">{{ detail }}</div>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -34,12 +28,24 @@ export default {
       default: () => '',
     },
   },
+  methods: {
+    gotoRoom() {
+      this.$router.push(`/room/${this.id}`)
+    },
+  },
 }
 </script>
 
 <style scoped>
-a {
-  text-decoration: none;
-  color: black;
+.card:hover {
+  background-color: rgb(224, 224, 224);
+}
+
+.line-clamp-text {
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 </style>

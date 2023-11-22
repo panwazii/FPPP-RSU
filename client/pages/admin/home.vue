@@ -1,5 +1,4 @@
 <template>
- 
   <div>
     <v-row>
       <v-col cols="3">
@@ -105,13 +104,6 @@
         />
       </v-col>
     </v-row>
-  <div id="chart">
-    <apexchart
-      type="line"
-      height="350"
-      :options="chart.chartOptions"
-      :series="chart.series"
-    ></apexchart>
   </div>
 </template>
 <script>

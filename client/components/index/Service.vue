@@ -1,56 +1,56 @@
 <template>
-  <body>
+  <div>
     <div>
-      <div>
-        <v-row class="justify-center"><h1 class="left">บริการของเรา</h1></v-row>
-        <v-row class="justify-center"
-          ><p class="left">
-            ทางเรามีบริการเยอะแยะมากมายทั้ง การจองห้อง การผลิต และการรับคำปรึกษา
-            ผู้ใช้งานเว็บไซต์สามารถติดต่อทางเราเพื่อรับบริการเหล่านี้ได้เลย
-          </p></v-row
-        >
+      <div class="d-flex justify-center">
+        <h1>บริการของเรา</h1>
       </div>
-
-      <v-window v-model="onboarding" show-arrows class="d-flex justify-center">
-        <v-window-item v-for="(item, index) in allServices" :key="item.id">
-          <v-card
-            elevation="2"
-            height="460"
-            width="1200"
-            class="d-flex align-center justify-center ma-2 rounded-xl"
-            color="#F2F2F2"
-          >
-            <div class="header header_home">{{ item.title }}</div>
-            <div class="content content_home">
-              {{ item.details }}
-            </div>
-            <img class="image rounded-xl" :src="item.picture" />
-          </v-card>
-        </v-window-item>
-      </v-window>
+      <div class="d-flex justify-center">
+        <p>
+          ทางเรามีบริการเยอะแยะมากมายทั้ง การจองห้อง การผลิต และการรับคำปรึกษา
+          ผู้ใช้งานเว็บไซต์สามารถติดต่อทางเราเพื่อรับบริการเหล่านี้ได้เลย
+        </p>
+      </div>
     </div>
-  </body>
+    <v-carousel hide-delimiters v-model="onboarding" show-arrows :cycle="true" :interval="6000">
+      <v-carousel-item v-for="item in allServices" :key="item.id">
+        <v-card
+          height="460"
+          width="100%"
+          class="d-flex ma-2 rounded-xl"
+        >
+          <v-row>
+            <v-col cols="12" md="5" xs="12">
+              <div>
+                <v-card-title class="text-h3">{{ item.title }}</v-card-title>
+                <v-card-text class="text-h6">{{ item.details }}</v-card-text>
+              </div>
+            </v-col>
+            <v-col cols="7" md="7" xs="0" v-if="width">
+              <v-img class="rounded-xl image" :src="item.picture" />
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-carousel-item>
+    </v-carousel>
+  </div>
 </template>
-
-<!-- <div
-      class="wrapper"
-      
-    >
-      <div class="header header_home">{{ item.title }}</div>
-      <div class="content content_home">
-        {{ item.details }}
-      </div>
-      <img class="image" :src="item.picture"></img>
-    </div> -->
-
 <script>
 export default {
-  layout: 'admin',
-  middleware: 'admin',
-  head() {
-    return {
-      title: 'manage news',
-    }
+  computed: {
+    width() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return false
+        case 'sm':
+          return false
+        case 'md':
+          return true
+        case 'lg':
+          return true
+        case 'xl':
+          return true
+      }
+    },
   },
   data() {
     return {
@@ -94,95 +94,13 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
-
-.container {
-  width: 90%;
-  max-width: 1000px;
-  margin: 50px auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* background-color: aqua; */
-}
-
-.wrapper {
-  position: absolute;
-  margin: auto;
-  max-width: 90%;
-  max-height: 90%;
-  width: 1500px;
-  height: 550px;
-
-  background: hsl(0, 0%, 95%);
-  box-shadow: 1px 1px 25px 3px rgba(0, 0, 0, 0.3);
-}
-
-h1 {
-  width: 100%;
-  height: 100%;
-  margin-top: 100px;
-  font-family: Tahoma (sans-serif);
-  color: rgb(106, 95, 73);
-}
-p {
-  width: 100%;
-  height: 100%;
-  margin-top: 10px;
-  margin-bottom: 30px;
-  font-family: Tahoma (sans-serif);
-  color: rgb(106, 95, 73);
-}
-
-.left {
-  width: 50%;
-  text-align: center;
-
-  border-radius: 8px;
-  font-family: Tahoma (sans-serif);
-}
-
-/*************/
-.header {
-  position: absolute;
-  width: max-content;
-  font-size: 2.875rem;
-  font-family: Tahoma (sans-serif);
-  white-space: nowrap;
-
-  top: 25%;
-  left: 4%;
-  color: rgb(106, 95, 73);
-}
-.header::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 5%;
-  font-family: Tahoma (sans-serif);
-  background: rgb(106, 95, 73);
-}
-
-/*************/
-.content {
-  position: absolute;
-  font-size: 1.2rem;
-  width: 23%;
-  font-family: Tahoma (sans-serif);
-  top: 45%;
-  left: 4%;
-  color: rgb(106, 95, 73);
-}
 .image {
   position: absolute;
   top: 0;
   right: 0;
-
   width: 70%;
   height: 100%;
-  background-image: url(https://images.unsplash.com/photo-1580707578919-892eb22db615?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fG1hbiUyMHBvcnRyYWl0fGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60);
+  /* background-image: url(https://images.unsplash.com/photo-1580707578919-892eb22db615?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fG1hbiUyMHBvcnRyYWl0fGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60); */
   background-repeat: no-repeat;
   background-size: cover;
 }

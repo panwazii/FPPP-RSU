@@ -1,106 +1,149 @@
 <template>
-  <section>
-    <div>
-      <!-- <h1>{{ $store.getters.getCartItems }}</h1>
+  <div>
+    <!-- <h1>{{ $store.getters.getCartItems }}</h1>
     <v-btn @click="$store.dispatch('addCartItems', { id: 1, name: 'test1' })">cart add</v-btn>
     <v-btn @click="$store.dispatch('removeCartItems', 1)">cart remove</v-btn> -->
+    <v-card class="rounded-xl">
       <v-parallax
-        class="rounded-lg"
         height="750"
         :src="require('~/static/img/index/index-bg.jpg')"
       >
-        <div
+        <!-- <div
           class="d-flex flex-column fill-height justify-center align-center text-white"
         >
           <h1 class="text-h4 font-weight-bold mb-4 paralax-text"></h1>
-        </div>
+        </div> -->
       </v-parallax>
+    </v-card>
 
-      <h1 class="text-h4 font-weight-bold d-flex justify-center mt-12">
-        ข่าวสาร
-      </h1>
-      <p class="d-flex justify-center text-center">ข่าวสารล่าสุดจากเว็บไซต์</p>
-      <div class="room1 justify-center">
-        <v-row class="justify-center">
-          <v-col
-            dense
-            v-for="(news, index) in datanew.slice(0, 3)"
-            :key="news.id"
-          >
-            <indexNewTest
-              :id="news.id"
-              :name="news.title"
-              :detail="news.details"
-            />
-          </v-col>
-        </v-row>
-        <v-row class="text-h4 font-weight-bold d-flex justify-center mt-12">
-          <a href="/news" class="btn justify-center">SEE MORE</a>
-        </v-row>
-      </div>
-
-      <indexService />
-
-      <h1 class="text-h4 font-weight-bold mt-12 mb-4 d-flex justify-center">
-        บริการจองห้อง
-      </h1>
-      <p class="mb-4 d-flex justify-center text-center">
-        จองห้องเพื่อใช้งานอุปกรณ์ต่างๆภายในห้อง
-      </p>
-
-      <!-- <v-row dense v-for="(news, index) in datanew.slice(0, 3)" :key="news.title">
-            <indexNew
-            :id="news.id"
-            :picture="rooms.Picture[0].url"
-            :name="news.name"
-            :details="news.details"
-          />
-          </v-row> -->
-
-      <div class="room1 justify-center">
-        <v-row class="justify-center mt-12">
-          <v-col v-for="(rooms, index) in room.slice(0, 3)" :key="rooms.name">
-            <indexAboutUs
-              :id="rooms.id"
-              :picture="rooms.picture[0].url"
-              :name="rooms.name"
-              :detail="rooms.details"
-            />
-          </v-col>
-        </v-row>
-      </div>
-
-      <v-row class="text-h4 font-weight-bold d-flex justify-center mt-12">
-        <a href="/room-selection" class="btn justify-center">SEE MORE</a>
+    <h1 class="text-h4 font-weight-bold d-flex justify-center mt-12">
+      ข่าวสาร
+    </h1>
+    <p class="d-flex justify-center text-center">ข่าวสารล่าสุดจากเว็บไซต์</p>
+    <div class="justify-center card-width">
+      <v-row class="justify-center">
+        <v-col
+          cols="12"
+          md="4"
+          dense
+          v-for="news in allNews.slice(0, 3)"
+          :key="news.id"
+        >
+          <indexNews :id="news.id" :name="news.title" :detail="news.details" />
+        </v-col>
       </v-row>
-
-      <div class="mt-15">
-        <indexContact />
+      <div class="d-flex justify-center">
+        <v-btn
+          large
+          dark
+          class="mt-12 rounded-xl text-h5"
+          @click="$router.push('/news')"
+          >ดูเพิ่มเติม</v-btn
+        >
       </div>
     </div>
-  </section>
+    <v-lazy
+      v-model="lazyService"
+      transition="fade-transition"
+      :options="{
+        threshold: 1,
+      }"
+    >
+      <div style="margin-top: 100px">
+        <indexService />
+      </div>
+    </v-lazy>
+
+    <v-lazy
+      v-model="lazyRoom"
+      transition="fade-transition"
+      :options="{
+        threshold: 1,
+      }"
+    >
+      <div style="margin-top: 100px">
+        <h1 class="text-h4 font-weight-bold mt-12 d-flex justify-center">
+          บริการจองห้อง
+        </h1>
+        <p class="d-flex justify-center text-center">
+          จองห้องเพื่อใช้งานอุปกรณ์ต่างๆภายในห้อง
+        </p>
+        <div class="card-width">
+          <v-row>
+            <v-col
+              cols="12"
+              md="4"
+              sm="12"
+              xs="12"
+              v-for="rooms in room.slice(0, 3)"
+              :key="rooms.name"
+            >
+              <indexAboutUs
+                :id="rooms.id"
+                :picture="rooms.picture[0].url"
+                :name="rooms.name"
+                :detail="rooms.details"
+              />
+            </v-col>
+          </v-row>
+          <div class="d-flex justify-center">
+            <v-btn
+              large
+              dark
+              class="mt-12 rounded-xl text-h5"
+              @click="$router.push('/room-selection')"
+              >ดูเพิ่มเติม</v-btn
+            >
+          </div>
+        </div>
+      </div>
+    </v-lazy>
+
+    <v-lazy
+      v-model="lazyRoom"
+      transition="fade-transition"
+      :options="{
+        threshold: 1,
+      }"
+    >
+      <div style="margin-top: 100px">
+        <indexContact />
+      </div>
+    </v-lazy>
+  </div>
 </template>
 
 <script>
 export default {
+  head() {
+    return {
+      title: 'หน้าหลัก',
+    }
+  },
   mounted() {
     this.fetctrooms()
   },
   data() {
     return {
       room: [],
-      datanew: [],
+      allNews: [],
       image: require('@/static/img/index/ventilation_mono.png'),
+      lazyService: false,
+      lazyRoom: false,
+      lazyContact: false,
     }
   },
   methods: {
     async fetctrooms() {
       let data = await this.$store.dispatch('api/public/getAllRooms')
-      let datanew = await this.$store.dispatch('api/public/getAllNews')
+      let allNews = await this.$store.dispatch('api/public/getAllNews')
       this.room = data.rooms
-      this.datanew = datanew.news
+      this.allNews = allNews.news
       console.log('this is room,', this.room)
       console.log('this is new', this.new)
+    },
+    goto(routeName) {
+      this.$router.push(routeName)
     },
   },
 }
@@ -109,40 +152,13 @@ export default {
 .paralax-text {
   text-shadow: 2px 2px #000000;
 }
-.room1 {
+.card-width {
   max-width: 1200px;
   margin: auto;
 }
 
-.roomcenter {
-  padding: 300px 260px;
-  font-family: Tahoma (sans-serif);
-  font-size: 30px;
-  text-align: center;
-  color: rgb(106, 95, 73);
-  z-index: 1;
-}
-a {
-  height: 50px;
-  width: 200px;
-  text-align: center;
-  text-decoration: none;
-  text-transform: uppercase;
-  background-color: rgb(0, 0, 0);
-  color: rgb(255, 255, 255);
-  padding: 5px 20px;
-  display: inline-block;
-  letter-spacing: 2px;
-  border-radius: 200px;
-  justify-items: center;
-  font-size: 20px;
-}
-section {
-  top: 0;
-  min-height: 100vh;
-  width: 100%;
-  display: grid;
-  background-color: #ffffff;
-  position: relative;
+.v-parallax__image {
+  transform: none !important;
+  width: 100% !important;
 }
 </style>

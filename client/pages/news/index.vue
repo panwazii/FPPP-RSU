@@ -6,9 +6,9 @@
     <section class="cards">
       <div
         class="card"
-        v-for="(news, index) in datanew"
+        v-for="news in datanew"
         :key="news.id"
-        @click="$router.push('/new/' + news.id)"
+        @click="$router.push('/news/' + news.id)"
       >
         <div class="card__image-container">
           <img :src="news.picture" />
