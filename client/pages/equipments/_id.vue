@@ -1,12 +1,8 @@
 <template>
   <div>
+    <SharedBreadCrumbs title="Equipments" :routes="routes" />
     <section>
       <div class="grid">
-        <header class="page-header content-header">
-          <H3
-            >CATEGORIES / <a href="">{{ equipmentInfo.type }}</a></H3
-          >
-        </header>
         <footer class="page-footer content-footer">
           <div class="box footerHeader"><H1>คุณสมบัติ</H1></div>
           <div>
@@ -57,14 +53,19 @@ export default {
       })
       return
     } else {
+      this.routes[2].name = equipment.equipment.name
       this.equipmentInfo = equipment.equipment
-      console.log('this is equipment', equipment)
     }
   },
   data() {
     return {
       equipmentInfo: {},
       tool: [],
+      routes: [
+        { id: 1, name: 'home', to: '/' },
+        { id: 2, name: 'equipments', to: '/equipments' },
+        { id: 3, name: '', to: '/' },
+      ],
     }
   },
   methods: {},

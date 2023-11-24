@@ -78,7 +78,7 @@
               v-for="rooms in room.slice(0, 3)"
               :key="rooms.name"
             >
-              <indexAboutUs
+              <IndexRoomReservation
                 :id="rooms.id"
                 :picture="rooms.picture[0].url"
                 :name="rooms.name"
@@ -91,7 +91,7 @@
               large
               dark
               class="mt-12 rounded-xl text-h5"
-              @click="$router.push('/room-selection')"
+              @click="$router.push('/rooms')"
               >ดูเพิ่มเติม</v-btn
             >
           </div>
@@ -127,7 +127,6 @@ export default {
     return {
       room: [],
       allNews: [],
-      image: require('@/static/img/index/ventilation_mono.png'),
       lazyService: false,
       lazyRoom: false,
       lazyContact: false,

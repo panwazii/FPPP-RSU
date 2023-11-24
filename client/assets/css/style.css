@@ -25,7 +25,7 @@
 }
 
 .banner-bg-1 {
-  background-image: url(~/static/img/index/872.png);
+  /* background-image: url(~/static/img/index/872.png); */
   background-position: right;
   background-size: cover;
   padding: 100px 0;

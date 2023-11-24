@@ -29,7 +29,7 @@
         <v-list-item to="/equipments" class="mt-2">
           <v-list-item-title>Equipment/อุปกรณ์</v-list-item-title>
         </v-list-item>
-        <v-list-item to="/room-selection" class="mt-2">
+        <v-list-item to="/rooms" class="mt-2">
           <v-list-item-title>Room/ห้องแลป</v-list-item-title>
         </v-list-item>
         <v-list-item to="/news" class="mt-2">
@@ -54,7 +54,7 @@
             <v-btn class="ml-2" rounded text to="/equipments">
               <h4>Equipment/อุปกรณ์</h4>
             </v-btn>
-            <v-btn class="ml-2" rounded text to="/room-selection">
+            <v-btn class="ml-2" rounded text to="/rooms">
               <h4>Room/ห้องแลป</h4>
             </v-btn>
             <v-btn class="ml-2" rounded text to="/news">
@@ -66,6 +66,7 @@
               class="ml-2"
               rounded
               depressed
+              dark
               to="/login"
             >
               <h4>Login</h4>
