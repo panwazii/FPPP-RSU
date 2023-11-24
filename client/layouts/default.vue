@@ -6,12 +6,13 @@
       message="are you sure about that son ?"
       :confirmLogout.sync="logout_modal"
     />
-    <!-- <v-navigation-drawer
+    <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
       fixed
       app
+      v-if="!width"
     >
       <v-list class="mt-0 pt-0">
         <div>
@@ -22,23 +23,20 @@
           ></v-img>
         </div>
         <v-divider></v-divider>
-        <v-list-item class="mt-2">
-          <h4>test</h4>
+        <v-list-item to="/" class="mt-2">
+          <v-list-item-title>Home/หน้าหลัก</v-list-item-title>
         </v-list-item>
-        <v-list-item class="mt-2">
-          <h4>test</h4>
+        <v-list-item to="/equipments" class="mt-2">
+          <v-list-item-title>Equipment/อุปกรณ์</v-list-item-title>
         </v-list-item>
-        <v-list-item class="mt-2">
-          <h4>test</h4>
+        <v-list-item to="/room-selection" class="mt-2">
+          <v-list-item-title>Room/ห้องแลป</v-list-item-title>
         </v-list-item>
-        <v-list-item class="mt-2">
-          <h4>test</h4>
-        </v-list-item>
-        <v-list-item class="mt-2">
-         
+        <v-list-item to="/news" class="mt-2">
+          <v-list-item-title>News/ข่าวสาร</v-list-item-title>
         </v-list-item>
       </v-list>
-    </v-navigation-drawer> -->
+    </v-navigation-drawer>
     <v-main>
       <v-app-bar hide-on-scroll transparent fixed app :color="bg" elevation="3">
         <v-img
@@ -47,8 +45,8 @@
           :src="require('~/static/img/logo/fppp-logo.png')"
         ></v-img>
         <template v-slot:extension>
-          <div class="mx-auto">
-            <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer" /> -->
+          <v-app-bar-nav-icon v-if="!width" @click.stop="drawer = !drawer" />
+          <div class="mx-auto" v-if="width">
             <!-- <v-spacer></v-spacer> -->
             <v-btn rounded text to="/">
               <h4>Home/หน้าหลัก</h4>
@@ -58,6 +56,9 @@
             </v-btn>
             <v-btn class="ml-2" rounded text to="/room-selection">
               <h4>Room/ห้องแลป</h4>
+            </v-btn>
+            <v-btn class="ml-2" rounded text to="/news">
+              <h4>News/ข่าวสาร</h4>
             </v-btn>
 
             <v-btn
@@ -115,6 +116,22 @@ export default {
       bg: '#FFFFFF',
       logout_modal: false,
     }
+  },
+  computed: {
+    width() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return false
+        case 'sm':
+          return false
+        case 'md':
+          return true
+        case 'lg':
+          return true
+        case 'xl':
+          return true
+      }
+    },
   },
   methods: {
     changeColor() {

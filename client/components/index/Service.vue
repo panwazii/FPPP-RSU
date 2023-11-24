@@ -11,13 +11,16 @@
         </p>
       </div>
     </div>
-    <v-carousel hide-delimiters v-model="onboarding" show-arrows :cycle="true" :interval="6000">
+    <v-carousel
+      class="card-width"
+      hide-delimiters
+      v-model="onboarding"
+      show-arrows
+      :cycle="true"
+      :interval="6000"
+    >
       <v-carousel-item v-for="item in allServices" :key="item.id">
-        <v-card
-          height="460"
-          width="100%"
-          class="d-flex ma-2 rounded-xl"
-        >
+        <v-card height="460" class="ma-2 rounded-xl">
           <v-row>
             <v-col cols="12" md="5" xs="12">
               <div>
@@ -103,5 +106,10 @@ export default {
   /* background-image: url(https://images.unsplash.com/photo-1580707578919-892eb22db615?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fG1hbiUyMHBvcnRyYWl0fGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60); */
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.card-width {
+  max-width: 1200px;
+  margin: auto;
 }
 </style>
