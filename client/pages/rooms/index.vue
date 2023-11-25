@@ -1,170 +1,63 @@
 <template>
-    <main>
-      <h1 class="text-h4 font-weight-bold d-flex justify-center mt-12">
-        รายการห้อง
-      </h1>
-      <section class="cards">
-        <div
-          class="card"
-          v-for="rooms in room"
-          :key="rooms.name"
-          @click="$router.push('/room/' + rooms.id)"
-        >
-          <div class="card__image-container">
-            <img :src="room[0].picture[0].url" />
-          </div>
-          <div class="card__content">
-            <p class="card__title text--medium">
-              {{ rooms.name }}
-            </p>
-            <div class="card__info">
-              <p class="text--medium">ราคา</p>
-              <p class="card__price text--medium">{{ rooms.rent_price }}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-  </template>
-  
-  <script>
-  export default {
-    mounted() {
-      this.fetctrooms()
+  <div>
+    <SharedBreadCrumbs title="Rooms" :routes="routes" />
+    <v-card min-height="1000" class="rounded-xl">
+      <v-card-text>
+        <v-row>
+          <v-col
+            justify="center"
+            align="center"
+            v-for="room in rooms"
+            :key="room.id"
+            cols="12"
+            md="3"
+          >
+            <RoomsCard
+              :id="room.id"
+              :title="room.name"
+              :picture="room.picture"
+              :price="room.rent_price"
+            />
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+    <v-pagination class="mt-2 justify-center" v-model="page" :length="totalPages">
+    </v-pagination>
+  </div>
+</template>
+<script>
+export default {
+  head() {
+    return {
+      title: 'รายการอุปกรณ์',
+    }
+  },
+  mounted() {
+    this.fetchRooms()
+  },
+  data() {
+    return {
+      page: 1,
+      totalPages: 0,
+      rooms: [],
+      routes: [
+        { id: 1, name: 'home', to: '/' },
+        { id: 2, name: 'rooms', to: '/rooms' },
+      ],
+    }
+  },
+  methods: {
+    async fetchRooms() {
+      let data = await this.$store.dispatch('api/public/getAllRooms')
+      this.rooms = data.rooms
+      this.totalPages = data.total_pages
     },
-    data() {
-      return {
-        room: [],
-      }
-    },
-    methods: {
-      async fetctrooms() {
-        let data = await this.$store.dispatch('api/public/getAllRooms')
-        this.room = data.rooms
-        console.log(this.room)
-      },
-    },
-  }
-  </script>
-  
-  <style scoped>
-  main {
-    height: 100%;
-    width: 100%;
-    background-color: #ffffff;
-    background-repeat: no-repeat;
-    background-position: 100%;
-  }
-  
-  * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-  }
-  
-  body {
-    background-color: #303032;
-  }
-  
-  main {
-    display: grid;
-    grid-template-columns: 1fr repeat(12, minmax(auto, 60px)) 1fr;
-    grid-gap: 40px;
-    padding: 60px 0;
-  }
-  
-  .text--medium {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 16px;
-    line-height: 20px;
-    font-weight: 400;
-    color: #ecf0f1;
-  }
-  
-  .cards {
-    grid-column: 2 / span 12;
-    display: grid;
-    grid-template-columns: repeat(12, minmax(auto, 60px));
-    grid-gap: 40px;
-  }
-  
-  .card {
-    grid-column-end: span 4;
-    display: flex;
-    flex-direction: column;
-    background-color: #39393b;
-    cursor: pointer;
-    transition: all 0.3s ease 0s;
-  }
-  
-  .card:hover {
-    transform: translateY(-7px);
-  }
-  
-  .card__image-container {
-    width: 100%;
-    padding-top: 56.25%;
-    overflow: hidden;
-    position: relative;
-  }
-  
-  .card__image-container img {
-    width: 100%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  
-  .card__content {
-    padding: 20px;
-  }
-  
-  .card__title {
-    margin-bottom: 20px;
-  }
-  
-  .card__info {
-    display: flex;
-    align-self: end;
-    align-items: center;
-  }
-  
-  .card__price {
-    margin-left: auto;
-    padding: 5px 20px;
-    background-color: #303032;
-    border-radius: 20px;
-  }
-  
-  @media only screen and (max-width: 1000px) {
-    .card {
-      grid-column-end: span 6;
-    }
-  }
-  
-  @media only screen and (max-width: 700px) {
-    main {
-      grid-gap: 20px;
-    }
-    .card {
-      grid-column-end: span 12;
-    }
-  }
-  
-  @media only screen and (max-width: 500px) {
-    main {
-      grid-template-columns: 10px repeat(6, 1fr) 10px;
-      grid-gap: 10px;
-    }
-    .cards {
-      grid-column: 2 / span 6;
-      grid-template-columns: repeat(6, 1fr);
-      grid-gap: 20px;
-    }
-    .card {
-      grid-column-end: span 6;
-    }
-  }
-  </style>
-  
+  },
+}
+</script>
+<style scoped>
+.card-actions {
+  bottom: 0;
+}
+</style>

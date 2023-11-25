@@ -25,39 +25,11 @@
     <v-pagination
       class="mt-2 justify-center"
       v-model="page"
-      :length="6"
+      :length="totalPages"
     ></v-pagination>
   </div>
-
-  <!-- <main>
-      <h1 class="text-h4 font-weight-bold d-flex justify-center mt-12">
-        รายการอุปกรณ์
-      </h1>
-      <section class="cards">
-        <div
-          class="card"
-          v-for="equipments in tool"
-          :key="equipments.id"
-          @click="$router.push('/equipment/' + equipments.id)"
-        >
-          <div class="card__image-container">
-            <img :src="equipments.picture" />
-          </div>
-          <div class="card__content">
-            <p class="card__title text--medium">
-              {{ equipments.name }}
-            </p>
-            <div class="card__info">
-              <p class="text--medium">ราคา</p>
-              <p class="card__price text--medium">{{ equipments.rent_price }}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main> -->
 </template>
-  
-  <script>
+<script>
 export default {
   head() {
     return {
@@ -65,12 +37,13 @@ export default {
     }
   },
   mounted() {
-    this.fetchrooms()
+    this.fetchEquipments()
   },
   data() {
     return {
       page: 1,
       equipments: [],
+      totalPages: 0,
       routes: [
         { id: 1, name: 'home', to: '/' },
         { id: 2, name: 'equipments', to: '/equipments' },
@@ -78,17 +51,16 @@ export default {
     }
   },
   methods: {
-    async fetchrooms() {
+    async fetchEquipments() {
       let data = await this.$store.dispatch('api/public/getAllEquipmentInfo')
       this.equipments = data.equipments
+      this.totalPages = data.total_pages
     },
   },
 }
 </script>
-  
-  <style scoped>
+<style scoped>
 .card-actions {
   bottom: 0;
 }
 </style>
-  

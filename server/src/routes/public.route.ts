@@ -38,7 +38,7 @@ publicRouter.get('/getAllNews', async (req, res) => {
         const Offset = Limit * Page;
         const allNews = await NewsController.getAllNews(Limit, Offset)
         res.status(200).json({
-            code: 200, news: allNews.rows, totalpages: Math.ceil(allNews.count / Limit)
+            code: 200, news: allNews.rows, total_pages: Math.ceil(allNews.count / Limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -55,7 +55,7 @@ publicRouter.get('/getAllRooms', async (req, res) => {
         const Offset = Limit * Page;
         const allRooms = await RoomController.getAllRooms(Limit, Offset)
         res.status(200).json({
-            code: 200, rooms: allRooms.rows, totalpages: Math.ceil(allRooms.count / Limit)
+            code: 200, rooms: allRooms.rows, total_pages: Math.ceil(allRooms.count / Limit)
         });
 
     } catch (error) {

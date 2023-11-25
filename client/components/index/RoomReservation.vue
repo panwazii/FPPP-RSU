@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     gotoRoom() {
-      this.$router.push(`/room/${this.id}`)
+      this.$router.push(`/rooms/${this.id}`)
     },
   },
 }

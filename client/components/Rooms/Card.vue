@@ -11,7 +11,7 @@
           >
             <v-fade-transition>
               <v-overlay v-if="hover" absolute>
-                <v-btn @click="$router.push('/equipments/' + id)">ดูรายละเอียด</v-btn>
+                <v-btn @click="$router.push('/rooms/' + id)">ดูรายละเอียด</v-btn>
               </v-overlay>
             </v-fade-transition>
           </v-img>
@@ -46,10 +46,10 @@ export default {
   },
   computed: {
     displayImage() {
-      if (this.picture === null) {
+      if (!this.picture[0]) {
         return require('~/static/img/default/no-image.png')
       } else {
-        return this.picture
+        return this.picture[0].url
       }
     },
   },
@@ -59,8 +59,7 @@ export default {
       default: () => '',
     },
     picture: {
-      type: String,
-      default: () => require('~/static/img/default/no-image.png'),
+      type: Array,
     },
     title: {
       type: String,
