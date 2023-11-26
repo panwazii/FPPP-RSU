@@ -93,7 +93,7 @@ export default {
   },
   watch: {
     'fetchOption.page'() {
-      this.fetchEquipment()
+      this.fetchEquipments()
     },
   },
   methods: {
@@ -102,7 +102,7 @@ export default {
         params: {
           ...this.search,
           limit: this.fetchOption.itemsPerPage,
-          page: this.fetchOptionpage,
+          page: this.fetchOption.page,
         },
       })
       this.equipments = data.equipments
@@ -111,6 +111,7 @@ export default {
     clearSearch() {
       this.search.filter = 1
       this.search.value = ''
+      this.fetchOption.page = 1
       this.fetchEquipments()
     },
   },
