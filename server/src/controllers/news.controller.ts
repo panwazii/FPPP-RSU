@@ -1,10 +1,4 @@
-import Sequelize, { Op } from 'sequelize';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import NewsModel, { NewsAttribute } from '../database/models/news.model';
-import config from '../config/global.config';
-import { log } from '../tools/log';
-
 
 class NewsController {
     public static async getByID(newsId: string) {

@@ -2,44 +2,50 @@ import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
 import RoomModel from './rooms.model';
+import EquipmentInfoModel from './equipment_infos.model';
+import SupplierModel from './supplier.model';
 
-export interface EquipmentAttribute {
+export interface EquipmentsAttribute {
     id?: string;
-    room_id?: number;
-    name?: string;
-    details?: string;
+    serial_number?: string;
     price?: number;
-    rent_price?: number;
-    picture?: string;
+    room_id?: string;
+    equipment_info_id?: string;
+    supplier_id?: number;
+    equipment_status?: string;
     available_status?: boolean;
     created_at?: string;
     update_at?: string;
 }
 
-export interface EquipmentAttributeCreation extends Optional<EquipmentAttribute, 'id'> { }
+export interface EquipmentsAttributeCreation extends Optional<EquipmentsAttribute, 'id'> { }
 
+export const EquipmentStatus = {
+    AVAILABLE: 'available',
+    UNAVAILABLE: 'unavailable',
+    REPAIR: 'repair',
+}
 
-
-class EquipmentModel extends Model<EquipmentAttribute, EquipmentAttributeCreation> implements EquipmentAttribute {
+class EquipmentsModel extends Model<EquipmentsAttribute, EquipmentsAttributeCreation> implements EquipmentsAttribute {
     declare id: string;
 
-    declare room_id: number;
-
-    declare name: string;
-
-    declare details: string;
+    declare serial_number: string;
 
     declare price: number;
 
-    declare rent_price: number;
+    declare room_id: string;
 
-    declare picture: string;
+    declare equipment_info_id: string;
+
+    declare supplier_id: number;
+
+    declare equipment_status: string;
 
     declare available_status: boolean;
 }
 
-export const initEquipmentModel = (connection: Sequelize) => {
-    EquipmentModel.init(
+export const initEquipmentsModel = (connection: Sequelize) => {
+    EquipmentsModel.init(
         {
             id: {
                 type: DataTypes.UUID,
@@ -47,19 +53,7 @@ export const initEquipmentModel = (connection: Sequelize) => {
                 primaryKey: true,
                 defaultValue: DataTypes.UUIDV4,
             },
-            room_id: {
-                type: DataTypes.UUID,
-                allowNull: false,
-                references: {
-                    model: RoomModel,
-                    key: 'id',
-                },
-            },
-            name: {
-                allowNull: false,
-                type: DataTypes.STRING,
-            },
-            details: {
+            serial_number: {
                 allowNull: false,
                 type: DataTypes.STRING,
             },
@@ -67,13 +61,33 @@ export const initEquipmentModel = (connection: Sequelize) => {
                 allowNull: false,
                 type: DataTypes.DECIMAL,
             },
-            rent_price: {
-                allowNull: false,
-                type: DataTypes.DECIMAL,
+            room_id: {
+                type: DataTypes.UUID,
+                allowNull: true,
+                references: {
+                    model: RoomModel,
+                    key: 'id',
+                },
             },
-            picture: {
+            equipment_info_id: {
+                type: DataTypes.UUID,
                 allowNull: false,
-                type: DataTypes.STRING,
+                references: {
+                    model: EquipmentInfoModel,
+                    key: 'id',
+                },
+            },
+            supplier_id: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+                references: {
+                    model: SupplierModel,
+                    key: 'id',
+                },
+            },
+            equipment_status: {
+                allowNull: false,
+                type: DataTypes.ENUM('available', 'unavailable', 'repair'),
             },
             available_status: {
                 allowNull: false,
@@ -83,9 +97,9 @@ export const initEquipmentModel = (connection: Sequelize) => {
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'equipments',
+            tableName: 'equipment_stocks',
         },
     );
 };
 
-export default EquipmentModel;
+export default EquipmentsModel;

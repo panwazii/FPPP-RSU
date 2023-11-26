@@ -1,12 +1,5 @@
-import Sequelize, { Op } from 'sequelize';
-import bcrypt from 'bcrypt';
-import axios from 'axios';
-import jwt from 'jsonwebtoken';
-import UserModel, { UserAttribute } from '../database/models/users.model';
 import ReserveModel, { ReserveAttribute } from '../database/models/reserve.model';
 import ReserveEquipmentModel, { ReserveEquipmentAttribute } from '../database/models/reserve_equipments.model';
-import config from '../config/global.config';
-import { log } from '../tools/log';
 
 class ReserveController {
     public static async getReserveByID(id: string) {
@@ -98,7 +91,7 @@ class ReserveController {
     public static async createReserveEquipment(id: any, data: any) {
         const packet: ReserveEquipmentAttribute = {
             equipment_info_id: data.equipment_info_id,
-            equipment_stock_id: data.equipment_stock_id,
+            equipments_id: data.equipments_id,
             reserve_id: id,
             available_status: true,
         };
@@ -109,7 +102,7 @@ class ReserveController {
     public static async updateReserveEquipment(data: any) {
         return ReserveEquipmentModel.update({
             equipment_info_id: data.equipment_info_id,
-            equipment_stock_id: data.equipment_stock_id,
+            equipments_id: data.equipments_id,
             available_status: data.available_status,
         }, {
             where: {

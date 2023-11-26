@@ -2,13 +2,13 @@ import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
 import EquipmentInfoModel from './equipment_infos.model';
-import EquipmentStockModel from './equipment_stocks.model';
+import EquipmentStockModel from './equipments.model';
 import ReserveModel from './reserve.model';
 
 export interface ReserveEquipmentAttribute {
     id?: string;
     equipment_info_id?: string;
-    equipment_stock_id?: string;
+    equipments_id?: string;
     reserve_id?: string;
     available_status?: boolean;
 }
@@ -20,7 +20,7 @@ class ReserveEquipmentModel extends Model<ReserveEquipmentAttribute, ReserveEqui
 
     declare equipment_info_id: string;
 
-    declare equipment_stock_id: string;
+    declare equipments_id: string;
 
     declare reserve_id: string;
 
@@ -44,7 +44,7 @@ export const initReserveEquipmentModel = (connection: Sequelize) => {
                     key: 'id',
                 },
             },
-            equipment_stock_id: {
+            equipments_id: {
                 type: DataTypes.UUID,
                 allowNull: true,
                 references: {

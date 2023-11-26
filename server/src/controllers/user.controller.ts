@@ -1,6 +1,5 @@
 import Sequelize, { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
-import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import UserModel, { UserAttribute } from '../database/models/users.model';
 import config from '../config/global.config';

@@ -1,40 +1,18 @@
 import Sequelize, { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import EquipmentModel, { EquipmentAttribute } from '../database/models/equipments.model';
-import GlobalEquipmentModel, { GlobalEquipmentAttribute } from '../database/models/global_equipments.model';
 import EquipmentInfoModel, { EquipmentInfoAttribute } from '../database/models/equipment_infos.model';
-import EquipmentStockModel, { EquipmentStockAttribute } from '../database/models/equipment_stocks.model';
-import EquipmentRentRateModel, { EquipmentRentRateAttribute } from '../database/models/equipment_rent_rates.model';
+import EquipmentsModel, { EquipmentsAttribute } from '../database/models/equipments.model';
+import RentRate, { RentRateAttribute } from '../database/models/rent_rate.model';
 import ProductionLineModel, { ProductionLineAttribute } from '../database/models/production_lines.model';
 import SupplierModel, { SupplierAttribute } from '../database/models/supplier.model';
-import SupplyStockModel, { SupplyStockAttribute } from '../database/models/supply_stock.model';
+import SupplyModel, { SupplyAttribute } from '../database/models/supply.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
 class EquipmentController {
-    // public static async createSuperAdmin() {
-    //     const Email = config.security.superadminemail
-    //     const HashedPassword = await bcrypt.hash(config.security.superadminpassword, 12);
-    //     const Packet = {
-    //         email: Email,
-    //         password: HashedPassword,
-    //         fname: "Super",
-    //         lname: "Admin",
-    //         type_id: 1
-    //     };
-
-    //     return NewsModel.create(Packet)
-    //         .then((res) => log("SuperAdmin has been created"))
-    //         .catch((e) => {
-    //             log(e);
-    //             return false;
-    //         });
-    // }
-    // EQUIPMENT
 
     // Equipment Info
-
     public static async getSingleEquipmentInfo(id: string) {
         return EquipmentInfoModel.findOne({
             where: { id: id },
@@ -79,7 +57,7 @@ class EquipmentController {
             distinct: true,
             where: { available_status: true },
             include: [{
-                model: EquipmentStockModel, as: 'stock',
+                model: EquipmentsModel, as: 'stock',
                 where: { room_id: id, available_status: true, },
             }],
             limit,
@@ -112,7 +90,7 @@ class EquipmentController {
             rent_price: data.rent_price,
             quantity: data.quantity,
             type: data.type,
-            equipment_rent_rate_id: data.equipment_rent_rate_id,
+            rent_rate_id: data.rent_rate_id,
             production_line_id: data.production_line_id,
         }, {
             where: {
@@ -123,14 +101,14 @@ class EquipmentController {
 
     // Equipment Stock
     public static async getSingleEquipmentStock(id: string) {
-        return EquipmentStockModel.findOne({
+        return EquipmentsModel.findOne({
             where: { id: id },
             raw: true
         });
     }
 
     public static async getAllEquipmentStock(limit: number, offset: number) {
-        return EquipmentStockModel.findAndCountAll({
+        return EquipmentsModel.findAndCountAll({
             where: { available_status: true },
             limit,
             offset,
@@ -139,7 +117,7 @@ class EquipmentController {
     }
 
     public static async createEquipmentStock(data: any) {
-        const packet: EquipmentStockAttribute = {
+        const packet: EquipmentsAttribute = {
             serial_number: data.serial_number,
             room_id: data.room_id,
             price: data.price,
@@ -148,11 +126,11 @@ class EquipmentController {
             available_status: true,
         };
 
-        return EquipmentStockModel.create(packet)
+        return EquipmentsModel.create(packet)
     }
 
     public static async updateEquipmentStock(data: any) {
-        return EquipmentStockModel.update({
+        return EquipmentsModel.update({
             serial_number: data.serial_number,
             room_id: data.room_id,
             price: data.price,
@@ -165,14 +143,14 @@ class EquipmentController {
 
     // Equipment Rent Rate
     public static async getSingleEquipmentRentRate(id: string) {
-        return EquipmentRentRateModel.findOne({
+        return RentRate.findOne({
             where: { id: id },
             raw: true
         });
     }
 
     public static async getAllEquipmentRentRate(limit: number, offset: number) {
-        return EquipmentRentRateModel.findAndCountAll({
+        return RentRate.findAndCountAll({
             where: { available_status: true },
             limit,
             offset,
@@ -181,16 +159,16 @@ class EquipmentController {
     }
 
     public static async createEquipmentRentRate(data: any) {
-        const packet: EquipmentRentRateAttribute = {
+        const packet: RentRateAttribute = {
             name: data.name,
             available_status: true,
         };
 
-        return EquipmentRentRateModel.create(packet)
+        return RentRate.create(packet)
     }
 
     public static async updateEquipmentRentRate(data: any) {
-        return EquipmentRentRateModel.update({
+        return RentRate.update({
             name: data.name,
         }, {
             where: {
@@ -236,14 +214,14 @@ class EquipmentController {
 
     //Supply
     public static async getSingleSupplyStock(id: number) {
-        return SupplyStockModel.findOne({
+        return SupplyModel.findOne({
             where: { id: id },
             raw: true
         });
     }
 
     public static async getAllSupplyStock(limit: number, offset: number) {
-        return SupplyStockModel.findAndCountAll({
+        return SupplyModel.findAndCountAll({
             where: { available_status: true },
             limit,
             offset,
@@ -252,26 +230,26 @@ class EquipmentController {
     }
 
     public static async createSupplyStock(data: any) {
-        const packet: SupplyStockAttribute = {
+        const packet: SupplyAttribute = {
             quantity: data.quantity,
             price: data.price,
             date: data.date,
             remark: data.remark,
-            supply_stock_id: data.supply_stock_id,
+            equipment_info_id: data.equipment_info_id,
             supplier_id: data.supplier_id,
             available_status: true,
         };
 
-        return SupplyStockModel.create(packet)
+        return SupplyModel.create(packet)
     }
 
     public static async updateSupplyStock(data: any) {
-        return SupplyStockModel.update({
+        return SupplyModel.update({
             quantity: data.quantity,
             price: data.price,
             date: data.date,
             remark: data.remark,
-            supply_stock_id: data.supply_stock_id,
+            equipment_info_id: data.equipment_info_id,
             supplier_id: data.supplier_id,
         }, {
             where: {
@@ -334,7 +312,7 @@ class EquipmentController {
     }
 
     public static async getDropdownRentRate() {
-        return EquipmentRentRateModel.findAll({
+        return RentRate.findAll({
             attributes: { include: ['id', 'name'] },
             raw: true
         });

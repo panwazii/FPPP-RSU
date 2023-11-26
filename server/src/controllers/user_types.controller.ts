@@ -1,9 +1,4 @@
-import Sequelize, { Op } from 'sequelize';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import UserTypeModel, { UserTypeAttribute } from '../database/models/user_types.model';
-import config from '../config/global.config';
-import { log } from '../tools/log';
 
 class UserTypeController {
     public static async getByID(id: string) {

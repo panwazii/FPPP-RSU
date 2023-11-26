@@ -1,10 +1,5 @@
-import Sequelize, { Op } from 'sequelize';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import RoomModel, { RoomAttribute } from '../database/models/rooms.model';
 import RoomPictureModel, { RoomPictureAttribute } from '../database/models/room_pictures.model';
-import config from '../config/global.config';
-import { log } from '../tools/log';
 
 class RoomController {
     public static async getByID(roomId: string) {

@@ -1,4 +1,3 @@
-import Sequelize, { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import AdminModel from '../database/models/admins.model';

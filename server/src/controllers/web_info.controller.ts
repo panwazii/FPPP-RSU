@@ -1,8 +1,4 @@
-import Sequelize, { Op } from 'sequelize';
-import jwt from 'jsonwebtoken';
 import WebInfoModel, { WebInfoAttribute } from '../database/models/web_info.model';
-import { log } from '../tools/log';
-
 
 class WebInfoController {
     public static async getByID(id: string) {

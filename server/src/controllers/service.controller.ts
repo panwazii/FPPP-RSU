@@ -1,8 +1,4 @@
-import Sequelize, { Op } from 'sequelize';
-import jwt from 'jsonwebtoken';
 import ServiceModel, { ServiceAttribute } from '../database/models/services.model';
-import { log } from '../tools/log';
-
 
 class ServiceController {
     public static async getByID(id: string) {

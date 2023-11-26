@@ -4,22 +4,22 @@ import {
 import EquipmentInfoModel from './equipment_infos.model';
 import SupplierModel from './supplier.model';
 
-export interface SupplyStockAttribute {
+export interface SupplyAttribute {
     id?: number;
     quantity?: number;
     price?: number;
     date?: Date;
     remark?: string;
     supplier_id?: number;
-    supply_stock_id?: string;
+    equipment_info_id?: string;
     created_at?: Date;
     update_at?: Date;
     available_status?: boolean;
 }
 
-export interface SupplyStockAttributeCreation extends Optional<SupplyStockAttribute, 'id'> { }
+export interface SupplyAttributeCreation extends Optional<SupplyAttribute, 'id'> { }
 
-class SupplyStockModel extends Model<SupplyStockAttribute, SupplyStockAttributeCreation> implements SupplyStockAttribute {
+class SupplyModel extends Model<SupplyAttribute, SupplyAttributeCreation> implements SupplyAttribute {
     declare id: number;
 
     declare quantity: number;
@@ -32,7 +32,7 @@ class SupplyStockModel extends Model<SupplyStockAttribute, SupplyStockAttributeC
 
     declare supplier_id: number;
 
-    declare supply_stock_id: string;
+    declare equipment_info_id: string;
 
     declare created_at: Date;
 
@@ -41,8 +41,8 @@ class SupplyStockModel extends Model<SupplyStockAttribute, SupplyStockAttributeC
     declare available_status: boolean;
 }
 
-export const initSupplyStockModel = (connection: Sequelize) => {
-    SupplyStockModel.init(
+export const initSupplyModel = (connection: Sequelize) => {
+    SupplyModel.init(
         {
             id: {
                 type: DataTypes.INTEGER,
@@ -74,7 +74,7 @@ export const initSupplyStockModel = (connection: Sequelize) => {
                     key: 'id',
                 },
             },
-            supply_stock_id: {
+            equipment_info_id: {
                 type: DataTypes.UUID,
                 allowNull: true,
                 references: {
@@ -105,4 +105,4 @@ export const initSupplyStockModel = (connection: Sequelize) => {
     );
 };
 
-export default SupplyStockModel;
+export default SupplyModel;
