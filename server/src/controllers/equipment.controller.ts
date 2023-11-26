@@ -7,8 +7,8 @@ import EquipmentInfoModel, { EquipmentInfoAttribute } from '../database/models/e
 import EquipmentStockModel, { EquipmentStockAttribute } from '../database/models/equipment_stocks.model';
 import EquipmentRentRateModel, { EquipmentRentRateAttribute } from '../database/models/equipment_rent_rates.model';
 import ProductionLineModel, { ProductionLineAttribute } from '../database/models/production_lines.model';
-import SupplierModel,{SupplierAttribute} from '../database/models/supplier.model';
-import SupplyStockModel,{SupplyStockAttribute} from '../database/models/supply_stock.model';
+import SupplierModel, { SupplierAttribute } from '../database/models/supplier.model';
+import SupplyStockModel, { SupplyStockAttribute } from '../database/models/supply_stock.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
@@ -42,13 +42,36 @@ class EquipmentController {
         });
     }
 
-    public static async getAllEquipmentInfo(limit: number, offset: number) {
-        return EquipmentInfoModel.findAndCountAll({
-            where: { available_status: true },
-            limit,
-            offset,
-            raw: true
-        });
+    public static async getAllEquipmentInfo(filterType: number, searchValue: string, limit: number, offset: number) {
+        if (searchValue !== '' && filterType === 1) {
+            return EquipmentInfoModel.findAndCountAll({
+                where: {
+                    available_status: true,
+                    name: {
+                        [Op.iLike]: '%' + searchValue + '%'
+                    }
+                },
+                limit,
+                offset,
+                raw: true
+            });
+        }
+        else if (searchValue !== '' && filterType === 2) {
+            return EquipmentInfoModel.findAndCountAll({
+                where: { available_status: true },
+                limit,
+                offset,
+                raw: true
+            });
+        }
+        else {
+            return EquipmentInfoModel.findAndCountAll({
+                where: { available_status: true },
+                limit,
+                offset,
+                raw: true
+            });
+        }
     }
 
     public static async getAllEquipmentInfoInRoom(id: string, limit: number, offset: number) {

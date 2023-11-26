@@ -113,13 +113,15 @@ publicRouter.get('/getSingleEquipmentInfo', checkParamsEmpty, async (req, res) =
 
 publicRouter.get('/getAllEquipmentInfo', async (req, res) => {
     try {
+        const filterType = Number(req.query.filter);
+        const searchValue = String(req.query.value);
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        const data = await EquipmentController.getAllEquipmentInfo(Limit, Offset)
+        const data = await EquipmentController.getAllEquipmentInfo(filterType, searchValue, Limit, Offset)
         res.status(200).json({
             code: 200, equipments: data.rows, total_pages: Math.ceil(data.count / Limit)
         });
