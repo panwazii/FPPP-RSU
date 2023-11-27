@@ -55,7 +55,7 @@ export const initRentRateModel = (connection: Sequelize) => {
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'equipment_rent_rates',
+            tableName: 'rent_rates',
         },
     );
 };

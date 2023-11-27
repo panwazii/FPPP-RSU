@@ -97,7 +97,7 @@ export const initEquipmentsModel = (connection: Sequelize) => {
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'equipment_stocks',
+            tableName: 'equipments',
         },
     );
 };

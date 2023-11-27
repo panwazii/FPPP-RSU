@@ -100,7 +100,7 @@ export const initSupplyModel = (connection: Sequelize) => {
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'supply_stock',
+            tableName: 'supply',
         },
     );
 };
