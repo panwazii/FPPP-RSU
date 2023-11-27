@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SharedBreadCrumbs title="Rooms" :routes="routes" />
+    <SharedBreadCrumbs title="ห้องแลปทั้งหมด" :routes="routes" />
     <v-card min-height="1000" class="rounded-xl">
       <v-card-text>
         <v-row>
@@ -22,7 +22,11 @@
         </v-row>
       </v-card-text>
     </v-card>
-    <v-pagination class="mt-2 justify-center" v-model="page" :length="totalPages">
+    <v-pagination
+      class="mt-2 justify-center"
+      v-model="page"
+      :length="totalPages"
+    >
     </v-pagination>
   </div>
 </template>
@@ -30,7 +34,7 @@
 export default {
   head() {
     return {
-      title: 'รายการอุปกรณ์',
+      title: 'รายการห้องแลป',
     }
   },
   mounted() {
@@ -42,8 +46,8 @@ export default {
       totalPages: 0,
       rooms: [],
       routes: [
-        { id: 1, name: 'home', to: '/' },
-        { id: 2, name: 'rooms', to: '/rooms' },
+        { id: 1, name: 'หน้าหลัก', to: '/' },
+        { id: 2, name: 'ห้องแลป', to: '/rooms' },
       ],
     }
   },

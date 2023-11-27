@@ -1,174 +1,120 @@
 <template>
-  <main>
-    <h1 class="text-h4 font-weight-bold d-flex justify-center mt-12">
-      รายการข่าว
-    </h1>
-    <section class="cards">
-      <div
-        class="card"
-        v-for="news in datanew"
-        :key="news.id"
-        @click="$router.push('/news/' + news.id)"
-      >
-        <div class="card__image-container">
-          <img :src="news.picture" />
+  <div>
+    <SharedBreadCrumbs title="ข่าวทั้งหมด" :routes="routes" />
+    <v-card min-height="1000" class="rounded-xl mt-2">
+      <v-card-text>
+        <div class="d-flex">
+          <v-row>
+            <v-col cols="12" md="7" class="px-0">
+              <v-text-field
+                v-model="search.value"
+                class="rounded-xl mx-2"
+                prepend-inner-icon="mdi-magnify"
+                solo
+                label="ค้นหาข่าว"
+              />
+            </v-col>
+            <v-col cols="12" md="5" class="px-0">
+              <div class="d-flex">
+                <v-select
+                  class="rounded-xl mx-2"
+                  v-model="search.filter"
+                  :items="searchOptions"
+                  item-text="name"
+                  item-value="id"
+                  solo
+                />
+                <v-btn
+                  height="48"
+                  dark
+                  class="rounded-xl mr-2"
+                  @click="fetchNews"
+                  >ค้นหา</v-btn
+                >
+                <v-btn height="48" class="rounded-xl mr-2" @click="clearSearch"
+                  >ล้างค่า</v-btn
+                >
+              </div>
+            </v-col>
+          </v-row>
         </div>
-        <div class="card__content">
-          <p class="card__title text--medium">
-            {{ news.title }}
-          </p>
-          <div class="card__info">
-            <p class="text--medium">{{ news.details }}</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+        <v-row>
+          <v-col
+            justify="center"
+            align="center"
+            v-for="allnew in news"
+            :key="allnew.id"
+            cols="12"
+            md="3"
+          >
+            <NewsCard
+              :id="allnew.id"
+              :title="allnew.title"
+              :picture="allnew.picture"
+              :details="allnew.details"
+            />
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+    <v-pagination
+      circle
+      dark
+      class="mt-2 justify-center"
+      v-model="fetchOption.page"
+      :length="fetchOption.totalPages"
+    ></v-pagination>
+  </div>
 </template>
-
 <script>
 export default {
+  head() {
+    return {
+      title: 'รายการข่าว',
+    }
+  },
   mounted() {
-    this.fetchrooms()
+    this.fetchNews()
   },
   data() {
     return {
-      datanew: [],
+      search: { value: '', filter: 1 },
+      searchOptions: [
+        { name: 'ค้นหาโดยชื่อข่าว', id: 1 },
+        { name: 'ค้นหาโดยหมวดข่าว', id: 2 },
+      ],
+      fetchOption: { page: 1, totalPages: 0, itemsPerPage: 16 },
+      news: [],
+      routes: [
+        { id: 1, name: 'หน้าหลัก', to: '/' },
+        { id: 2, name: 'ข่าว', to: '/news' },
+      ],
     }
   },
+  watch: {
+    'fetchOption.page'() {
+      this.fetchNews()
+    },
+  },
   methods: {
-    async fetchrooms() {
-      let datanew = await this.$store.dispatch('api/public/getAllNews')
-      this.datanew = datanew.news
+    async fetchNews() {
+      let data = await this.$store.dispatch('api/public/getAllNews', {
+        params: {
+          ...this.search,
+          limit: this.fetchOption.itemsPerPage,
+          page: this.fetchOption.page,
+        },
+      })
+      this.news = data.news
+      this.fetchOption.totalPages = data.total_pages
+    },
+    clearSearch() {
+      this.search.filter = 1
+      this.search.value = ''
+      this.fetchOption.page = 1
+      this.fetchNews()
     },
   },
 }
 </script>
-
-<style scoped>
-main {
-  height: 100%;
-  width: 100%;
-  background-color: #ffffff;
-  background-repeat: no-repeat;
-  background-position: 100%;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-body {
-  background-color: #303032;
-}
-
-main {
-  display: grid;
-  grid-template-columns: 1fr repeat(12, minmax(auto, 60px)) 1fr;
-  grid-gap: 40px;
-  padding: 60px 0;
-}
-
-.text--medium {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 16px;
-  line-height: 20px;
-  font-weight: 400;
-  color: #ecf0f1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  /* autoprefixer: ignore next */
-  -webkit-box-orient: vertical;
-  max-height: 70px;
-}
-
-.cards {
-  grid-column: 2 / span 12;
-  display: grid;
-  grid-template-columns: repeat(12, minmax(auto, 60px));
-  grid-gap: 40px;
-}
-
-.card {
-  grid-column-end: span 4;
-  display: flex;
-  flex-direction: column;
-  background-color: #39393b;
-  cursor: pointer;
-  transition: all 0.3s ease 0s;
-}
-
-.card:hover {
-  transform: translateY(-7px);
-}
-
-.card__image-container {
-  width: 100%;
-  padding-top: 56.25%;
-  overflow: hidden;
-  position: relative;
-}
-
-.card__image-container img {
-  width: 100%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.card__content {
-  padding: 20px;
-}
-
-.card__title {
-  margin-bottom: 20px;
-}
-
-.card__info {
-  display: flex;
-  align-self: end;
-  align-items: center;
-}
-
-.card__price {
-  margin-left: auto;
-  padding: 5px 20px;
-  background-color: #303032;
-  border-radius: 10px;
-}
-
-@media only screen and (max-width: 1000px) {
-  .card {
-    grid-column-end: span 6;
-  }
-}
-
-@media only screen and (max-width: 700px) {
-  main {
-    grid-gap: 20px;
-  }
-  .card {
-    grid-column-end: span 12;
-  }
-}
-
-@media only screen and (max-width: 500px) {
-  main {
-    grid-template-columns: 10px repeat(6, 1fr) 10px;
-    grid-gap: 10px;
-  }
-  .cards {
-    grid-column: 2 / span 6;
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: 20px;
-  }
-  .card {
-    grid-column-end: span 6;
-  }
-}
-</style>
+<style scoped></style>

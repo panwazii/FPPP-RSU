@@ -1,33 +1,50 @@
 <template>
   <div>
-    <section>
-      <div class="grid">
-        <header class="page-header content-header">
-          <H3>CATEGORIES /</H3>
-        </header>
-        <footer class="page-footer content-footer">
-          <div class="box footerHeader"><H1>คุณสมบัติ</H1></div>
-          <div>
-            <h3 class="footerHeader">รายละเอียด {{ room[0].details }}</h3>
+    <SharedBreadCrumbs title="รายละเอียดห้องแลป" :routes="routes" />
+    <v-card min-height="800" class="rounded-xl mt-2 pa-4">
+      <v-card-title class="text-h5 font-weight-bold">{{
+        room[0].name
+      }}</v-card-title>
+      <v-row justify="center" align="center">
+        <v-col cols="12" md="6">
+          <v-img
+            contain
+            aspect-ratio="1.3333"
+            width="640"
+            height="480"
+            :src="room[0].picture[0].url"
+            :lazy-src="require('~/static/img/default/no-image.png')"
+            class="rounded-xl"
+          />
+        </v-col>
+        <v-col cols="12" md="6">
+          <div justify="center" align="center">
+            <div class="d-flex justify-space-around">
+              <div class="text-h6 font-weight-bold">ราคา</div>
+              <div>
+                <v-chip class="text-h5 font-weight-bold">
+                  {{ room[0].rent_price }} บาท
+                </v-chip>
+              </div>
+            </div>
+            <v-btn
+              x-large
+              elevation="2"
+              max-width="200"
+              class="text-h6 rounded-xl mt-8"
+              dark
+            >
+              <v-icon>mdi-cart-plus</v-icon>เพิ่มลงตระกร้า
+            </v-btn>
           </div>
-        </footer>
-        <div class="page-leftbar content-left">
-          <H1>{{ room[0].name }}</H1>
-          <img class="centerimg" :src="room[0].picture[0].url" />
-        </div>
-        <div class="page-main content-main">
-          <H3>{{ room[0].name }}</H3>
-          <div id="textbox">
-            <p class="alignleft">ราคา</p>
-            <p class="aligncenter">{{ room[0].rent_price }}</p>
-            <p class="alignright">บาท</p>
-          </div>
-          <v-divider></v-divider>
-          <button class="button-28" role="button">จองเลย</button>
-          <v-divider class="mt-5"></v-divider>
-        </div>
+        </v-col>
+      </v-row>
+      <v-divider class="mt-4"></v-divider>
+      <div class="mt-4">
+        <div class="text-h6 font-weight-bold">รายละเอียด</div>
+        <div class="mt-2">{{ room[0].details }}</div>
       </div>
-    </section>
+    </v-card>
   </div>
 </template>
 
@@ -50,172 +67,24 @@ export default {
       return
     } else {
       this.room = room.room
+      this.routes[2].name = room.room[0].name
       console.log('this is equipment', room)
     }
   },
   data() {
     return {
       room: {},
-      Reservations: false,
-      dialog: false,
+      equipmentInfo: {},
+      tool: [],
+      routes: [
+        { id: 1, name: 'หน้าหลัก', to: '/' },
+        { id: 2, name: 'ห้องแลป', to: '/rooms' },
+        { id: 3, name: '', to: '/' },
+      ],
+      loading: true,
     }
   },
-  methods: {
-    async openReservationsModal(id) {
-      this.Reservations = true
-    },
-  },
+  methods: {},
 }
 </script>
-
-<style scoped>
-.footerHeader {
-  padding-left: 10px;
-}
-.button-28 {
-  appearance: none;
-  background-color: transparent;
-  border: 2px solid #1a1a1a;
-  border-radius: 15px;
-  box-sizing: border-box;
-  color: #3b3b3b;
-  cursor: pointer;
-  display: inline-block;
-  font-family: Roobert, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica,
-    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  font-size: 20px;
-  font-weight: 600;
-  line-height: normal;
-  margin: 0;
-  min-height: 60px;
-  min-width: 0;
-  outline: none;
-  padding: 16px 24px;
-  text-align: center;
-  text-decoration: none;
-  transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  width: 150px;
-  will-change: transform;
-  margin-top: 20px;
-}
-
-.button-28:disabled {
-  pointer-events: none;
-}
-
-.button-28:hover {
-  color: #fff;
-  background-color: #1a1a1a;
-  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-  transform: translateY(-2px);
-}
-
-.button-28:active {
-  box-shadow: none;
-  transform: translateY(0);
-}
-
-#textbox {
-  display: flex;
-  flex-flow: row wrap;
-}
-
-.alignleft {
-  padding-left: 20px;
-  padding-top: 30px;
-  width: 33.33333%;
-  text-align: left;
-  font-size: 30px;
-  font-weight: 700;
-}
-.aligncenter {
-  width: 33.33333%;
-  text-align: center;
-  font-size: 50px;
-  font-weight: 900;
-  padding-top: 10px;
-}
-.alignright {
-  font-size: 30px;
-  padding-right: 20px;
-  padding-top: 30px;
-  width: 33.33333%;
-  text-align: right;
-  font-weight: 700;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: minmax(600px, auto) auto;
-  grid-template-rows: 50px minmax(600px, auto) 200px;
-  grid-template-areas: 'header header' 'leftbar main' 'footer footer';
-}
-
-.page-header {
-  grid-area: header;
-}
-.page-leftbar {
-  grid-area: leftbar;
-}
-.page-main {
-  grid-area: main;
-}
-.page-footer {
-  grid-area: footer;
-}
-
-.content-header {
-  background-color: white;
-  box-sizing: border-box;
-  padding: 10px;
-}
-
-.content-left {
-  background-color: white;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  padding-top: 10px;
-  padding-left: 30px;
-}
-
-.centerimg {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-}
-
-.box {
-  background-color: #d1d0d0;
-}
-
-img {
-  object-fit: fill;
-  border-radius: 50px;
-  max-width: 550px;
-  max-height: 550px;
-}
-
-.content-main {
-  background-color: white;
-  border: 4px solid rgb(117, 117, 203);
-  box-sizing: border-box;
-  padding: 10px;
-  justify-items: center;
-  text-align: center;
-}
-
-.content-main h3 {
-  font-size: 30px;
-}
-
-.content-footer {
-  background-color: white;
-  box-sizing: border-box;
-  padding: 10px;
-}
-</style>
+<style scoped></style>
