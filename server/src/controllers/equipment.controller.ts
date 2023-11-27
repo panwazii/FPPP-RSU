@@ -16,7 +16,10 @@ class EquipmentController {
     public static async getSingleEquipmentInfo(id: string) {
         return EquipmentInfoModel.findOne({
             where: { id: id },
-            raw: true
+            include: [{
+                model: RentRate, as: 'rent_rate',
+                attributes: ['name'],
+            }],
         });
     }
 

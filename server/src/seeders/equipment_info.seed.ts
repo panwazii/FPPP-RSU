@@ -5,7 +5,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: '0ca76aa8-403c-4ba1-bd41-92893645b514',
         name: 'Can seamer',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 2000,
         rent_price: 100,
         quantity: 1,
@@ -18,7 +18,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: 'd57ca094-cef1-49aa-b2ae-da89653a7155',
         name: 'Pin mill',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 2500,
         rent_price: 105,
         quantity: 1,
@@ -31,7 +31,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: '5848f071-ac20-4c54-bf73-6faeb21f5795',
         name: 'Pasta maker',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 110,
         quantity: 1,
@@ -44,7 +44,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: '8d533d89-5983-4e82-b3a9-b34784c96778',
         name: 'Drum dryer',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 160,
         quantity: 1,
@@ -57,7 +57,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: '70d29632-634b-401a-a91b-b7e07353f19d',
         name: 'Spray dryer',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 150,
         quantity: 1,
@@ -70,7 +70,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: 'd12c2e8e-7051-4e9a-a8b8-e8d0a0dbcc29',
         name: 'Microwave vacuum dryer',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 250,
         quantity: 1,
@@ -83,7 +83,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: '4923e8b6-0a81-4cb8-aa5f-a7e92dfb6484',
         name: 'hammer mill',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 350,
         quantity: 1,
@@ -96,7 +96,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: '21c8ef43-db7d-4a84-ac0f-ff58d4ea5450',
         name: 'Pin mill',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 156,
         quantity: 1,
@@ -109,7 +109,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: '288adb2d-e518-4d8a-b858-a31814ab239b',
         name: 'sausage binding',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 200,
         quantity: 1,
@@ -122,7 +122,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: 'c6b35eee-6260-4606-9528-1c3cd7d100a7',
         name: 'bowl chopper',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 250,
         quantity: 1,
@@ -135,7 +135,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: '7f43175e-23c2-432b-b061-a1562fd642ae',
         name: 'butter churn',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 250,
         quantity: 1,
@@ -148,7 +148,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: 'cc463d93-b658-4b37-b7d3-b5742d37b475',
         name: 'cream separator',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 250,
         quantity: 1,
@@ -161,7 +161,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: '7f81a17f-8a30-4f5a-8020-2f45292c5435',
         name: 'ice cream maker',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 250,
         quantity: 1,
@@ -174,7 +174,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: 'cfab9fb2-86db-4f53-ab97-09f7223e726c',
         name: 'ice maker',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 250,
         quantity: 1,
@@ -187,7 +187,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: '78df8981-d732-4a21-a306-02d71d8e4835',
         name: 'food mixer',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 250,
         quantity: 1,
@@ -200,7 +200,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: 'd98810b8-1962-40bc-932a-87d452d688df',
         name: 'cooker-smokehouse',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 250,
         quantity: 1,
@@ -213,7 +213,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: '001c8918-4a82-4d20-82c4-ad2cd02d07a8',
         name: 'meat slicer',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 250,
         quantity: 1,
@@ -226,7 +226,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: 'c7f5b88f-3569-4a05-b4ad-50b3df4d7794',
         name: 'dough mixer',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 220,
         quantity: 1,
@@ -239,7 +239,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: '4b51a07e-3932-4c8d-a579-4d3a61b28ac8',
         name: 'blender',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 50,
         quantity: 1,
@@ -252,7 +252,7 @@ const entries: EquipmentInfoAttribute[] = [
     {
         id: '3b6587e3-27fb-4aeb-a159-9ae70c6bed50',
         name: 'viscometer',
-        details: 'อุปกรณ์',
+        details: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minus placeat molestias sunt harum distinctio facilis aperiam totam doloribus dolorem iste est, ullam fugit obcaecati doloremque excepturi commodi sequi. Assumenda.',
         average_price: 3000,
         rent_price: 180,
         quantity: 1,

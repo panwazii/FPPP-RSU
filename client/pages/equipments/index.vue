@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SharedBreadCrumbs title="Equipments" :routes="routes" />
+    <SharedBreadCrumbs title="อุปกรณ์ทั้งหมด" :routes="routes" />
     <v-card min-height="1000" class="rounded-xl mt-2">
       <v-card-text>
         <div class="d-flex">
@@ -86,8 +86,8 @@ export default {
       fetchOption: { page: 1, totalPages: 0, itemsPerPage: 16 },
       equipments: [],
       routes: [
-        { id: 1, name: 'home', to: '/' },
-        { id: 2, name: 'equipments', to: '/equipments' },
+        { id: 1, name: 'หน้าหลัก', to: '/' },
+        { id: 2, name: 'อุปกรณ์', to: '/equipments' },
       ],
     }
   },
@@ -118,7 +118,4 @@ export default {
 }
 </script>
 <style scoped>
-.card-actions {
-  bottom: 0;
-}
 </style>

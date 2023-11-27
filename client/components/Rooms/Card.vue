@@ -20,7 +20,7 @@
     </v-hover>
     <v-divider></v-divider>
     <v-card-title class="justify-center">
-      {{ title }}
+      <div class="line-clamp">{{ title }}</div>
     </v-card-title>
     <v-card-text class="justify-space-around d-flex">
       <div class="text-subtitle-1 font-weight-bold">ราคา</div>
@@ -74,4 +74,11 @@ export default {
 }
 </script>
 <style scoped>
+.line-clamp {
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
 </style>
