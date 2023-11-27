@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     displayImage() {
-      if (this.picture === null) {
+      if (!this.picture) {
         return require('~/static/img/default/no-image.png')
       } else {
         return this.picture

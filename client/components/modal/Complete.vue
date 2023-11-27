@@ -5,8 +5,9 @@
     v-model="open"
     max-width="500"
     max-height="300"
+    content-class="rounded-xl"
   >
-    <v-card class="rounded-xl">
+    <v-card>
       <v-card-title class="text-h5"
         ><v-icon justify="left" class="mr-3" size="50">mdi-check-circle</v-icon>
         สำเร็จ

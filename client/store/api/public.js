@@ -11,6 +11,9 @@ export const actions = {
     async getAllEquipment({ getters }, data) {
         return await this.$axios.get('api/public/getAllEquipment', data).then((res) => res.data)
     },
+    async getAllProductionLine({ getters }, data) {
+        return await this.$axios.get('api/public/getAllProductionLine', data).then((res) => res.data)
+    },
     async getAllEquipmentByRoom({ getters }, data) {
         return await this.$axios.get('api/public/getAllEquipmentByRoom', data).then((res) => res.data)
     },

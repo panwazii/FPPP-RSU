@@ -1,5 +1,10 @@
 <template>
   <div>
+    <SharedGoToLoginModal
+      :open="modal.goToLogin.open"
+      :message="modal.goToLogin.message"
+      :goToLogin.sync="modal.goToLogin.open"
+    />
     <SharedBreadCrumbs title="รายละเอียดข่าว" :routes="routes" />
     <v-card min-height="800" class="rounded-xl mt-2 pa-4">
       <v-card-title v-if="!loading" class="text-h5 font-weight-bold">{{
@@ -61,6 +66,12 @@ export default {
         { id: 3, name: '', to: '/' },
       ],
       loading: true,
+      modal: {
+        goToLogin: {
+          open: false,
+          message: 'กรุณาเข้าสู่ระบบเพื่อใช้งานบริการทั้งหมด',
+        },
+      },
     }
   },
   methods: {},

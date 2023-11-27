@@ -1,47 +1,67 @@
 <template>
-  <v-card max-width="300" class="rounded-xl">
-    <v-hover>
-      <template v-slot:default="{ hover }">
+  <div>
+    <SharedGoToLoginModal
+      :open="modal.goToLogin.open"
+      :message="modal.goToLogin.message"
+      :goToLogin.sync="modal.goToLogin.open"
+    />
+    <v-card max-width="300" class="rounded-xl">
+      <v-hover>
+        <template v-slot:default="{ hover }">
+          <div>
+            <v-img
+              contain
+              aspect-ratio="1.3333"
+              :src="displayImage"
+              class="rounded-t-xl"
+            >
+              <v-fade-transition>
+                <v-overlay v-if="hover" absolute>
+                  <v-btn @click="$router.push('/rooms/' + id)"
+                    >ดูรายละเอียด</v-btn
+                  >
+                </v-overlay>
+              </v-fade-transition>
+            </v-img>
+          </div>
+        </template>
+      </v-hover>
+      <v-divider></v-divider>
+      <v-card-title class="justify-center">
+        <div class="line-clamp">{{ title }}</div>
+      </v-card-title>
+      <v-card-text class="justify-space-around d-flex">
+        <div class="text-subtitle-1 font-weight-bold">ราคา</div>
         <div>
-          <v-img
-            contain
-            aspect-ratio="1.3333"
-            :src="displayImage"
-            class="rounded-t-xl"
-          >
-            <v-fade-transition>
-              <v-overlay v-if="hover" absolute>
-                <v-btn @click="$router.push('/rooms/' + id)">ดูรายละเอียด</v-btn>
-              </v-overlay>
-            </v-fade-transition>
-          </v-img>
+          <v-chip class="text-subtitle-1 font-weight-bold">
+            {{ price }} บาท
+          </v-chip>
         </div>
-      </template>
-    </v-hover>
-    <v-divider></v-divider>
-    <v-card-title class="justify-center">
-      <div class="line-clamp">{{ title }}</div>
-    </v-card-title>
-    <v-card-text class="justify-space-around d-flex">
-      <div class="text-subtitle-1 font-weight-bold">ราคา</div>
-      <div>
-        <v-chip class="text-subtitle-1 font-weight-bold">
-          {{ price }} บาท
-        </v-chip>
-      </div>
-    </v-card-text>
-    <v-card-actions class="justify-center">
-      <v-btn elevation="0" max-width="200" class="rounded-xl px-4" dark>
-        <v-icon>mdi-cart-plus</v-icon>เพิ่มลงตระกร้า
-      </v-btn>
-    </v-card-actions>
-  </v-card>
+      </v-card-text>
+      <v-card-actions class="justify-center">
+        <v-btn
+          @click="modal.goToLogin.open = true"
+          elevation="0"
+          max-width="200"
+          class="rounded-xl px-4"
+          dark
+        >
+          <v-icon>mdi-cart-plus</v-icon>เพิ่มลงตระกร้า
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      // overlay: false,
+      modal: {
+        goToLogin: {
+          open: false,
+          message: 'กรุณาเข้าสู่ระบบเพื่อใช้งานบริการทั้งหมด',
+        },
+      },
     }
   },
   computed: {

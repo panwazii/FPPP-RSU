@@ -1,7 +1,7 @@
 <template>
   <div>
     <SharedBreadCrumbs title="อุปกรณ์ทั้งหมด" :routes="routes" />
-    <v-card min-height="1000" class="rounded-xl mt-2">
+    <v-card min-height="1250" class="rounded-xl mt-2">
       <v-card-text>
         <div class="d-flex">
           <v-row>
@@ -22,6 +22,7 @@
                   :items="searchOptions"
                   item-text="name"
                   item-value="id"
+                  label="เลือกสายการผลิต (ไม่จำเป็น)"
                   solo
                 />
                 <v-btn
@@ -37,6 +38,10 @@
               </div>
             </v-col>
           </v-row>
+        </div>
+        <div v-if="equipments.length === 0" class="mt-10">
+          <div class="d-flex justify-center text-subtitle-1">ไม่พบข้อมูล</div>
+          <v-divider class="mx-10"></v-divider>
         </div>
         <v-row>
           <v-col
@@ -75,15 +80,13 @@ export default {
   },
   mounted() {
     this.fetchEquipments()
+    this.fetchProductionLine()
   },
   data() {
     return {
-      search: { value: '', filter: 1 },
-      searchOptions: [
-        { name: 'ค้นหาโดยชื่ออุปกรณ์', id: 1 },
-        { name: 'ค้นหาโดยสายการผลิต', id: 2 },
-      ],
-      fetchOption: { page: 1, totalPages: 0, itemsPerPage: 16 },
+      search: { value: '', filter: 0 },
+      searchOptions: [],
+      fetchOption: { page: 1, totalPages: 0, itemsPerPage: 12 },
       equipments: [],
       routes: [
         { id: 1, name: 'หน้าหลัก', to: '/' },
@@ -108,8 +111,12 @@ export default {
       this.equipments = data.equipments
       this.fetchOption.totalPages = data.total_pages
     },
+    async fetchProductionLine() {
+      let data = await this.$store.dispatch('api/public/getAllProductionLine')
+      this.searchOptions = data.production_lines
+    },
     clearSearch() {
-      this.search.filter = 1
+      this.search.filter = 0
       this.search.value = ''
       this.fetchOption.page = 1
       this.fetchEquipments()
