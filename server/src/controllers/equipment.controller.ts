@@ -27,27 +27,36 @@ class EquipmentController {
                     available_status: true,
                     name: {
                         [Op.iLike]: '%' + searchValue + '%'
-                    }
+                    },
                 },
+                include: [{
+                    model: RentRate, as: 'rent_rate',
+                    attributes: ['name'],
+                }],
                 limit,
                 offset,
-                raw: true
             });
         }
         else if (searchValue !== '' && filterType === 2) {
             return EquipmentInfoModel.findAndCountAll({
                 where: { available_status: true },
+                include: [{
+                    model: RentRate, as: 'rent_rate',
+                    attributes: ['name'],
+                }],
                 limit,
                 offset,
-                raw: true
             });
         }
         else {
             return EquipmentInfoModel.findAndCountAll({
                 where: { available_status: true },
+                include: [{
+                    model: RentRate, as: 'rent_rate',
+                    attributes: ['name'],
+                }],
                 limit,
                 offset,
-                raw: true
             });
         }
     }

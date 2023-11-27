@@ -126,6 +126,7 @@ publicRouter.get('/getAllEquipmentInfo', async (req, res) => {
             code: 200, equipments: data.rows, total_pages: Math.ceil(data.count / Limit)
         });
     } catch (error) {
+        log(error)
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
