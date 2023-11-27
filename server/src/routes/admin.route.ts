@@ -58,7 +58,7 @@ adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
 adminRouter.get('/getSingleNews', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const Id = req.query.id as string;
-        const singleNews = await NewsController.getByID(Id)
+        const singleNews = await NewsController.getByIDAdmin(Id)
         if (singleNews) {
             res.status(200).json({
                 code: 200, news: singleNews
@@ -73,13 +73,14 @@ adminRouter.get('/getSingleNews', checkParamsEmpty, authValid, async (req, res) 
 
 adminRouter.get('/getAllNews', authValid, async (req, res) => {
     try {
+        const searchValue = String(req.query.value);
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        const allNews = await NewsController.getAllNews(Limit, Offset)
+        const allNews = await NewsController.getAllNewsAdmin(searchValue, Limit, Offset)
         if (allNews) {
             res.status(200).json({
                 code: 200, news: allNews.rows, total_pages: Math.ceil(allNews.count / Limit)
@@ -143,7 +144,7 @@ adminRouter.post('/updateNews', checkBodyEmpty, multerUpload.single("file"), aut
 adminRouter.get('/getSingleRoom', checkParamsEmpty, async (req, res) => {
     try {
         const Id = req.query.id as string;
-        const room = await RoomController.getByID(Id)
+        const room = await RoomController.getByIDAdmin(Id)
         res.status(200).json({
             code: 200, room: room
         });
@@ -160,7 +161,7 @@ adminRouter.get('/getAllRooms', authValid, async (req, res) => {
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        const allRooms = await RoomController.getAllRooms(Limit, Offset)
+        const allRooms = await RoomController.getAllRoomsAdmin(Limit, Offset)
         res.status(200).json({
             code: 200, rooms: allRooms.rows, total_pages: Math.ceil(allRooms.count / Limit)
         });
@@ -349,7 +350,7 @@ adminRouter.get('/getAllUserTypes', async (req, res) => {
 adminRouter.get('/getSingleEquipmentInfo', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const Id = req.query.id as string;
-        const equipment = await EquipmentController.getSingleEquipmentInfo(Id)
+        const equipment = await EquipmentController.getSingleEquipmentInfoAdmin(Id)
         res.status(200).json({
             code: 200, equipment
         });
@@ -368,7 +369,7 @@ adminRouter.get('/getAllEquipmentInfo', async (req, res) => {
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        const allEquipments = await EquipmentController.getAllEquipmentInfo(filterType, searchValue, Limit, Offset)
+        const allEquipments = await EquipmentController.getAllEquipmentInfoAdmin(filterType, searchValue, Limit, Offset)
         res.status(200).json({
             code: 200, equipments: allEquipments.rows, total_pages: Math.ceil(allEquipments.count / Limit)
         });
@@ -385,7 +386,7 @@ adminRouter.get('/getAllEquipmentInfoInRoom', checkParamsEmpty, async (req, res)
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        const equipmentInfoInRoom = await EquipmentController.getAllEquipmentInfoInRoom(req.query.id as string, Limit, Offset)
+        const equipmentInfoInRoom = await EquipmentController.getAllEquipmentInfoInRoomAdmin(req.query.id as string, Limit, Offset)
         res.status(200).json({
             code: 200, equipments: equipmentInfoInRoom.rows, total_pages: Math.ceil(equipmentInfoInRoom.count / Limit), count: equipmentInfoInRoom.count
         });

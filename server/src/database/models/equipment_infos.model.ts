@@ -82,7 +82,7 @@ export const initEquipmentInfoModel = (connection: Sequelize) => {
                 type: DataTypes.STRING,
             },
             picture: {
-                allowNull: false,
+                allowNull: true,
                 type: DataTypes.STRING,
             },
             rent_rate_id: {

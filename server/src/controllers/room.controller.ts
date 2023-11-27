@@ -2,10 +2,12 @@ import RoomModel, { RoomAttribute } from '../database/models/rooms.model';
 import RoomPictureModel, { RoomPictureAttribute } from '../database/models/room_pictures.model';
 
 class RoomController {
-    public static async getByID(roomId: string) {
+    //Public
+    public static async getByIDPublic(roomId: string) {
         return RoomModel.findAll({
             where: {
                 id: roomId,
+                available_status: true
             },
             include: [{
                 model: RoomPictureModel, as: 'picture'
@@ -13,19 +15,7 @@ class RoomController {
         });
     }
 
-    public static async getAllRooms(limit: number, offset: number) {
-        return RoomModel.findAndCountAll({
-            distinct: true,
-            include: [{
-                model: RoomPictureModel, as: 'picture',
-            }],
-            order: [["name", "ASC"]],
-            limit,
-            offset,
-        });
-    }
-
-    public static async getAllRoomsUser(limit: number, offset: number) {
+    public static async getAllRoomsPublic(limit: number, offset: number) {
         return RoomModel.findAndCountAll({
             distinct: true,
             where: { available_status: true },
@@ -36,6 +26,30 @@ class RoomController {
             order: [["name", "ASC"]],
             limit,
             offset,
+        });
+    }
+
+    //Admin
+    public static async getAllRoomsAdmin(limit: number, offset: number) {
+        return RoomModel.findAndCountAll({
+            distinct: true,
+            include: [{
+                model: RoomPictureModel, as: 'picture',
+            }],
+            order: [["name", "ASC"]],
+            limit,
+            offset,
+        });
+    }
+
+    public static async getByIDAdmin(roomId: string) {
+        return RoomModel.findAll({
+            where: {
+                id: roomId,
+            },
+            include: [{
+                model: RoomPictureModel, as: 'picture'
+            }],
         });
     }
 

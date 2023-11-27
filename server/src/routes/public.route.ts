@@ -30,13 +30,14 @@ publicRouter.get('/getAllUserTypesDropdown', async (req, res) => {
 
 publicRouter.get('/getAllNews', async (req, res) => {
     try {
+        const searchValue = String(req.query.value);
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        const allNews = await NewsController.getAllNews(Limit, Offset)
+        const allNews = await NewsController.getAllNewsPublic(searchValue, Limit, Offset)
         res.status(200).json({
             code: 200, news: allNews.rows, total_pages: Math.ceil(allNews.count / Limit)
         });
@@ -53,7 +54,7 @@ publicRouter.get('/getAllRooms', async (req, res) => {
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        const allRooms = await RoomController.getAllRooms(Limit, Offset)
+        const allRooms = await RoomController.getAllRoomsPublic(Limit, Offset)
         res.status(200).json({
             code: 200, rooms: allRooms.rows, total_pages: Math.ceil(allRooms.count / Limit)
         });
@@ -66,7 +67,7 @@ publicRouter.get('/getAllRooms', async (req, res) => {
 publicRouter.get('/getSingleRoom', checkParamsEmpty, async (req, res) => {
     try {
         const id = req.query.id as string;
-        const room = await RoomController.getByID(id)
+        const room = await RoomController.getByIDPublic(id)
         res.status(200).json({ code: 200, room });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -76,7 +77,7 @@ publicRouter.get('/getSingleRoom', checkParamsEmpty, async (req, res) => {
 publicRouter.get('/getSingleNews', checkParamsEmpty, async (req, res) => {
     try {
         const id = req.query.id as string;
-        const news = await NewsController.getByID(id)
+        const news = await NewsController.getByIDPublic(id)
         res.status(200).json({ code: 200, news });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -104,7 +105,7 @@ publicRouter.get('/getAllWebInfos', async (req, res) => {
 publicRouter.get('/getSingleEquipmentInfo', checkParamsEmpty, async (req, res) => {
     try {
         const id = req.query.id as string;
-        const data = await EquipmentController.getSingleEquipmentInfo(id)
+        const data = await EquipmentController.getSingleEquipmentInfoPublic(id)
         res.status(200).json({ code: 200, equipment: data });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -121,13 +122,23 @@ publicRouter.get('/getAllEquipmentInfo', async (req, res) => {
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        const data = await EquipmentController.getAllEquipmentInfo(filterType, searchValue, Limit, Offset)
+        const data = await EquipmentController.getAllEquipmentInfoPublic(filterType, searchValue, Limit, Offset)
         res.status(200).json({
             code: 200, equipments: data.rows, total_pages: Math.ceil(data.count / Limit)
         });
     } catch (error) {
-        log(error)
-        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+publicRouter.get('/getAllProductionLine', async (req, res) => {
+    try {
+        const data = await EquipmentController.getDropdownProductionLine()
+        res.status(200).json({
+            code: 200, production_lines: data
+        });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
 
@@ -139,7 +150,7 @@ publicRouter.get('/getAllEquipmentInfoInRoom', checkParamsEmpty, async (req, res
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        const data = await EquipmentController.getAllEquipmentInfoInRoom(req.query.id as string, Limit, Offset)
+        const data = await EquipmentController.getAllEquipmentInfoInRoomPublic(req.query.id as string, Limit, Offset)
         res.status(200).json({
             code: 200, equipments: data.rows, total_pages: Math.ceil(data.count / Limit), count: data.count
         });

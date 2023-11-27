@@ -1,4 +1,4 @@
-import Sequelize, { Op } from 'sequelize';
+import { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import EquipmentInfoModel, { EquipmentInfoAttribute } from '../database/models/equipment_infos.model';
@@ -12,8 +12,8 @@ import { log } from '../tools/log';
 
 class EquipmentController {
 
-    // Equipment Info
-    public static async getSingleEquipmentInfo(id: string) {
+    // Equipment Info Public
+    public static async getSingleEquipmentInfoPublic(id: string) {
         return EquipmentInfoModel.findOne({
             where: { id: id },
             include: [{
@@ -23,33 +23,74 @@ class EquipmentController {
         });
     }
 
-    public static async getAllEquipmentInfo(filterType: number, searchValue: string, limit: number, offset: number) {
-        if (searchValue !== '' && filterType === 1) {
-            return EquipmentInfoModel.findAndCountAll({
-                where: {
-                    available_status: true,
-                    name: {
-                        [Op.iLike]: '%' + searchValue + '%'
+    public static async getAllEquipmentInfoPublic(filterType: number, searchValue: string, limit: number, offset: number) {
+        if (searchValue !== '') {
+            if (filterType === 0) {
+                return EquipmentInfoModel.findAndCountAll({
+                    where: {
+                        available_status: true,
+                        name: {
+                            [Op.iLike]: '%' + searchValue + '%'
+                        },
                     },
-                },
-                include: [{
-                    model: RentRate, as: 'rent_rate',
-                    attributes: ['name'],
-                }],
-                limit,
-                offset,
-            });
+                    include: [{
+                        model: RentRate, as: 'rent_rate',
+                        attributes: ['name'],
+                    }],
+                    limit,
+                    offset,
+                });
+            }
+            else {
+                return EquipmentInfoModel.findAndCountAll({
+                    where: {
+                        available_status: true,
+                        production_line_id: filterType,
+                        name: {
+                            [Op.iLike]: '%' + searchValue + '%'
+                        },
+                    },
+                    include: [{
+                        model: RentRate, as: 'rent_rate',
+                        attributes: ['name'],
+                    }],
+                    limit,
+                    offset,
+                });
+            }
         }
-        else if (searchValue !== '' && filterType === 2) {
-            return EquipmentInfoModel.findAndCountAll({
-                where: { available_status: true },
-                include: [{
-                    model: RentRate, as: 'rent_rate',
-                    attributes: ['name'],
-                }],
-                limit,
-                offset,
-            });
+        else if (filterType !== 0) {
+            if (searchValue !== '') {
+                return EquipmentInfoModel.findAndCountAll({
+                    where: {
+                        available_status: true,
+                        production_line_id: filterType,
+                        name: {
+                            [Op.iLike]: '%' + searchValue + '%'
+                        },
+                    },
+                    include: [{
+                        model: RentRate, as: 'rent_rate',
+                        attributes: ['name'],
+                    }],
+                    limit,
+                    offset,
+                });
+            }
+            else {
+                return EquipmentInfoModel.findAndCountAll({
+                    where: {
+                        available_status: true,
+                        production_line_id: filterType,
+                    },
+                    include: [{
+                        model: RentRate, as: 'rent_rate',
+                        attributes: ['name'],
+                    }],
+                    limit,
+                    offset,
+                });
+            }
         }
         else {
             return EquipmentInfoModel.findAndCountAll({
@@ -64,10 +105,111 @@ class EquipmentController {
         }
     }
 
-    public static async getAllEquipmentInfoInRoom(id: string, limit: number, offset: number) {
+    public static async getAllEquipmentInfoInRoomPublic(id: string, limit: number, offset: number) {
         return EquipmentInfoModel.findAndCountAll({
             distinct: true,
             where: { available_status: true },
+            include: [{
+                model: EquipmentsModel, as: 'stock',
+                where: { room_id: id, available_status: true, },
+            }],
+            limit,
+            offset,
+
+        });
+    }
+
+    // Equipment Info Admin
+    public static async getSingleEquipmentInfoAdmin(id: string) {
+        return EquipmentInfoModel.findOne({
+            where: { id: id },
+            include: [{
+                model: RentRate, as: 'rent_rate',
+                attributes: ['name'],
+            }],
+        });
+    }
+
+    public static async getAllEquipmentInfoAdmin(filterType: number, searchValue: string, limit: number, offset: number) {
+        if (searchValue !== '') {
+            if (filterType === 0) {
+                return EquipmentInfoModel.findAndCountAll({
+                    where: {
+                        name: {
+                            [Op.iLike]: '%' + searchValue + '%'
+                        },
+                    },
+                    include: [{
+                        model: RentRate, as: 'rent_rate',
+                        attributes: ['name'],
+                    }],
+                    limit,
+                    offset,
+                });
+            }
+            else {
+                return EquipmentInfoModel.findAndCountAll({
+                    where: {
+                        production_line_id: filterType,
+                        name: {
+                            [Op.iLike]: '%' + searchValue + '%'
+                        },
+                    },
+                    include: [{
+                        model: RentRate, as: 'rent_rate',
+                        attributes: ['name'],
+                    }],
+                    limit,
+                    offset,
+                });
+            }
+        }
+        else if (filterType !== 0) {
+            if (searchValue !== '') {
+                return EquipmentInfoModel.findAndCountAll({
+                    where: {
+                        production_line_id: filterType,
+                        name: {
+                            [Op.iLike]: '%' + searchValue + '%'
+                        },
+                    },
+                    include: [{
+                        model: RentRate, as: 'rent_rate',
+                        attributes: ['name'],
+                    }],
+                    limit,
+                    offset,
+                });
+            }
+            else {
+                return EquipmentInfoModel.findAndCountAll({
+                    where: {
+                        production_line_id: filterType,
+                    },
+                    include: [{
+                        model: RentRate, as: 'rent_rate',
+                        attributes: ['name'],
+                    }],
+                    limit,
+                    offset,
+                });
+            }
+        }
+        else {
+            return EquipmentInfoModel.findAndCountAll({
+                include: [{
+                    model: RentRate, as: 'rent_rate',
+                    attributes: ['name'],
+                }],
+                limit,
+                offset,
+            });
+        }
+    }
+
+    public static async getAllEquipmentInfoInRoomAdmin(id: string, limit: number, offset: number) {
+        return EquipmentInfoModel.findAndCountAll({
+            distinct: true,
             include: [{
                 model: EquipmentsModel, as: 'stock',
                 where: { room_id: id, available_status: true, },

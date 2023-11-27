@@ -1,18 +1,49 @@
+import { Op } from 'sequelize';
 import NewsModel, { NewsAttribute } from '../database/models/news.model';
 
 class NewsController {
-    public static async getByID(newsId: string) {
+    //Public
+    public static async getByIDPublic(newsId: string) {
         return NewsModel.findOne({
             where: {
                 id: newsId,
+                available_status: true
             },
             raw: true
         });
     }
 
-    public static async getAllNews(limit: number, offset: number) {
+    public static async getAllNewsPublic(searchValue: string, limit: number, offset: number) {
         return NewsModel.findAndCountAll({
-            where: { available_status: true },
+            where: {
+                available_status: true,
+                title: {
+                    [Op.iLike]: '%' + searchValue + '%'
+                },
+            },
+            limit,
+            offset,
+            raw: true
+        });
+    }
+
+    //Admin
+    public static async getByIDAdmin(newsId: string) {
+        return NewsModel.findOne({
+            where: {
+                id: newsId
+            },
+            raw: true
+        });
+    }
+
+    public static async getAllNewsAdmin(searchValue: string, limit: number, offset: number) {
+        return NewsModel.findAndCountAll({
+            where: {
+                title: {
+                    [Op.iLike]: '%' + searchValue + '%'
+                },
+            },
             limit,
             offset,
             raw: true
