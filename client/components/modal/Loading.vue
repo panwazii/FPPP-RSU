@@ -3,7 +3,7 @@
     <v-overlay :value="open"></v-overlay>
     <div class="text-center">
       <v-dialog v-model="open" hide-overlay persistent width="300">
-        <v-card color="#78909C" dark>
+        <v-card class="rounded-xl" color="#78909C" dark>
           <v-card-text>
             {{ message }}
             <v-progress-linear

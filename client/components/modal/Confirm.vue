@@ -6,7 +6,7 @@
     max-width="500"
     max-height="300"
   >
-    <v-card>
+    <v-card class="rounded-xl">
       <v-card-title class="text-h5"
         ><v-icon justify="left" class="mr-3" size="50">mdi-help-circle</v-icon>
         ยืนยัน ?
@@ -18,10 +18,10 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" @click="confirm" class="font-weight-medium mt-3">
+        <v-btn color="primary" @click="confirm" class="rounded-xl font-weight-medium mt-3">
           ตกลง
         </v-btn>
-        <v-btn color="error" @click="cancel" class="font-weight-medium mt-3">
+        <v-btn color="error" @click="cancel" class="rounded-xl font-weight-medium mt-3">
           ยกเลิก
         </v-btn>
       </v-card-actions>
