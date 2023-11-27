@@ -6,14 +6,14 @@ export default async function ({ store, $cookies, redirect }) {
         console.log(AdminVerify);
         if (!(Token && AdminStatus === 1)) {
             store.dispatch('logout')
-            return redirect('/admin-login')
+            return redirect('/auth/admin-login')
         }
         if (!(AdminVerify.type === "super-admin")) {
             return redirect('/admin')
         }
     } catch (error) {
         store.dispatch('logout')
-        return redirect('/admin-login')
+        return redirect('/auth/admin-login')
     }
 
 }

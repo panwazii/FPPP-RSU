@@ -173,7 +173,7 @@ export default {
       }
     },
     redirectToLogin() {
-      this.$router.push('/login')
+      this.$router.push('/auth/login')
     },
   },
 }

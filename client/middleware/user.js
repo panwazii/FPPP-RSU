@@ -5,18 +5,18 @@ export default async function ({ store, $cookies, redirect }) {
 
         if (!Token) {
             store.dispatch('logout')
-            return redirect('/login')
+            return redirect('/auth/login')
         }
         if (UserVerify.verify === true) {
             return
         }
         else {
             store.dispatch('logout')
-            return redirect('/login')
+            return redirect('/auth/login')
         }
     } catch (error) {
         store.dispatch('logout')
-        return redirect('/login')
+        return redirect('/auth/login')
     }
 
 }

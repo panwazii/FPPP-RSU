@@ -45,6 +45,7 @@ export const actions = {
         try {
             const token = await this.$cookies.get('token');
             const admin = await this.$cookies.get('isAdmin');
+            console.log("this is isAdmin", admin);
             // await this.$cookies.set('cartItems', [] , {
             //     path: '/',
             //     maxAge: 60 * 60 * 24 * 7
@@ -80,22 +81,19 @@ export const actions = {
     },
 
     async setIsAdmin({ commit }, isAdmin) {
-        if (isAdmin === true) {
-            commit('setIsAdmin', isAdmin)
-            await this.$cookies.set('isAdmin', isAdmin, {
-                path: '/',
-                maxAge: 60 * 60 * 24 * 7
-            })
-            console.log('setIsAdmin act:', isAdmin);
-
-        }
+        commit('setIsAdmin', isAdmin)
+        await this.$cookies.set('isAdmin', isAdmin, {
+            path: '/',
+            maxAge: 60 * 60 * 24 * 7
+        })
+        console.log('setIsAdmin act:', isAdmin);
     },
 
     async setAdmin({ commit }, admin) {
         commit('setAdmin', admin)
     },
-    async setUser({ commit }, admin) {
-        commit('setUser', admin)
+    async setUser({ commit }, user) {
+        commit('setUser', user)
     },
 
     async fetchUser({ commit }) {
@@ -106,7 +104,7 @@ export const actions = {
             redirect('/')
         }
         else {
-            var User = Response.data.user
+            let User = Response.data.user
             await commit('setUser', User)
             await commit('setIsAdmin', false);
         }
@@ -120,7 +118,7 @@ export const actions = {
             redirect('/')
         }
         else {
-            var Admin = Response.data.admin
+            let Admin = Response.data.admin
             await commit('setAdmin', Admin)
             await commit('setIsAdmin', true);
         }

@@ -67,7 +67,7 @@
       </v-row>
       <v-row class="text-center">
         <v-col>
-          <a href="/admin-login">admin only</a>
+          <a href="/auth/admin-login">admin only</a>
         </v-col>
       </v-row>
     </v-card-text>

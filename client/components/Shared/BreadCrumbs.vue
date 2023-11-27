@@ -5,7 +5,12 @@
       <div class="d-flex">
         <div v-for="route in routes" :key="route.id">
           <div v-if="route.id === routes.length">{{ route.name }}</div>
-          <NuxtLink v-if="route.id !== routes.length" :to="route.to">{{ route.name }}</NuxtLink>
+          <NuxtLink
+            class="link"
+            v-if="route.id !== routes.length"
+            :to="route.to"
+            >{{ route.name }}</NuxtLink
+          >
           <v-icon v-if="route.id !== routes.length && routes.length !== 1"
             >mdi-chevron-right</v-icon
           >
@@ -33,3 +38,9 @@ export default {
   methods: {},
 }
 </script>
+<style scoped>
+.link {
+  text-decoration: none;
+  color: black;
+}
+</style>

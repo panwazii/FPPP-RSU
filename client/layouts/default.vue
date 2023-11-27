@@ -67,7 +67,7 @@
               rounded
               depressed
               dark
-              to="/login"
+              to="/auth/login"
             >
               <h4>Login</h4>
             </v-btn>
@@ -146,7 +146,7 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('logout')
-      this.$router.push('/admin-login')
+      this.$router.push('/auth/admin-login')
     },
   },
   // mounted() {

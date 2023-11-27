@@ -1,20 +1,67 @@
 <template>
   <v-app dark>
+    <ModalConfirmLogout
+      :open="logout_modal"
+      :method="logout"
+      message="are you sure about that son ?"
+      :confirmLogout.sync="logout_modal"
+    />
+    <v-navigation-drawer
+      v-model="drawer"
+      :mini-variant="miniVariant"
+      :clipped="clipped"
+      fixed
+      app
+      v-if="!width"
+    >
+      <v-list class="mt-0 pt-0">
+        <div>
+          <v-img
+            @click="goToHomePage('/')"
+            class="mx-auto justify-center mb-2"
+            :src="require('~/static/img/logo/fppp-logo.png')"
+          ></v-img>
+        </div>
+        <v-divider></v-divider>
+        <v-list-item to="/equipments" class="mt-2">
+          <v-list-item-title>Equipment/อุปกรณ์</v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/rooms" class="mt-2">
+          <v-list-item-title>Room/ห้องแลป</v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/news" class="mt-2">
+          <v-list-item-title>News/ข่าวสาร</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
     <v-main>
-      <v-app-bar transparent fixed app :color="bg" elevation="3">
-        <img
-          src="~/static/img/logo/rsu-logo.png"
-          class="ma-1"
-          width="auto"
-          height="50"
-        />
-        <h3>FPPP</h3>
-        <v-spacer></v-spacer>
-        <v-btn rounded text to="/"> <h4>Home/หน้าหลัก</h4></v-btn>
-        <v-btn class="ml-2" rounded text to="/room-selection"> <h4>Room/ห้องแลป</h4></v-btn>
-        <v-btn class="ml-2" rounded depressed to="/login"><h4>Login</h4></v-btn>
+      <v-app-bar hide-on-scroll transparent fixed app :color="bg" elevation="3">
+        <v-img
+          max-width="250"
+          class="mx-auto mt-10 mb-8"
+          :src="require('~/static/img/logo/fppp-logo.png')"
+        ></v-img>
+        <template v-slot:extension>
+          <v-app-bar-nav-icon v-if="!width" @click.stop="drawer = !drawer" />
+          <div class="mx-auto" v-if="width">
+            <v-btn class="ml-2" rounded text to="/equipments">
+              <h4>Equipment/อุปกรณ์</h4>
+            </v-btn>
+            <v-btn class="ml-2" rounded text to="/rooms">
+              <h4>Room/ห้องแลป</h4>
+            </v-btn>
+            <v-btn class="ml-2" rounded text to="/news">
+              <h4>News/ข่าวสาร</h4>
+            </v-btn>
+            <v-btn @click="logout_modal = true" text rounded class="ml-2">
+              <v-icon>mdi-logout-variant</v-icon>
+            </v-btn>
+          </div>
+        </template>
       </v-app-bar>
-      <Nuxt />
+      <v-container>
+        <Nuxt />
+      </v-container>
     </v-main>
 
     <v-footer class="pa-0" height="30">
@@ -31,25 +78,35 @@ export default {
   name: 'DefaultLayout',
   data() {
     return {
-      bg: '#78909C',
       fixed: false,
+      drawer: false,
+      miniVariant: false,
+      clipped: false,
+      bg: '#FFFFFF',
+      logout_modal: false,
     }
   },
-  methods: {
-    changeColor() {
-      if (document.documentElement.scrollTop <= 100) {
-        this.bg = '#78909C'
-      } else if (document.documentElement.scrollTop < 100) {
-        this.bg = 'transparent'
-      } else {
-        this.bg = 'transparent'
+  computed: {
+    width() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return false
+        case 'sm':
+          return false
+        case 'md':
+          return true
+        case 'lg':
+          return true
+        case 'xl':
+          return true
       }
     },
   },
-  mounted() {
-    window.onscroll = () => {
-      this.changeColor()
-    }
+  methods: {
+    async logout() {
+      await this.$store.dispatch('logout')
+      this.$router.push('/auth/login')
+    },
   },
 }
 </script>
