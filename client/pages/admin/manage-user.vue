@@ -10,7 +10,7 @@
     <div class="d-flex justify-end">
       <v-btn @click="createUser = true" class="mb-3" color="primary">
         <v-icon medium> mdi-plus </v-icon>
-        <h4>Add user</h4>
+        <h4>เพิ่มผู้ใช้</h4>
       </v-btn>
     </div>
     <div>
@@ -67,19 +67,19 @@ export default {
       createUser: false,
       headers: [
         {
-          text: 'fname',
+          text: 'ชื่อ',
           value: 'fname',
           sortable: false,
           align: 'start',
         },
         {
-          text: 'lname',
+          text: 'นามสกุล',
           value: 'lname',
           sortable: false,
           align: 'start',
         },
         {
-          text: 'email',
+          text: 'อีเมล',
           value: 'email',
           sortable: false,
           align: 'start',

@@ -13,7 +13,7 @@
     <div class="d-flex justify-end">
       <v-btn @click="createEquipment = true" class="mb-3" color="primary">
         <v-icon medium> mdi-plus </v-icon>
-        <h4>Add Equipment</h4>
+        <h4>เพิ่มเครื่องมือ</h4>
       </v-btn>
     </div>
     <div>
@@ -76,7 +76,7 @@ export default {
           align: 'start',
         },
         {
-          text: 'Price',
+          text: 'ราคายืม',
           value: 'rent_price',
           sortable: false,
           align: 'start',

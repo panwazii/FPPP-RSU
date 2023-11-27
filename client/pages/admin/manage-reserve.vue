@@ -13,7 +13,7 @@
       <div class="d-flex justify-end">
         <v-btn @click="createReserve = true" class="mb-3" color="primary">
           <v-icon medium> mdi-plus </v-icon>
-          <h4>Add Reserve</h4>
+          <h4>เพิ่มการจอง</h4>
         </v-btn>
       </div>
       <div>
@@ -70,7 +70,7 @@
         createReserve: false,
         headers: [
           {
-            text: 'id',
+            text: 'ไอดี',
             value: 'id',
             sortable: false,
             align: 'start',

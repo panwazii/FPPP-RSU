@@ -30,7 +30,7 @@
                         <v-text-field
                           v-model="form.title"
                           :rules="[(v) => !!v || 'name required']"
-                          label="Name"
+                          label="บริการ"
                           outlined
                           required
                         ></v-text-field>
@@ -39,7 +39,7 @@
                         <v-textarea
                           v-model="form.details"
                           :rules="[(v) => !!v || 'details required']"
-                          label="Details"
+                          label="รายละเอียด"
                           outlined
                           required
                         ></v-textarea>

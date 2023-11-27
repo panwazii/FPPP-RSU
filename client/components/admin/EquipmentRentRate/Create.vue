@@ -30,7 +30,7 @@
                         <v-text-field
                           v-model="form.name"
                           :rules="[(v) => !!v || 'name required']"
-                          label="Name"
+                          label="หน่วย"
                           outlined
                           required
                         ></v-text-field>

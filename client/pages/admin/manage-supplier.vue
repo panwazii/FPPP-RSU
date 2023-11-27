@@ -13,7 +13,7 @@
       <div class="d-flex justify-end">
         <v-btn @click="createSupplier = true" class="mb-3" color="primary">
           <v-icon medium> mdi-plus </v-icon>
-          <h4>Add Supplier</h4>
+          <h4>เพิ่มผู้ผลิต</h4>
         </v-btn>
       </div>
       <div>
@@ -70,7 +70,7 @@
         createSupplier: false,
         headers: [
           {
-            text: 'name',
+            text: 'ชื่อ',
             value: 'name',
             sortable: false,
             align: 'start',

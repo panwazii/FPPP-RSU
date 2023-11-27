@@ -43,7 +43,7 @@
                         <v-text-field
                           v-model="data.title"
                           :rules="[(v) => !!v || 'title required']"
-                          label="Title"
+                          label="บริการ"
                           outlined
                           required
                         ></v-text-field>
@@ -54,7 +54,7 @@
                         <v-textarea
                           v-model="data.details"
                           :rules="[(v) => !!v || 'details required']"
-                          label="Details"
+                          label="รายละเอียด"
                           outlined
                           required
                         ></v-textarea>

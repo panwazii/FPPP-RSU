@@ -13,7 +13,7 @@
     <div class="d-flex justify-end">
       <v-btn @click="createNews = true" class="mb-3" color="primary">
         <v-icon medium> mdi-plus </v-icon>
-        <h4>Add News</h4>
+        <h4>เพิ่มข่าว</h4>
       </v-btn>
     </div>
     <div>
@@ -69,13 +69,13 @@ export default {
       createNews: false,
       headers: [
         {
-          text: 'title',
+          text: 'หัวข้อ',
           value: 'title',
           sortable: false,
           align: 'start',
         },
         {
-          text: 'details',
+          text: 'เนื้อหา',
           value: 'details',
           sortable: false,
           align: 'start',

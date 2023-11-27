@@ -36,7 +36,7 @@
                         <v-text-field
                           v-model="data.title"
                           :rules="[(v) => !!v || 'title is required']"
-                          label="title"
+                          label="หัวข้อ"
                           outlined
                           required
                         ></v-text-field>
@@ -45,7 +45,7 @@
                         <v-textarea
                           v-model="data.details"
                           :rules="[(v) => !!v || 'details is required']"
-                          label="details"
+                          label="เนื้อหา"
                           outlined
                           required
                         ></v-textarea>

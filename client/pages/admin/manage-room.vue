@@ -13,7 +13,7 @@
     <div class="d-flex justify-end">
       <v-btn @click="createRoom = true" class="mb-3" color="primary">
         <v-icon medium> mdi-plus </v-icon>
-        <h4>Add room</h4>
+        <h4>เพิ่มห้อง</h4>
       </v-btn>
     </div>
     <div>
@@ -76,7 +76,7 @@ export default {
           align: 'start',
         },
         {
-          text: 'Price',
+          text: 'ค่าเช่า',
           value: 'rent_price',
           sortable: false,
           align: 'start',

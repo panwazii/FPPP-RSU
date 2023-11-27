@@ -13,7 +13,7 @@
       <div class="d-flex justify-end">
         <v-btn @click="createEquipmentRentRate = true" class="mb-3" color="primary">
           <v-icon medium> mdi-plus </v-icon>
-          <h4>Add EquipmentRentRate</h4>
+          <h4>เพิ่มอัตราค่าเช่า</h4>
         </v-btn>
       </div>
       <div>
@@ -70,7 +70,7 @@
         createEquipmentRentRate: false,
         headers: [
           {
-            text: 'name',
+            text: 'หน่วย',
             value: 'name',
             sortable: false,
             align: 'start',

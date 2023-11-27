@@ -43,7 +43,7 @@
                         <v-text-field
                           v-model="data.name"
                           :rules="[(v) => !!v || 'name required']"
-                          label="Name"
+                          label="หน่วย"
                           outlined
                           required
                         ></v-text-field>

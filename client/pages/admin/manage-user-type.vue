@@ -13,7 +13,7 @@
     <div class="d-flex justify-end">
       <v-btn @click="createUserType = true" class="mb-3" color="primary">
         <v-icon medium> mdi-plus </v-icon>
-        <h4>Add User Type</h4>
+        <h4>เพิ่มประเภทผู้ใช้</h4>
       </v-btn>
     </div>
     <div>
@@ -70,13 +70,13 @@ export default {
       createUserType: false,
       headers: [
         {
-          text: 'ID',
+          text: 'ไอดี',
           value: 'id',
           sortable: true,
           align: 'start',
         },
         {
-          text: 'Name',
+          text: 'ประเภท',
           value: 'name',
           sortable: false,
           align: 'start',

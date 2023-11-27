@@ -13,7 +13,7 @@
       <div class="d-flex justify-end">
         <v-btn @click="createProductionLine = true" class="mb-3" color="primary">
           <v-icon medium> mdi-plus </v-icon>
-          <h4>Add production line</h4>
+          <h4>เพิ่มไลน์การผลิต</h4>
         </v-btn>
       </div>
       <div>
@@ -70,7 +70,7 @@
         createProductionLine: false,
         headers: [
           {
-            text: 'name',
+            text: 'ไลน์การผลิต',
             value: 'name',
             sortable: false,
             align: 'start',

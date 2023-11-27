@@ -26,14 +26,13 @@
               <template>
                 <v-form ref="form" lazy-validation>
                   <v-row class="mt-2">
-                    {{ data }}
                     <v-col cols="12" sm="6">
                       <v-select
                         :items="rooms"
                         v-model="data.room_id"
                         item-text="name"
                         item-value="id"
-                        label="Select room"
+                        label="ห้อง"
                         outlined
                       ></v-select>
                     </v-col>
@@ -41,7 +40,7 @@
                       <v-text-field
                         v-model="data.name"
                         :rules="[(v) => !!v || 'name required']"
-                        label="Name"
+                        label="ชื่อเครื่องมือ"
                         outlined
                         required
                       ></v-text-field>
@@ -53,7 +52,7 @@
                       <v-text-field
                         v-model="data.price"
                         :rules="[(v) => !!v || 'price required']"
-                        label="Price"
+                        label="ราคาเฉลี่ย"
                         outlined
                         required
                       ></v-text-field>
@@ -62,7 +61,7 @@
                       <v-text-field
                         v-model="data.rent_price"
                         :rules="[(v) => !!v || 'rent price required']"
-                        label="Rent price"
+                        label="ราคาเช่า"
                         outlined
                         required
                       ></v-text-field>
@@ -74,7 +73,7 @@
                       <v-textarea
                         v-model="data.details"
                         :rules="[(v) => !!v || 'details required']"
-                        label="Details"
+                        label="รายละเอียด"
                         outlined
                         required
                       ></v-textarea>

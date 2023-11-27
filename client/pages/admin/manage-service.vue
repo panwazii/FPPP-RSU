@@ -13,7 +13,7 @@
       <div class="d-flex justify-end">
         <v-btn @click="createService = true" class="mb-3" color="primary">
           <v-icon medium> mdi-plus </v-icon>
-          <h4>Add service</h4>
+          <h4>เพิ่มรายการบริการ</h4>
         </v-btn>
       </div>
       <div>
@@ -70,7 +70,7 @@
         createService: false,
         headers: [
           {
-            text: 'title',
+            text: 'บริการ',
             value: 'title',
             sortable: false,
             align: 'start',

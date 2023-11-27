@@ -13,7 +13,7 @@
       <div class="d-flex justify-end">
         <v-btn @click="createSupplyStock = true" class="mb-3" color="primary">
           <v-icon medium> mdi-plus </v-icon>
-          <h4>Add Supply Stock</h4>
+          <h4>เพิ่ม</h4>
         </v-btn>
       </div>
       <div>

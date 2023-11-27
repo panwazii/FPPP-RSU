@@ -31,7 +31,7 @@
                       <v-text-field
                         v-model="form.name"
                         :rules="[(v) => !!v || 'name required']"
-                        label="Name"
+                        label="ชื่อ"
                         outlined
                         required
                       ></v-text-field>

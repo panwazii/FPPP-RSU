@@ -13,7 +13,7 @@
       <div class="d-flex justify-end">
         <v-btn @click="createEquipmentStock = true" class="mb-3" color="primary">
           <v-icon medium> mdi-plus </v-icon>
-          <h4>Add EquipmentStock</h4>
+          <h4>เพิ่มสต็อคอุปกรณ์</h4>
         </v-btn>
       </div>
       <div>
@@ -70,7 +70,7 @@
         createEquipmentStock: false,
         headers: [
           {
-            text: 'serial_number',
+            text: 'หมายเลขซีเรียล',
             value: 'serial_number',
             sortable: false,
             align: 'start',
