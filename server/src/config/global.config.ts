@@ -26,7 +26,7 @@ const config: any = {
     type: process.env.GOOGLEAPI_TYPE,
     project_id: process.env.GOOGLEAPI_PROJECT_ID,
     private_key_id: process.env.GOOGLEAPI_KEY_ID,
-    private_key: process.env.GOOGLEAPI_KEY,
+    private_key: (process.env.GOOGLEAPI_KEY)?.replace(/\\n/gm, "\n"),
     client_email: process.env.GOOGLEAPI_CLIENT_EMAIL,
     client_id: process.env.GOOGLEAPI_CLIENT_ID,
     auth_uri: process.env.GOOGLEAPI_AUTH_URI,
