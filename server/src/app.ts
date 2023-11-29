@@ -25,7 +25,7 @@ initDatabase().then(() => {
     router.use('/api/user', userRouter);
     router.use('/api/util', utilRouter);
     router.get('/', ((req, res) => {
-        res.json('server running 111');
+        res.json('server up!');
     }));
 
     app.use(express.json());
