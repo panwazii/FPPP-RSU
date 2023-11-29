@@ -134,8 +134,16 @@ export default {
   },
   methods: {
     async fetctrooms() {
-      let data = await this.$store.dispatch('api/public/getAllRooms')
-      let allNews = await this.$store.dispatch('api/public/getAllNews')
+      let data = await this.$store.dispatch('api/public/getAllRooms', {
+        params: {
+          value: '',
+        },
+      })
+      let allNews = await this.$store.dispatch('api/public/getAllNews', {
+        params: {
+          value: '',
+        },
+      })
       this.room = data.rooms
       this.allNews = allNews.news
       console.log('this is room,', this.room)

@@ -14,17 +14,30 @@ class NewsController {
     }
 
     public static async getAllNewsPublic(searchValue: string, limit: number, offset: number) {
-        return NewsModel.findAndCountAll({
-            where: {
-                available_status: true,
-                title: {
-                    [Op.iLike]: '%' + searchValue + '%'
+        console.log('ser val', searchValue)
+        if (searchValue !== '') {
+            return NewsModel.findAndCountAll({
+                where: {
+                    available_status: true,
+                    title: {
+                        [Op.iLike]: '%' + searchValue + '%'
+                    },
                 },
-            },
-            limit,
-            offset,
-            raw: true
-        });
+                limit,
+                offset,
+                raw: true
+            });
+        }
+        else {
+            return NewsModel.findAndCountAll({
+                where: {
+                    available_status: true,
+                },
+                limit,
+                offset,
+                raw: true
+            });
+        }
     }
 
     //Admin
