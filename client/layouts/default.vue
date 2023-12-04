@@ -35,6 +35,12 @@
         <v-list-item to="/news" class="mt-2">
           <v-list-item-title>News/ข่าวสาร</v-list-item-title>
         </v-list-item>
+        <v-list-item to="/auth/login" class="mt-2">
+          <v-list-item-title>Login</v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/auth/register" class="mt-2">
+          <v-list-item-title>Register</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-main>

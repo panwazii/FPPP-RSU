@@ -76,7 +76,9 @@
         <v-btn text rounded><v-icon>mdi-cog</v-icon></v-btn>
         <v-btn @click="logout_modal = true" text rounded><v-icon>mdi-logout-variant</v-icon></v-btn>
       </v-app-bar>
-      <Nuxt />
+      <v-container>
+        <Nuxt />
+      </v-container>
     </v-main>
 
     <v-footer class="pa-0" height="30">
@@ -193,7 +195,7 @@ export default {
   methods: {
     async logout() {
       await this.$store.dispatch('logout')
-      this.$router.push('/admin-login')
+      this.$router.push('/auth/admin-login')
     },
     goToHomePage(){
       goTo('/')

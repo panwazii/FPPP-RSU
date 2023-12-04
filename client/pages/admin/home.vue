@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col cols="3">
-        <v-card class="mx-auto my-6" max-width="344" outlined>
+        <v-card class="mx-auto my-6" max-width="344">
           <v-list-item three-line>
             <v-list-item-content>
               <v-list-item-title class="text-h5 mb-1">
@@ -25,7 +25,7 @@
         </v-card>
       </v-col>
       <v-col cols="3">
-        <v-card class="mx-auto my-6" max-width="344" outlined>
+        <v-card class="mx-auto my-6" max-width="344">
           <v-list-item three-line>
             <v-list-item-content>
               <v-list-item-title class="text-h5 mb-1">
@@ -48,7 +48,7 @@
         </v-card>
       </v-col>
       <v-col cols="3">
-        <v-card class="mx-auto my-6" max-width="344" outlined>
+        <v-card class="mx-auto my-6" max-width="344">
           <v-list-item three-line>
             <v-list-item-content>
               <v-list-item-title class="text-h5 mb-1">
@@ -71,7 +71,7 @@
         </v-card>
       </v-col>
       <v-col cols="3">
-        <v-card class="mx-auto my-6" max-width="344" outlined>
+        <v-card class="mx-auto my-6" max-width="344">
           <v-list-item three-line>
             <v-list-item-content>
               <v-list-item-title class="text-h5 mb-1">
@@ -95,19 +95,22 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col>
-        <ApexCharts
-          width="500"
-          type="line"
-          :options="chart.chartOptions"
-          :series="chart.series"
-        />
+      <v-col cols="12">
+        <v-card>
+          <!-- <client-only> -->
+            <apexchart
+            type="line"
+            :options="chart.chartOptions"
+            :series="chart.series"
+          />
+          <!-- </client-only> -->
+        </v-card>
       </v-col>
     </v-row>
   </div>
 </template>
 <script>
-import ApexCharts from 'apexcharts'
+// import ApexCharts from 'apexcharts'
 export default {
   layout: 'admin',
   middleware: 'admin',
@@ -117,8 +120,6 @@ export default {
     }
   },
   components: {
-    ApexCharts: () => import('vue-apexcharts'),
-
     [process.browser && 'apexchart']: () => import('vue-apexcharts'),
   },
   data() {
