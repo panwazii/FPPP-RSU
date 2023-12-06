@@ -18,6 +18,8 @@ import { initNewsModel } from './models/news.model';
 import AdminModel, { initAdminModel } from './models/admins.model';
 import AdminTypeModel, { initAdminTypeModel } from './models/admin_types.model';
 import CartModel, { initCartModel } from './models/carts.model';
+import NotificationModel, { initNotificationModel } from './models/notifications.model';
+
 import { initWebInfoModel } from './models/web_info.model';
 import { initServiceModel } from './models/services.model';
 import { initAdminTypeSeed } from '../seeders/admin_types.seed';
@@ -78,6 +80,7 @@ const initDatabase = async () => {
         initReserveEquipmentModel,
         initRoomPictureModel,
         initCartModel,
+        initNotificationModel,
 
         //Admin
         initAdminTypeModel,
@@ -139,6 +142,9 @@ const initDatabase = async () => {
 
     EquipmentInfoModel.hasMany(CartModel, { as: 'equipment', foreignKey: 'equipment_info_id' });
     CartModel.belongsTo(EquipmentInfoModel, { as: 'equipment', foreignKey: 'equipment_info_id' });
+
+    UserModel.hasMany(NotificationModel, { foreignKey: 'user_id' });
+    NotificationModel.belongsTo(UserModel, { foreignKey: 'user_id' });
 
     if (yn(config.database.dropAndCreateNew)) {
         log("Drop status :", config.database.dropAndCreateNew);
