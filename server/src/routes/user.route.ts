@@ -7,6 +7,7 @@ import { numberOrDefault } from '../tools/util';
 import ReserveController from '../controllers/reserve.controller';
 import ServiceController from '../controllers/service.controller';
 import { checkBodyEmpty, checkParamsEmpty } from '../middleware/validator.middleware';
+import CartController from '../controllers/cart.controller';
 
 const userRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON();
@@ -161,5 +162,28 @@ userRouter.get('/getAllReserve', checkParamsEmpty, async (req, res) => {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
+
+// Cart
+userRouter.post('/createCart', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const data = req.body
+        const userId = req.body.credentials.id;
+        await CartController.create(data)
+        res.status(200).json({ code: 200, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+userRouter.post('/getAllCart', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const userId = req.body.credentials.id;
+        const data = await CartController.getAll(userId)
+        res.status(200).json({ code: 200, cart: data});
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 
 export default userRouter;

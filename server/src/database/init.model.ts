@@ -17,6 +17,7 @@ import SupplyModel, { initSupplyModel } from './models/supply.model';
 import { initNewsModel } from './models/news.model';
 import AdminModel, { initAdminModel } from './models/admins.model';
 import AdminTypeModel, { initAdminTypeModel } from './models/admin_types.model';
+import CartModel, { initCartModel } from './models/carts.model';
 import { initWebInfoModel } from './models/web_info.model';
 import { initServiceModel } from './models/services.model';
 import { initAdminTypeSeed } from '../seeders/admin_types.seed';
@@ -76,6 +77,7 @@ const initDatabase = async () => {
         initSupplyModel,
         initReserveEquipmentModel,
         initRoomPictureModel,
+        initCartModel,
 
         //Admin
         initAdminTypeModel,
@@ -109,7 +111,7 @@ const initDatabase = async () => {
     EquipmentsModel.belongsTo(EquipmentInfoModel, { as: 'stock', foreignKey: 'equipment_info_id' });
 
     RentRateModel.hasMany(EquipmentInfoModel, { as: 'rent_rate', foreignKey: 'rent_rate_id' });
-    EquipmentInfoModel.belongsTo(RentRateModel, { as: 'rent_rate',foreignKey: 'rent_rate_id' });
+    EquipmentInfoModel.belongsTo(RentRateModel, { as: 'rent_rate', foreignKey: 'rent_rate_id' });
 
     EquipmentsModel.hasMany(ReserveEquipmentModel, { foreignKey: 'equipments_id' });
     ReserveEquipmentModel.belongsTo(EquipmentsModel, { foreignKey: 'equipments_id' });
@@ -132,6 +134,12 @@ const initDatabase = async () => {
     AdminTypeModel.hasMany(AdminModel, { foreignKey: 'type_id' });
     AdminModel.belongsTo(AdminTypeModel, { foreignKey: 'type_id' });
 
+    UserModel.hasMany(CartModel, { foreignKey: 'user_id' });
+    CartModel.belongsTo(UserModel, { foreignKey: 'user_id' });
+
+    EquipmentInfoModel.hasMany(CartModel, { as: 'equipment', foreignKey: 'equipment_info_id' });
+    CartModel.belongsTo(EquipmentInfoModel, { as: 'equipment', foreignKey: 'equipment_info_id' });
+
     if (yn(config.database.dropAndCreateNew)) {
         log("Drop status :", config.database.dropAndCreateNew);
         log(sequelizeConnection.models);
@@ -149,7 +157,7 @@ const initDatabase = async () => {
             await initEquipmentsSeed();
             await initServiceSeed();
             await initNewsSeed();
-            
+
             await AdminController.createSuperAdmin();
         }
     } else {
