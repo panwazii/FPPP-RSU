@@ -5,10 +5,11 @@ import UserModel from './users.model';
 
 export interface NotificationAttribute {
     id?: string;
+    title?:string;
     user_id?: string;
     created_at?: Date;
     update_at?: Date;
-    status?: boolean;
+    read?: boolean;
 }
 
 export interface NotificationAttributeCreation extends Optional<NotificationAttribute, 'id'> { }
@@ -16,13 +17,15 @@ export interface NotificationAttributeCreation extends Optional<NotificationAttr
 class NotificationModel extends Model<NotificationAttribute, NotificationAttributeCreation> implements NotificationAttribute {
     declare id: string;
 
+    declare title: string;
+
     declare user_id: string;
 
     declare created_at: Date;
 
     declare update_at: Date;
 
-    declare status: boolean;
+    declare read: boolean;
 }
 
 export const initNotificationModel = (connection: Sequelize) => {
@@ -33,6 +36,10 @@ export const initNotificationModel = (connection: Sequelize) => {
                 defaultValue: DataTypes.UUIDV4,
                 allowNull: false,
                 primaryKey: true,
+            },
+            title: {
+                allowNull: false,
+                type: DataTypes.STRING,
             },
             user_id: {
                 type: DataTypes.UUID,
@@ -52,7 +59,7 @@ export const initNotificationModel = (connection: Sequelize) => {
                 type: DataTypes.DATE,
                 defaultValue: DataTypes.NOW,
             },
-            status: {
+            read: {
                 allowNull: false,
                 type: DataTypes.BOOLEAN,
             },
