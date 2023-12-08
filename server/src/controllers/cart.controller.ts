@@ -11,17 +11,16 @@ class CartController {
         });
     }
 
-    public static async create(data: any) {
+    public static async create(userId: string, equipmentInfoId: string) {
 
         const packet: CartAttribute = {
-            id: data.id,
-            user_id: data.user_id,
-            equipment_info_id: data.equipment_info_id
+            user_id: userId,
+            equipment_info_id: equipmentInfoId
         };
 
         return CartModel.create(packet)
     }
-    
+
     public static async delete(id: string) {
         return CartModel.destroy({
             where: {

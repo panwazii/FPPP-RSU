@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="mx-auto text-center mt-12 pa-2 pt-10 justify-center"
+    class="mx-auto text-center mt-12 pa-2 pt-10 justify-center rounded-xl"
     max-width="400"
     max-height="800"
   >
@@ -8,7 +8,6 @@
     <h1>เข้าสู่ระบบ</h1>
     <v-card-text>
       <v-row>
-        <v-col cols="6"></v-col>
         <v-col cols="12">
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-text-field
@@ -19,7 +18,7 @@
               :rules="emailRules"
               prepend-inner-icon="mdi-mail"
               type="email"
-              class="rounded-1"
+              class="rounded-xl"
               outlined
               v-model="email"
             >
@@ -32,7 +31,7 @@
               prepend-inner-icon="mdi-lock"
               type="password"
               :rules="passwordRules"
-              class="rounded-1 mb-5"
+              class="rounded-xl mb-5"
               outlined
               v-model="password"
             >
@@ -40,7 +39,7 @@
             <v-divider></v-divider>
             <v-btn
               @click="login()"
-              class="rounded-1 mt-10"
+              class="rounded-xl mt-10"
               color="secondary"
               large
               block
@@ -49,8 +48,8 @@
             </v-btn>
             <h3 class="mt-2">หรือ</h3>
             <v-btn
-              to="/register"
-              class="rounded-1 mt-2"
+              to="/auth/register"
+              class="rounded-xl mt-2"
               color="#78909C"
               large
               block

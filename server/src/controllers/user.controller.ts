@@ -179,14 +179,6 @@ class UserController {
 
         return UserModel.update({ password: newPass }, { where: { id: userID } });
     }
-
-    public static async updateCart(userID: string, data: any) {
-        return UserModel.update(data, {
-            where: {
-                id: userID,
-            },
-        });
-    }
 }
 
 export default UserController;

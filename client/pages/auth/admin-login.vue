@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="mx-auto text-center mt-12 pa-2 pt-10 justify-center"
+    class="mx-auto text-center mt-12 pa-2 pt-10 justify-center rounded-xl"
     max-width="400"
     max-height="800"
   >
@@ -19,7 +19,7 @@
               :rules="emailRules"
               prepend-inner-icon="mdi-mail"
               type="email"
-              class="rounded-1"
+              class="rounded-xl"
               outlined
               v-model="email"
             >
@@ -32,7 +32,7 @@
               prepend-inner-icon="mdi-lock"
               type="password"
               :rules="passwordRules"
-              class="rounded-1 mb-5"
+              class="rounded-xl mb-5"
               outlined
               v-model="password"
             >
@@ -40,7 +40,7 @@
             <v-divider></v-divider>
             <v-btn
               @click="login()"
-              class="rounded-1 mt-10"
+              class="rounded-xl mt-10"
               color="secondary"
               large
               block

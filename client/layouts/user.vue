@@ -23,13 +23,13 @@
           ></v-img>
         </div>
         <v-divider></v-divider>
-        <v-list-item to="/equipments" class="mt-2">
+        <v-list-item to="/user/equipments" class="mt-2">
           <v-list-item-title>Equipment/อุปกรณ์</v-list-item-title>
         </v-list-item>
-        <v-list-item to="/rooms" class="mt-2">
+        <v-list-item to="/user/rooms" class="mt-2">
           <v-list-item-title>Room/ห้องแลป</v-list-item-title>
         </v-list-item>
-        <v-list-item to="/news" class="mt-2">
+        <v-list-item to="/user/news" class="mt-2">
           <v-list-item-title>News/ข่าวสาร</v-list-item-title>
         </v-list-item>
       </v-list>
@@ -43,6 +43,41 @@
         ></v-img>
         <template v-slot:extension>
           <v-app-bar-nav-icon v-if="!width" @click.stop="drawer = !drawer" />
+          <v-spacer v-if="!width" />
+          <v-badge v-if="!width" content="6" offset-x="20" offset-y="20">
+            <v-btn color="black" icon>
+              <v-icon>mdi-cart</v-icon>
+            </v-btn>
+          </v-badge>
+          <v-badge v-if="!width" content="2" offset-x="20" offset-y="20">
+            <v-btn color="black" icon>
+              <v-icon>mdi-bell</v-icon>
+            </v-btn>
+          </v-badge>
+          <v-menu offset-y rounded="xl" v-if="!width">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="primary" icon v-bind="attrs" v-on="on" class="mb-1">
+                <v-avatar color="primary" size="32">
+                  <span class="white--text text-h6">{{ avatarName }}</span>
+                </v-avatar>
+              </v-btn>
+            </template>
+            <v-list rounded width="200">
+              <v-list-item
+                link
+                v-for="(item, i) in menu"
+                :key="i"
+                @click="item.actions"
+              >
+                <v-list-item-icon>
+                  <v-icon>{{ item.icon }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.name }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-menu>
           <div class="mx-auto" v-if="width">
             <v-btn class="ml-2" rounded text to="/user/equipments">
               <h4>Equipment/อุปกรณ์</h4>
@@ -53,39 +88,69 @@
             <v-btn class="ml-2" rounded text to="/user/news">
               <h4>News/ข่าวสาร</h4>
             </v-btn>
-            <v-badge class="ml-6" content="6" offset-x="20" offset-y="20">
-              <v-btn rounded text>
-                <v-icon>mdi-cart</v-icon>
-              </v-btn>
-            </v-badge>
-            <!-- <v-btn icon>
-              <v-avatar color="primary" class="mb-1" size="32">
-                <span class="white--text text-h6">CJ</span>
-              </v-avatar>
-            </v-btn> -->
+
             <v-menu offset-y rounded="xl">
               <template v-slot:activator="{ on, attrs }">
-                <v-btn color="primary" icon v-bind="attrs" v-on="on">
-                  <v-avatar color="primary" class="mb-1" size="32">
-                    <span class="white--text text-h6">CJ</span>
+                <v-badge :content="cartItemsCount" offset-x="20" offset-y="20">
+                  <v-btn color="black" v-bind="attrs" v-on="on" icon>
+                    <v-icon>mdi-cart</v-icon>
+                  </v-btn>
+                </v-badge>
+              </template>
+              <v-list rounded width="300">
+                <v-list-item v-if="$store.getters.getCartItems.length === 0">
+                  <v-list-item-content>
+                    <v-list-item-title class="d-flex justify-center">
+                      no items
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item
+                  link
+                  v-for="(item, i) in $store.getters.getCartItems"
+                  :key="i"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title>{{ item.id }}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+            <v-badge content="2" offset-x="20" offset-y="20" class="ml-2">
+              <v-btn color="black" icon>
+                <v-icon>mdi-bell</v-icon>
+              </v-btn>
+            </v-badge>
+            <v-menu offset-y rounded="xl">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="primary"
+                  icon
+                  v-bind="attrs"
+                  v-on="on"
+                  class="mb-1 ml-2"
+                >
+                  <v-avatar color="primary" size="32">
+                    <span class="white--text text-h6">{{ avatarName }}</span>
                   </v-avatar>
                 </v-btn>
               </template>
-              <v-list rounded class="py-0">
-                <v-list-item link v-for="(item, i) in menu" :key="i" class="my-0 pa-0">
-                  <v-list-item-icon class="pt-0">
+              <v-list rounded width="200">
+                <v-list-item
+                  link
+                  v-for="(item, i) in menu"
+                  :key="i"
+                  @click="item.actions"
+                >
+                  <v-list-item-icon>
                     <v-icon>{{ item.icon }}</v-icon>
                   </v-list-item-icon>
-                  <v-list-item-content class="pt-0 pb-0">
+                  <v-list-item-content>
                     <v-list-item-title>{{ item.name }}</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
             </v-menu>
-            <!-- <v-btn @click="logout_modal = true" class="ml-2" rounded text>
-              <h4>ออกจากระบบ</h4>
-              <v-icon>mdi-logout-variant</v-icon>
-            </v-btn> -->
           </div>
         </template>
       </v-app-bar>
@@ -114,7 +179,29 @@ export default {
       clipped: false,
       bg: '#FFFFFF',
       logout_modal: false,
-      menu: [{ name: 'ออกจากระบบ', icon: 'mdi-logout-variant' },{ name: 'account', icon: 'mdi-account' }],
+      menu: [
+        {
+          name: 'account',
+          icon: 'mdi-account',
+          actions: () => {
+            this.$router.push('/user/account')
+          },
+        },
+        {
+          name: 'support',
+          icon: 'mdi-face-agent',
+          actions: () => {
+            this.$router.push('/user/support')
+          },
+        },
+        {
+          name: 'ออกจากระบบ',
+          icon: 'mdi-logout-variant',
+          actions: () => {
+            this.logout()
+          },
+        },
+      ],
     }
   },
   computed: {
@@ -131,6 +218,20 @@ export default {
         case 'xl':
           return true
       }
+    },
+    avatarName() {
+      if (!this.$store.getters.getUser) {
+        return '??'
+      } else {
+        return (
+          this.$store.getters.getUser.fname.charAt(0) +
+          this.$store.getters.getUser.lname.charAt(0)
+        )
+      }
+    },
+    cartItemsCount() {
+      console.log('cart item', this.$store.getters.getCartItems.length)
+      return this.$store.getters.getCartItems.length.toString()
     },
   },
   methods: {

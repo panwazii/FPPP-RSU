@@ -52,7 +52,7 @@
             cols="12"
             md="3"
           >
-            <EquipmentsCard
+            <UserEquipmentsCard
               :id="equipment.id"
               :title="equipment.name"
               :picture="equipment.picture"
