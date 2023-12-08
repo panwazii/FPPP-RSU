@@ -18,6 +18,7 @@ import { initNewsModel } from './models/news.model';
 import AdminModel, { initAdminModel } from './models/admins.model';
 import AdminTypeModel, { initAdminTypeModel } from './models/admin_types.model';
 import CartModel, { initCartModel } from './models/carts.model';
+import CartItemModel,{ initCartItemModel } from './models/cart_items.model';
 import NotificationModel, { initNotificationModel } from './models/notifications.model';
 
 import { initWebInfoModel } from './models/web_info.model';
@@ -80,6 +81,7 @@ const initDatabase = async () => {
         initReserveEquipmentModel,
         initRoomPictureModel,
         initCartModel,
+        initCartItemModel,
         initNotificationModel,
 
         //Admin
@@ -140,8 +142,11 @@ const initDatabase = async () => {
     UserModel.hasMany(CartModel, { foreignKey: 'user_id' });
     CartModel.belongsTo(UserModel, { foreignKey: 'user_id' });
 
-    EquipmentInfoModel.hasMany(CartModel, { as: 'equipment', foreignKey: 'equipment_info_id' });
-    CartModel.belongsTo(EquipmentInfoModel, { as: 'equipment', foreignKey: 'equipment_info_id' });
+    CartModel.hasMany(CartItemModel, { as: 'cart_items', foreignKey: 'cart_id' });
+    CartItemModel.belongsTo(CartModel, { as: 'cart_items', foreignKey: 'cart_id' });
+
+    EquipmentInfoModel.hasMany(CartItemModel, { as: 'equipment', foreignKey: 'equipment_info_id' });
+    CartItemModel.belongsTo(EquipmentInfoModel, { as: 'equipment', foreignKey: 'equipment_info_id' });
 
     UserModel.hasMany(NotificationModel, { foreignKey: 'user_id' });
     NotificationModel.belongsTo(UserModel, { foreignKey: 'user_id' });

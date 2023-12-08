@@ -2,29 +2,32 @@ import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
 import EquipmentInfoModel from './equipment_infos.model';
-import UserModel from './users.model';
+import CartModel from './carts.model';
 
-export interface CartAttribute {
+export interface CartItemAttribute {
     id?: string;
-    user_id?: string;
+    cart_id?: string;
+    equipment_info_id:string;
     created_at?: Date;
     update_at?: Date;
 }
 
-export interface CartAttributeCreation extends Optional<CartAttribute, 'id'> { }
+export interface CartItemAttributeCreation extends Optional<CartItemAttribute, 'id'> { }
 
-class CartModel extends Model<CartAttribute, CartAttributeCreation> implements CartAttribute {
+class CartItemModel extends Model<CartItemAttribute, CartItemAttributeCreation> implements CartItemAttribute {
     declare id: string;
 
-    declare user_id: string;
+    declare cart_id: string;
+
+    declare equipment_info_id: string;
 
     declare created_at: Date;
 
     declare update_at: Date;
 }
 
-export const initCartModel = (connection: Sequelize) => {
-    CartModel.init(
+export const initCartItemModel = (connection: Sequelize) => {
+    CartItemModel.init(
         {
             id: {
                 type: DataTypes.UUID,
@@ -32,11 +35,19 @@ export const initCartModel = (connection: Sequelize) => {
                 allowNull: false,
                 primaryKey: true,
             },
-            user_id: {
+            cart_id: {
                 type: DataTypes.UUID,
                 allowNull: false,
                 references: {
-                    model: UserModel,
+                    model: CartModel,
+                    key: 'id',
+                },
+            },
+            equipment_info_id: {
+                type: DataTypes.UUID,
+                allowNull: false,
+                references: {
+                    model: EquipmentInfoModel,
                     key: 'id',
                 },
             },
@@ -54,9 +65,9 @@ export const initCartModel = (connection: Sequelize) => {
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'carts',
+            tableName: 'cart_items',
         },
     );
 };
 
-export default CartModel;
+export default CartItemModel;

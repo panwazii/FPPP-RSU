@@ -154,11 +154,21 @@ userRouter.get('/getAllReserve', checkParamsEmpty, async (req, res) => {
 });
 
 // Cart
-userRouter.get('/createCart', checkBodyEmpty, authValid, async (req, res) => {
+userRouter.post('/createCart', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const userId = req.body.credentials.id;
-        const equipmentInfoId = String(req.query.id);
-        await CartController.create(userId, equipmentInfoId)
+        await CartController.create(userId)
+        res.status(200).json({ code: 200, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+userRouter.post('/createCartItem', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const cartId = req.body.cart_id;
+        const equipmentInfoId = String(req.body.id);
+        await CartController.createItems(cartId, equipmentInfoId)
         res.status(200).json({ code: 200, });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -175,5 +185,22 @@ userRouter.get('/getAllCart', checkBodyEmpty, authValid, async (req, res) => {
     }
 });
 
+userRouter.post('/createCartDelete', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        await CartController.delete(req.body.id)
+        res.status(200).json({ code: 200, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+userRouter.post('/createCartItemDelete', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        await CartController.deleteItems(req.body.id)
+        res.status(200).json({ code: 200, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
 
 export default userRouter;

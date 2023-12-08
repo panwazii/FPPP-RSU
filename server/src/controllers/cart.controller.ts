@@ -1,21 +1,34 @@
 import EquipmentInfoModel from '../database/models/equipment_infos.model';
 import CartModel, { CartAttribute } from '../database/models/carts.model';
+import CartItemModel, { CartItemAttribute } from '../database/models/cart_items.model';
 
 class CartController {
-    public static async getAll(user_id: string) {
+    public static async getAll(userId: string) {
         return CartModel.findAll({
-            where: { user_id: user_id },
+            where: { user_id: userId },
             include: [{
-                model: EquipmentInfoModel, as: 'equipment'
+                model: CartItemModel, as: 'cart_items',
+                include: [{
+                    model: EquipmentInfoModel, as: 'equipment'
+                }]
             }]
         });
     }
 
-    public static async create(userId: string, equipmentInfoId: string) {
+    public static async create(userId: string) {
 
         const packet: CartAttribute = {
             user_id: userId,
-            equipment_info_id: equipmentInfoId
+        };
+
+        return CartModel.create(packet)
+    }
+
+    public static async createItems(cartId: string, equipmentInfoId: string) {
+
+        const packet: CartItemAttribute = {
+            cart_id: cartId,
+            equipment_info_id: equipmentInfoId,
         };
 
         return CartModel.create(packet)
@@ -28,6 +41,15 @@ class CartController {
             },
         }).then((rowDeleted) => rowDeleted > 0);
     }
+
+    public static async deleteItems(id: string) {
+        return CartItemModel.destroy({
+            where: {
+                id: id,
+            },
+        }).then((rowDeleted) => rowDeleted > 0);
+    }
+
 }
 
 export default CartController;
