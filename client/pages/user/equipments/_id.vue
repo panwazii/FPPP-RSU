@@ -94,8 +94,8 @@ export default {
       equipmentInfo: {},
       tool: [],
       routes: [
-        { id: 1, name: 'หน้าหลัก', to: '/' },
-        { id: 2, name: 'อุปกรณ์', to: '/equipments' },
+        { id: 1, name: 'หน้าหลัก', to: '/user/home' },
+        { id: 2, name: 'อุปกรณ์', to: '/user/equipments' },
         { id: 3, name: '', to: '/' },
       ],
       loading: true,

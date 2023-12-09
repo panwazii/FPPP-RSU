@@ -91,8 +91,8 @@ export default {
       fetchOption: { page: 1, totalPages: 0, itemsPerPage: 12 },
       equipments: [],
       routes: [
-        { id: 1, name: 'หน้าหลัก', to: '/' },
-        { id: 2, name: 'อุปกรณ์', to: '/equipments' },
+        { id: 1, name: 'หน้าหลัก', to: '/user/home' },
+        { id: 2, name: 'อุปกรณ์', to: '/user/equipments' },
       ],
     }
   },

@@ -6,8 +6,7 @@ export const state = () => ({
     user: null,
     admin: null,
     path_name_th: "",
-    cart: [],
-    production_lines: []
+    cart: []
 })
 
 export const mutations = {
@@ -48,7 +47,6 @@ export const actions = {
             console.log("this is isAdmin", admin);
             await dispatch('setToken', token);
             if (typeof token === "string") {
-                await dispatch('fetchProductionLine');
                 if (admin === true) {
                     console.log("admin");
                     return await dispatch('fetchAdmin');
@@ -126,6 +124,7 @@ export const actions = {
         await commit('setAdmin', null);
         await commit('setUser', null);
         await commit('setIsAdmin', null);
+        await commit('setCart', []);
     },
     //Cart
     async getCartItems({ commit }) {
@@ -139,13 +138,9 @@ export const actions = {
         await dispatch('getCartItems')
     },
     async removeCartItem({ commit, dispatch }, itemId) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
         await this.$axios.delete('/api/user/deleteCartItem', { params: { id: itemId } })
         await dispatch('getCartItems')
-    },
-    //Production Line (for user layout)
-    async fetchProductionLine({ commit, dispatch }) {
-        const productionLine = await this.$axios.get('api/public/getAllProductionLine')
-        commit('setProductionLines', productionLine.data.production_lines)
     },
     //Path Name
     async setPathName({ commit }, pathName) {
@@ -170,8 +165,4 @@ export const getters = {
     getCartItems(state) {
         return state.cart
     },
-    //Production Line
-    getProductionLines(state) {
-        return state.production_lines
-    }
 }

@@ -12,7 +12,7 @@
             >
               <v-fade-transition>
                 <v-overlay v-if="hover" absolute>
-                  <v-btn @click="$router.push('/equipments/' + id)"
+                  <v-btn @click="$router.push('/user/equipments/' + id)"
                     >ดูรายละเอียด</v-btn
                   >
                 </v-overlay>
@@ -32,9 +32,11 @@
             {{ price }} บาท
           </v-chip>
         </div>
+        {{ checkAvailableItems }}
       </v-card-text>
       <v-card-actions class="justify-center">
         <v-btn
+          v-if="!checkAvailableItems"
           elevation="0"
           max-width="200"
           class="rounded-xl px-4"
@@ -42,6 +44,16 @@
           @click="$store.dispatch('addCartItem', id)"
         >
           <v-icon>mdi-cart-plus</v-icon>เพิ่มลงตระกร้า
+        </v-btn>
+        <v-btn
+          v-if="checkAvailableItems"
+          elevation="0"
+          max-width="200"
+          class="rounded-xl px-4"
+          color="red"
+          @click="$store.dispatch('removeCartItem', getCartItemId)"
+        >
+          <v-icon>mdi-cart-remove</v-icon>ลบออกจากตระกร้า
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -58,6 +70,27 @@ export default {
         return require('~/static/img/default/no-image.png')
       } else {
         return this.picture
+      }
+    },
+    checkAvailableItems() {
+      // this.$store.getters.getCartItems.forEach((item) => {
+      //   if (item.equipment_info_id === this.id) {
+      //     console.log(this.id, '----', item.equipment_info_id)
+      //     return true
+      //   }
+      // })
+      for (let i = 0; i < this.$store.getters.getCartItems.length; i++) {
+        if (this.$store.getters.getCartItems[i].equipment_info_id === this.id) {
+          return true
+        }
+      }
+      return false
+    },
+    getCartItemId() {
+      for (let i = 0; i < this.$store.getters.getCartItems.length; i++) {
+        if (this.$store.getters.getCartItems[i].equipment_info_id === this.id) {
+          return this.$store.getters.getCartItems[i].id
+        }
       }
     },
   },

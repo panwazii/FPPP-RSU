@@ -17,7 +17,7 @@
             >
               <v-fade-transition>
                 <v-overlay v-if="hover" absolute>
-                  <v-btn @click="$router.push('/news/' + id)"
+                  <v-btn @click="$router.push('/user/news/' + id)"
                     >ดูรายละเอียด</v-btn
                   >
                 </v-overlay>

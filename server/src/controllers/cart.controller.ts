@@ -12,7 +12,7 @@ class CartController {
                 include: [{
                     model: EquipmentInfoModel, as: 'equipment',
                     include: [{
-                        model: ProductionLineModel, as: 'equipments'
+                        model: ProductionLineModel, as: 'production_line'
                     }]
                 }]
             }]

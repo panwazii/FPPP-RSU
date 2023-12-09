@@ -33,7 +33,7 @@
             cols="12"
             md="3"
           >
-            <NewsCard
+            <UserNewsCard
               :id="news.id"
               :title="news.title"
               :picture="news.picture"
@@ -70,8 +70,8 @@ export default {
       fetchOption: { page: 1, totalPages: 0, itemsPerPage: 12 },
       allNews: [],
       routes: [
-        { id: 1, name: 'หน้าหลัก', to: '/' },
-        { id: 2, name: 'ข่าว', to: '/news' },
+        { id: 1, name: 'หน้าหลัก', to: '/user/home' },
+        { id: 2, name: 'ข่าว', to: '/user/news' },
       ],
     }
   },

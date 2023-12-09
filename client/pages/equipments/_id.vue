@@ -64,6 +64,12 @@
 
 <script>
 export default {
+  middleware: 'guest',
+  head() {
+    return {
+      title: 'อุปกรณ์',
+    }
+  },
   async asyncData({ params }) {
     const id = params.id
     return { id }

@@ -59,6 +59,12 @@
 
 <script>
 export default {
+  middleware: 'guest',
+  head() {
+    return {
+      title: 'ห้องแลป',
+    }
+  },
   async asyncData({ params }) {
     const id = params.id
     return { id }

@@ -36,6 +36,12 @@
 
 <script>
 export default {
+  middleware: 'guest',
+  head() {
+    return {
+      title: 'ข่าว',
+    }
+  },
   async asyncData({ params }) {
     const id = params.id
     return { id }

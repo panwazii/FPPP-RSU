@@ -54,6 +54,7 @@
 </template>
 <script>
 export default {
+  middleware: 'guest',
   head() {
     return {
       title: 'รายการข่าว',

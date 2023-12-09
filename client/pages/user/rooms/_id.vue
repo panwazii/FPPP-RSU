@@ -98,8 +98,8 @@ export default {
     return {
       room: {},
       routes: [
-        { id: 1, name: 'หน้าหลัก', to: '/' },
-        { id: 2, name: 'ห้องแลป', to: '/rooms' },
+        { id: 1, name: 'หน้าหลัก', to: '/user/home' },
+        { id: 2, name: 'ห้องแลป', to: '/user/rooms' },
         { id: 3, name: '', to: '/' },
       ],
       loading: true,

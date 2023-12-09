@@ -23,6 +23,9 @@
           ></v-img>
         </div>
         <v-divider></v-divider>
+        <v-list-item to="/user/home" class="mt-2">
+          <v-list-item-title>รายการจองทั้งหมด</v-list-item-title>
+        </v-list-item>
         <v-list-item to="/user/equipments" class="mt-2">
           <v-list-item-title>Equipment/อุปกรณ์</v-list-item-title>
         </v-list-item>
@@ -44,11 +47,79 @@
         <template v-slot:extension>
           <v-app-bar-nav-icon v-if="!width" @click.stop="drawer = !drawer" />
           <v-spacer v-if="!width" />
-          <v-badge v-if="!width" content="6" offset-x="20" offset-y="20">
-            <v-btn color="black" icon>
-              <v-icon>mdi-cart</v-icon>
-            </v-btn>
-          </v-badge>
+          <v-menu v-if="!width" offset-y rounded="xl">
+            <template v-slot:activator="{ on, attrs }">
+              <v-badge :content="cartItemsCount" offset-x="20" offset-y="20">
+                <v-btn color="black" v-bind="attrs" v-on="on" icon>
+                  <v-icon>mdi-cart</v-icon>
+                </v-btn>
+              </v-badge>
+            </template>
+            <v-list rounded min-width="300" max-width="350">
+              <v-list-item v-if="$store.getters.getCartItems.length === 0">
+                <v-list-item-content>
+                  <v-list-item-title class="d-flex justify-center">
+                    no items
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item
+                link
+                v-for="item in $store.getters.getCartItems"
+                :key="item.id"
+              >
+                <v-list-item-avatar>
+                  <v-img :src="item.equipment.picture" />
+                </v-list-item-avatar>
+                <v-list-item-content
+                  @click="
+                    $router.push(`/user/equipments/${item.equipment_info_id}`)
+                  "
+                >
+                  <v-list-item-title>{{
+                    item.equipment.name
+                  }}</v-list-item-title>
+                  <v-list-item-subtitle
+                    >สายการผลิต :
+                    {{
+                      item.equipment.production_line.name
+                    }}</v-list-item-subtitle
+                  >
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-btn
+                    icon
+                    @click="$store.dispatch('removeCartItem', item.id)"
+                  >
+                    <v-icon color="red">mdi-trash-can</v-icon>
+                  </v-btn>
+                </v-list-item-action>
+              </v-list-item>
+              <v-divider v-if="$store.getters.getCartItems.length !== 0" />
+              <div
+                class="d-flex justify-space-between mt-2"
+                v-if="$store.getters.getCartItems.length !== 0"
+              >
+                <v-sheet
+                  class="rounded-xl pa-1 text-center"
+                  color="grey lighten-2"
+                  elevation="0"
+                  height="36"
+                  width="140"
+                >
+                  ทั้งหมด {{ $store.getters.getCartItems.length }} ชิ้น
+                </v-sheet>
+                <v-btn
+                  @click="$router.push('/user/cart')"
+                  elevation="0"
+                  dark
+                  class="rounded-xl"
+                >
+                  จองเลย
+                </v-btn>
+              </div>
+            </v-list>
+          </v-menu>
           <v-badge v-if="!width" content="2" offset-x="20" offset-y="20">
             <v-btn color="black" icon>
               <v-icon>mdi-bell</v-icon>
@@ -79,6 +150,9 @@
             </v-list>
           </v-menu>
           <div class="mx-auto" v-if="width">
+            <v-btn class="ml-2" rounded text to="/user/home">
+              <h4>รายการจองทั้งหมด</h4>
+            </v-btn>
             <v-btn class="ml-2" rounded text to="/user/equipments">
               <h4>Equipment/อุปกรณ์</h4>
             </v-btn>
@@ -97,7 +171,7 @@
                   </v-btn>
                 </v-badge>
               </template>
-              <v-list rounded width="300">
+              <v-list rounded min-width="300" max-width="350">
                 <v-list-item v-if="$store.getters.getCartItems.length === 0">
                   <v-list-item-content>
                     <v-list-item-title class="d-flex justify-center">
@@ -124,7 +198,7 @@
                     <v-list-item-subtitle
                       >สายการผลิต :
                       {{
-                        getProductionLineName(item.equipment.production_line_id)
+                        item.equipment.production_line.name
                       }}</v-list-item-subtitle
                     >
                   </v-list-item-content>
@@ -137,11 +211,20 @@
                     </v-btn>
                   </v-list-item-action>
                 </v-list-item>
-                <v-divider />
+                <v-divider v-if="$store.getters.getCartItems.length !== 0" />
                 <div
-                  class="d-flex justify-end mt-2"
+                  class="d-flex justify-space-between mt-2"
                   v-if="$store.getters.getCartItems.length !== 0"
                 >
+                  <v-sheet
+                    class="rounded-xl pa-1 text-center"
+                    color="grey lighten-2"
+                    elevation="0"
+                    height="36"
+                    width="140"
+                  >
+                    ทั้งหมด {{ $store.getters.getCartItems.length }} ชิ้น
+                  </v-sheet>
                   <v-btn
                     @click="$router.push('/user/cart')"
                     elevation="0"
@@ -274,17 +357,6 @@ export default {
     async logout() {
       await this.$store.dispatch('logout')
       this.$router.push('/auth/login')
-    },
-    getProductionLineName(id) {
-      console.log('param id', id)
-
-      this.$store.getters.getProductionLines.forEach((item) => {
-        console.log(id, '----', item.id)
-        if (id === item.id) {
-          return item.name
-        }
-      })
-      return 'n/a'
     },
   },
 }

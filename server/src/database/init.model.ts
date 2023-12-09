@@ -109,8 +109,8 @@ const initDatabase = async () => {
     RoomModel.hasMany(RoomPictureModel, { as: 'picture', foreignKey: 'room_id' });
     RoomPictureModel.belongsTo(RoomModel, { as: 'picture', foreignKey: 'room_id' });
 
-    ProductionLineModel.hasMany(EquipmentInfoModel, { as: 'equipments', foreignKey: 'production_line_id' });
-    EquipmentInfoModel.belongsTo(ProductionLineModel, { as: 'equipments', foreignKey: 'production_line_id' });
+    ProductionLineModel.hasMany(EquipmentInfoModel, { as: 'production_line', foreignKey: 'production_line_id' });
+    EquipmentInfoModel.belongsTo(ProductionLineModel, { as: 'production_line', foreignKey: 'production_line_id' });
 
     EquipmentInfoModel.hasMany(EquipmentsModel, { as: 'stock', foreignKey: 'equipment_info_id' });
     EquipmentsModel.belongsTo(EquipmentInfoModel, { as: 'stock', foreignKey: 'equipment_info_id' });
