@@ -50,7 +50,7 @@ export default {
   middleware: 'admin',
   head() {
     return {
-      title: 'manage room',
+      title: 'จัดการห้อง',
     }
   },
   data() {
@@ -92,7 +92,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('setPathName', 'manage room')
+    this.$store.dispatch('setPathName', 'จัดการห้อง')
     this.fetchRooms()
   },
   watch: {
