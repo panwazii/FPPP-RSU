@@ -1,6 +1,7 @@
 import EquipmentInfoModel from '../database/models/equipment_infos.model';
 import CartModel, { CartAttribute } from '../database/models/carts.model';
 import CartItemModel, { CartItemAttribute } from '../database/models/cart_items.model';
+import ProductionLineModel from '../database/models/production_lines.model';
 
 class CartController {
     public static async getAll(userId: string) {
@@ -9,7 +10,10 @@ class CartController {
             include: [{
                 model: CartItemModel, as: 'cart_items',
                 include: [{
-                    model: EquipmentInfoModel, as: 'equipment'
+                    model: EquipmentInfoModel, as: 'equipment',
+                    include: [{
+                        model: ProductionLineModel, as: 'equipments'
+                    }]
                 }]
             }]
         });
