@@ -6,7 +6,8 @@ export const state = () => ({
     user: null,
     admin: null,
     path_name_th: "",
-    cart: []
+    cart: [],
+    production_lines: []
 })
 
 export const mutations = {
@@ -29,8 +30,13 @@ export const mutations = {
     setPathName(state, name) {
         state.path_name_th = name
     },
+    //Cart
     setCart(state, items) {
         state.cart = items
+    },
+    //Production Line
+    setProductionLines(state, items) {
+        state.production_lines = items
     }
 }
 
@@ -42,6 +48,7 @@ export const actions = {
             console.log("this is isAdmin", admin);
             await dispatch('setToken', token);
             if (typeof token === "string") {
+                await dispatch('fetchProductionLine');
                 if (admin === true) {
                     console.log("admin");
                     return await dispatch('fetchAdmin');
@@ -124,16 +131,21 @@ export const actions = {
     async getCartItems({ commit }) {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
         let cartItems = await this.$axios.get('/api/user/getAllCart')
-        await commit('setCart', cartItems.data.cart)
+        await commit('setCart', cartItems.data.cart[0].cart_items)
     },
     async addCartItem({ commit, dispatch }, itemId) {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
-        await this.$axios.get('/api/user/createCart', { params: { id: itemId } })
+        await this.$axios.post('/api/user/createCartItem', { id: itemId })
         await dispatch('getCartItems')
     },
     async removeCartItem({ commit, dispatch }, itemId) {
-        // await this.$axios.get('/api/user/deleteCart', { params: { id: itemId } })
+        await this.$axios.delete('/api/user/deleteCartItem', { params: { id: itemId } })
         await dispatch('getCartItems')
+    },
+    //Production Line (for user layout)
+    async fetchProductionLine({ commit, dispatch }) {
+        const productionLine = await this.$axios.get('api/public/getAllProductionLine')
+        commit('setProductionLines', productionLine.data.production_lines)
     },
     //Path Name
     async setPathName({ commit }, pathName) {
@@ -157,5 +169,9 @@ export const getters = {
     //Cart
     getCartItems(state) {
         return state.cart
+    },
+    //Production Line
+    getProductionLines(state) {
+        return state.production_lines
     }
 }

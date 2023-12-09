@@ -77,7 +77,7 @@ export default {
         params: { id: this.id },
       }
     )
-    if (!equipment) {
+    if (!equipment.equipment) {
       this.$nuxt.error({
         statusCode: 404,
         message: ' Room Not found ' + this.id,

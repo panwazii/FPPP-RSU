@@ -139,7 +139,7 @@ const initDatabase = async () => {
     AdminTypeModel.hasMany(AdminModel, { foreignKey: 'type_id' });
     AdminModel.belongsTo(AdminTypeModel, { foreignKey: 'type_id' });
 
-    UserModel.hasMany(CartModel, { foreignKey: 'user_id' });
+    UserModel.hasOne(CartModel, { foreignKey: 'user_id' });
     CartModel.belongsTo(UserModel, { foreignKey: 'user_id' });
 
     CartModel.hasMany(CartItemModel, { as: 'cart_items', foreignKey: 'cart_id' });

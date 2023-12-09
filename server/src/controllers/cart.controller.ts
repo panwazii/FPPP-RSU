@@ -15,6 +15,13 @@ class CartController {
         });
     }
 
+    public static async getByUserId(userId: string) {
+        return CartModel.findOne({
+            where: { user_id: userId },
+            raw: true
+        });
+    }
+
     public static async create(userId: string) {
 
         const packet: CartAttribute = {
@@ -31,7 +38,7 @@ class CartController {
             equipment_info_id: equipmentInfoId,
         };
 
-        return CartModel.create(packet)
+        return CartItemModel.create(packet)
     }
 
     public static async delete(id: string) {

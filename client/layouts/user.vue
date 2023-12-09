@@ -107,13 +107,50 @@
                 </v-list-item>
                 <v-list-item
                   link
-                  v-for="(item, i) in $store.getters.getCartItems"
-                  :key="i"
+                  v-for="item in $store.getters.getCartItems"
+                  :key="item.id"
                 >
-                  <v-list-item-content>
-                    <v-list-item-title>{{ item.id }}</v-list-item-title>
+                  <v-list-item-avatar>
+                    <v-img :src="item.equipment.picture" />
+                  </v-list-item-avatar>
+                  <v-list-item-content
+                    @click="
+                      $router.push(`/user/equipments/${item.equipment_info_id}`)
+                    "
+                  >
+                    <v-list-item-title>{{
+                      item.equipment.name
+                    }}</v-list-item-title>
+                    <v-list-item-subtitle
+                      >สายการผลิต :
+                      {{
+                        getProductionLineName(item.equipment.production_line_id)
+                      }}</v-list-item-subtitle
+                    >
                   </v-list-item-content>
+                  <v-list-item-action>
+                    <v-btn
+                      icon
+                      @click="$store.dispatch('removeCartItem', item.id)"
+                    >
+                      <v-icon color="red">mdi-trash-can</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
                 </v-list-item>
+                <v-divider />
+                <div
+                  class="d-flex justify-end mt-2"
+                  v-if="$store.getters.getCartItems.length !== 0"
+                >
+                  <v-btn
+                    @click="$router.push('/user/cart')"
+                    elevation="0"
+                    dark
+                    class="rounded-xl"
+                  >
+                    จองเลย
+                  </v-btn>
+                </div>
               </v-list>
             </v-menu>
             <v-badge content="2" offset-x="20" offset-y="20" class="ml-2">
@@ -230,7 +267,6 @@ export default {
       }
     },
     cartItemsCount() {
-      console.log('cart item', this.$store.getters.getCartItems.length)
       return this.$store.getters.getCartItems.length.toString()
     },
   },
@@ -238,6 +274,17 @@ export default {
     async logout() {
       await this.$store.dispatch('logout')
       this.$router.push('/auth/login')
+    },
+    getProductionLineName(id) {
+      console.log('param id', id)
+
+      this.$store.getters.getProductionLines.forEach((item) => {
+        console.log(id, '----', item.id)
+        if (id === item.id) {
+          return item.name
+        }
+      })
+      return 'n/a'
     },
   },
 }
