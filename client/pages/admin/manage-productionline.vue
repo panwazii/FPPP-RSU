@@ -50,7 +50,7 @@
     middleware: 'admin',
     head() {
       return {
-        title: 'manage production line',
+        title: 'จัดการไลน์การผลิต',
       }
     },
     data() {
@@ -86,7 +86,7 @@
       }
     },
     mounted() {
-      this.$store.dispatch('setPathName', 'manage productionline')
+      this.$store.dispatch('setPathName', 'จัดการไลน์การผลิต')
       this.fetchProductionLines()
     },
     watch: {

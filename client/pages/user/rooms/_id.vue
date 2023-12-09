@@ -5,10 +5,10 @@
       :message="modal.goToLogin.message"
       :goToLogin.sync="modal.goToLogin.open"
     />
-    <SharedBreadCrumbs title="รายละเอียดอุปกรณ์" :routes="routes" />
+    <SharedBreadCrumbs title="รายละเอียดห้องแลป" :routes="routes" />
     <v-card min-height="800" class="rounded-xl mt-2 pa-4">
       <v-card-title v-if="!loading" class="text-h5 font-weight-bold">
-        {{ equipmentInfo.name }}
+        {{ room.name }}
       </v-card-title>
       <v-skeleton-loader v-if="loading" type="card-heading"></v-skeleton-loader>
       <v-row justify="center" align="center">
@@ -18,7 +18,7 @@
             aspect-ratio="1.3333"
             width="640"
             height="480"
-            :src="equipmentInfo.picture"
+            :src="picture"
             :lazy-src="require('~/static/img/default/no-image.png')"
             class="rounded-xl"
           />
@@ -30,12 +30,7 @@
               <div class="text-h6 font-weight-bold">ราคา</div>
               <div>
                 <v-chip class="text-h5 font-weight-bold">
-                  {{ equipmentInfo.rent_price }} บาท
-                </v-chip>
-              </div>
-              <div>
-                <v-chip class="text-h6 font-weight-bold">
-                  ต่อ {{ equipmentInfo.rent_rate.name }}
+                  {{ room.rent_price }} บาท
                 </v-chip>
               </div>
             </div>
@@ -53,9 +48,9 @@
         </v-col>
       </v-row>
       <v-divider class="mt-4"></v-divider>
-      <div class="mt-4" v-if="!loading">
+      <div v-if="!loading" class="mt-4">
         <div class="text-h6 font-weight-bold">รายละเอียด</div>
-        <div class="mt-2">{{ equipmentInfo.details }}</div>
+        <div class="mt-2">{{ room.details }}</div>
       </div>
       <v-skeleton-loader v-if="loading" type="article"></v-skeleton-loader>
     </v-card>
@@ -64,42 +59,47 @@
 
 <script>
 export default {
-  middleware: 'guest',
-  head() {
-    return {
-      title: 'อุปกรณ์',
-    }
-  },
+  layout: 'user',
+  middleware: 'user',
   async asyncData({ params }) {
     const id = params.id
     return { id }
   },
   async fetch() {
-    let equipment = await this.$store.dispatch(
-      'api/public/getSingleEquipmentInfo',
-      {
-        params: { id: this.id },
-      }
-    )
-    if (!equipment) {
+    let room = await this.$store.dispatch('api/public/getSingleRoom', {
+      params: { id: this.id },
+    })
+    if (!room) {
       this.$nuxt.error({
         statusCode: 404,
         message: ' Room Not found ' + this.id,
       })
       return
     } else {
-      this.routes[2].name = equipment.equipment.name
-      this.equipmentInfo = equipment.equipment
+      this.room = room.room[0]
+      this.routes[2].name = room.room[0].name
       this.loading = false
     }
   },
+  computed: {
+    picture() {
+      try {
+        if (!this.room.picture[0]) {
+          return require('~/static/img/default/no-image.png')
+        } else {
+          return this.room.picture[0].url
+        }
+      } catch (error) {
+        return require('~/static/img/default/no-image.png')
+      }
+    },
+  },
   data() {
     return {
-      equipmentInfo: {},
-      tool: [],
+      room: {},
       routes: [
-        { id: 1, name: 'หน้าหลัก', to: '/' },
-        { id: 2, name: 'อุปกรณ์', to: '/equipments' },
+        { id: 1, name: 'หน้าหลัก', to: '/user/home' },
+        { id: 2, name: 'ห้องแลป', to: '/user/rooms' },
         { id: 3, name: '', to: '/' },
       ],
       loading: true,
@@ -114,5 +114,4 @@ export default {
   methods: {},
 }
 </script>
-<style scoped>
-</style>
+<style scoped></style>

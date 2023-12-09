@@ -8,6 +8,7 @@ export default async function ({ store, $cookies, redirect }) {
             return redirect('/auth/login')
         }
         if (UserVerify.verify === true) {
+            store.dispatch('getCartItems')
             return
         }
         else {

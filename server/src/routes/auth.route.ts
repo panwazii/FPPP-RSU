@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { createErrCodeJSON, createUnknownErrCodeJSON, HttpStatusCode } from '../tools/lib';
 import UserController from '../controllers/user.controller';
 import AdminController from '../controllers/admin.controller';
+import CartController from '../controllers/cart.controller';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
@@ -101,8 +102,8 @@ authRouter.post('/user/register', async (req, res) => {
 
     const User = await UserController.register(req.body)
 
-
     if (User) {
+      await CartController.create(User.id)
       return res.status(201).json({ code: 201 });
     }
     else {

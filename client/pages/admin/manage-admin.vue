@@ -34,7 +34,7 @@ export default {
   middleware: 'super-admin',
   head() {
     return {
-      title: 'manage admin',
+      title: 'จัดการผู้ดูแล',
     }
   },
   data() {
@@ -65,7 +65,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('setPathName',"manage admin")
+    this.$store.dispatch('setPathName',"จัดการผู้ดูแล")
   },
 }
 </script>

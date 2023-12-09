@@ -50,7 +50,7 @@ export default {
   middleware: 'admin',
   head() {
     return {
-      title: 'manage equipment',
+      title: 'จัดการเครื่องมือ',
     }
   },
   data() {
@@ -92,7 +92,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('setPathName', 'manage equipment')
+    this.$store.dispatch('setPathName', 'จัดการเครื่องมือ')
     this.fetchEquipment()
   },
   watch: {

@@ -36,12 +36,8 @@
 
 <script>
 export default {
-  middleware: 'guest',
-  head() {
-    return {
-      title: 'ข่าว',
-    }
-  },
+  layout: 'user',
+  middleware: 'user',
   async asyncData({ params }) {
     const id = params.id
     return { id }
@@ -67,8 +63,8 @@ export default {
       newInfo: {},
       tool: [],
       routes: [
-        { id: 1, name: 'หน้าหลัก', to: '/' },
-        { id: 2, name: 'ข่าว', to: '/news' },
+        { id: 1, name: 'หน้าหลัก', to: '/user/home' },
+        { id: 2, name: 'ข่าว', to: '/user/news' },
         { id: 3, name: '', to: '/' },
       ],
       loading: true,

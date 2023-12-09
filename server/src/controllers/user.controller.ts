@@ -149,11 +149,6 @@ class UserController {
         };
 
         return UserModel.create(packet)
-            .then(() => true)
-            .catch((e) => {
-                log(e);
-                return false;
-            });
     }
 
     public static async update(data: any) {
@@ -178,14 +173,6 @@ class UserController {
         }
 
         return UserModel.update({ password: newPass }, { where: { id: userID } });
-    }
-
-    public static async updateCart(userID: string, data: any) {
-        return UserModel.update(data, {
-            where: {
-                id: userID,
-            },
-        });
     }
 }
 

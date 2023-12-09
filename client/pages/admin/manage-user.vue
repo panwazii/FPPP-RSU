@@ -47,7 +47,7 @@ export default {
   middleware: 'admin',
   head() {
     return {
-      title: 'manage user',
+      title: 'จัดการผู้ใช้',
     }
   },
   data() {
@@ -95,7 +95,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('setPathName', 'manage user')
+    this.$store.dispatch('setPathName', 'จัดการผู้ใช้')
     this.fetchUsers()
   },
   watch: {

@@ -50,7 +50,7 @@
     middleware: 'admin',
     head() {
       return {
-        title: 'manage equipmentstock',
+        title: 'จัดการสต็อคอุปกรณ์',
       }
     },
     data() {
@@ -86,7 +86,7 @@
       }
     },
     mounted() {
-      this.$store.dispatch('setPathName', 'manage equipmentstock')
+      this.$store.dispatch('setPathName', 'จัดการสต็อคอุปกรณ์')
       this.fetchEquipmentStocks()
     },
     watch: {

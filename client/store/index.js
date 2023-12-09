@@ -6,7 +6,7 @@ export const state = () => ({
     user: null,
     admin: null,
     path_name_th: "",
-    cartItems: []
+    cart: []
 })
 
 export const mutations = {
@@ -17,7 +17,6 @@ export const mutations = {
     },
     setIsAdmin(state, isAdmin) {
         state.isAdmin = isAdmin
-        console.log('setIsAdmin muta:', state.isAdmin);
     },
     setUser(state, user) {
         state.user = user
@@ -25,18 +24,18 @@ export const mutations = {
     },
     setAdmin(state, admin) {
         state.admin = admin
-        console.log('setAdmin ', state.admin);
     },
     //Path Name
     setPathName(state, name) {
         state.path_name_th = name
     },
     //Cart
-    setCartItems(state, item) {
-        state.cartItems.push(item)
+    setCart(state, items) {
+        state.cart = items
     },
-    deleteCartItems(state, id) {
-        removeObjectWithId(state.cartItems, id)
+    //Production Line
+    setProductionLines(state, items) {
+        state.production_lines = items
     }
 }
 
@@ -46,10 +45,6 @@ export const actions = {
             const token = await this.$cookies.get('token');
             const admin = await this.$cookies.get('isAdmin');
             console.log("this is isAdmin", admin);
-            // await this.$cookies.set('cartItems', [] , {
-            //     path: '/',
-            //     maxAge: 60 * 60 * 24 * 7
-            // })
             await dispatch('setToken', token);
             if (typeof token === "string") {
                 if (admin === true) {
@@ -63,6 +58,7 @@ export const actions = {
 
             }
         } catch (error) {
+            // console.log(error);
             // await dispatch('logout')
         }
     },
@@ -75,8 +71,6 @@ export const actions = {
                 path: '/',
                 maxAge: 60 * 60 * 24 * 7
             })
-            console.log('setToken act:', token);
-
         }
     },
 
@@ -86,7 +80,6 @@ export const actions = {
             path: '/',
             maxAge: 60 * 60 * 24 * 7
         })
-        console.log('setIsAdmin act:', isAdmin);
     },
 
     async setAdmin({ commit }, admin) {
@@ -96,9 +89,8 @@ export const actions = {
         commit('setUser', user)
     },
 
-    async fetchUser({ commit }) {
+    async fetchUser({ commit, dispatch }) {
         let Response = await this.$axios.get('/api/user/getUserInfo')
-        console.log("this is fech user", Response.data);
         if (!Response.data.user) {
             await dispatch('logout')
             redirect('/')
@@ -106,13 +98,13 @@ export const actions = {
         else {
             let User = Response.data.user
             await commit('setUser', User)
-            await commit('setIsAdmin', false);
+            await commit('setIsAdmin', false)
+            await dispatch('getCartItems')
         }
 
     },
     async fetchAdmin({ commit, dispatch }) {
         let Response = await this.$axios.get('/api/admin/getAdminInfo')
-        console.log("this is fech admin", Response.data);
         if (!Response.data.admin) {
             await dispatch('logout')
             redirect('/')
@@ -123,6 +115,7 @@ export const actions = {
             await commit('setIsAdmin', true);
         }
     },
+
     async logout({ commit, dispatch }) {
         console.log('[STORE ACTIONS] - logout');
         await this.$cookies.remove('token');
@@ -131,16 +124,27 @@ export const actions = {
         await commit('setAdmin', null);
         await commit('setUser', null);
         await commit('setIsAdmin', null);
+        await commit('setCart', []);
+    },
+    //Cart
+    async getCartItems({ commit }) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        let cartItems = await this.$axios.get('/api/user/getAllCart')
+        await commit('setCart', cartItems.data.cart[0].cart_items)
+    },
+    async addCartItem({ commit, dispatch }, itemId) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        await this.$axios.post('/api/user/createCartItem', { id: itemId })
+        await dispatch('getCartItems')
+    },
+    async removeCartItem({ commit, dispatch }, itemId) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        await this.$axios.delete('/api/user/deleteCartItem', { params: { id: itemId } })
+        await dispatch('getCartItems')
     },
     //Path Name
     async setPathName({ commit }, pathName) {
         commit('setPathName', pathName)
-    },
-    addCartItems({ commit }, item) {
-        commit('setCartItems', item)
-    },
-    removeCartItems({ commit }, item) {
-        commit('deleteCartItems', item.id)
     }
 }
 
@@ -159,6 +163,6 @@ export const getters = {
     },
     //Cart
     getCartItems(state) {
-        return state.cartItems
-    }
+        return state.cart
+    },
 }

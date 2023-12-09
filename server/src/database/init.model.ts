@@ -17,6 +17,10 @@ import SupplyModel, { initSupplyModel } from './models/supply.model';
 import { initNewsModel } from './models/news.model';
 import AdminModel, { initAdminModel } from './models/admins.model';
 import AdminTypeModel, { initAdminTypeModel } from './models/admin_types.model';
+import CartModel, { initCartModel } from './models/carts.model';
+import CartItemModel,{ initCartItemModel } from './models/cart_items.model';
+import NotificationModel, { initNotificationModel } from './models/notifications.model';
+
 import { initWebInfoModel } from './models/web_info.model';
 import { initServiceModel } from './models/services.model';
 import { initAdminTypeSeed } from '../seeders/admin_types.seed';
@@ -76,6 +80,9 @@ const initDatabase = async () => {
         initSupplyModel,
         initReserveEquipmentModel,
         initRoomPictureModel,
+        initCartModel,
+        initCartItemModel,
+        initNotificationModel,
 
         //Admin
         initAdminTypeModel,
@@ -102,14 +109,14 @@ const initDatabase = async () => {
     RoomModel.hasMany(RoomPictureModel, { as: 'picture', foreignKey: 'room_id' });
     RoomPictureModel.belongsTo(RoomModel, { as: 'picture', foreignKey: 'room_id' });
 
-    ProductionLineModel.hasMany(EquipmentInfoModel, { as: 'equipments', foreignKey: 'production_line_id' });
-    EquipmentInfoModel.belongsTo(ProductionLineModel, { as: 'equipments', foreignKey: 'production_line_id' });
+    ProductionLineModel.hasMany(EquipmentInfoModel, { as: 'production_line', foreignKey: 'production_line_id' });
+    EquipmentInfoModel.belongsTo(ProductionLineModel, { as: 'production_line', foreignKey: 'production_line_id' });
 
     EquipmentInfoModel.hasMany(EquipmentsModel, { as: 'stock', foreignKey: 'equipment_info_id' });
     EquipmentsModel.belongsTo(EquipmentInfoModel, { as: 'stock', foreignKey: 'equipment_info_id' });
 
     RentRateModel.hasMany(EquipmentInfoModel, { as: 'rent_rate', foreignKey: 'rent_rate_id' });
-    EquipmentInfoModel.belongsTo(RentRateModel, { as: 'rent_rate',foreignKey: 'rent_rate_id' });
+    EquipmentInfoModel.belongsTo(RentRateModel, { as: 'rent_rate', foreignKey: 'rent_rate_id' });
 
     EquipmentsModel.hasMany(ReserveEquipmentModel, { foreignKey: 'equipments_id' });
     ReserveEquipmentModel.belongsTo(EquipmentsModel, { foreignKey: 'equipments_id' });
@@ -132,6 +139,18 @@ const initDatabase = async () => {
     AdminTypeModel.hasMany(AdminModel, { foreignKey: 'type_id' });
     AdminModel.belongsTo(AdminTypeModel, { foreignKey: 'type_id' });
 
+    UserModel.hasOne(CartModel, { foreignKey: 'user_id' });
+    CartModel.belongsTo(UserModel, { foreignKey: 'user_id' });
+
+    CartModel.hasMany(CartItemModel, { as: 'cart_items', foreignKey: 'cart_id' });
+    CartItemModel.belongsTo(CartModel, { as: 'cart_items', foreignKey: 'cart_id' });
+
+    EquipmentInfoModel.hasMany(CartItemModel, { as: 'equipment', foreignKey: 'equipment_info_id' });
+    CartItemModel.belongsTo(EquipmentInfoModel, { as: 'equipment', foreignKey: 'equipment_info_id' });
+
+    UserModel.hasMany(NotificationModel, { foreignKey: 'user_id' });
+    NotificationModel.belongsTo(UserModel, { foreignKey: 'user_id' });
+
     if (yn(config.database.dropAndCreateNew)) {
         log("Drop status :", config.database.dropAndCreateNew);
         log(sequelizeConnection.models);
@@ -149,7 +168,7 @@ const initDatabase = async () => {
             await initEquipmentsSeed();
             await initServiceSeed();
             await initNewsSeed();
-            
+
             await AdminController.createSuperAdmin();
         }
     } else {

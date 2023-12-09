@@ -50,7 +50,7 @@
     middleware: 'admin',
     head() {
       return {
-        title: 'manage service',
+        title: 'จัดการรายการบริการ',
       }
     },
     data() {
@@ -86,7 +86,7 @@
       }
     },
     mounted() {
-      this.$store.dispatch('setPathName', 'manage service')
+      this.$store.dispatch('setPathName', 'จัดการรายการบริการ')
       this.fetchServices()
     },
     watch: {
