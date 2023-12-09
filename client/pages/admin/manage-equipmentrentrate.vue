@@ -50,7 +50,7 @@
     middleware: 'admin',
     head() {
       return {
-        title: 'manage equipmentrentrate',
+        title: 'จัดการอัตราค่าเช่า',
       }
     },
     data() {
@@ -86,7 +86,7 @@
       }
     },
     mounted() {
-      this.$store.dispatch('setPathName', 'manage equipmentrentrate')
+      this.$store.dispatch('setPathName', 'จัดการอัตราค่าเช่า')
       this.fetchEquipmentRentRates()
     },
     watch: {

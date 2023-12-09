@@ -50,7 +50,7 @@ export default {
   middleware: 'admin',
   head() {
     return {
-      title: 'manage room',
+      title: 'จัดการประเภทผู้ใช้',
     }
   },
   data() {
@@ -92,7 +92,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('setPathName', 'manage user type')
+    this.$store.dispatch('setPathName', 'จัดการประเภทผู้ใช้')
     this.fetchUserTypes()
   },
   watch: {

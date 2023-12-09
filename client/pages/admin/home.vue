@@ -116,7 +116,7 @@ export default {
   middleware: 'admin',
   head() {
     return {
-      title: 'admin home',
+      title: 'หน้าหลัก',
     }
   },
   components: {
@@ -173,7 +173,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('setPathName', 'home')
+    this.$store.dispatch('setPathName', 'หน้าหลัก')
   },
 }
 </script>

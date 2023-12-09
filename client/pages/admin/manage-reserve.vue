@@ -50,7 +50,7 @@
     middleware: 'admin',
     head() {
       return {
-        title: 'manage reserve',
+        title: 'จัดการการจอง',
       }
     },
     data() {
@@ -86,7 +86,7 @@
       }
     },
     mounted() {
-      this.$store.dispatch('setPathName', 'manage reserve')
+      this.$store.dispatch('setPathName', 'จัดการการจอง')
       this.fetchReserves()
     },
     watch: {
