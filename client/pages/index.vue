@@ -115,6 +115,7 @@
 
 <script>
 export default {
+  middleware: 'guest',
   head() {
     return {
       title: 'หน้าหลัก',

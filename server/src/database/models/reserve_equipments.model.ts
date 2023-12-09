@@ -10,6 +10,7 @@ export interface ReserveEquipmentAttribute {
     equipment_info_id?: string;
     equipments_id?: string;
     reserve_id?: string;
+    quantity?: number;
     available_status?: boolean;
 }
 
@@ -23,6 +24,8 @@ class ReserveEquipmentModel extends Model<ReserveEquipmentAttribute, ReserveEqui
     declare equipments_id: string;
 
     declare reserve_id: string;
+
+    declare quantity: number;
 
     declare available_status: boolean;
 }
@@ -59,6 +62,11 @@ export const initReserveEquipmentModel = (connection: Sequelize) => {
                     model: ReserveModel,
                     key: 'id',
                 },
+            },
+            quantity: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                defaultValue: 1
             },
             available_status: {
                 allowNull: false,

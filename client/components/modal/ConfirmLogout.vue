@@ -19,10 +19,10 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="error" @click="confirm" class="rounded-xl font-weight-medium mt-3">
+        <v-btn color="primary" @click="confirm" class="rounded-xl font-weight-medium mt-3">
           ตกลง
         </v-btn>
-        <v-btn color="primary" @click="cancel" class="rounded-xl font-weight-medium mt-3">
+        <v-btn color="error" @click="cancel" class="rounded-xl font-weight-medium mt-3">
           ยกเลิก
         </v-btn>
       </v-card-actions>

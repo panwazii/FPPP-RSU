@@ -7,6 +7,7 @@ import { numberOrDefault } from '../tools/util';
 import ReserveController from '../controllers/reserve.controller';
 import ServiceController from '../controllers/service.controller';
 import { checkBodyEmpty, checkParamsEmpty } from '../middleware/validator.middleware';
+import CartController from '../controllers/cart.controller';
 
 const userRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON();
@@ -30,17 +31,7 @@ userRouter.get('/getUserInfo', authValid, async (req, res) => {
             }
         });
     } catch (error) {
-        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
-    }
-});
-
-userRouter.post('/updateCart', checkBodyEmpty, authValid, async (req, res) => {
-    try {
-        const data = req.body
-        const userId = req.body.credentials.id;
-        await UserController.updateCart(userId, data)
-        res.status(200).json({ code: 200, });
-    } catch (error) {
+        log(error)
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
@@ -157,6 +148,41 @@ userRouter.get('/getAllReserve', checkParamsEmpty, async (req, res) => {
         res.status(200).json({
             code: 200, reserve: allReserve.rows, total_pages: Math.ceil(allReserve.count / Limit)
         });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+// Cart
+userRouter.post('/createCartItem', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const userId = req.body.credentials.id;
+        const equipmentInfoId = String(req.body.id);
+        const cart = await CartController.getByUserId(userId);
+        const cartId = String(cart?.id);
+        await CartController.createItems(cartId, equipmentInfoId);
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        log(error)
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+userRouter.get('/getAllCart', authValid, async (req, res) => {
+    try {
+        const userId = req.body.credentials.id;
+        const data = await CartController.getAll(userId);
+        res.status(200).json({ code: 200, cart: data });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+userRouter.delete('/deleteCartItem', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const cartItemId = String(req.query.id);
+        await CartController.deleteItems(cartItemId);
+        res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }

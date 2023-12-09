@@ -50,7 +50,7 @@
     middleware: 'admin',
     head() {
       return {
-        title: 'manage supplier',
+        title: 'จัดการผู้ผลิต',
       }
     },
     data() {
@@ -86,7 +86,7 @@
       }
     },
     mounted() {
-      this.$store.dispatch('setPathName', 'manage supplier')
+      this.$store.dispatch('setPathName', 'จัดการผู้ผลิต')
       this.fetchSuppliers()
     },
     watch: {

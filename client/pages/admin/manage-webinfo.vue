@@ -133,7 +133,7 @@ export default {
   middleware: 'admin',
   head() {
     return {
-      title: 'manage webinfo',
+      title: 'จัดการข้อมูลเว็บไซต์',
     }
   },
   data() {
@@ -147,7 +147,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('setPathName', 'manage webinfo')
+    this.$store.dispatch('setPathName', 'จัดการข้อมูลเว็บไซต์')
     this.fetchWebInfos()
   },
   watch: {

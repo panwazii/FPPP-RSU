@@ -51,7 +51,7 @@
             cols="12"
             md="3"
           >
-            <RoomsCard
+            <UserRoomsCard
               :id="room.id"
               :title="room.name"
               :picture="room.picture"
@@ -73,7 +73,8 @@
 </template>
 <script>
 export default {
-  middleware: 'guest',
+  layout: 'user',
+  middleware: 'user',
   head() {
     return {
       title: 'รายการห้องแลป',
@@ -88,8 +89,8 @@ export default {
       search: { value: '', filter: 1 },
       fetchOption: { page: 1, totalPages: 0, itemsPerPage: 12 },
       routes: [
-        { id: 1, name: 'หน้าหลัก', to: '/' },
-        { id: 2, name: 'ห้องแลป', to: '/rooms' },
+        { id: 1, name: 'หน้าหลัก', to: '/user/home' },
+        { id: 2, name: 'ห้องแลป', to: '/user/rooms' },
       ],
     }
   },

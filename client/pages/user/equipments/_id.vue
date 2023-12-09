@@ -64,12 +64,8 @@
 
 <script>
 export default {
-  middleware: 'guest',
-  head() {
-    return {
-      title: 'อุปกรณ์',
-    }
-  },
+  layout: 'user',
+  middleware: 'user',
   async asyncData({ params }) {
     const id = params.id
     return { id }
@@ -81,7 +77,7 @@ export default {
         params: { id: this.id },
       }
     )
-    if (!equipment) {
+    if (!equipment.equipment) {
       this.$nuxt.error({
         statusCode: 404,
         message: ' Room Not found ' + this.id,
@@ -98,8 +94,8 @@ export default {
       equipmentInfo: {},
       tool: [],
       routes: [
-        { id: 1, name: 'หน้าหลัก', to: '/' },
-        { id: 2, name: 'อุปกรณ์', to: '/equipments' },
+        { id: 1, name: 'หน้าหลัก', to: '/user/home' },
+        { id: 2, name: 'อุปกรณ์', to: '/user/equipments' },
         { id: 3, name: '', to: '/' },
       ],
       loading: true,

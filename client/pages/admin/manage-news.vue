@@ -50,7 +50,7 @@ export default {
   middleware: 'admin',
   head() {
     return {
-      title: 'manage news',
+      title: 'จัดการข่าว',
     }
   },
   data() {
@@ -91,7 +91,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('setPathName', 'manage news')
+    this.$store.dispatch('setPathName', 'จัดการข่าว')
     this.fetchNews()
   },
   watch: {
