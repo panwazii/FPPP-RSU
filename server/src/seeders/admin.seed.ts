@@ -5,14 +5,14 @@ import config from '../config/global.config';
 let entries: AdminAttribute[];
 
 async function hashPassword() {
-    return await bcrypt.hash(String(config.security.adminPassword), Number(config.security.hashRounds))
+    return await bcrypt.hash(String(config.security.superadminpassword), Number(config.security.hashRounds))
 }
 
 hashPassword().then(hash => {
     const password = hash.toString()
     entries = [
         {
-            email: config.security.adminEmail,
+            email: config.security.superadminemail,
             password: password,
             fname: "Super",
             lname: "Admin",

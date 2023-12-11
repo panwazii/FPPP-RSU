@@ -57,12 +57,10 @@ export const initAdminModel = (connection: Sequelize) => {
             },
             fname: {
                 allowNull: false,
-                unique: true,
                 type: DataTypes.STRING,
             },
             lname: {
                 allowNull: false,
-                unique: true,
                 type: DataTypes.STRING,
             },
             email: {
