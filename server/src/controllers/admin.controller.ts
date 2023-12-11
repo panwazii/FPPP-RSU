@@ -5,19 +5,19 @@ import config from '../config/global.config';
 import { log } from '../tools/log';
 
 class AdminController {
-    public static async createSuperAdmin() {
-        const Email = config.security.superadminemail
-        const HashedPassword = await bcrypt.hash(config.security.superadminpassword, 12);
+    public static async createAdmin(data: any) {
+        const HashedPassword = await bcrypt.hash(data.password, 12);
         const Packet = {
-            email: Email,
+            email: data.email,
             password: HashedPassword,
-            fname: "Super",
-            lname: "Admin",
-            type_id: 1
+            fname: data.fname,
+            lname: data.lname,
+            tel: data.tel,
+            type: 'ADMIN'
         };
 
         return AdminModel.create(Packet)
-            .then((res) => log("SuperAdmin has been created"))
+            .then((res) => log("Admin has been created"))
             .catch((e) => {
                 log(e);
                 return false;

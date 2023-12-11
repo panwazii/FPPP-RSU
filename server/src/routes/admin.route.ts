@@ -26,6 +26,20 @@ const errorCode = createErrCodeJSON();
 const unknownErrorCode = createUnknownErrCodeJSON()
 const multerUpload = multer();
 
+adminRouter.post('/createAdmin', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const type = req.body.credentials.type;
+        if(type !== "SUPERADMIN"){
+            return res.status(HttpStatusCode.UNAUTHORIZED).json({ msg: "Kuy" });
+        }
+        await AdminController.createAdmin(req.body)
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+
+});
+
 adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
     try {
         const AdminId = req.body.credentials.id;
@@ -36,7 +50,7 @@ adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
                 code: 200,
                 admin: {
                     id: adminInfo.id,
-                    type_id: adminInfo.type_id,
+                    type: adminInfo.type,
                     fname: adminInfo.fname,
                     lname: adminInfo.lname,
                     email: adminInfo.email,
