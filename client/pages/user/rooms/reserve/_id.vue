@@ -1,5 +1,10 @@
 <template>
   <div>
+    <SharedGoToLoginModal
+      :open="modal.goToLogin.open"
+      :message="modal.goToLogin.message"
+      :goToLogin.sync="modal.goToLogin.open"
+    />
     <SharedBreadCrumbs title="รายละเอียดห้องแลป" :routes="routes" />
     <v-card min-height="800" class="rounded-xl mt-2 pa-4">
       <v-card-title v-if="!loading" class="text-h5 font-weight-bold">
@@ -20,55 +25,6 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-skeleton-loader v-if="loading" type="text@2"></v-skeleton-loader>
-          <v-sheet tile height="54" class="d-flex">
-            <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
-              <v-icon>mdi-chevron-left</v-icon>
-            </v-btn>
-            <v-select
-              v-model="type"
-              :items="types"
-              dense
-              outlined
-              hide-details
-              class="ma-2"
-              label="type"
-            ></v-select>
-            <v-select
-              v-model="mode"
-              :items="modes"
-              dense
-              outlined
-              hide-details
-              label="event-overlap-mode"
-              class="ma-2"
-            ></v-select>
-            <v-select
-              v-model="weekday"
-              :items="weekdays"
-              dense
-              outlined
-              hide-details
-              label="weekdays"
-              class="ma-2"
-            ></v-select>
-            <v-spacer></v-spacer>
-            <v-btn icon class="ma-2" @click="$refs.calendar.next()">
-              <v-icon>mdi-chevron-right</v-icon>
-            </v-btn>
-          </v-sheet>
-          <v-sheet height="600">
-            <v-calendar
-              ref="calendar"
-              v-model="value"
-              :weekdays="weekday"
-              :type="type"
-              :events="events"
-              :event-overlap-mode="mode"
-              :event-overlap-threshold="30"
-              :event-color="getEventColor"
-              @change="getEvents"
-            ></v-calendar>
-          </v-sheet>
           <div v-if="!loading" justify="center" align="center">
             <div class="d-flex justify-space-around">
               <div class="text-h6 font-weight-bold">ราคา</div>
@@ -79,14 +35,14 @@
               </div>
             </div>
             <v-btn
-              @click="$router.push(`/user/rooms/reserve/${room.id}`)"
+              @click="modal.goToLogin.open = true"
               x-large
               elevation="2"
               max-width="200"
               class="text-h6 rounded-xl mt-8"
               dark
             >
-              <v-icon>mdi-cart-plus</v-icon>จองเลย
+              <v-icon>mdi-cart-plus</v-icon>เพิ่มลงตระกร้า
             </v-btn>
           </div>
         </v-col>
@@ -100,7 +56,6 @@
     </v-card>
   </div>
 </template>
-
 <script>
 export default {
   layout: 'user',
@@ -147,6 +102,12 @@ export default {
         { id: 3, name: '', to: '/' },
       ],
       loading: true,
+      modal: {
+        goToLogin: {
+          open: false,
+          message: 'กรุณาเข้าสู่ระบบเพื่อใช้งานบริการทั้งหมด',
+        },
+      },
       calenda: {
         type: 'month',
         types: ['month', 'week', 'day', '4day'],
@@ -186,4 +147,5 @@ export default {
   methods: {},
 }
 </script>
-<style scoped></style>
+<style scoped>
+</style>

@@ -106,6 +106,8 @@ export default {
         params: {
           limit: this.itemsPerPage,
           page: this.page,
+          filter: 0,
+          value:''
         },
       })
       console.log('this is equipment', Data)

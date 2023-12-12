@@ -380,9 +380,9 @@ adminRouter.get('/getAllEquipmentInfo', async (req, res) => {
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        const allEquipments = await EquipmentController.getAllEquipmentInfoAdmin(filterType, searchValue, Limit, Offset)
+        const data = await EquipmentController.getAllEquipmentInfoAdmin(filterType, searchValue, Limit, Offset)
         res.status(200).json({
-            code: 200, equipments: allEquipments.rows, total_pages: Math.ceil(allEquipments.count / Limit)
+            code: 200, equipments: data.rows, total_pages: Math.ceil(data.count / Limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));

@@ -33,88 +33,84 @@
         </v-card-title>
         <v-divider class="mb-3"></v-divider>
         <v-card-text>
-          <v-row class="d-flex justify-center mt-3">
-            <v-col cols="8">
-              <v-form ref="form" lazy-validation>
-                <v-row class="mt-2">
-                  <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="form.fname"
-                      :rules="[(v) => !!v || 'โปรดระบุชื่อ']"
-                      label="ชื่อ"
-                      outlined
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="form.lname"
-                      :rules="[(v) => !!v || 'โปรดระบุนามสกุล']"
-                      label="นามสกุล"
-                      outlined
-                      required
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-
-                <v-row class="mt-2">
-                  <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="form.email"
-                      :rules="[(v) => !!v || 'โปรดระบุ Email']"
-                      label="email"
-                      outlined
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-select
-                      :items="userTypes"
-                      v-model="form.type_id"
-                      item-text="name"
-                      item-value="id"
-                      label="user type"
-                      outlined
-                    ></v-select>
-                  </v-col>
-                </v-row>
-
+          <v-form ref="form" lazy-validation>
+            <v-row class="mt-2">
+              <v-col cols="12" sm="6">
                 <v-text-field
-                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                  :type="show1 ? 'text' : 'password'"
-                  v-model="form.password"
-                  :rules="[(v) => !!v || 'โปรดระบุรหัสผ่าน']"
-                  password="input-10-2"
-                  label="Password"
-                  @click:append="show1 = !show1"
+                  v-model="form.fname"
+                  :rules="[(v) => !!v || 'โปรดระบุชื่อ']"
+                  label="ชื่อ"
                   outlined
                   required
-                >
-                </v-text-field>
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6">
                 <v-text-field
-                  :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                  :type="show2 ? 'text' : 'password'"
-                  v-model="form.confirmPassword"
-                  :rules="[(v) => !!v || 'โปรดระบุยืนยันรหัสผ่าน']"
-                  password="input-10-2"
-                  label="Comfrim Password"
-                  @click:append="show2 = !show2"
+                  v-model="form.lname"
+                  :rules="[(v) => !!v || 'โปรดระบุนามสกุล']"
+                  label="นามสกุล"
                   outlined
                   required
-                >
-                </v-text-field>
+                ></v-text-field>
+              </v-col>
+            </v-row>
 
+            <v-row class="mt-2">
+              <v-col cols="12" sm="6">
                 <v-text-field
-                  v-model="form.tel"
-                  label="หมายเลขโทรศัพท์"
-                  required
+                  v-model="form.email"
+                  :rules="[(v) => !!v || 'โปรดระบุ Email']"
+                  label="email"
                   outlined
-                  :rules="[(v) => !!v || 'โปรดระบุหมายเลขโทรศัพท์']"
-                >
-                </v-text-field>
-              </v-form>
-            </v-col>
-          </v-row>
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-select
+                  :items="userTypes"
+                  v-model="form.type_id"
+                  item-text="name"
+                  item-value="id"
+                  label="user type"
+                  outlined
+                ></v-select>
+              </v-col>
+            </v-row>
+
+            <v-text-field
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show1 ? 'text' : 'password'"
+              v-model="form.password"
+              :rules="[(v) => !!v || 'โปรดระบุรหัสผ่าน']"
+              password="input-10-2"
+              label="Password"
+              @click:append="show1 = !show1"
+              outlined
+              required
+            >
+            </v-text-field>
+            <v-text-field
+              :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show2 ? 'text' : 'password'"
+              v-model="form.confirmPassword"
+              :rules="[(v) => !!v || 'โปรดระบุยืนยันรหัสผ่าน']"
+              password="input-10-2"
+              label="Comfrim Password"
+              @click:append="show2 = !show2"
+              outlined
+              required
+            >
+            </v-text-field>
+
+            <v-text-field
+              v-model="form.tel"
+              label="หมายเลขโทรศัพท์"
+              required
+              outlined
+              :rules="[(v) => !!v || 'โปรดระบุหมายเลขโทรศัพท์']"
+            >
+            </v-text-field>
+          </v-form>
         </v-card-text>
 
         <v-card-actions>

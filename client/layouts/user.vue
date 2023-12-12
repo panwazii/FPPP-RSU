@@ -38,7 +38,15 @@
       </v-list>
     </v-navigation-drawer>
     <v-main>
-      <v-app-bar hide-on-scroll transparent fixed app :color="bg" elevation="3">
+      <v-app-bar
+        hide-on-scroll
+        transparent
+        fixed
+        app
+        :color="bg"
+        elevation="3"
+        extension-height="55"
+      >
         <v-img
           max-width="250"
           class="mx-auto mt-10 mb-8"
@@ -318,7 +326,7 @@ export default {
           name: 'ออกจากระบบ',
           icon: 'mdi-logout-variant',
           actions: () => {
-            this.logout()
+            this.logout_modal = true
           },
         },
       ],
