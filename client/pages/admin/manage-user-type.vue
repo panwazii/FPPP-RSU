@@ -11,7 +11,11 @@
       :createUserType.sync="createUserType"
     />
     <div class="d-flex justify-end">
-      <v-btn @click="createUserType = true" class="mb-3" color="primary">
+      <v-btn
+        @click="createUserType = true"
+        class="mb-3 rounded-xl"
+        color="primary"
+      >
         <v-icon medium> mdi-plus </v-icon>
         <h4>เพิ่มประเภทผู้ใช้</h4>
       </v-btn>
@@ -23,7 +27,7 @@
         :page.sync="page"
         :items-per-page="itemsPerPage"
         hide-default-footer
-        class="elevation-1"
+        class="elevation-1 rounded-xl"
         @page-count="pageCount = $event"
       >
         <template v-slot:[`item.edit`]="{ item }">
@@ -38,7 +42,11 @@
         </template>
       </v-data-table>
       <div class="text-center pt-2">
-        <v-pagination v-model="page" :length="totalPages"></v-pagination>
+        <v-pagination
+          class="rounded-xl"
+          v-model="fetchOption.page"
+          :length="fetchOption.totalPages"
+        ></v-pagination>
       </div>
     </div>
   </v-container>
@@ -59,15 +67,13 @@ export default {
       loadingDialog: false,
       editDialog: false,
       deleteDialog: false,
-      page: 1,
-      itemsPerPage: 7,
-      totalPages: 0,
       search: '',
       userTypes: [],
       userType: null,
       newUserType: null,
       editUserType: false,
       createUserType: false,
+      fetchOption: { page: 1, totalPages: 0, itemsPerPage: 12 },
       headers: [
         {
           text: 'ไอดี',
@@ -96,7 +102,7 @@ export default {
     this.fetchUserTypes()
   },
   watch: {
-    page() {
+    'fetchOption.page'() {
       this.fetchUserTypes()
     },
   },
@@ -104,19 +110,22 @@ export default {
     async fetchUserTypes() {
       let Data = await this.$store.dispatch('api/admin/getAllUserTypes', {
         params: {
-          limit: this.itemsPerPage,
-          page: this.page,
+          limit: this.fetchOption.itemsPerPage,
+          page: this.fetchOption.page,
         },
       })
       this.userTypes = Data.user_types
-      this.totalPages = Data.totalpages
+      this.fetchOption.totalPages = Data.totalpages
     },
     async openEditUserTypeModal(id) {
-      const UserTypeData = await this.$store.dispatch('api/admin/getSingleUserType', {
-        params: {
-          id: id,
-        },
-      })
+      const UserTypeData = await this.$store.dispatch(
+        'api/admin/getSingleUserType',
+        {
+          params: {
+            id: id,
+          },
+        }
+      )
       this.userType = UserTypeData.user_type
       this.editUserType = true
     },

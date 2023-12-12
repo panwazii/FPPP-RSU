@@ -1,12 +1,12 @@
 <template>
   <div>
     <ModalConfirm
-      :open="confirmModal"
-      :message="confirmMessage"
+      :open="modal.confirm.open"
+      :message="modal.confirm.message"
       :method="createReserve"
-      :confirm.sync="confirmModal"
+      :confirm.sync="modal.confirm.open"
     />
-    <ModalLoading :open="loading" :message="loadingMessage" />
+    <ModalLoading :open="modal.loading.open" :message="modal.loading.message" />
     <v-dialog
       persistent
       :retain-focus="false"
@@ -14,15 +14,15 @@
       max-width="650"
       max-height="300"
     >
-      <v-card>
+      <v-card class="rounded-xl">
         <v-card-title class="text-h5">
           <v-icon justify="left" class="mr-3" size="50">mdi-home-plus</v-icon>
-          Create new Reserve.
+          เพิ่มการจองใหม่
         </v-card-title>
         <v-divider class="mb-3"></v-divider>
         <v-card-text>
           <v-row class="d-flex justify-center mt-3">
-            <v-col cols="8">
+            <v-col>
               <template>
                 <v-form ref="form" lazy-validation>
                   <v-row class="mt-2">
@@ -30,78 +30,90 @@
                       <h4>ผู้จอง</h4>
                       <v-autocomplete
                         v-model="form.user_id"
-                        :rules="[(v) => !!v || 'user id required']"
+                        :rules="[(v) => !!v || 'โปรดระบุผู้ใช้งาน']"
                         :items="users"
                         item-text="fname"
                         item-value="id"
                         label="User id"
                         outlined
                         required
+                        class="rounded-xl"
                       ></v-autocomplete>
                     </v-col>
                     <v-col cols="12" sm="12">
                       <h4>ชื่อห้อง</h4>
                       <v-autocomplete
                         v-model="form.room_id"
-                        :rules="[(v) => !!v || 'room id required']"
+                        :rules="[(v) => !!v || 'โปรดระบุชื่อห้อง']"
                         :items="rooms"
                         item-text="name"
                         item-value="id"
                         label="Room id"
                         outlined
                         required
+                        class="rounded-xl"
                       >
                         <template v-slot:item="{ item }">
-                          <v-img :src="item.picture[0].url" class="itemimg"></v-img>
-                          {{item.name}}
+                          <v-img
+                            :src="item.picture[0].url"
+                            class="itemimg"
+                          ></v-img>
+                          {{ item.name }}
                         </template>
                       </v-autocomplete>
                     </v-col>
                     <v-col cols="12" sm="12">
-                      <v-img :src="roomDisplayImage" class="disimg" :contain="true"></v-img>
+                      <v-img
+                        :src="roomDisplayImage"
+                        class="disimg"
+                        :contain="true"
+                      ></v-img>
                     </v-col>
-                    <v-col cols="12" sm="12">
+                    <v-col cols="6">
                       <h4>วันที่</h4>
                       <v-date-picker
                         v-model="form.reservedate"
-                        :rules="[(v) => !!v || 'reserve date required']"
+                        :rules="[(v) => !!v || 'โปรดระบุวันที่']"
                         label="Reserve date"
                         outlined
                         required
+                        class="rounded-xl"
                       ></v-date-picker>
                     </v-col>
                     <v-col cols="12" sm="12">
                       <h4>เริ่ม</h4>
                       <v-text-field
                         v-model="form.time_start"
-                        :rules="[(v) => !!v || 'time start required']"
+                        :rules="[(v) => !!v || 'โปรดระบุเวลาเริ่มต้น']"
                         label="Time start"
                         outlined
                         required
+                        class="rounded-xl"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="12">
                       <h4>สิ้นสุด</h4>
                       <v-text-field
                         v-model="form.time_end"
-                        :rules="[(v) => !!v || 'time end required']"
+                        :rules="[(v) => !!v || 'โปรดเวลาสิ้นสุด']"
                         label="Time end"
                         outlined
                         required
+                        class="rounded-xl"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="12">
                       <h4>รายละเอียด</h4>
                       <v-textarea
                         v-model="form.details"
-                        :rules="[(v) => !!v || 'details required']"
+                        :rules="[(v) => !!v || 'โปรดระบุรายละเอียด']"
                         label="Details"
                         outlined
                         required
+                        class="rounded-xl"
                       ></v-textarea>
                     </v-col>
                   </v-row>
-                  
                 </v-form>
               </template>
             </v-col>
@@ -156,19 +168,19 @@ export default {
       users: [],
 
       readers: [],
-      confirmModal: false,
-      confirmMessage: 'Confirm this change',
-      loading: false,
-      loadingMessage: 'Loading',
+      modal: {
+        confirm: { open: false, message: 'Confirm to create?' },
+        loading: { open: false, message: 'Loading' },
+        complete: { open: false, message: 'Create reserve complete' },
+        error: { open: false, message: '' },
+      },
     }
   },
-  mounted() {
-
-  },
+  mounted() {},
   computed: {
-    formWatched () {
-        return Object.assign({}, this.form)
-    }
+    formWatched() {
+      return Object.assign({}, this.form)
+    },
   },
   watch: {
     formWatched: {
@@ -186,7 +198,7 @@ export default {
   },
   methods: {
     confirm() {
-      this.confirmModal = true
+      this.modal.confirm.open = true
     },
     cancel() {
       this.clearForm()
@@ -194,18 +206,18 @@ export default {
     },
     async createReserve() {
       try {
-        this.loading = true
+        this.modal.loading.open = true
         await this.$store.dispatch('api/admin/createReserve', this.form)
         this.clearForm()
         this.$emit('update:createReserve', false)
-        this.loading = false
+        this.modal.loading.open = false
       } catch (error) {
-        this.loading = false
+        this.modal.loading.open = false
         console.log(error)
         this.$emit('update:createReserve', false)
       }
     },
-    
+
     clearForm() {
       this.form.name = null
       this.form.contact_info = null
@@ -216,7 +228,7 @@ export default {
 </script>
 
 <style scoped>
-.itemimg{
+.itemimg {
   min-width: 40px;
   max-width: 40px;
   height: 40px;
@@ -226,5 +238,4 @@ export default {
 .disimg {
   max-height: 200px;
 }
-
 </style>

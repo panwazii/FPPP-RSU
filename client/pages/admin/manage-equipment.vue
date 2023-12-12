@@ -11,7 +11,11 @@
       :createEquipment.sync="createEquipment"
     />
     <div class="d-flex justify-end">
-      <v-btn @click="createEquipment = true" class="mb-3" color="primary">
+      <v-btn
+        @click="createEquipment = true"
+        class="mb-3 rounded-xl"
+        color="primary"
+      >
         <v-icon medium> mdi-plus </v-icon>
         <h4>เพิ่มเครื่องมือ</h4>
       </v-btn>
@@ -23,7 +27,7 @@
         :page.sync="page"
         :items-per-page="itemsPerPage"
         hide-default-footer
-        class="elevation-1"
+        class="elevation-1 rounded-xl"
         @page-count="pageCount = $event"
       >
         <template v-slot:[`item.edit`]="{ item }">
@@ -38,7 +42,11 @@
         </template>
       </v-data-table>
       <div class="text-center pt-2">
-        <v-pagination v-model="page" :length="totalPages"></v-pagination>
+        <v-pagination
+          class="rounded-xl"
+          v-model="fetchOption.page"
+          :length="fetchOption.totalPages"
+        ></v-pagination>
       </div>
     </div>
   </v-container>
@@ -59,15 +67,13 @@ export default {
       loadingDialog: false,
       editDialog: false,
       deleteDialog: false,
-      page: 1,
-      itemsPerPage: 7,
-      totalPages: 0,
       search: '',
       equipments: [],
       equipment: null,
       newEquipment: null,
       editEquipment: false,
       createEquipment: false,
+      fetchOption: { page: 1, totalPages: 0, itemsPerPage: 12 },
       headers: [
         {
           text: 'ชื่อเครื่องมือ',
@@ -96,7 +102,7 @@ export default {
     this.fetchEquipment()
   },
   watch: {
-    page() {
+    'fetchOption.page'() {
       this.fetchEquipment()
     },
   },
@@ -104,15 +110,15 @@ export default {
     async fetchEquipment() {
       let Data = await this.$store.dispatch('api/admin/getAllEquipmentInfo', {
         params: {
-          limit: this.itemsPerPage,
-          page: this.page,
+          limit: this.fetchOption.itemsPerPage,
+          page: this.fetchOption.page,
           filter: 0,
-          value:''
+          value: '',
         },
       })
       console.log('this is equipment', Data)
       this.equipments = Data.equipments
-      this.totalPages = Data.total_pages
+      this.fetchOption.totalPages = Data.total_pages
     },
     async openEditEquipmentModal(id) {
       const EquipmentData = await this.$store.dispatch(

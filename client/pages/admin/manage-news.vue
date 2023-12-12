@@ -6,12 +6,9 @@
       :editNews.sync="editNews"
       v-if="news"
     />
-    <AdminNewsCreate
-      :open="createNews"
-      :createNews.sync="createNews"
-    />
+    <AdminNewsCreate :open="createNews" :createNews.sync="createNews" />
     <div class="d-flex justify-end">
-      <v-btn @click="createNews = true" class="mb-3" color="primary">
+      <v-btn @click="createNews = true" class="mb-3 rounded-xl" color="primary">
         <v-icon medium> mdi-plus </v-icon>
         <h4>เพิ่มข่าว</h4>
       </v-btn>
@@ -23,7 +20,7 @@
         :page.sync="page"
         :items-per-page="itemsPerPage"
         hide-default-footer
-        class="elevation-1"
+        class="elevation-1 rounded-xl"
         @page-count="pageCount = $event"
       >
         <template v-slot:[`item.edit`]="{ item }">
@@ -38,7 +35,11 @@
         </template>
       </v-data-table>
       <div class="text-center pt-2">
-        <v-pagination v-model="page" :length="totalPages"></v-pagination>
+        <v-pagination
+          class="rounded-xl"
+          v-model="fetchOption.page"
+          :length="fetchOption.totalPages"
+        ></v-pagination>
       </div>
     </div>
   </v-container>
@@ -59,14 +60,12 @@ export default {
       loadingDialog: false,
       editDialog: false,
       deleteDialog: false,
-      page: 1,
-      itemsPerPage: 7,
-      totalPages: 0,
       search: '',
       allNews: [],
       news: null,
       editNews: false,
       createNews: false,
+      fetchOption: { page: 1, totalPages: 0, itemsPerPage: 12 },
       headers: [
         {
           text: 'หัวข้อ',
@@ -95,7 +94,7 @@ export default {
     this.fetchNews()
   },
   watch: {
-    page() {
+    'fetchOption.page'() {
       this.fetchNews()
     },
   },
@@ -103,23 +102,21 @@ export default {
     async fetchNews() {
       let Data = await this.$store.dispatch('api/admin/getAllNews', {
         params: {
-          limit: this.itemsPerPage,
-          page: this.page,
+          limit: this.fetchOption.itemsPerPage,
+          page: this.fetchOption.page,
+          value: '',
         },
       })
       console.log('this is equipment', Data)
       this.allNews = Data.news
-      this.totalPages = Data.total_pages
+      this.fetchOption.totalPages = Data.total_pages
     },
     async openEditNewsModal(id) {
-      const NewsData = await this.$store.dispatch(
-        'api/admin/getSingleNews',
-        {
-          params: {
-            id: id,
-          },
-        }
-      )
+      const NewsData = await this.$store.dispatch('api/admin/getSingleNews', {
+        params: {
+          id: id,
+        },
+      })
       this.news = NewsData.news
       this.editNews = true
     },

@@ -6,9 +6,13 @@
       :editUser.sync="editUser"
       v-if="user"
     />
-    <AdminUserCreate :open="createUser" :createUser.sync="createUser" />
+    <AdminUserCreate
+      :open="createUser"
+      :createUser.sync="createUser"
+      :method="fetchUsers"
+    />
     <div class="d-flex justify-end">
-      <v-btn @click="createUser = true" class="mb-3" color="primary">
+      <v-btn @click="createUser = true" class="mb-3 rounded-xl" color="primary">
         <v-icon medium> mdi-plus </v-icon>
         <h4>เพิ่มผู้ใช้</h4>
       </v-btn>
@@ -20,7 +24,7 @@
         :page.sync="page"
         :items-per-page="itemsPerPage"
         hide-default-footer
-        class="elevation-1"
+        class="elevation-1 rounded-xl"
         @page-count="pageCount = $event"
       >
         <template v-slot:[`item.edit`]="{ item }">
@@ -35,7 +39,11 @@
         </template>
       </v-data-table>
       <div class="text-center pt-2">
-        <v-pagination v-model="page" :length="totalPages"></v-pagination>
+        <v-pagination
+          class="rounded-xl"
+          v-model="fetchOption.page"
+          :length="fetchOption.totalPages"
+        ></v-pagination>
       </div>
     </div>
   </v-container>
@@ -56,15 +64,13 @@ export default {
       loadingDialog: false,
       editDialog: false,
       deleteDialog: false,
-      page: 1,
-      itemsPerPage: 7,
-      totalPages: 0,
       search: '',
       users: [],
       user: null,
       newUser: null,
       editUser: false,
       createUser: false,
+      fetchOption: { page: 1, totalPages: 0, itemsPerPage: 7 },
       headers: [
         {
           text: 'ชื่อ',
@@ -99,7 +105,7 @@ export default {
     this.fetchUsers()
   },
   watch: {
-    page() {
+    'fetchOption.page'() {
       this.fetchUsers()
     },
   },
@@ -107,12 +113,12 @@ export default {
     async fetchUsers() {
       let Data = await this.$store.dispatch('api/admin/getAllUsers', {
         params: {
-          limit: this.itemsPerPage,
-          page: this.page,
+          limit: this.fetchOption.itemsPerPage,
+          page: this.fetchOption.page,
         },
       })
       this.users = Data.users
-      this.totalPages = Data.total_pages
+      this.fetchOption.totalPages = Data.total_pages
     },
     async openEditUserModal(id) {
       const UserData = await this.$store.dispatch('api/admin/getSingleUser', {

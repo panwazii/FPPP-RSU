@@ -6,12 +6,9 @@
       :editRoom.sync="editRoom"
       v-if="room"
     />
-    <AdminRoomCreate
-      :open="createRoom"
-      :createRoom.sync="createRoom"
-    />
+    <AdminRoomCreate :open="createRoom" :createRoom.sync="createRoom" />
     <div class="d-flex justify-end">
-      <v-btn @click="createRoom = true" class="mb-3" color="primary">
+      <v-btn @click="createRoom = true" class="mb-3 rounded-xl" color="primary">
         <v-icon medium> mdi-plus </v-icon>
         <h4>เพิ่มห้อง</h4>
       </v-btn>
@@ -23,7 +20,7 @@
         :page.sync="page"
         :items-per-page="itemsPerPage"
         hide-default-footer
-        class="elevation-1"
+        class="elevation-1 rounded-xl"
         @page-count="pageCount = $event"
       >
         <template v-slot:[`item.edit`]="{ item }">
@@ -38,7 +35,11 @@
         </template>
       </v-data-table>
       <div class="text-center pt-2">
-        <v-pagination v-model="page" :length="totalPages"></v-pagination>
+        <v-pagination
+          class="rounded-xl"
+          v-model="fetchOption.page"
+          :length="fetchOption.totalPages"
+        ></v-pagination>
       </div>
     </div>
   </v-container>
@@ -59,15 +60,13 @@ export default {
       loadingDialog: false,
       editDialog: false,
       deleteDialog: false,
-      page: 1,
-      itemsPerPage: 7,
-      totalPages: 0,
       search: '',
       rooms: [],
       room: null,
       newRoom: null,
       editRoom: false,
       createRoom: false,
+      fetchOption: { page: 1, totalPages: 0, itemsPerPage: 12 },
       headers: [
         {
           text: 'ชื่อห้อง',
@@ -96,7 +95,7 @@ export default {
     this.fetchRooms()
   },
   watch: {
-    page() {
+    'fetchOption.page'() {
       this.fetchRooms()
     },
   },
@@ -104,13 +103,13 @@ export default {
     async fetchRooms() {
       let Data = await this.$store.dispatch('api/admin/getAllRooms', {
         params: {
-          limit: this.itemsPerPage,
-          page: this.page,
+          limit: this.fetchOption.itemsPerPage,
+          page: this.fetchOption.page,
         },
       })
       console.log('this is room', Data)
       this.rooms = Data.rooms
-      this.totalPages = Data.total_pages
+      this.fetchOption.totalPages = Data.total_pages
     },
     async openEditRoomModal(id) {
       const RoomData = await this.$store.dispatch('api/admin/getSingleRoom', {
@@ -118,7 +117,7 @@ export default {
           id: id,
         },
       })
-      console.log('here', RoomData);
+      console.log('here', RoomData)
       this.room = RoomData.room[0]
       this.editRoom = true
     },
