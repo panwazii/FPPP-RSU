@@ -14,7 +14,6 @@ class NewsController {
     }
 
     public static async getAllNewsPublic(searchValue: string, limit: number, offset: number) {
-        console.log('ser val', searchValue)
         if (searchValue !== '') {
             return NewsModel.findAndCountAll({
                 where: {
