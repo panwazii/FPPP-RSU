@@ -10,15 +10,12 @@ import UserTypeController from '../controllers/user_types.controller';
 import ReserveController from '../controllers/reserve.controller';
 import ServiceController from '../controllers/service.controller';
 import WebInfoController from '../controllers/web_info.controller';
-import { authValid } from '../middleware/admin.middleware';
+import { authValid, requestLog } from '../middleware/admin.middleware';
 import { checkBodyEmpty, checkParamsEmpty } from '../middleware/validator.middleware';
 import { numberOrDefault } from '../tools/util';
 import { uploadSinglePicture, uploadSinglePictureV2 } from '../tools/util';
 import multer from 'multer';
 import { Admin } from '../service/firebase';
-import { url } from 'inspector';
-import { error } from 'console';
-import { IntegerDataType } from 'sequelize';
 
 const bucket = Admin.storage().bucket()
 const adminRouter: express.Router = express.Router();
@@ -29,7 +26,7 @@ const multerUpload = multer();
 adminRouter.post('/createAdmin', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const type = req.body.credentials.type;
-        if(type !== "SUPERADMIN"){
+        if (type !== "SUPERADMIN") {
             return res.status(HttpStatusCode.UNAUTHORIZED).json({ msg: "Kuy" });
         }
         await AdminController.createAdmin(req.body)
@@ -848,7 +845,7 @@ adminRouter.get('/getAllSupplier', async (req, res) => {
     }
 });
 
-adminRouter.post('/createSupplier', checkBodyEmpty, async (req, res) => {
+adminRouter.post('/createSupplier', checkBodyEmpty, authValid, requestLog, async (req, res) => {
     try {
         await EquipmentController.createSupplier(req.body)
         res.status(200).json({ code: 200 });

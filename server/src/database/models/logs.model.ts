@@ -2,32 +2,60 @@ import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
 
-export interface LogsAttribute {
+export interface LogAttribute {
     id?: string;
-    is_admin?: boolean;
+
     type?: string;
-    operation?: string;
+
+    uuid?: string;
+
+    fname?: string;
+
+    lname?: string;
+
+    ip?: string;
+
+    route?: string;
+
+    method?: string;
+
+    body?: any;
+
+    params?: any;
+
     time?: string;
 }
 
-export interface LogsAttributeCreation extends Optional<LogsAttribute, 'id'> { }
+export interface LogAttributeCreation extends Optional<LogAttribute, 'id'> { }
 
 
 
-class LogsModel extends Model<LogsAttribute, LogsAttributeCreation> implements LogsAttribute {
+class LogModel extends Model<LogAttribute, LogAttributeCreation> implements LogAttribute {
     declare id: string;
-
-    declare is_admin: boolean;
 
     declare type: string;
 
-    declare operation: string;
+    declare uuid: string;
+
+    declare fname: string;
+
+    declare lname: string;
+
+    declare ip: string;
+
+    declare route: string;
+
+    declare method: string;
+
+    declare body: any;
+
+    declare params: any;
 
     declare time: string;
 }
 
-export const initLogsModel = (connection: Sequelize) => {
-    LogsModel.init(
+export const initLogModel = (connection: Sequelize) => {
+    LogModel.init(
         {
             id: {
                 type: DataTypes.UUID,
@@ -35,19 +63,41 @@ export const initLogsModel = (connection: Sequelize) => {
                 allowNull: false,
                 primaryKey: true,
             },
-            is_admin: {
-                allowNull: false,
-                unique: true,
-                type: DataTypes.BOOLEAN,
-            },
             type: {
                 allowNull: false,
-                unique: true,
                 type: DataTypes.STRING,
             },
-            operation: {
+            uuid: {
+                allowNull: false,
+                type: DataTypes.UUID
+            },
+            fname: {
                 allowNull: false,
                 type: DataTypes.STRING,
+            },
+            lname: {
+                allowNull: false,
+                type: DataTypes.STRING,
+            },
+            ip: {
+                allowNull: false,
+                type: DataTypes.STRING,
+            },
+            route: {
+                allowNull: false,
+                type: DataTypes.STRING,
+            },
+            method: {
+                allowNull: false,
+                type: DataTypes.STRING,
+            },
+            body: {
+                allowNull: true,
+                type: DataTypes.JSON,
+            },
+            params: {
+                allowNull: true,
+                type: DataTypes.JSON,
             },
             time: {
                 allowNull: false,
@@ -63,4 +113,4 @@ export const initLogsModel = (connection: Sequelize) => {
     );
 };
 
-export default LogsModel;
+export default LogModel;

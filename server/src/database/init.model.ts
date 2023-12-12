@@ -17,7 +17,7 @@ import SupplyModel, { initSupplyModel } from './models/supply.model';
 import { initNewsModel } from './models/news.model';
 import AdminModel, { initAdminModel } from './models/admins.model';
 import CartModel, { initCartModel } from './models/carts.model';
-import CartItemModel,{ initCartItemModel } from './models/cart_items.model';
+import CartItemModel, { initCartItemModel } from './models/cart_items.model';
 import NotificationModel, { initNotificationModel } from './models/notifications.model';
 
 import { initWebInfoModel } from './models/web_info.model';
@@ -36,6 +36,7 @@ import { initAdminSeed } from '../seeders/admin.seed';
 
 import log from '../tools/log';
 import { initWebInfoSeed } from '../seeders/web_infos.seed';
+import { initLogModel } from './models/logs.model';
 
 const logDB = debug('app:db');
 const logFunc = config.database.logging ? ((sql: string) => logDB(sql)) : false;
@@ -89,13 +90,16 @@ const initDatabase = async () => {
         initWebInfoModel,
         initServiceModel,
 
+        //Log
+        initLogModel
+
     ];
     models.forEach((initFunction) => {
         initFunction(sequelizeConnection);
     });
 
-    UserTypeModel.hasMany(UserModel, { foreignKey: 'type_id' });
-    UserModel.belongsTo(UserTypeModel, { foreignKey: 'type_id' });
+    UserTypeModel.hasMany(UserModel, { as: 'user_type', foreignKey: 'type_id' });
+    UserModel.belongsTo(UserTypeModel, { as: 'user_type', foreignKey: 'type_id' });
 
     UserModel.hasMany(ReserveModel, { foreignKey: 'user_id' });
     ReserveModel.belongsTo(UserModel, { foreignKey: 'user_id' });
