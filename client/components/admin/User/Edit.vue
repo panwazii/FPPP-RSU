@@ -2,7 +2,7 @@
   <div>
     <ModalConfirm
       :open="modal.confirm.open"
-      :message="modal.message"
+      :message="modal.confirm.message"
       :method="updateUser"
       :confirm.sync="modal.confirm.open"
     />
@@ -143,7 +143,7 @@ export default {
     return {
       userTypes: null,
       modal: {
-        confirm: { open: false, message: 'Confirm this change' },
+        confirm: { open: false, message: 'Confirm this change?' },
         loading: { open: false, message: 'Loading' },
         error: { open: false, message: '' },
       },
