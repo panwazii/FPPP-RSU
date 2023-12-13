@@ -3,10 +3,15 @@
     <AdminNewsEdit
       :open="editNews"
       :data="news"
+      :method="fetchNews"
       :editNews.sync="editNews"
       v-if="news"
     />
-    <AdminNewsCreate :open="createNews" :createNews.sync="createNews" />
+    <AdminNewsCreate
+      :open="createNews"
+      :method="fetchNews"
+      :createNews.sync="createNews"
+    />
     <div class="d-flex justify-end">
       <v-btn @click="createNews = true" class="mb-3 rounded-xl" color="primary">
         <v-icon medium> mdi-plus </v-icon>

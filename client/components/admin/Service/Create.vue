@@ -82,6 +82,7 @@
 </template>
 <script>
 export default {
+  method: { type: Function },
   props: {
     open: {
       required: true,
@@ -122,6 +123,7 @@ export default {
         this.clearForm()
         this.$emit('update:createService', false)
         this.modal.loading.open = false
+        this.method()
       } catch (error) {
         this.modal.loading.open = false
         console.log(error)

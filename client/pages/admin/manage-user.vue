@@ -3,6 +3,7 @@
     <AdminUserEdit
       :open="editUser"
       :data="user"
+      :method="fetchUsers"
       :editUser.sync="editUser"
       v-if="user"
     />

@@ -3,11 +3,13 @@
     <AdminUserTypeEdit
       :open="editUserType"
       :data="userType"
+      :method="fetchUserTypes"
       :editUserType.sync="editUserType"
       v-if="userType"
     />
     <AdminUserTypeCreate
       :open="createUserType"
+      :method="fetchUserTypes"
       :createUserType.sync="createUserType"
     />
     <div class="d-flex justify-end">

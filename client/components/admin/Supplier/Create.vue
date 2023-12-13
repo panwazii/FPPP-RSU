@@ -79,6 +79,7 @@
 <script>
 export default {
   props: {
+    method: { type: Function },
     open: {
       required: true,
     },
@@ -115,6 +116,7 @@ export default {
         this.clearForm()
         this.$emit('update:createSupplier', false)
         this.modal.loading.open = false
+        this.method()
       } catch (error) {
         this.modal.loading.open = false
         console.log(error)

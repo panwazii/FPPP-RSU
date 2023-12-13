@@ -3,11 +3,13 @@
     <AdminProductionLineEdit
       :open="editProductionLine"
       :data="productionline"
+      :method="fetchProductionLines"
       :editProductionLine.sync="editProductionLine"
       v-if="productionline"
     />
     <AdminProductionLineCreate
       :open="createProductionLine"
+      :method="fetchProductionLines"
       :createProductionLine.sync="createProductionLine"
     />
     <div class="d-flex justify-end">

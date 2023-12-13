@@ -91,6 +91,7 @@
 <script>
 export default {
   props: {
+    method: { type: Function },
     open: {
       required: true,
     },
@@ -130,6 +131,7 @@ export default {
         this.$emit('update:editNews', false)
         this.modal.loading.open = false
         this.modal.complete.open = true
+        this.method()
       } catch (error) {
         this.modal.loading.open = false
         console.log(error)

@@ -3,11 +3,13 @@
     <AdminReserveEdit
       :open="editReserve"
       :data="reserve"
+      :method="fetchReserves"
       :editReserve.sync="editReserve"
       v-if="reserve"
     />
     <AdminReserveCreate
       :open="createReserve"
+      :data="fetchReserves"
       :createReserve.sync="createReserve"
     />
     <div class="d-flex justify-end">

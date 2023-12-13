@@ -77,7 +77,7 @@
 <script>
 export default {
   props: {
-    // method: { type: Function },
+    method: { type: Function },
     open: {
       required: true,
     },
@@ -109,6 +109,7 @@ export default {
         await this.$store.dispatch('api/admin/updateProductionLine', this.data)
         this.$emit('update:editProductionLine', false)
         this.modal.loading.open = false
+        this.method()
       } catch (error) {
         this.modal.loading.open = false
         console.log(error)

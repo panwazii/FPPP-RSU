@@ -3,11 +3,13 @@
     <AdminEquipmentRentRateEdit
       :open="editEquipmentRentRate"
       :data="equipmentrentrate"
+      :method="fetchEquipmentRentRates"
       :editEquipmentRentRate.sync="editEquipmentRentRate"
       v-if="equipmentrentrate"
     />
     <AdminEquipmentRentRateCreate
       :open="createEquipmentRentRate"
+      :method="fetchEquipmentRentRates"
       :createEquipmentRentRate.sync="createEquipmentRentRate"
     />
     <div class="d-flex justify-end">

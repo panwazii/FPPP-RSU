@@ -3,10 +3,15 @@
     <AdminRoomEdit
       :open="editRoom"
       :data="room"
+      :method="fetchRooms"
       :editRoom.sync="editRoom"
       v-if="room"
     />
-    <AdminRoomCreate :open="createRoom" :createRoom.sync="createRoom" />
+    <AdminRoomCreate
+      :open="createRoom"
+      :method="fetchRooms"
+      :createRoom.sync="createRoom"
+    />
     <div class="d-flex justify-end">
       <v-btn @click="createRoom = true" class="mb-3 rounded-xl" color="primary">
         <v-icon medium> mdi-plus </v-icon>

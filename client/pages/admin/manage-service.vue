@@ -3,11 +3,13 @@
     <AdminServiceEdit
       :open="editService"
       :data="service"
+      :method="fetchServices"
       :editService.sync="editService"
       v-if="service"
     />
     <AdminServiceCreate
       :open="createService"
+      :method="fetchServices"
       :createService.sync="createService"
     />
     <div class="d-flex justify-end">

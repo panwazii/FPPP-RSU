@@ -3,11 +3,13 @@
     <AdminSupplierEdit
       :open="editSupplier"
       :data="supplier"
+      :method="fetchSuppliers"
       :editSupplier.sync="editSupplier"
       v-if="supplier"
     />
     <AdminSupplierCreate
       :open="createSupplier"
+      :method="fetchSuppliers"
       :createSupplier.sync="createSupplier"
     />
     <div class="d-flex justify-end">

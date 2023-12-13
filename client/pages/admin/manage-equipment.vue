@@ -3,11 +3,13 @@
     <AdminEquipmentEdit
       :open="editEquipment"
       :data="equipment"
+      :method="fetchEquipment"
       :editEquipment.sync="editEquipment"
       v-if="equipment"
     />
     <AdminEquipmentCreate
       :open="createEquipment"
+      :method="fetchEquipment"
       :createEquipment.sync="createEquipment"
     />
     <div class="d-flex justify-end">

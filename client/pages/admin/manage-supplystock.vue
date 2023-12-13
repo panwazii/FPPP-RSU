@@ -3,11 +3,13 @@
     <AdminSupplyStockEdit
       :open="editSupplyStock"
       :data="supplystock"
+      :method="fetchSupplyStocks"
       :editSupplyStock.sync="editSupplyStock"
       v-if="supplystock"
     />
     <AdminSupplyStockCreate
       :open="createSupplyStock"
+      :method="fetchSupplyStocks"
       :createSupplyStock.sync="createSupplyStock"
     />
     <div class="d-flex justify-end">
