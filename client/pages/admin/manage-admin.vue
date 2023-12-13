@@ -5,7 +5,7 @@
       width="1020"
       :headers="headers"
       sort-by="id"
-      class="elevation-1 mt-12 pa-6 ml-12 mr-12"
+      class="elevation-1 mt-12 pa-6 ml-12 mr-12 rounded-xl"
       :search="search"
     >
       <template v-slot:top>
@@ -65,7 +65,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('setPathName',"จัดการผู้ดูแล")
+    this.$store.dispatch('setPathName', 'จัดการผู้ดูแล')
   },
 }
 </script>

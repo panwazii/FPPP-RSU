@@ -10,21 +10,32 @@ import UserTypeController from '../controllers/user_types.controller';
 import ReserveController from '../controllers/reserve.controller';
 import ServiceController from '../controllers/service.controller';
 import WebInfoController from '../controllers/web_info.controller';
-import { authValid } from '../middleware/admin.middleware';
+import { authValid, requestLog } from '../middleware/admin.middleware';
 import { checkBodyEmpty, checkParamsEmpty } from '../middleware/validator.middleware';
 import { numberOrDefault } from '../tools/util';
 import { uploadSinglePicture, uploadSinglePictureV2 } from '../tools/util';
 import multer from 'multer';
 import { Admin } from '../service/firebase';
-import { url } from 'inspector';
-import { error } from 'console';
-import { IntegerDataType } from 'sequelize';
 
 const bucket = Admin.storage().bucket()
 const adminRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON();
 const unknownErrorCode = createUnknownErrCodeJSON()
 const multerUpload = multer();
+
+adminRouter.post('/createAdmin', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const type = req.body.credentials.type;
+        if (type !== "SUPERADMIN") {
+            return res.status(HttpStatusCode.UNAUTHORIZED).json({ msg: "Kuy" });
+        }
+        await AdminController.createAdmin(req.body)
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+
+});
 
 adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
     try {
@@ -36,7 +47,7 @@ adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
                 code: 200,
                 admin: {
                     id: adminInfo.id,
-                    type_id: adminInfo.type_id,
+                    type: adminInfo.type,
                     fname: adminInfo.fname,
                     lname: adminInfo.lname,
                     email: adminInfo.email,
@@ -369,9 +380,9 @@ adminRouter.get('/getAllEquipmentInfo', async (req, res) => {
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        const allEquipments = await EquipmentController.getAllEquipmentInfoAdmin(filterType, searchValue, Limit, Offset)
+        const data = await EquipmentController.getAllEquipmentInfoAdmin(filterType, searchValue, Limit, Offset)
         res.status(200).json({
-            code: 200, equipments: allEquipments.rows, total_pages: Math.ceil(allEquipments.count / Limit)
+            code: 200, equipments: data.rows, total_pages: Math.ceil(data.count / Limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -834,7 +845,7 @@ adminRouter.get('/getAllSupplier', async (req, res) => {
     }
 });
 
-adminRouter.post('/createSupplier', checkBodyEmpty, async (req, res) => {
+adminRouter.post('/createSupplier', checkBodyEmpty, authValid, requestLog, async (req, res) => {
     try {
         await EquipmentController.createSupplier(req.body)
         res.status(200).json({ code: 200 });

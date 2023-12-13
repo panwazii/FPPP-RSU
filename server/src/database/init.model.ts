@@ -16,14 +16,12 @@ import SupplierModel, { initSupplierModel } from './models/supplier.model';
 import SupplyModel, { initSupplyModel } from './models/supply.model';
 import { initNewsModel } from './models/news.model';
 import AdminModel, { initAdminModel } from './models/admins.model';
-import AdminTypeModel, { initAdminTypeModel } from './models/admin_types.model';
 import CartModel, { initCartModel } from './models/carts.model';
-import CartItemModel,{ initCartItemModel } from './models/cart_items.model';
+import CartItemModel, { initCartItemModel } from './models/cart_items.model';
 import NotificationModel, { initNotificationModel } from './models/notifications.model';
 
 import { initWebInfoModel } from './models/web_info.model';
 import { initServiceModel } from './models/services.model';
-import { initAdminTypeSeed } from '../seeders/admin_types.seed';
 import { initUserTypeSeed } from '../seeders/user_types.seed';
 import { initRoomSeed } from '../seeders/room.seed';
 import { initRoomPictureSeed } from '../seeders/room_picture.seed';
@@ -34,10 +32,11 @@ import { initUserSeed } from '../seeders/user.seed';
 import { initProductionLineSeed } from '../seeders/production_line.seed';
 import { initRentRateSeed } from '../seeders/rent_rates.seed';
 import { initEquipmentsSeed } from '../seeders/equipment.seed';
+import { initAdminSeed } from '../seeders/admin.seed';
 
-import AdminController from '../controllers/admin.controller';
 import log from '../tools/log';
 import { initWebInfoSeed } from '../seeders/web_infos.seed';
+import { initLogModel } from './models/logs.model';
 
 const logDB = debug('app:db');
 const logFunc = config.database.logging ? ((sql: string) => logDB(sql)) : false;
@@ -85,20 +84,22 @@ const initDatabase = async () => {
         initNotificationModel,
 
         //Admin
-        initAdminTypeModel,
         initAdminModel,
 
         //Public
         initWebInfoModel,
         initServiceModel,
 
+        //Log
+        initLogModel
+
     ];
     models.forEach((initFunction) => {
         initFunction(sequelizeConnection);
     });
 
-    UserTypeModel.hasMany(UserModel, { foreignKey: 'type_id' });
-    UserModel.belongsTo(UserTypeModel, { foreignKey: 'type_id' });
+    UserTypeModel.hasMany(UserModel, { as: 'user_type', foreignKey: 'type_id' });
+    UserModel.belongsTo(UserTypeModel, { as: 'user_type', foreignKey: 'type_id' });
 
     UserModel.hasMany(ReserveModel, { foreignKey: 'user_id' });
     ReserveModel.belongsTo(UserModel, { foreignKey: 'user_id' });
@@ -136,9 +137,6 @@ const initDatabase = async () => {
     EquipmentInfoModel.hasMany(SupplyModel, { foreignKey: 'equipment_info_id' });
     SupplyModel.belongsTo(EquipmentInfoModel, { foreignKey: 'equipment_info_id' });
 
-    AdminTypeModel.hasMany(AdminModel, { foreignKey: 'type_id' });
-    AdminModel.belongsTo(AdminTypeModel, { foreignKey: 'type_id' });
-
     UserModel.hasOne(CartModel, { foreignKey: 'user_id' });
     CartModel.belongsTo(UserModel, { foreignKey: 'user_id' });
 
@@ -156,7 +154,7 @@ const initDatabase = async () => {
         log(sequelizeConnection.models);
         await sequelizeConnection.sync({ force: true });
         if (yn(config.database.insertInitData)) {
-            await initAdminTypeSeed();
+            await initAdminSeed();
             await initUserTypeSeed();
             await initUserSeed();
             await initWebInfoSeed();
@@ -168,8 +166,6 @@ const initDatabase = async () => {
             await initEquipmentsSeed();
             await initServiceSeed();
             await initNewsSeed();
-
-            await AdminController.createSuperAdmin();
         }
     } else {
         await sequelizeConnection.sync({ alter: config.database.syncOption.alter });

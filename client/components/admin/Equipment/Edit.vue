@@ -1,12 +1,12 @@
 <template>
   <div>
     <ModalConfirm
-      :open="confirmModal"
-      :message="confirmMessage"
+      :open="modal.confirm.open"
+      :message="modal.confirm.message"
       :method="updateEquipment"
-      :confirm.sync="confirmModal"
+      :confirm.sync="modal.confirm.open"
     />
-    <ModalLoading :open="loading" :message="loadingMessage" />
+    <ModalLoading :open="modal.loading.open" :message="modal.loading.message" />
     <v-dialog
       persistent
       :retain-focus="false"
@@ -14,15 +14,15 @@
       max-width="650"
       max-height="300"
     >
-      <v-card>
+      <v-card class="rounded-xl">
         <v-card-title class="text-h5">
           <v-icon justify="left" class="mr-3" size="50">mdi-pencil</v-icon>
-          Edit Equipment
+          แก้ไขเครื่องมือ
         </v-card-title>
         <v-divider class="mb-3"></v-divider>
         <v-card-text>
           <v-row class="d-flex justify-center mt-3">
-            <v-col cols="8">
+            <v-col>
               <template>
                 <v-form ref="form" lazy-validation>
                   <v-row class="mt-2">
@@ -34,15 +34,17 @@
                         item-value="id"
                         label="ห้อง"
                         outlined
+                        class="rounded-xl"
                       ></v-select>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="data.name"
-                        :rules="[(v) => !!v || 'name required']"
+                        :rules="[(v) => !!v || 'โปรดระบุชื่อเครื่องมือ']"
                         label="ชื่อเครื่องมือ"
                         outlined
                         required
+                        class="rounded-xl"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -51,31 +53,34 @@
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="data.price"
-                        :rules="[(v) => !!v || 'price required']"
+                        :rules="[(v) => !!v || 'โปรดระบุราคาเฉลี่ย']"
                         label="ราคาเฉลี่ย"
                         outlined
                         required
+                        class="rounded-xl"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field
                         v-model="data.rent_price"
-                        :rules="[(v) => !!v || 'rent price required']"
+                        :rules="[(v) => !!v || 'โปรดระบุราคาเช่า']"
                         label="ราคาเช่า"
                         outlined
                         required
+                        class="rounded-xl"
                       ></v-text-field>
                     </v-col>
                   </v-row>
 
                   <v-row class="mt-2">
-                    <v-col cols="12" sm="6">
+                    <v-col cols="12">
                       <v-textarea
                         v-model="data.details"
-                        :rules="[(v) => !!v || 'details required']"
+                        :rules="[(v) => !!v || 'โปรดระบุรายละเอียด']"
                         label="รายละเอียด"
                         outlined
                         required
+                        class="rounded-xl"
                       ></v-textarea>
                     </v-col>
                   </v-row>
@@ -93,6 +98,7 @@
                       label="รูปภาพ"
                       filled
                       prepend-icon="mdi-camera"
+                      class="rounded-xl"
                     ></v-file-input>
                   </v-row>
                 </v-form>
@@ -121,7 +127,7 @@
 <script>
 export default {
   props: {
-    // method: { type: Function },
+    method: { type: Function },
     open: {
       required: true,
     },
@@ -137,15 +143,17 @@ export default {
   data() {
     return {
       rooms: null,
-      confirmModal: false,
-      confirmMessage: 'Confirm this change',
-      loading: false,
-      loadingMessage: 'Loading',
+      modal: {
+        confirm: { open: false, message: 'Confirm this change?' },
+        loading: { open: false, message: 'Loading' },
+        complete: { open: false, message: 'Complete' },
+        error: { open: false, message: '' },
+      },
     }
   },
   methods: {
     confirm() {
-      this.confirmModal = true
+      this.modal.confirm.open = true
       //   this.$emit('update:editRoom', false)
     },
     cancel() {
@@ -153,7 +161,7 @@ export default {
     },
     async updateEquipment() {
       try {
-        this.loading = true
+        this.modal.loading.open = true
         let file = new FormData()
         file.append('file', this.data.file),
           file.append('id', this.data.id),
@@ -163,9 +171,10 @@ export default {
           file.append('details', this.data.details),
           await this.$store.dispatch('api/admin/updateEquipment', file)
         this.$emit('update:editEquipment', false)
-        this.loading = false
+        this.modal.loading.open = false
+        this.method()
       } catch (error) {
-        this.loading = false
+        this.modal.loading.open = false
         console.log(error)
         this.$emit('update:editEquipment', false)
       }

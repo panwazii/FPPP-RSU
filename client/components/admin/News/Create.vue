@@ -1,21 +1,21 @@
 <template>
   <div>
     <ModalConfirm
-      :open="confirmModal"
-      :message="confirmMessage"
+      :open="modal.confirm.open"
+      :message="modal.confirm.message"
       :method="createNews"
-      :confirm.sync="confirmModal"
+      :confirm.sync="modal.confirm.open"
     />
-    <ModalLoading :open="loading" :message="loadingMessage" />
+    <ModalLoading :open="modal.loading.open" :message="modal.loading.message" />
     <ModalComplete
-      :open="completeModal"
-      :message="completeMessage"
-      :complete.sync="completeModal"
+      :open="modal.complete.open"
+      :message="modal.complete.message"
+      :complete.sync="modal.complete.open"
     />
     <ModalError
-      :open="errorModal"
-      :message="errorMessage"
-      :error.sync="errorModal"
+      :open="modal.error.open"
+      :message="modal.error.message"
+      :error.sync="modal.error.open"
     />
     <v-dialog
       persistent
@@ -24,17 +24,17 @@
       max-width="650"
       max-height="300"
     >
-      <v-card>
+      <v-card class="rounded-xl">
         <v-card-title class="text-h5">
           <v-icon justify="left" class="mr-3" size="50"
             >mdi-newspaper-plus</v-icon
           >
-          Create new user.
+          เพิ่มข่าวใหม่
         </v-card-title>
         <v-divider class="mb-3"></v-divider>
         <v-card-text>
           <v-row class="d-flex justify-center mt-3">
-            <v-col cols="8">
+            <v-col>
               <v-form ref="form" lazy-validation>
                 <v-row class="mt-2">
                   <v-col cols="12" sm="12">
@@ -44,6 +44,7 @@
                       label="หัวข้อ"
                       outlined
                       required
+                      class="rounded-xl"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="12">
@@ -53,6 +54,7 @@
                       label="เนื้อหา"
                       outlined
                       required
+                      class="rounded-xl"
                     ></v-textarea>
                   </v-col>
                   <v-col cols="12" sm="12">
@@ -61,6 +63,7 @@
                       label="รูปภาพ"
                       filled
                       prepend-icon="mdi-camera"
+                      class="rounded-xl"
                     ></v-file-input>
                   </v-col>
                 </v-row>
@@ -89,6 +92,7 @@
 <script>
 export default {
   props: {
+    method: { type: Function },
     open: {
       required: true,
     },
@@ -100,20 +104,18 @@ export default {
         details: null,
         picture: 'beta',
       },
-      confirmModal: false,
-      confirmMessage: 'Confirm this change',
-      loading: false,
-      loadingMessage: 'Loading',
-      completeMessage: 'Create news complete',
-      completeModal: false,
-      errorMessage: '',
-      errorModal: false,
       file: null,
+      modal: {
+        confirm: { open: false, message: 'Confirm to create?' },
+        loading: { open: false, message: 'Loading' },
+        complete: { open: false, message: 'Create news complete' },
+        error: { open: false, message: '' },
+      },
     }
   },
   methods: {
     confirm() {
-      this.confirmModal = true
+      this.modal.confirm.open = true
     },
     cancel() {
       this.clearForm()
@@ -133,21 +135,22 @@ export default {
         if (Response.code === 201) {
           this.clearForm()
           this.$emit('update:createNews', false)
-          this.loading = false
-          this.completeModal = true
+          this.modal.loading.open = false
+          this.modal.complete.open = true
+          this.method()
         } else {
           this.clearForm()
           this.$emit('update:createNews', false)
-          this.loading = false
-          this.errorMessage = Response.msg
-          this.errorModal = true
+          this.modal.loading.open = false
+          this.modal.error.message = Response.msg
+          this.modal.error.open = true
         }
       } catch (error) {
-        this.loading = false
+        this.modal.loading.open = false
         this.clearForm()
         this.$emit('update:createNews', false)
-        this.errorMessage = String(error)
-        this.errorModal = true
+        this.modal.error.message = String(error)
+        this.modal.error.open = true
       }
     },
     clearForm() {

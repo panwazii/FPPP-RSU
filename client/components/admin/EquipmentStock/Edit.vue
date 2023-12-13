@@ -1,12 +1,12 @@
 <template>
   <div>
     <ModalConfirm
-      :open="confirmModal"
-      :message="confirmMessage"
+      :open="modal.confirm.open"
+      :message="modal.confirm.message"
       :method="updateEquipmentStock"
-      :confirm.sync="confirmModal"
+      :confirm.sync="modal.confirm.open"
     />
-    <ModalLoading :open="loading" :message="loadingMessage" />
+    <ModalLoading :open="modal.loading.open" :message="modal.loading.message" />
     <v-dialog
       persistent
       :retain-focus="false"
@@ -14,11 +14,11 @@
       max-width="650"
       max-height="300"
     >
-      <v-card>
+      <v-card class="rounded-xl">
         <!-- this is room {{ rooms }} -->
         <v-card-title class="text-h5">
           <v-icon justify="left" class="mr-3" size="50">mdi-pencil</v-icon>
-          Edit EquipmentStock
+          แก้ไขสต็อกอุปกรณ์
         </v-card-title>
         <!-- {{ data }} -->
         <!-- <hr> -->
@@ -26,7 +26,7 @@
         <v-divider class="mb-3"></v-divider>
         <v-card-text>
           <v-row class="d-flex justify-center mt-3">
-            <v-col cols="8">
+            <v-col>
               <template>
                 <v-form ref="form" lazy-validation>
                   <p>ID</p>
@@ -38,6 +38,7 @@
                         label="ID"
                         outlined
                         required
+                        class="rounded-xl"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -51,29 +52,32 @@
                         label="Serial number"
                         outlined
                         required
+                        class="rounded-xl"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="12">
                       <h4>ราคา</h4>
                       <v-text-field
                         v-model="data.price"
-                        :rules="[(v) => !!v || 'price required']"
+                        :rules="[(v) => !!v || 'โปรดระบุราคา']"
                         label="Price"
                         outlined
                         required
+                        class="rounded-xl"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="12">
                       <h4>ห้อง</h4>
                       <v-autocomplete
                         v-model="data.room_id"
-                        :rules="[(v) => !!v || 'room id required']"
+                        :rules="[(v) => !!v || 'โปรดระบุห้อง']"
                         :items="rooms"
                         item-text="name"
                         item-value="id"
                         label="Room id"
                         outlined
                         required
+                        class="rounded-xl"
                       >
                         <template v-slot:item="{ item }">
                           <v-img
@@ -99,13 +103,14 @@
                       <h4>อุปกรณ์</h4>
                       <v-autocomplete
                         v-model="data.equipment_info_id"
-                        :rules="[(v) => !!v || 'equipment info id required']"
+                        :rules="[(v) => !!v || 'โปรดระบุอุปกรณ์']"
                         :items="equipments"
                         item-text="name"
                         item-value="id"
                         label="Equipment info id"
                         outlined
                         required
+                        class="rounded-xl"
                       >
                         <template v-slot:item="{ item }">
                           <v-img :src="item.picture" class="itemimg"></v-img>
@@ -131,6 +136,7 @@
                         label="Supplier id"
                         outlined
                         required
+                        class="rounded-xl"
                       ></v-autocomplete>
                     </v-col>
                   </v-row>
@@ -157,10 +163,10 @@
     </v-dialog>
   </div>
 </template>
-  <script>
+<script>
 export default {
   props: {
-    // method: { type: Function },
+    method: { type: Function },
     open: {
       required: true,
     },
@@ -203,18 +209,18 @@ export default {
     return {
       roomDisplayImage: null,
       equipmentDisplayImage: null,
-      confirmModal: false,
-      confirmMessage: 'Confirm this change',
-      loading: false,
-      loadingMessage: 'Loading',
       rooms: [],
       equipments: [],
       suppliers: [],
+      modal: {
+        confirm: { open: false, message: 'Confirm this change?' },
+        loading: { open: false, message: 'Loading' },
+        complete: { open: false, message: 'Complete' },
+        error: { open: false, message: '' },
+      },
     }
   },
-  async mounted() {
-    
-  },
+  async mounted() {},
   computed: {
     formWatched() {
       return Object.assign({}, this.data)
@@ -222,7 +228,7 @@ export default {
     getRoomPicture() {
       this.rooms.forEach((room) => {
         if (room.id === data.room_id) {
-          console.log('this is room',room);
+          console.log('this is room', room)
           return room.picture[0].url
         }
       })
@@ -251,19 +257,20 @@ export default {
   },
   methods: {
     confirm() {
-      this.confirmModal = true
+      this.modal.confirm.open = true
     },
     cancel() {
       this.$emit('update:editEquipmentStock', false)
     },
     async updateEquipmentStock() {
       try {
-        this.loading = true
+        this.modal.loading.open = true
         await this.$store.dispatch('api/admin/updateEquipmentStock', this.data)
         this.$emit('update:editEquipmentStock', false)
-        this.loading = false
+        this.modal.loading.open = false
+        this.method()
       } catch (error) {
-        this.loading = false
+        this.modal.loading.open = false
         console.log(error)
         this.$emit('update:editEquipmentStock', false)
       }

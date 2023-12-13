@@ -18,7 +18,7 @@ const corsOptions = {
 initDatabase().then(() => {
     const app: Application = express();
     const router: express.Router = express.Router();
-
+    app.set('trust proxy', true)
     router.use('/api/auth', authRouter);
     router.use('/api/admin', adminRouter);
     router.use('/api/public', publicRouter);
