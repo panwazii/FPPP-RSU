@@ -28,7 +28,7 @@
                 v-model="UserInfo.fname"
                 outlined
                 label="ชื่อจริง"
-                :rules="Rules.firstName"
+                :rules="firstName"
                 required
               ></v-text-field>
             </v-col>
@@ -38,7 +38,7 @@
                 v-model="UserInfo.lname"
                 outlined
                 label="นามสกุล"
-                :rules="Rules.lastName"
+                :rules="lastName"
                 required
               ></v-text-field>
             </v-col>
@@ -48,7 +48,7 @@
                 v-model="UserInfo.tel"
                 outlined
                 label="เบอร์ติดต่อ"
-                :rules="Rules.tel"
+                :rules="tel"
                 required
               ></v-text-field>
             </v-col>
@@ -58,7 +58,7 @@
                 v-model="UserInfo.email"
                 outlined
                 label="อีเมล"
-                :rules="Rules.email"
+                :rules="email"
                 required
               ></v-text-field>
             </v-col>
@@ -191,23 +191,47 @@ export default {
       errorModal: false,
       loadingMessage: '',
       loading: false,
-      Rules: {
-        firstName: [(v) => !!v || 'โปรดระบุชื่อจริง'],
-        lastName: [(v) => !!v || 'โปรดระบุนามสกุล'],
-        tel: [
-          (v) => !!v || 'โปรดระบุเบอร์โทรศัพท์',
-          (v) =>
-            /((\+66|0)(\d{1,2}\-?\d{3}\-?\d{3,4}))|((\+๖๖|๐)([๐-๙]{1,2}\-?[๐-๙]{3}\-?[๐-๙]{3,4}))/gm.test(
-              v
-            ) || 'โปรดระบุเบอร์โทรศัพท์ที่ถูกต้อง',
-        ],
-        email: [
-          (v) => !!v || 'โปรดระบุอีเมล',
-          (v) =>
-            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'โปรดระบุอีเมลที่ถูกต้อง',
-        ],
-      },
+      // Rules: {
+      //   firstName: [(v) => !!v || 'โปรดระบุชื่อจริง'],
+      //   lastName: [(v) => !!v || 'โปรดระบุนามสกุล'],
+      //   tel: [
+      //     (v) => !!v || 'โปรดระบุเบอร์โทรศัพท์',
+      //     (v) =>
+      //       /((\+66|0)(\d{1,2}\-?\d{3}\-?\d{3,4}))|((\+๖๖|๐)([๐-๙]{1,2}\-?[๐-๙]{3}\-?[๐-๙]{3,4}))/gm.test(
+      //         v
+      //       ) || 'โปรดระบุเบอร์โทรศัพท์ที่ถูกต้อง',
+      //   ],
+      //   email: [
+      //     (v) => !!v || 'โปรดระบุอีเมล',
+      //     (v) =>
+      //       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'โปรดระบุอีเมลที่ถูกต้อง',
+      //   ],
+      // },
     }
+  },
+  computed: {
+    firstName: () => {
+      return [(v) => !!v || 'โปรดระบุชื่อจริง']
+    },
+    lastName: () => {
+      return [(v) => !!v || 'โปรดระบุนามสกุล']
+    },
+    tel: () => {
+      return [
+        (v) => !!v || 'โปรดระบุเบอร์โทรศัพท์',
+        (v) =>
+          /((\+66|0)(\d{1,2}\-?\d{3}\-?\d{3,4}))|((\+๖๖|๐)([๐-๙]{1,2}\-?[๐-๙]{3}\-?[๐-๙]{3,4}))/gm.test(
+            v
+          ) || 'โปรดระบุเบอร์โทรศัพท์ที่ถูกต้อง',
+      ]
+    },
+    email: () => {
+      return [
+        (v) => !!v || 'โปรดระบุอีเมล',
+        (v) =>
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'โปรดระบุอีเมลที่ถูกต้อง',
+      ]
+    },
   },
   methods: {
     refresh() {

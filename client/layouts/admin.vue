@@ -1,17 +1,29 @@
 <template>
   <v-app dark>
     <v-main>
-      <ModalConfirmLogout :open="logout_modal" :method="logout" message="are you sure about that son ?"
-        :confirmLogout.sync="logout_modal" />
-      <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
+      <ModalConfirmLogout
+        :open="logout_modal"
+        :method="logout"
+        message="are you sure about that son ?"
+        :confirmLogout.sync="logout_modal"
+      />
+      <v-navigation-drawer
+        v-model="drawer"
+        :mini-variant="miniVariant"
+        :clipped="clipped"
+        fixed
+        app
+      >
         <v-list class="mt-0 pt-0">
           <div>
-            <v-img @click="goToHomePage('/')" class="mx-auto justify-center mb-2"
-              :src="require('~/static/img/logo/fppp-logo.png')"></v-img>
+            <v-img
+              @click="goToHomePage('/')"
+              class="mx-auto justify-center mb-2"
+              :src="require('~/static/img/logo/fppp-logo.png')"
+            ></v-img>
           </div>
           <v-divider></v-divider>
           <v-list-item class="mt-2">
-            <!-- <v-icon class="mr-2">mdi-shield-account</v-icon> -->
             <h4>
               Name :
               {{ $store.getters.getAdmin.fname }}
@@ -19,16 +31,16 @@
             </h4>
           </v-list-item>
           <v-list-item class="mt-2">
-            <!-- <v-icon class="mr-2">mdi-shield-account</v-icon> -->
             <h4>Level : {{ getAdminLevel }}</h4>
           </v-list-item>
         </v-list>
         <v-divider></v-divider>
-        <v-list nav>
+        <v-list nav rounded>
+          <v-subheader>จัดการทั่วไป</v-subheader>
           <v-list-item-group class="mb-1">
             <div v-for="menus in menu" :key="menus.id" :value="menu">
               <v-list-item :to="menus.path">
-                <v-list-item-icon>
+                <v-list-item-icon class="mr-0">
                   <v-icon>{{ menus.icon }} </v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
@@ -40,11 +52,16 @@
             </div>
           </v-list-item-group>
         </v-list>
-        <div v-if="$store.getters.getAdmin.type_id === 1">
-          <v-divider></v-divider>
+        <div v-if="$store.getters.getAdmin.type === 'SUPERADMIN'">
           <v-list nav>
+            <v-divider class="mx-4" />
+            <v-subheader>เฉพาะผู้ดูแลระบบ</v-subheader>
             <v-list-item-group class="mb-1">
-              <div v-for="super_admin_menus in super_admin_menu" :key="super_admin_menus.id" :value="menu">
+              <div
+                v-for="super_admin_menus in super_admin_menu"
+                :key="super_admin_menus.id"
+                :value="menu"
+              >
                 <v-list-item :to="super_admin_menus.path">
                   <v-list-item-icon>
                     <v-icon>{{ super_admin_menus.icon }} </v-icon>
@@ -57,24 +74,20 @@
                 </v-list-item>
               </div>
             </v-list-item-group>
+            <v-divider class="mx-4" />
           </v-list>
-          <v-divider></v-divider>
         </div>
       </v-navigation-drawer>
       <v-app-bar transparent fixed app :color="bg" elevation="3">
         <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-        <!-- <img
-          src="~/static/img/logo/rsu-logo.png"
-          class="ma-1"
-          width="auto"
-          height="50"
-        /> -->
         <h3>FPPP</h3>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-toolbar-title> {{ navPathName }}</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn text rounded><v-icon>mdi-cog</v-icon></v-btn>
-        <v-btn @click="logout_modal = true" text rounded><v-icon>mdi-logout-variant</v-icon></v-btn>
+        <v-btn @click="logout_modal = true" text rounded
+          ><v-icon>mdi-logout-variant</v-icon></v-btn
+        >
       </v-app-bar>
       <v-container>
         <Nuxt />
@@ -83,7 +96,9 @@
 
     <v-footer class="pa-0" height="30">
       <v-spacer></v-spacer>
-      <span class="mr-1">FPPP &copy; {{ new Date().getFullYear() }} developed by DIT CS</span>
+      <span class="mr-1"
+        >FPPP &copy; {{ new Date().getFullYear() }} developed by DIT CS</span
+      >
     </v-footer>
   </v-app>
 </template>
@@ -197,18 +212,18 @@ export default {
       await this.$store.dispatch('logout')
       this.$router.push('/auth/admin-login')
     },
-    goToHomePage(){
+    goToHomePage() {
       goTo('/')
-    }
+    },
   },
   computed: {
     navPathName() {
       return this.$store.getters.getPathName
     },
     getAdminLevel() {
-      if (this.$store.getters.getAdmin.type_id === 1) {
+      if (this.$store.getters.getAdmin.type === 'SUPERADMIN') {
         return 'super admin'
-      } else if (this.$store.getters.getAdmin.type_id === 2) {
+      } else if (this.$store.getters.getAdmin.type === 'ADMIN') {
         return 'admin'
       }
     },

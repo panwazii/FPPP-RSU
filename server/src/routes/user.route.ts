@@ -2,7 +2,7 @@ import express from 'express';
 import { createErrCodeJSON, createUnknownErrCodeJSON, HttpStatusCode } from '../tools/lib';
 import log from '../tools/log';
 import UserController from '../controllers/user.controller';
-import { authValid } from '../middleware/user.middleware';
+import { authValid, requestLog } from '../middleware/user.middleware';
 import { numberOrDefault } from '../tools/util';
 import ReserveController from '../controllers/reserve.controller';
 import ServiceController from '../controllers/service.controller';
@@ -154,7 +154,7 @@ userRouter.get('/getAllReserve', checkParamsEmpty, async (req, res) => {
 });
 
 // Cart
-userRouter.post('/createCartItem', checkBodyEmpty, authValid, async (req, res) => {
+userRouter.post('/createCartItem', checkBodyEmpty, authValid, requestLog, async (req, res) => {
     try {
         const userId = req.body.credentials.id;
         const equipmentInfoId = String(req.body.id);
@@ -178,7 +178,7 @@ userRouter.get('/getAllCart', authValid, async (req, res) => {
     }
 });
 
-userRouter.delete('/deleteCartItem', checkParamsEmpty, authValid, async (req, res) => {
+userRouter.delete('/deleteCartItem', checkParamsEmpty, authValid, requestLog,async (req, res) => {
     try {
         const cartItemId = String(req.query.id);
         await CartController.deleteItems(cartItemId);

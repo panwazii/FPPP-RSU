@@ -2,6 +2,7 @@ import Sequelize, { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import UserModel, { UserAttribute } from '../database/models/users.model';
+import UserTypeModel from '../database/models/user_types.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
@@ -53,7 +54,9 @@ class UserController {
             where: {
                 id: userID,
             },
-            raw: true,
+            include: [{
+                model: UserTypeModel, as: 'user_type'
+            }],
         });
     }
 

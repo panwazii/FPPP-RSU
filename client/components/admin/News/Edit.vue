@@ -1,16 +1,16 @@
 <template>
   <div>
     <ModalConfirm
-      :open="confirmModal"
-      :message="confirmMessage"
+      :open="modal.confirm.open"
+      :message="modal.confirm.message"
       :method="updateUser"
-      :confirm.sync="confirmModal"
+      :confirm.sync="modal.confirm.open"
     />
-    <ModalLoading :open="loading" :message="loadingMessage" />
+    <ModalLoading :open="modal.loading.open" :message="modal.loading.message" />
     <ModalComplete
-      :open="completeModal"
-      :message="completeMessage"
-      :complete.sync="completeModal"
+      :open="modal.complete.open"
+      :message="modal.complete.message"
+      :complete.sync="modal.complete.open"
     />
     <v-dialog
       persistent
@@ -19,55 +19,54 @@
       max-width="650"
       max-height="300"
     >
-      <v-card>
+      <v-card class="rounded-xl">
         <v-card-title class="text-h5">
           <v-icon justify="left" class="mr-3" size="50">mdi-pencil</v-icon>
-          Edit News
+          แก้ไขข่าว
         </v-card-title>
         <v-divider class="mb-3"></v-divider>
         <v-card-text>
           <v-row class="d-flex justify-center mt-3">
-            <v-col cols="8">
-              <v-row class="d-flex justify-center mt-3">
-                <v-col cols="8">
-                  <v-form ref="form" lazy-validation>
-                    <v-row class="mt-2">
-                      <v-col cols="12" sm="12">
-                        <v-text-field
-                          v-model="data.title"
-                          :rules="[(v) => !!v || 'title is required']"
-                          label="หัวข้อ"
-                          outlined
-                          required
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="12">
-                        <v-textarea
-                          v-model="data.details"
-                          :rules="[(v) => !!v || 'details is required']"
-                          label="เนื้อหา"
-                          outlined
-                          required
-                        ></v-textarea>
-                      </v-col>
-                      <v-col cols="12" sm="12">
-                        <v-img
-                          class="mx-auto"
-                          :src="data.picture"
-                          height="250"
-                          width="300"
-                        ></v-img>
-                      </v-col>
-                      <v-file-input
-                        v-model="data.file"
-                        label="รูปภาพ"
-                        filled
-                        prepend-icon="mdi-camera"
-                      ></v-file-input>
-                    </v-row>
-                  </v-form>
-                </v-col>
-              </v-row>
+            <v-col>
+              <v-form ref="form" lazy-validation>
+                <v-row class="mt-2">
+                  <v-col cols="12" sm="12">
+                    <v-text-field
+                      v-model="data.title"
+                      :rules="[(v) => !!v || 'โปรดระบุหัวข้อข่าว']"
+                      label="หัวข้อ"
+                      outlined
+                      required
+                      class="rounded-xl"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="12">
+                    <v-textarea
+                      v-model="data.details"
+                      :rules="[(v) => !!v || 'โปรดระบุเนื้อหาข่าว']"
+                      label="เนื้อหา"
+                      outlined
+                      required
+                      class="rounded-xl"
+                    ></v-textarea>
+                  </v-col>
+                  <v-col cols="12" sm="12">
+                    <v-img
+                      class="mx-auto"
+                      :src="data.picture"
+                      height="250"
+                      width="300"
+                    ></v-img>
+                  </v-col>
+                  <v-file-input
+                    v-model="data.file"
+                    label="รูปภาพ"
+                    filled
+                    prepend-icon="mdi-camera"
+                    class="rounded-xl"
+                  ></v-file-input>
+                </v-row>
+              </v-form>
             </v-col>
           </v-row>
         </v-card-text>
@@ -92,6 +91,7 @@
 <script>
 export default {
   props: {
+    method: { type: Function },
     open: {
       required: true,
     },
@@ -102,18 +102,18 @@ export default {
   data() {
     return {
       userTypes: null,
-      confirmModal: false,
-      confirmMessage: 'Confirm this change',
-      loading: false,
-      loadingMessage: 'Loading',
-      completeMessage: 'Create news complete',
-      completeModal: false,
       file: null,
+      modal: {
+        confirm: { open: false, message: 'Confirm this change?' },
+        loading: { open: false, message: 'Loading' },
+        complete: { open: false, message: 'Complete' },
+        error: { open: false, message: '' },
+      },
     }
   },
   methods: {
     confirm() {
-      this.confirmModal = true
+      this.modal.confirm.open = true
       //   this.$emit('update:editRoom', false)
     },
     cancel() {
@@ -121,7 +121,7 @@ export default {
     },
     async updateUser() {
       try {
-        this.loading = true
+        this.modal.loading.open = true
         let file = new FormData()
         file.append('file', this.data.file),
           file.append('id', this.data.id),
@@ -129,10 +129,11 @@ export default {
           file.append('details', this.data.details),
           await this.$store.dispatch('api/admin/updateNews', file)
         this.$emit('update:editNews', false)
-        this.loading = false
-        this.completeModal = true
+        this.modal.loading.open = false
+        this.modal.complete.open = true
+        this.method()
       } catch (error) {
-        this.loading = false
+        this.modal.loading.open = false
         console.log(error)
         this.$emit('update:editNews', false)
       }

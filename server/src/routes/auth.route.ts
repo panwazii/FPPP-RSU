@@ -81,10 +81,10 @@ authRouter.get('/admin/verify', async (req, res) => {
     const Decode = AdminController.verifyJWT(Token as string) as JwtPayload
     const AdminId = Decode.result.id
     const Data = await AdminController.getByID(AdminId)
-    if (Data!.type_id === 1) {
+    if (Data!.type === "SUPERADMIN") {
       return res.status(200).json({ type: "super-admin" });
     }
-    else if (Data!.type_id === 2) {
+    else if (Data!.type === "ADMIN") {
       return res.status(200).json({ type: "admin" });
     }
 

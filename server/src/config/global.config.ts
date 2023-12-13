@@ -11,6 +11,7 @@ const config: any = {
     superadminpassword: process.env.SUPER_ADMIN_PASSWORD,
     salt: process.env.SEC_SALT,
     loginDuration: process.env.SEC_LOGIN_DURATION,
+    hashRounds: process.env.SEC_HASH_ROUNDS,
   },
   firebase: {
     bucketName: process.env.FIREBASE_BUCKET_NAME,

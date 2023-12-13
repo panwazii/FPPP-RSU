@@ -1,10 +1,5 @@
 <template>
   <div>
-    <SharedGoToLoginModal
-      :open="modal.goToLogin.open"
-      :message="modal.goToLogin.message"
-      :goToLogin.sync="modal.goToLogin.open"
-    />
     <SharedBreadCrumbs title="รายละเอียดอุปกรณ์" :routes="routes" />
     <v-card min-height="800" class="rounded-xl mt-2 pa-4">
       <v-card-title v-if="!loading" class="text-h5 font-weight-bold">
@@ -40,7 +35,8 @@
               </div>
             </div>
             <v-btn
-              @click="modal.goToLogin.open = true"
+              v-if="!getCartItemId"
+              @click="$store.dispatch('addCartItem', $route.params.id)"
               x-large
               elevation="2"
               max-width="200"
@@ -48,6 +44,17 @@
               dark
             >
               <v-icon>mdi-cart-plus</v-icon>เพิ่มลงตระกร้า
+            </v-btn>
+            <v-btn
+              v-if="getCartItemId"
+              @click="$store.dispatch('removeCartItem', getCartItemId)"
+              x-large
+              elevation="2"
+              max-width="200"
+              class="text-h6 rounded-xl mt-8"
+              color="red"
+            >
+              <v-icon>mdi-cart-remove</v-icon>ลบออกจากตระกร้า
             </v-btn>
           </div>
         </v-col>
@@ -88,6 +95,18 @@ export default {
       this.equipmentInfo = equipment.equipment
       this.loading = false
     }
+  },
+  computed: {
+    getCartItemId() {
+      for (let i = 0; i < this.$store.getters.getCartItems.length; i++) {
+        if (
+          this.$store.getters.getCartItems[i].equipment_info_id ===
+          this.$route.params.id
+        ) {
+          return this.$store.getters.getCartItems[i].id
+        }
+      }
+    },
   },
   data() {
     return {
