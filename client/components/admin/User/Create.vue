@@ -14,7 +14,7 @@
     />
     <ModalError
       :open="modal.error.open"
-      :message="errorMessage"
+      :message="modal.error.message"
       :error.sync="modal.error.open"
     />
     <v-dialog

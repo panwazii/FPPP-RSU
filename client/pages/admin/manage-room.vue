@@ -22,8 +22,8 @@
       <v-data-table
         :headers="headers"
         :items="rooms"
-        :page.sync="page"
-        :items-per-page="itemsPerPage"
+        :page.sync="fetchOption.page"
+        :items-per-page="fetchOption.itemsPerPage"
         hide-default-footer
         class="elevation-1 rounded-xl"
         @page-count="pageCount = $event"
