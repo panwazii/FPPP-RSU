@@ -149,17 +149,18 @@ class UserController {
             email: data.email,
             avatar: data.avatar,
             tel: data.tel,
+            booking_permission: 'NONE',
         };
 
         return UserModel.create(packet)
     }
 
-    public static async update(data: any) {
+    public static async update(id: string, data: any) {
         return UserModel.update(
             data
             , {
                 where: {
-                    id: data.id,
+                    id
                 },
             })
     }

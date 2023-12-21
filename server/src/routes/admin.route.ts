@@ -65,6 +65,16 @@ adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
+
+adminRouter.post('/setUserBookingPermission', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        // const
+        // await UserController.update(req.query)
+    } catch (error) {
+        
+    }
+})
+
 //News
 adminRouter.get('/getSingleNews', checkParamsEmpty, authValid, async (req, res) => {
     try {
@@ -282,8 +292,7 @@ adminRouter.post('/updateUserType', checkBodyEmpty, authValid, async (req, res) 
 adminRouter.post('/updateUser', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
-        await UserController.update({
-            id: Data.id,
+        await UserController.update(Data.id,{
             fname: Data.fname,
             lname: Data.lname,
             type_id: Data.type_id,
