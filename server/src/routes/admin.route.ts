@@ -921,6 +921,27 @@ adminRouter.get('/getDropdownRoom', async (req, res) => {
     }
 });
 
+//tab 1&2
+adminRouter.post('/updateTab1', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const {title,content,picture} = req.body;
+        await WebInfoController.updateTab1(title,content,picture)
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.post('/updateTab2', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const {title,content,picture} = req.body;
+        await WebInfoController.updateTab2(title,content,picture)
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 export default adminRouter;
 
 
