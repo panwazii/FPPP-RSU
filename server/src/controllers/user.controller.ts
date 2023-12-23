@@ -155,7 +155,7 @@ class UserController {
         return UserModel.create(packet)
     }
 
-    public static async update(id: string, data: any) {
+    public static async update(id: string, data: UserAttribute) {
         return UserModel.update(
             data
             , {

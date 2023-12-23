@@ -1,12 +1,7 @@
 <template>
   <div>
-    <SharedGoToLoginModal
-      :open="modal.goToLogin.open"
-      :message="modal.goToLogin.message"
-      :goToLogin.sync="modal.goToLogin.open"
-    />
-    <SharedBreadCrumbs title="รายละเอียดห้องแลป" :routes="routes" />
-    <v-card min-height="800" class="rounded-xl mt-2 pa-4">
+    <SharedBreadCrumbs title="จองห้อง" :routes="routes" />
+    <v-card min-height="500" class="rounded-xl mt-2 pa-4">
       <v-card-title v-if="!loading" class="text-h5 font-weight-bold">
         {{ room.name }}
       </v-card-title>
@@ -23,36 +18,143 @@
             class="rounded-xl"
           />
         </v-col>
-        <v-col cols="12" md="6">
-          <v-skeleton-loader v-if="loading" type="text@2"></v-skeleton-loader>
-          <div v-if="!loading" justify="center" align="center">
-            <div class="d-flex justify-space-around">
-              <div class="text-h6 font-weight-bold">ราคา</div>
-              <div>
-                <v-chip class="text-h5 font-weight-bold">
-                  {{ room.rent_price }} บาท
-                </v-chip>
-              </div>
-            </div>
-            <v-btn
-              @click="modal.goToLogin.open = true"
-              x-large
-              elevation="2"
-              max-width="200"
-              class="text-h6 rounded-xl mt-8"
-              dark
-            >
-              <v-icon>mdi-cart-plus</v-icon>เพิ่มลงตระกร้า
-            </v-btn>
-          </div>
-        </v-col>
       </v-row>
-      <v-divider class="mt-4"></v-divider>
-      <div v-if="!loading" class="mt-4">
-        <div class="text-h6 font-weight-bold">รายละเอียด</div>
-        <div class="mt-2">{{ room.details }}</div>
-      </div>
       <v-skeleton-loader v-if="loading" type="article"></v-skeleton-loader>
+    </v-card>
+    <v-card min-height="300" class="rounded-xl mt-2 pa-4">
+      <v-card-title v-if="!loading" class="text-h5 font-weight-bold">
+        ตารางการใช้งาน
+      </v-card-title>
+      <v-card-text>
+        <v-sheet tile height="54" class="d-flex mb-2">
+          <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
+            <v-icon>mdi-chevron-left</v-icon>
+          </v-btn>
+          <v-select
+            v-model="calenda.type"
+            :items="calenda.types"
+            dense
+            outlined
+            hide-details
+            class="ma-2"
+            label="type"
+          ></v-select>
+          <v-select
+            v-model="calenda.mode"
+            :items="calenda.modes"
+            dense
+            outlined
+            hide-details
+            label="event-overlap-mode"
+            class="ma-2"
+          ></v-select>
+          <v-select
+            v-model="calenda.weekday"
+            :items="calenda.weekdays"
+            dense
+            outlined
+            hide-details
+            label="weekdays"
+            class="ma-2"
+          ></v-select>
+          <v-spacer></v-spacer>
+          <v-btn icon class="ma-2" @click="$refs.calendar.next()">
+            <v-icon>mdi-chevron-right</v-icon>
+          </v-btn>
+        </v-sheet>
+        <v-sheet max-height="600">
+          <v-calendar
+            ref="calendar"
+            v-model="calenda.value"
+            :weekdays="calenda.weekday"
+            :type="calenda.type"
+            :events="calenda.events"
+            :event-overlap-mode="calenda.mode"
+            :event-overlap-threshold="30"
+            :event-color="getEventColor"
+            @change="getEvents"
+          ></v-calendar>
+        </v-sheet>
+      </v-card-text>
+    </v-card>
+    <v-card min-height="300" class="rounded-xl mt-2 pa-4">
+      <v-card-title v-if="!loading" class="text-h5 font-weight-bold">
+        ข้อมูลผู้จอง
+      </v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col cols="12" md="4">
+            <v-text-field
+              class="rounded-xl"
+              outlined
+              :label="$store.getters.getUser.fname"
+              disabled
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="4">
+            <v-text-field
+              class="rounded-xl"
+              outlined
+              :label="$store.getters.getUser.lname"
+              disabled
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="4">
+            <v-text-field
+              class="rounded-xl"
+              outlined
+              :label="$store.getters.getUser.email"
+              disabled
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="4">
+            <v-text-field
+              class="rounded-xl"
+              outlined
+              :label="$store.getters.getUser.tel"
+              disabled
+            ></v-text-field>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+    <v-card min-height="300" class="rounded-xl mt-2 pa-4">
+      <v-card-title v-if="!loading" class="text-h5 font-weight-bold">
+        ระยะเวลาการจอง
+      </v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field
+              class="rounded-xl"
+              outlined
+              label="start"
+              disabled
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              class="rounded-xl"
+              outlined
+              label="end"
+              disabled
+            ></v-text-field>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+    <v-card min-height="300" class="rounded-xl mt-2 pa-4">
+      <v-card-title v-if="!loading" class="text-h5 font-weight-bold">
+        อุปกรณ์
+      </v-card-title>
+      <v-card-text>
+        <v-card v-for="i in 5" :key="i" class="rounded-xl mb-2">
+          <v-card-title> อุปกรณ์ {{ i + 1 }} </v-card-title>
+        </v-card>
+      </v-card-text>
+      <div class="d-flex justify-center">
+        <v-btn class="rounded-xl">add more</v-btn>
+      </div>
     </v-card>
   </div>
 </template>
@@ -99,7 +201,8 @@ export default {
       routes: [
         { id: 1, name: 'หน้าหลัก', to: '/user/home' },
         { id: 2, name: 'ห้องแลป', to: '/user/rooms' },
-        { id: 3, name: '', to: '/' },
+        { id: 3, name: '', to: `/user/rooms/${this.$route.params.id}` },
+        { id: 4, name: 'จอง', to: '/' },
       ],
       loading: true,
       modal: {
@@ -144,7 +247,40 @@ export default {
       },
     }
   },
-  methods: {},
+  methods: {
+    getEvents ({ start, end }) {
+        const events = []
+
+        const min = new Date(`${start.date}T00:00:00`)
+        const max = new Date(`${end.date}T23:59:59`)
+        const days = (max.getTime() - min.getTime()) / 86400000
+        const eventCount = this.rnd(days, days + 20)
+
+        for (let i = 0; i < eventCount; i++) {
+          const allDay = this.rnd(0, 3) === 0
+          const firstTimestamp = this.rnd(min.getTime(), max.getTime())
+          const first = new Date(firstTimestamp - (firstTimestamp % 900000))
+          const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
+          const second = new Date(first.getTime() + secondTimestamp)
+
+          events.push({
+            name: this.calenda.names[this.rnd(0, this.calenda.names.length - 1)],
+            start: first,
+            end: second,
+            color: this.calenda.colors[this.rnd(0, this.calenda.colors.length - 1)],
+            timed: !allDay,
+          })
+        }
+
+        this.calenda.events = events
+      },
+      getEventColor (event) {
+        return event.color
+      },
+      rnd (a, b) {
+        return Math.floor((b - a + 1) * Math.random()) + a
+      },
+  },
 }
 </script>
 <style scoped>

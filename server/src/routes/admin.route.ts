@@ -297,7 +297,6 @@ adminRouter.post('/updateUser', checkBodyEmpty, authValid, async (req, res) => {
             lname: Data.lname,
             type_id: Data.type_id,
             email: Data.email,
-            avatar: Data.avatar,
             tel: Data.tel,
             verify_status: Data.verify_status,
             available_status: Data.available_status,
