@@ -8,6 +8,7 @@ import ReserveController from '../controllers/reserve.controller';
 import ServiceController from '../controllers/service.controller';
 import { checkBodyEmpty, checkParamsEmpty } from '../middleware/validator.middleware';
 import CartController from '../controllers/cart.controller';
+import NotificationController from '../controllers/notification.controller';
 
 const userRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON();
@@ -182,6 +183,17 @@ userRouter.delete('/deleteCartItem', checkParamsEmpty, authValid, requestLog,asy
     try {
         const cartItemId = String(req.query.id);
         await CartController.deleteItems(cartItemId);
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+//notification
+userRouter.get('/getAllNotification', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const UserId = req.body.credentials.id;
+        await NotificationController.getAllAdmin(UserId)
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));

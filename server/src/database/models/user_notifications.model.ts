@@ -3,21 +3,21 @@ import {
 } from 'sequelize';
 import UserModel from './users.model';
 
-export interface NotificationAttribute {
+export interface UserNotificationAttribute {
     id?: string;
-    title?:string;
+    text?:string;
     user_id?: string;
     created_at?: Date;
     update_at?: Date;
-    read?: boolean;
+    status?: string;
 }
 
-export interface NotificationAttributeCreation extends Optional<NotificationAttribute, 'id'> { }
+export interface UserNotificationAttributeCreation extends Optional<UserNotificationAttribute, 'id'> { }
 
-class NotificationModel extends Model<NotificationAttribute, NotificationAttributeCreation> implements NotificationAttribute {
+class UserNotificationModel extends Model<UserNotificationAttribute, UserNotificationAttributeCreation> implements UserNotificationAttribute {
     declare id: string;
 
-    declare title: string;
+    declare text: string;
 
     declare user_id: string;
 
@@ -25,11 +25,11 @@ class NotificationModel extends Model<NotificationAttribute, NotificationAttribu
 
     declare update_at: Date;
 
-    declare read: boolean;
+    declare status: string;
 }
 
-export const initNotificationModel = (connection: Sequelize) => {
-    NotificationModel.init(
+export const initUserNotificationModel = (connection: Sequelize) => {
+    UserNotificationModel.init(
         {
             id: {
                 type: DataTypes.UUID,
@@ -37,7 +37,7 @@ export const initNotificationModel = (connection: Sequelize) => {
                 allowNull: false,
                 primaryKey: true,
             },
-            title: {
+            text: {
                 allowNull: false,
                 type: DataTypes.STRING,
             },
@@ -59,17 +59,17 @@ export const initNotificationModel = (connection: Sequelize) => {
                 type: DataTypes.DATE,
                 defaultValue: DataTypes.NOW,
             },
-            read: {
+            status: {
                 allowNull: false,
-                type: DataTypes.BOOLEAN,
+                type: DataTypes.ENUM('READ','UNREAD'),
             },
         },
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'notifications',
+            tableName: 'user_notifications',
         },
     );
 };
 
-export default NotificationModel;
+export default UserNotificationModel;

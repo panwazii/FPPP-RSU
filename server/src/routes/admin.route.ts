@@ -10,6 +10,7 @@ import UserTypeController from '../controllers/user_types.controller';
 import ReserveController from '../controllers/reserve.controller';
 import ServiceController from '../controllers/service.controller';
 import WebInfoController from '../controllers/web_info.controller';
+import NotificationController from '../controllers/notification.controller';
 import { authValid, requestLog } from '../middleware/admin.middleware';
 import { checkBodyEmpty, checkParamsEmpty } from '../middleware/validator.middleware';
 import { numberOrDefault } from '../tools/util';
@@ -935,6 +936,17 @@ adminRouter.post('/updateTab2', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const {title,content,picture} = req.body;
         await WebInfoController.updateTab2(title,content,picture)
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+//notification
+adminRouter.get('/getAllNotification', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const AdminId = req.body.credentials.id;
+        await NotificationController.getAllAdmin(AdminId)
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
