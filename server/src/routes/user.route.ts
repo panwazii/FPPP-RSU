@@ -122,7 +122,7 @@ userRouter.post('/update/password', checkBodyEmpty, authValid, (req, res) => {
 //     });
 // });
 
-userRouter.post('/createReserve', checkBodyEmpty, async (req, res) => {
+userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const newReserve = await ReserveController.createReserve(req.body)
         if (newReserve) {
@@ -137,7 +137,7 @@ userRouter.post('/createReserve', checkBodyEmpty, async (req, res) => {
 
 });
 
-userRouter.get('/getAllReserve', checkParamsEmpty, async (req, res) => {
+userRouter.get('/getAllReserve', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
@@ -179,7 +179,7 @@ userRouter.get('/getAllCart', authValid, async (req, res) => {
     }
 });
 
-userRouter.delete('/deleteCartItem', checkParamsEmpty, authValid, requestLog,async (req, res) => {
+userRouter.delete('/deleteCartItem', checkParamsEmpty, authValid, requestLog, async (req, res) => {
     try {
         const cartItemId = String(req.query.id);
         await CartController.deleteItems(cartItemId);

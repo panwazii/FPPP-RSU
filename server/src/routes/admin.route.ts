@@ -72,7 +72,7 @@ adminRouter.post('/setUserBookingPermission', checkParamsEmpty, authValid, async
         // const
         // await UserController.update(req.query)
     } catch (error) {
-        
+
     }
 })
 
@@ -163,7 +163,7 @@ adminRouter.post('/updateNews', checkBodyEmpty, multerUpload.single("file"), aut
 });
 
 //Room
-adminRouter.get('/getSingleRoom', checkParamsEmpty, async (req, res) => {
+adminRouter.get('/getSingleRoom', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const Id = req.query.id as string;
         const room = await RoomController.getByIDAdmin(Id)
@@ -192,7 +192,7 @@ adminRouter.get('/getAllRooms', authValid, async (req, res) => {
     }
 });
 
-adminRouter.post('/createRoom', checkBodyEmpty, multerUpload.single("file"), async (req, res) => {
+adminRouter.post('/createRoom', checkBodyEmpty, multerUpload.single("file"), authValid, async (req, res) => {
     try {
         const picture = req.file
         if (!picture) {
@@ -214,7 +214,7 @@ adminRouter.post('/createRoom', checkBodyEmpty, multerUpload.single("file"), asy
 
 });
 
-adminRouter.post('/createRoomPicture', checkBodyEmpty, multerUpload.single("file"), async (req, res) => {
+adminRouter.post('/createRoomPicture', checkBodyEmpty, multerUpload.single("file"), authValid, async (req, res) => {
     try {
         const picture = req.file;
         if (!picture) {
@@ -293,7 +293,7 @@ adminRouter.post('/updateUserType', checkBodyEmpty, authValid, async (req, res) 
 adminRouter.post('/updateUser', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
-        await UserController.update(Data.id,{
+        await UserController.update(Data.id, {
             fname: Data.fname,
             lname: Data.lname,
             type_id: Data.type_id,
@@ -332,7 +332,7 @@ adminRouter.get('/getSingleUser', checkParamsEmpty, authValid, async (req, res) 
     }
 });
 
-adminRouter.get('/getAllUsers', async (req, res) => {
+adminRouter.get('/getAllUsers', authValid, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
@@ -349,7 +349,7 @@ adminRouter.get('/getAllUsers', async (req, res) => {
     }
 });
 
-adminRouter.get('/getAllUserTypes', async (req, res) => {
+adminRouter.get('/getAllUserTypes', authValid, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
@@ -379,7 +379,7 @@ adminRouter.get('/getSingleEquipmentInfo', checkParamsEmpty, authValid, async (r
     }
 });
 
-adminRouter.get('/getAllEquipmentInfo', async (req, res) => {
+adminRouter.get('/getAllEquipmentInfo', authValid, async (req, res) => {
     try {
         const filterType = Number(req.query.filter);
         const searchValue = String(req.query.value);
@@ -398,7 +398,7 @@ adminRouter.get('/getAllEquipmentInfo', async (req, res) => {
     }
 });
 
-adminRouter.get('/getAllEquipmentInfoInRoom', checkParamsEmpty, async (req, res) => {
+adminRouter.get('/getAllEquipmentInfoInRoom', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
@@ -415,7 +415,7 @@ adminRouter.get('/getAllEquipmentInfoInRoom', checkParamsEmpty, async (req, res)
     }
 });
 
-adminRouter.post('/createEquipmentInfo', checkBodyEmpty, multerUpload.single("file"), async (req, res) => {
+adminRouter.post('/createEquipmentInfo', checkBodyEmpty, multerUpload.single("file"), authValid, async (req, res) => {
     try {
         const picture = req.file;
         if (!picture) {
@@ -472,7 +472,7 @@ adminRouter.get('/getSingleEquipmentStock', checkParamsEmpty, authValid, async (
     }
 });
 
-adminRouter.get('/getAllEquipmentStock', async (req, res) => {
+adminRouter.get('/getAllEquipmentStock', authValid, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
@@ -489,7 +489,7 @@ adminRouter.get('/getAllEquipmentStock', async (req, res) => {
     }
 });
 
-adminRouter.post('/createEquipmentStock', checkBodyEmpty, async (req, res) => {
+adminRouter.post('/createEquipmentStock', checkBodyEmpty, authValid, async (req, res) => {
     try {
         await EquipmentController.createEquipmentStock(req.body)
         res.status(200).json({ code: 200 });
@@ -511,7 +511,7 @@ adminRouter.post('/updateEquipmentStock', checkBodyEmpty, authValid, async (req,
 });
 
 // reserve
-adminRouter.get('/getSingleReserve', checkParamsEmpty, async (req, res) => {
+adminRouter.get('/getSingleReserve', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const id = req.query.id as string;
         const reserve = await ReserveController.getReserveByID(id)
@@ -521,7 +521,7 @@ adminRouter.get('/getSingleReserve', checkParamsEmpty, async (req, res) => {
     }
 });
 
-adminRouter.get('/getAllReserve', async (req, res) => {
+adminRouter.get('/getAllReserve', authValid, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
@@ -538,7 +538,7 @@ adminRouter.get('/getAllReserve', async (req, res) => {
     }
 });
 
-adminRouter.post('/createReserve', checkBodyEmpty, async (req, res) => {
+adminRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const equipment = req.body.equipment_info_id;
         const newReserve = await ReserveController.createReserve(req.body)
@@ -581,7 +581,7 @@ adminRouter.post('/updateReserveEquipment', checkBodyEmpty, authValid, async (re
 });
 
 //web info
-adminRouter.get('/getAllWebInfo', async (req, res) => {
+adminRouter.get('/getAllWebInfo', authValid, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 1);
         let Page = numberOrDefault(req.query.page, 0);
@@ -598,7 +598,7 @@ adminRouter.get('/getAllWebInfo', async (req, res) => {
     }
 });
 
-adminRouter.post('/updateWebInfo', checkBodyEmpty, multerUpload.single("file"), async (req, res) => {
+adminRouter.post('/updateWebInfo', checkBodyEmpty, multerUpload.single("file"), authValid, async (req, res) => {
     try {
         const Data = req.body;
         const picture = req.file;
@@ -624,7 +624,7 @@ adminRouter.post('/updateWebInfo', checkBodyEmpty, multerUpload.single("file"), 
 });
 
 //service
-adminRouter.get('/getSingleService', checkParamsEmpty, async (req, res) => {
+adminRouter.get('/getSingleService', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const id = req.query.id as string;
         const service = await ServiceController.getByID(id)
@@ -634,7 +634,7 @@ adminRouter.get('/getSingleService', checkParamsEmpty, async (req, res) => {
     }
 });
 
-adminRouter.get('/getAllService', async (req, res) => {
+adminRouter.get('/getAllService', authValid, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
@@ -651,7 +651,7 @@ adminRouter.get('/getAllService', async (req, res) => {
     }
 });
 
-adminRouter.post('/createService', checkBodyEmpty, multerUpload.single("file"), async (req, res) => {
+adminRouter.post('/createService', checkBodyEmpty, multerUpload.single("file"), authValid, async (req, res) => {
     try {
         const picture = req.file;
         if (!picture) {
@@ -686,7 +686,7 @@ adminRouter.post('/updateService', checkBodyEmpty, authValid, async (req, res) =
 });
 
 // Production Line
-adminRouter.get('/getSingleProductionLine', checkParamsEmpty, async (req, res) => {
+adminRouter.get('/getSingleProductionLine', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const id = req.query.id as string;
         const productionLine = await EquipmentController.getSingleEquipmentRentRate(id)
@@ -696,7 +696,7 @@ adminRouter.get('/getSingleProductionLine', checkParamsEmpty, async (req, res) =
     }
 });
 
-adminRouter.get('/getAllProductionLine', async (req, res) => {
+adminRouter.get('/getAllProductionLine', authValid, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
@@ -713,7 +713,7 @@ adminRouter.get('/getAllProductionLine', async (req, res) => {
     }
 });
 
-adminRouter.post('/createProductionLine', checkBodyEmpty, async (req, res) => {
+adminRouter.post('/createProductionLine', checkBodyEmpty, authValid, async (req, res) => {
     try {
         await EquipmentController.createProductionLine(req.body)
         res.status(200).json({ code: 200 });
@@ -733,7 +733,7 @@ adminRouter.post('/updateProductionLine', checkBodyEmpty, authValid, async (req,
 });
 
 //Equipment Rent Rate
-adminRouter.get('/getSingleEquipmentRentRate', checkParamsEmpty, async (req, res) => {
+adminRouter.get('/getSingleEquipmentRentRate', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const id = req.query.id as string;
         const equipmentRentRate = await EquipmentController.getSingleEquipmentRentRate(id)
@@ -743,7 +743,7 @@ adminRouter.get('/getSingleEquipmentRentRate', checkParamsEmpty, async (req, res
     }
 });
 
-adminRouter.get('/getAllEquipmentRentRate', async (req, res) => {
+adminRouter.get('/getAllEquipmentRentRate', authValid, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
@@ -760,7 +760,7 @@ adminRouter.get('/getAllEquipmentRentRate', async (req, res) => {
     }
 });
 
-adminRouter.post('/createEquipmentRentRate', checkBodyEmpty, async (req, res) => {
+adminRouter.post('/createEquipmentRentRate', checkBodyEmpty, authValid, async (req, res) => {
     try {
         await EquipmentController.createEquipmentRentRate(req.body)
         res.status(200).json({ code: 200 });
@@ -779,7 +779,7 @@ adminRouter.post('/updateEquipmentRentRate', checkBodyEmpty, authValid, async (r
     }
 });
 //Supply
-adminRouter.get('/getSingleSupplyStock', async (req, res) => {
+adminRouter.get('/getSingleSupplyStock', authValid, async (req, res) => {
     try {
         const id = Number(req.query.id);
         const supplyStock = await EquipmentController.getSingleSupplyStock(id)
@@ -789,7 +789,7 @@ adminRouter.get('/getSingleSupplyStock', async (req, res) => {
     }
 });
 
-adminRouter.get('/getAllSupplyStock', async (req, res) => {
+adminRouter.get('/getAllSupplyStock', authValid, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
@@ -806,7 +806,7 @@ adminRouter.get('/getAllSupplyStock', async (req, res) => {
     }
 });
 
-adminRouter.post('/createSupplyStock', checkBodyEmpty, async (req, res) => {
+adminRouter.post('/createSupplyStock', checkBodyEmpty, authValid, async (req, res) => {
     try {
         await EquipmentController.createSupplyStock(req.body)
         res.status(200).json({ code: 200 });
@@ -827,7 +827,7 @@ adminRouter.post('/updateSupplyStock', checkBodyEmpty, authValid, async (req, re
 });
 
 //Supplier
-adminRouter.get('/getSingleSupplier', checkParamsEmpty, async (req, res) => {
+adminRouter.get('/getSingleSupplier', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const id = Number(req.query.id);
         const supplier = await EquipmentController.getSingleSupplier(id)
@@ -837,7 +837,7 @@ adminRouter.get('/getSingleSupplier', checkParamsEmpty, async (req, res) => {
     }
 });
 
-adminRouter.get('/getAllSupplier', async (req, res) => {
+adminRouter.get('/getAllSupplier', authValid, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
@@ -877,7 +877,7 @@ adminRouter.post('/updateSupplier', checkBodyEmpty, authValid, async (req, res) 
 });
 
 //Drop down
-adminRouter.get('/getDropdownRentRate', async (req, res) => {
+adminRouter.get('/getDropdownRentRate', authValid, async (req, res) => {
     try {
         const data = await EquipmentController.getDropdownRentRate()
         res.status(200).json({
@@ -888,7 +888,7 @@ adminRouter.get('/getDropdownRentRate', async (req, res) => {
     }
 });
 
-adminRouter.get('/getDropdownProductionLine', async (req, res) => {
+adminRouter.get('/getDropdownProductionLine', authValid, async (req, res) => {
     try {
         const data = await EquipmentController.getDropdownProductionLine()
         res.status(200).json({
@@ -899,7 +899,7 @@ adminRouter.get('/getDropdownProductionLine', async (req, res) => {
     }
 });
 
-adminRouter.get('/getDropdownEquipmentInfo', async (req, res) => {
+adminRouter.get('/getDropdownEquipmentInfo', authValid, async (req, res) => {
     try {
         const data = await EquipmentController.getDropdownEquipmentInfo()
         res.status(200).json({
@@ -910,7 +910,7 @@ adminRouter.get('/getDropdownEquipmentInfo', async (req, res) => {
     }
 });
 
-adminRouter.get('/getDropdownRoom', async (req, res) => {
+adminRouter.get('/getDropdownRoom', authValid, async (req, res) => {
     try {
         const data = await RoomController.getDropdownRoom()
         res.status(200).json({
@@ -924,8 +924,8 @@ adminRouter.get('/getDropdownRoom', async (req, res) => {
 //tab 1&2
 adminRouter.post('/updateTab1', checkBodyEmpty, authValid, async (req, res) => {
     try {
-        const {title,content,picture} = req.body;
-        await WebInfoController.updateTab1(title,content,picture)
+        const { title, content, picture } = req.body;
+        await WebInfoController.updateTab1(title, content, picture)
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -934,8 +934,8 @@ adminRouter.post('/updateTab1', checkBodyEmpty, authValid, async (req, res) => {
 
 adminRouter.post('/updateTab2', checkBodyEmpty, authValid, async (req, res) => {
     try {
-        const {title,content,picture} = req.body;
-        await WebInfoController.updateTab2(title,content,picture)
+        const { title, content, picture } = req.body;
+        await WebInfoController.updateTab2(title, content, picture)
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
