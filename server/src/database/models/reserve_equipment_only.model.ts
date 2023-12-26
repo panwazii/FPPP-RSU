@@ -1,46 +1,46 @@
 import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
+import EquipmentInfoModel from './equipment_infos.model';
+import EquipmentStockModel from './equipments.model';
 import UserModel from './users.model';
-import RoomModel from './rooms.model';
 
-export interface ReserveAttribute {
+export interface ReserveEquipmentOnlyAttribute {
     id?: string;
     user_id?: string;
-    room_id?: string;
+    equipment_info_id?: string;
+    equipments_id?: string;
     time_start?: Date;
     time_end?: Date;
-    details?: string;
+    quantity?: number;
     approval_status?: string;
     available_status?: boolean;
-    created_at?: Date;
-    update_at?: Date;
 }
 
-export interface ReserveAttributeCreation extends Optional<ReserveAttribute, 'id'> { }
+export interface ReserveEquipmentOnlyAttributeCreation extends Optional<ReserveEquipmentOnlyAttribute, 'id'> { }
 
-
-
-class ReserveModel extends Model<ReserveAttribute, ReserveAttributeCreation> implements ReserveAttribute {
+class ReserveEquipmentOnlyModel extends Model<ReserveEquipmentOnlyAttribute, ReserveEquipmentOnlyAttributeCreation> implements ReserveEquipmentOnlyAttribute {
     declare id: string;
 
-    declare user_id: string;
+    declare user_id?: string;
 
-    declare room_id: string;
+    declare equipment_info_id: string;
+
+    declare equipments_id: string;
 
     declare time_start: Date;
 
     declare time_end: Date;
 
-    declare details: string;
+    declare quantity: number;
 
     declare approval_status: string;
 
     declare available_status: boolean;
 }
 
-export const initReserveModel = (connection: Sequelize) => {
-    ReserveModel.init(
+export const initReserveEquipmentOnlyModel = (connection: Sequelize) => {
+    ReserveEquipmentOnlyModel.init(
         {
             id: {
                 type: DataTypes.UUID,
@@ -56,11 +56,19 @@ export const initReserveModel = (connection: Sequelize) => {
                     key: 'id',
                 },
             },
-            room_id: {
+            equipment_info_id: {
+                type: DataTypes.UUID,
+                allowNull: false,
+                references: {
+                    model: EquipmentInfoModel,
+                    key: 'id',
+                },
+            },
+            equipments_id: {
                 type: DataTypes.UUID,
                 allowNull: true,
                 references: {
-                    model: RoomModel,
+                    model: EquipmentStockModel,
                     key: 'id',
                 },
             },
@@ -72,13 +80,14 @@ export const initReserveModel = (connection: Sequelize) => {
                 type: DataTypes.DATE,
                 allowNull: false,
             },
-            details: {
+            quantity: {
+                type: DataTypes.INTEGER,
                 allowNull: false,
-                type: DataTypes.TEXT,
+                defaultValue: 1
             },
             approval_status: {
                 allowNull: false,
-                type: DataTypes.ENUM('WAITING', 'RETURN_QUOTATION', 'CONFIRM'),
+                type: DataTypes.ENUM('WAITING','RETURN_QUOTATION','CONFIRM'),
             },
             available_status: {
                 allowNull: false,
@@ -88,9 +97,9 @@ export const initReserveModel = (connection: Sequelize) => {
         {
             sequelize: connection,
             timestamps: false,
-            tableName: 'reserve',
+            tableName: 'reserve_equipment_onlys',
         },
     );
 };
 
-export default ReserveModel;
+export default ReserveEquipmentOnlyModel;

@@ -521,7 +521,7 @@ adminRouter.get('/getSingleReserve', checkParamsEmpty, authValid, async (req, re
     }
 });
 
-adminRouter.get('/getAllReserve', authValid, async (req, res) => {
+adminRouter.get('/getAllReserveRoom', authValid, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
@@ -538,16 +538,19 @@ adminRouter.get('/getAllReserve', authValid, async (req, res) => {
     }
 });
 
-adminRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) => {
+adminRouter.post('/createReserveRoom', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const equipment = req.body.equipment_info_id;
         const newReserve = await ReserveController.createReserve(req.body)
         if (newReserve && equipment) {
             ReserveController.createReserveEquipment(newReserve.id, req.body)
-            res.status(200).json({ code: 200, newReserve });
+            res.status(200).json({ code: 200 });
         }
         else if (newReserve) {
-            res.status(200).json({ code: 200, newReserve });
+            res.status(200).json({ code: 200 });
+        }
+        else {
+            res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'RESERVE', 'ERROR'));
         }
         // else {
         //     res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -558,7 +561,7 @@ adminRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) =
 
 });
 
-adminRouter.post('/updateReserve', checkBodyEmpty, authValid, async (req, res) => {
+adminRouter.post('/updateReserveRoom', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
         await ReserveController.update(Data)
@@ -573,6 +576,57 @@ adminRouter.post('/updateReserveEquipment', checkBodyEmpty, authValid, async (re
     try {
         const Data = req.body;
         await ReserveController.updateReserveEquipment(Data)
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+// reserve equipment
+adminRouter.get('/getSingleReserveEquipmentOnly', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const id = req.query.id as string;
+        const reserve = await ReserveController.getReserveEquipmentByID(id)
+        res.status(200).json({ code: 200, reserve });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.get('/getAllReserveEquipmentOnly', authValid, async (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        const allReserve = await ReserveController.getAllReserveEquipment(Limit, Offset)
+        res.status(200).json({
+            code: 200, reserves: allReserve.rows, total_pages: Math.ceil(allReserve.count / Limit)
+        });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.post('/createReserveEquipmentOnly', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        await ReserveController.createReserveEquipmentOnly(req.body)
+        res.status(200).json({ code: 200 });
+        // else {
+        //     res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+        // }
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+
+});
+
+adminRouter.post('/updateReserveEquipmentOnly', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const Data = req.body;
+        await ReserveController.updateReserveEquipmentOnly(Data)
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));

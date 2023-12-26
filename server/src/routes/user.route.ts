@@ -122,13 +122,19 @@ userRouter.post('/update/password', checkBodyEmpty, authValid, (req, res) => {
 //     });
 // });
 
+// reserve
 userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
+        const equipment = req.body.equipment_info_id;
         const newReserve = await ReserveController.createReserve(req.body)
-        if (newReserve) {
+        if (newReserve && equipment) {
             ReserveController.createReserveEquipment(newReserve.id, req.body)
             res.json({ code: 200 });
-        } else {
+        }
+        else if (newReserve) {
+            res.status(200).json({ code: 200 });
+        }
+        else {
             res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'RESERVE', 'ERROR'));
         }
     } catch (error) {
@@ -139,13 +145,32 @@ userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) =>
 
 userRouter.get('/getAllReserve', checkParamsEmpty, authValid, async (req, res) => {
     try {
+        const userId = req.body.credentials.id;
         const Limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
         const Offset = Limit * Page;
-        const allReserve = await ReserveController.getAllReserveAndChildForUser(req.query.id as string, Limit, Offset)
+        const allReserve = await ReserveController.getAllReserveAndChildForUser(userId, Limit, Offset)
+        res.status(200).json({
+            code: 200, reserve: allReserve.rows, total_pages: Math.ceil(allReserve.count / Limit)
+        });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+userRouter.get('/getAllReserveEquipment', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const userId = req.body.credentials.id;
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        const allReserve = await ReserveController.getAllReserveEquipmentUser(userId, Limit, Offset)
         res.status(200).json({
             code: 200, reserve: allReserve.rows, total_pages: Math.ceil(allReserve.count / Limit)
         });

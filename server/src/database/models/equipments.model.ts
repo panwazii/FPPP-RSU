@@ -14,8 +14,8 @@ export interface EquipmentsAttribute {
     supplier_id?: number;
     equipment_status?: string;
     available_status?: boolean;
-    created_at?: string;
-    update_at?: string;
+    created_at?: Date;
+    update_at?: Date;
 }
 
 export interface EquipmentsAttributeCreation extends Optional<EquipmentsAttribute, 'id'> { }

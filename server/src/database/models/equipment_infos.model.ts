@@ -16,8 +16,6 @@ export interface EquipmentInfoAttribute {
     rent_rate_id?: number;
     production_line_id?: number;
     available_status?: boolean;
-    created_at?: string;
-    update_at?: string;
 }
 
 export interface EquipmentInfoAttributeCreation extends Optional<EquipmentInfoAttribute, 'id'> { }
