@@ -90,32 +90,18 @@
           </v-card-text>
 
           <v-row>
-            <v-col cols="12" md="6">
-              <p class="subtitle-1">วันที่เริ่มจอง</p>
+            <v-col cols="12">
+              <p class="subtitle-1">วันที่จอง</p>
               <v-text-field
                 class="rounded-xl"
                 v-model="date_start"
                 outlined
                 dense
                 hide-details
+                disabled
               >
                 <template v-slot:append-outer>
                   <UserCartDatePicker v-model="date_start" />
-                </template>
-              </v-text-field>
-            </v-col>
-
-            <v-col cols="12" md="6">
-              <p class="subtitle-1">วันที่สิ้นสุดการจอง</p>
-              <v-text-field
-                class="rounded-xl"
-                v-model="date_end"
-                outlined
-                dense
-                hide-details
-              >
-                <template v-slot:append-outer>
-                  <UserCartDatePicker v-model="date_end" />
                 </template>
               </v-text-field>
             </v-col>
@@ -130,6 +116,7 @@
                 outlined
                 dense
                 hide-details
+                disabled
               >
                 <template v-slot:append-outer>
                   <UserCartTimePicker v-model="time_start" />
@@ -145,6 +132,7 @@
                 outlined
                 dense
                 hide-details
+                disabled
               >
                 <template v-slot:append-outer>
                   <UserCartTimePicker v-model="time_end" />
@@ -168,19 +156,6 @@
               v-for="item in cartItems"
               :key="item.id"
             >
-              <!-- <v-list>
-        <v-list-item-avatar size="90" class="ml-2">
-            <v-img
-            class="rounded-xl"
-            contain
-            height="100"
-            width="133"
-            aspect-ratio="1.3333"
-            :src="item.equipment.picture"
-          />
-        </v-list-item-avatar>
-      </v-list> -->
-
               <v-row no-gutters class="flex-nowrap bg-surface-variant">
                 <v-col cols="2" class="flex-grow-0 flex-shrink-0">
                   <v-img
@@ -224,12 +199,11 @@
           </div>
 
           <v-row class="justify-center mt-12 mb-12">
-            <v-btn class="rounded-xl mx-5" color="primary" @click="step = 3">
-              ต่อไป
-            </v-btn>
-
             <v-btn class="rounded-xl mx-5" color="primary" @click="step = 1">
               ถอยกลับ
+            </v-btn>
+            <v-btn class="rounded-xl mx-5" color="primary" @click="step = 3">
+              ต่อไป
             </v-btn>
           </v-row>
         </v-stepper-content>
@@ -307,11 +281,10 @@
           </v-card-text>
 
           <v-row class="justify-center mt-12 mb-12">
-            <v-btn class="rounded-xl mx-5" color="primary"> ชำระเงิน </v-btn>
-
             <v-btn class="rounded-xl mx-5" color="primary" @click="step = 2">
               ถอยกลับ
             </v-btn>
+            <v-btn class="rounded-xl mx-5" color="primary"> ชำระเงิน </v-btn>
           </v-row>
         </v-stepper-content>
       </v-stepper-items>

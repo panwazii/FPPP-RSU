@@ -1,161 +1,250 @@
 <template>
-  <div>
+  <div class="ma-4">
     <SharedBreadCrumbs title="จองห้อง" :routes="routes" />
-    <v-card min-height="500" class="rounded-xl mt-2 pa-4">
-      <v-card-title v-if="!loading" class="text-h5 font-weight-bold">
-        {{ room.name }}
-      </v-card-title>
-      <v-skeleton-loader v-if="loading" type="card-heading"></v-skeleton-loader>
-      <v-row justify="center" align="center">
-        <v-col cols="12" md="6">
-          <v-img
-            contain
-            aspect-ratio="1.3333"
-            width="640"
-            height="480"
-            :src="picture"
-            :lazy-src="require('~/static/img/default/no-image.png')"
-            class="rounded-xl"
-          />
-        </v-col>
-      </v-row>
-      <v-skeleton-loader v-if="loading" type="article"></v-skeleton-loader>
-    </v-card>
-    <v-card min-height="300" class="rounded-xl mt-2 pa-4">
-      <v-card-title v-if="!loading" class="text-h5 font-weight-bold">
-        ตารางการใช้งาน
-      </v-card-title>
-      <v-card-text>
-        <v-sheet tile height="54" class="d-flex mb-2">
-          <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
-            <v-icon>mdi-chevron-left</v-icon>
-          </v-btn>
-          <v-select
-            v-model="calenda.type"
-            :items="calenda.types"
-            dense
-            outlined
-            hide-details
-            class="ma-2"
-            label="type"
-          ></v-select>
-          <v-select
-            v-model="calenda.mode"
-            :items="calenda.modes"
-            dense
-            outlined
-            hide-details
-            label="event-overlap-mode"
-            class="ma-2"
-          ></v-select>
-          <v-select
-            v-model="calenda.weekday"
-            :items="calenda.weekdays"
-            dense
-            outlined
-            hide-details
-            label="weekdays"
-            class="ma-2"
-          ></v-select>
-          <v-spacer></v-spacer>
-          <v-btn icon class="ma-2" @click="$refs.calendar.next()">
-            <v-icon>mdi-chevron-right</v-icon>
-          </v-btn>
-        </v-sheet>
-        <v-sheet max-height="600">
-          <v-calendar
-            ref="calendar"
-            v-model="calenda.value"
-            :weekdays="calenda.weekday"
-            :type="calenda.type"
-            :events="calenda.events"
-            :event-overlap-mode="calenda.mode"
-            :event-overlap-threshold="30"
-            :event-color="getEventColor"
-            @change="getEvents"
-          ></v-calendar>
-        </v-sheet>
-      </v-card-text>
-    </v-card>
-    <v-card min-height="300" class="rounded-xl mt-2 pa-4">
-      <v-card-title v-if="!loading" class="text-h5 font-weight-bold">
-        ข้อมูลผู้จอง
-      </v-card-title>
-      <v-card-text>
-        <v-row>
-          <v-col cols="12" md="4">
-            <v-text-field
-              class="rounded-xl"
-              outlined
-              :label="$store.getters.getUser.fname"
-              disabled
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="4">
-            <v-text-field
-              class="rounded-xl"
-              outlined
-              :label="$store.getters.getUser.lname"
-              disabled
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="4">
-            <v-text-field
-              class="rounded-xl"
-              outlined
-              :label="$store.getters.getUser.email"
-              disabled
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="4">
-            <v-text-field
-              class="rounded-xl"
-              outlined
-              :label="$store.getters.getUser.tel"
-              disabled
-            ></v-text-field>
-          </v-col>
-        </v-row>
-      </v-card-text>
-    </v-card>
-    <v-card min-height="300" class="rounded-xl mt-2 pa-4">
-      <v-card-title v-if="!loading" class="text-h5 font-weight-bold">
-        ระยะเวลาการจอง
-      </v-card-title>
-      <v-card-text>
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-text-field
-              class="rounded-xl"
-              outlined
-              label="start"
-              disabled
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              class="rounded-xl"
-              outlined
-              label="end"
-              disabled
-            ></v-text-field>
-          </v-col>
-        </v-row>
-      </v-card-text>
-    </v-card>
-    <v-card min-height="300" class="rounded-xl mt-2 pa-4">
-      <v-card-title v-if="!loading" class="text-h5 font-weight-bold">
-        อุปกรณ์
-      </v-card-title>
-      <v-card-text>
-        <v-card v-for="i in 5" :key="i" class="rounded-xl mb-2">
-          <v-card-title> อุปกรณ์ {{ i + 1 }} </v-card-title>
-        </v-card>
-      </v-card-text>
-      <div class="d-flex justify-center">
-        <v-btn class="rounded-xl">add more</v-btn>
-      </div>
-    </v-card>
+    <v-stepper v-model="step" class="rounded-xl">
+      <v-stepper-header>
+        <v-stepper-step :complete="step > 1" step="1">
+          ขั้นตอนที่ 1
+        </v-stepper-step>
+
+        <v-divider></v-divider>
+
+        <v-stepper-step step="2"> ขั้นตอนที่ 2 </v-stepper-step>
+      </v-stepper-header>
+
+      <v-stepper-items>
+        <v-stepper-content step="1">
+          <v-card-title v-if="!loading" class="text-h5 font-weight-bold">
+            {{ room.name }}
+          </v-card-title>
+          <v-skeleton-loader
+            v-if="loading"
+            type="card-heading"
+          ></v-skeleton-loader>
+          <v-row justify="center" align="center">
+            <v-col cols="12" md="6">
+              <v-img
+                contain
+                aspect-ratio="1.3333"
+                width="640"
+                height="480"
+                :src="picture"
+                :lazy-src="require('~/static/img/default/no-image.png')"
+                class="rounded-xl"
+              />
+            </v-col>
+          </v-row>
+          <v-skeleton-loader v-if="loading" type="article"></v-skeleton-loader>
+
+          <v-card-title> ข้อมูลส่วนตัว </v-card-title>
+          <v-card-subtitle class="subtitle-1 mb-4">
+            รายละเอียดข้อมูลส่วนตัว
+          </v-card-subtitle>
+          <v-card-text>
+            <v-row>
+              <v-col cols="12" md="4">
+                <v-text-field
+                  class="rounded-xl"
+                  v-model="UserInfo.fname"
+                  outlined
+                  disabled
+                  label="ชื่อจริง"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-text-field
+                  class="rounded-xl"
+                  v-model="UserInfo.lname"
+                  outlined
+                  disabled
+                  label="นามสกุล"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-text-field
+                  class="rounded-xl"
+                  v-model="UserInfo.tel"
+                  outlined
+                  disabled
+                  label="เบอร์ติดต่อ"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  class="rounded-xl"
+                  v-model="UserInfo.email"
+                  outlined
+                  disabled
+                  label="อีเมล"
+                  required
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="12" md="6">
+                <v-text-field
+                  class="rounded-xl"
+                  v-model="UserInfo.type_id"
+                  outlined
+                  disabled
+                  label="ประเภทผู้ใช้"
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="12">
+                <v-textarea
+                  class="rounded-xl"
+                  v-model="etc"
+                  outlined
+                  label="หมายเหตุ"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+            <v-divider class="my-5"></v-divider>
+          </v-card-text>
+
+          <v-row>
+            <v-col cols="12">
+              <p class="subtitle-1">วันที่จอง</p>
+              <v-text-field
+                class="rounded-xl"
+                v-model="date_start"
+                outlined
+                dense
+                hide-details
+                disabled
+              >
+                <template v-slot:append-outer>
+                  <UserCartDatePicker v-model="date_start" />
+                </template>
+              </v-text-field>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col cols="12" md="6">
+              <p class="subtitle-1">เวลาเริ่มจอง</p>
+              <v-text-field
+                class="rounded-xl"
+                v-model="time_start"
+                outlined
+                dense
+                hide-details
+                disabled
+              >
+                <template v-slot:append-outer>
+                  <UserCartTimePicker v-model="time_start" />
+                </template>
+              </v-text-field>
+            </v-col>
+
+            <v-col cols="12" md="6">
+              <p class="subtitle-1">เวลาที่สิ้นสุดการจอง</p>
+              <v-text-field
+                class="rounded-xl"
+                v-model="time_end"
+                outlined
+                dense
+                hide-details
+                disabled
+              >
+                <template v-slot:append-outer>
+                  <UserCartTimePicker v-model="time_end" />
+                </template>
+              </v-text-field>
+            </v-col>
+          </v-row>
+
+          <v-row class="justify-center mt-12 mb-12">
+            <v-btn class="rounded-xl" color="primary" @click="step = 2">
+              ต่อไป
+            </v-btn>
+          </v-row>
+        </v-stepper-content>
+
+        <v-stepper-content step="2">
+          <v-card-title> ยืนยันข้อมูล </v-card-title>
+          <v-card-subtitle class="subtitle-1 mb-4">
+            โปรดเช็ครายละเอียดก่อนกดชำระเงิน
+          </v-card-subtitle>
+          <v-card-text>
+            <v-row>
+              <v-col cols="12" md="4">
+                <v-text-field
+                  class="rounded-xl"
+                  v-model="UserInfo.fname"
+                  outlined
+                  disabled
+                  label="ชื่อจริง"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-text-field
+                  class="rounded-xl"
+                  v-model="UserInfo.lname"
+                  outlined
+                  disabled
+                  label="นามสกุล"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-text-field
+                  class="rounded-xl"
+                  v-model="UserInfo.tel"
+                  outlined
+                  disabled
+                  label="เบอร์ติดต่อ"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  class="rounded-xl"
+                  v-model="UserInfo.email"
+                  outlined
+                  disabled
+                  label="อีเมล"
+                  required
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="12" md="6">
+                <v-text-field
+                  class="rounded-xl"
+                  v-model="UserInfo.type_id"
+                  outlined
+                  disabled
+                  label="ประเภทผู้ใช้"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-divider class="mt-5 mb-5"></v-divider>
+            <h1>ราคาการจองห้อง {{ room.rent_price }} บาท</h1>
+            <v-divider class="mt-5 mb-5"></v-divider>
+            <v-col cols="12">
+              <v-textarea
+                class="rounded-xl"
+                v-model="etc"
+                outlined
+                disabled
+                label="หมายเหตุ"
+              ></v-textarea>
+            </v-col>
+          </v-card-text>
+
+          <v-row class="justify-center mt-12 mb-12">
+            <v-btn class="rounded-xl mx-5" color="primary" @click="step = 1">
+              ถอยกลับ
+            </v-btn>
+            <v-btn class="rounded-xl mx-5" color="primary"> ชำระเงิน </v-btn>
+          </v-row>
+        </v-stepper-content>
+      </v-stepper-items>
+    </v-stepper>
   </div>
 </template>
 <script>
@@ -170,16 +259,27 @@ export default {
     let room = await this.$store.dispatch('api/public/getSingleRoom', {
       params: { id: this.id },
     })
-    if (!room) {
+    let Data = await this.$store.dispatch('api/user/getUserInfo', {
+      params: { id: this.id },
+    })
+    let Equips = await this.$store.dispatch(
+      'api/user/getAllEquipmentInfoInRoom',
+      {
+        params: { id: this.id },
+      }
+    )
+    if ((!room, !Data)) {
       this.$nuxt.error({
         statusCode: 404,
-        message: ' Room Not found ' + this.id,
+        message: ' Room or User Not found ' + this.id,
       })
       return
     } else {
       this.room = room.room[0]
       this.routes[2].name = room.room[0].name
       this.loading = false
+      this.UserInfo = Data.user
+      this.Equipments = Equips.data
     }
   },
   computed: {
@@ -195,9 +295,23 @@ export default {
       }
     },
   },
+  head() {
+    return {
+      title: 'ตะกร้า',
+    }
+  },
   data() {
     return {
+      step: 1,
+      date_start: null,
+      date_end: null,
+      time_start: null,
+      time_end: null,
+      Equipments: [],
+      foo: 0,
+      etc: '',
       room: {},
+      UserInfo: [],
       routes: [
         { id: 1, name: 'หน้าหลัก', to: '/user/home' },
         { id: 2, name: 'ห้องแลป', to: '/user/rooms' },
@@ -211,77 +325,17 @@ export default {
           message: 'กรุณาเข้าสู่ระบบเพื่อใช้งานบริการทั้งหมด',
         },
       },
-      calenda: {
-        type: 'month',
-        types: ['month', 'week', 'day', '4day'],
-        mode: 'stack',
-        modes: ['stack', 'column'],
-        weekday: [0, 1, 2, 3, 4, 5, 6],
-        weekdays: [
-          { text: 'Sun - Sat', value: [0, 1, 2, 3, 4, 5, 6] },
-          { text: 'Mon - Sun', value: [1, 2, 3, 4, 5, 6, 0] },
-          { text: 'Mon - Fri', value: [1, 2, 3, 4, 5] },
-          { text: 'Mon, Wed, Fri', value: [1, 3, 5] },
-        ],
-        value: '',
-        events: [],
-        colors: [
-          'blue',
-          'indigo',
-          'deep-purple',
-          'cyan',
-          'green',
-          'orange',
-          'grey darken-1',
-        ],
-        names: [
-          'Meeting',
-          'Holiday',
-          'PTO',
-          'Travel',
-          'Event',
-          'Birthday',
-          'Conference',
-          'Party',
-        ],
-      },
     }
   },
   methods: {
-    getEvents ({ start, end }) {
-        const events = []
-
-        const min = new Date(`${start.date}T00:00:00`)
-        const max = new Date(`${end.date}T23:59:59`)
-        const days = (max.getTime() - min.getTime()) / 86400000
-        const eventCount = this.rnd(days, days + 20)
-
-        for (let i = 0; i < eventCount; i++) {
-          const allDay = this.rnd(0, 3) === 0
-          const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-          const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-          const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
-          const second = new Date(first.getTime() + secondTimestamp)
-
-          events.push({
-            name: this.calenda.names[this.rnd(0, this.calenda.names.length - 1)],
-            start: first,
-            end: second,
-            color: this.calenda.colors[this.rnd(0, this.calenda.colors.length - 1)],
-            timed: !allDay,
-          })
-        }
-
-        this.calenda.events = events
-      },
-      getEventColor (event) {
-        return event.color
-      },
-      rnd (a, b) {
-        return Math.floor((b - a + 1) * Math.random()) + a
-      },
+    increment() {
+      this.foo = parseInt(this.foo, 10) + 1
+    },
+    decrement() {
+      this.foo = parseInt(this.foo, 10) - 1
+    },
   },
 }
 </script>
-<style scoped>
-</style>
+
+<style scoped></style>
