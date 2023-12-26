@@ -6,6 +6,7 @@ import { authValid, requestLog } from '../middleware/user.middleware';
 import { numberOrDefault } from '../tools/util';
 import ReserveController from '../controllers/reserve.controller';
 import ServiceController from '../controllers/service.controller';
+import EquipmentController from '../controllers/equipment.controller';
 import { checkBodyEmpty, checkParamsEmpty } from '../middleware/validator.middleware';
 import CartController from '../controllers/cart.controller';
 import NotificationController from '../controllers/notification.controller';
@@ -235,6 +236,23 @@ userRouter.get('/getAllNotification', checkParamsEmpty, authValid, async (req, r
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+userRouter.get('/getAllEquipmentInfoInRoom', checkParamsEmpty, async (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        const data = await EquipmentController.getAllEquipmentInfoInRoomPublic(req.query.id as string, Limit, Offset)
+        res.status(200).json({
+            code: 200, equipments: data.rows, total_pages: Math.ceil(data.count / Limit), count: data.count
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
     }
 });
 
