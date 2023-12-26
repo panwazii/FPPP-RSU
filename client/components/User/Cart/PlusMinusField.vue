@@ -73,10 +73,11 @@ export default {
   display: inline-block;
 }
 .minusplusnumber #field_container input {
-  width: 50px;
+  width: 30px;
+  max-width: 50px;
   text-align: center;
   font-size: 15px;
-  padding: 3px;
+  padding: 1px;
   border: none;
 }
 .minusplusnumber .mpbtn {
