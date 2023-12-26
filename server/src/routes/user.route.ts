@@ -143,6 +143,19 @@ userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) =>
 
 });
 
+userRouter.post('/createReserveEquipmentOnly', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        await ReserveController.createReserveEquipmentOnly(req.body)
+        res.status(200).json({ code: 200 });
+        // else {
+        //     res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+        // }
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+
+});
+
 userRouter.get('/getAllReserve', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const userId = req.body.credentials.id;
