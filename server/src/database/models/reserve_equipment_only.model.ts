@@ -87,7 +87,7 @@ export const initReserveEquipmentOnlyModel = (connection: Sequelize) => {
             },
             approval_status: {
                 allowNull: false,
-                type: DataTypes.ENUM('WAITING','RETURN_QUOTATION','CONFIRM'),
+                type: DataTypes.ENUM('WAITING', 'RETURN_QUOTATION', 'CONFIRM_QUOTATION', 'CONFIRM'),
             },
             available_status: {
                 allowNull: false,
