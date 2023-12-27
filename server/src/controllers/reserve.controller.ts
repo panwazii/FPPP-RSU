@@ -1,6 +1,7 @@
 import ReserveModel, { ReserveAttribute } from '../database/models/reserve.model';
 import ReserveEquipmentModel, { ReserveEquipmentAttribute } from '../database/models/reserve_equipments.model';
 import ReserveEquipmentOnlyModel, { ReserveEquipmentOnlyAttribute } from '../database/models/reserve_equipment_only.model';
+import { Op } from 'sequelize';
 
 class ReserveController {
     public static async getReserveByID(id: string) {
@@ -15,10 +16,14 @@ class ReserveController {
         });
     }
 
-    public static async getAllReserveAndChildForUser(id: string, limit: number, offset: number) {
+    public static async getAllReserveAndChildForUser(searchValue: string, id: string, limit: number, offset: number) {
         return ReserveModel.findAndCountAll({
             distinct: true,
-            where: { user_id: id, available_status: true },
+            where: {
+                user_id: id,
+                approval_status: { [Op.like]: '%' + searchValue + '%' },
+                available_status: true
+            },
             include: [{
                 model: ReserveEquipmentModel,
             }],
@@ -27,10 +32,13 @@ class ReserveController {
         });
     }
 
-    public static async getAllReserveAndChild(limit: number, offset: number) {
+    public static async getAllReserveAndChild(searchValue: string, limit: number, offset: number) {
         return ReserveModel.findAndCountAll({
             distinct: true,
-            where: { available_status: true },
+            where: {
+                approval_status: { [Op.like]: '%' + searchValue + '%' },
+                available_status: true
+            },
             include: [{
                 model: ReserveEquipmentModel,
                 where: { available_status: true },
@@ -94,63 +102,63 @@ class ReserveController {
     }
 
     // reserve equipment
-    public static async getReserveEquipmentByID(id: string) {
-        return ReserveEquipmentOnlyModel.findOne({
-            where: {
-                id: id,
-            },
-            raw: true
-        });
-    }
+    // public static async getReserveEquipmentByID(id: string) {
+    //     return ReserveEquipmentOnlyModel.findOne({
+    //         where: {
+    //             id: id,
+    //         },
+    //         raw: true
+    //     });
+    // }
 
-    public static async getAllReserveEquipment(limit: number, offset: number) {
-        return ReserveEquipmentOnlyModel.findAndCountAll({
-            where: { available_status: true },
-            limit,
-            offset,
-            raw: true
+    // public static async getAllReserveEquipment(limit: number, offset: number) {
+    //     return ReserveEquipmentOnlyModel.findAndCountAll({
+    //         where: { available_status: true },
+    //         limit,
+    //         offset,
+    //         raw: true
 
-        });
-    }
+    //     });
+    // }
 
-    public static async getAllReserveEquipmentUser(id: string, limit: number, offset: number) {
-        return ReserveEquipmentOnlyModel.findAndCountAll({
-            where: { user_id: id, available_status: true },
-            limit,
-            offset,
-            raw: true
+    // public static async getAllReserveEquipmentUser(id: string, limit: number, offset: number) {
+    //     return ReserveEquipmentOnlyModel.findAndCountAll({
+    //         where: { user_id: id, available_status: true },
+    //         limit,
+    //         offset,
+    //         raw: true
 
-        });
-    }
+    //     });
+    // }
 
-    public static async createReserveEquipmentOnly(data: ReserveEquipmentOnlyAttribute) {
-        const packet: ReserveEquipmentOnlyAttribute = {
-            user_id: data.user_id,
-            equipment_info_id: data.equipment_info_id,
-            equipments_id: data.equipments_id,
-            time_start: data.time_start,
-            time_end: data.time_end,
-            quantity: data.quantity,
-            available_status: true,
-        };
+    // public static async createReserveEquipmentOnly(data: ReserveEquipmentOnlyAttribute) {
+    //     const packet: ReserveEquipmentOnlyAttribute = {
+    //         user_id: data.user_id,
+    //         equipment_info_id: data.equipment_info_id,
+    //         equipments_id: data.equipments_id,
+    //         time_start: data.time_start,
+    //         time_end: data.time_end,
+    //         quantity: data.quantity,
+    //         available_status: true,
+    //     };
 
-        return ReserveEquipmentOnlyModel.create(packet)
-    }
+    //     return ReserveEquipmentOnlyModel.create(packet)
+    // }
 
-    public static async updateReserveEquipmentOnly(data: any) {
-        return ReserveEquipmentOnlyModel.update({
-            equipment_info_id: data.equipment_info_id,
-            equipments_id: data.equipments_id,
-            time_start: data.time_start,
-            time_end: data.time_end,
-            quantity: data.quantity,
-            available_status: data.available_status,
-        }, {
-            where: {
-                id: data.id,
-            },
-        })
-    }
+    // public static async updateReserveEquipmentOnly(data: any) {
+    //     return ReserveEquipmentOnlyModel.update({
+    //         equipment_info_id: data.equipment_info_id,
+    //         equipments_id: data.equipments_id,
+    //         time_start: data.time_start,
+    //         time_end: data.time_end,
+    //         quantity: data.quantity,
+    //         available_status: data.available_status,
+    //     }, {
+    //         where: {
+    //             id: data.id,
+    //         },
+    //     })
+    // }
 }
 
 
