@@ -40,9 +40,9 @@ adminRouter.post('/createAdmin', checkBodyEmpty, authValid, async (req, res) => 
 
 adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
     try {
-        const AdminId = req.body.credentials.id;
+        const adminid = req.body.credentials.id;
 
-        const adminInfo = await AdminController.getByID(AdminId)
+        const adminInfo = await AdminController.getByID(adminid)
         if (adminInfo) {
             res.status(200).json({
                 code: 200,
@@ -79,8 +79,8 @@ adminRouter.post('/setUserBookingPermission', checkParamsEmpty, authValid, async
 //News
 adminRouter.get('/getSingleNews', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const Id = req.query.id as string;
-        const singleNews = await NewsController.getByIDAdmin(Id)
+        const id = req.query.id as string;
+        const singleNews = await NewsController.getByIDAdmin(id)
         if (singleNews) {
             res.status(200).json({
                 code: 200, news: singleNews
@@ -96,16 +96,16 @@ adminRouter.get('/getSingleNews', checkParamsEmpty, authValid, async (req, res) 
 adminRouter.get('/getAllNews', authValid, async (req, res) => {
     try {
         const searchValue = String(req.query.value);
-        const Limit = numberOrDefault(req.query.limit, 10);
+        const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
-        const Offset = Limit * Page;
-        const allNews = await NewsController.getAllNewsAdmin(searchValue, Limit, Offset)
+        const offset = limit * Page;
+        const allNews = await NewsController.getAllNewsAdmin(searchValue, limit, offset)
         if (allNews) {
             res.status(200).json({
-                code: 200, news: allNews.rows, total_pages: Math.ceil(allNews.count / Limit)
+                code: 200, news: allNews.rows, total_pages: Math.ceil(allNews.count / limit)
             });
         } else {
             res.status(200).json(errorCode(HttpStatusCode.NOT_FOUND, 'NEWS', 'NOTFOUND'));
@@ -165,8 +165,8 @@ adminRouter.post('/updateNews', checkBodyEmpty, multerUpload.single("file"), aut
 //Room
 adminRouter.get('/getSingleRoom', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const Id = req.query.id as string;
-        const room = await RoomController.getByIDAdmin(Id)
+        const id = req.query.id as string;
+        const room = await RoomController.getByIDAdmin(id)
         res.status(200).json({
             code: 200, room: room
         });
@@ -177,15 +177,15 @@ adminRouter.get('/getSingleRoom', checkParamsEmpty, authValid, async (req, res) 
 
 adminRouter.get('/getAllRooms', authValid, async (req, res) => {
     try {
-        const Limit = numberOrDefault(req.query.limit, 10);
+        const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
-        const Offset = Limit * Page;
-        const allRooms = await RoomController.getAllRoomsAdmin(Limit, Offset)
+        const offset = limit * Page;
+        const allRooms = await RoomController.getAllRoomsAdmin(limit, offset)
         res.status(200).json({
-            code: 200, rooms: allRooms.rows, total_pages: Math.ceil(allRooms.count / Limit)
+            code: 200, rooms: allRooms.rows, total_pages: Math.ceil(allRooms.count / limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -322,8 +322,8 @@ adminRouter.get('/getSingleUserType', checkParamsEmpty, authValid, async (req, r
 
 adminRouter.get('/getSingleUser', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const Id = req.query.id as string;
-        const user = await UserController.getByID(Id)
+        const id = req.query.id as string;
+        const user = await UserController.getByID(id)
         res.status(200).json({
             code: 200, user
         });
@@ -334,15 +334,15 @@ adminRouter.get('/getSingleUser', checkParamsEmpty, authValid, async (req, res) 
 
 adminRouter.get('/getAllUsers', authValid, async (req, res) => {
     try {
-        const Limit = numberOrDefault(req.query.limit, 10);
+        const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
-        const Offset = Limit * Page;
-        const allUsers = await UserController.getAllUsers(Limit, Offset)
+        const offset = limit * Page;
+        const allUsers = await UserController.getAllUsers(limit, offset)
         res.status(200).json({
-            code: 200, users: allUsers.rows, total_pages: Math.ceil(allUsers.count / Limit)
+            code: 200, users: allUsers.rows, total_pages: Math.ceil(allUsers.count / limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -351,15 +351,15 @@ adminRouter.get('/getAllUsers', authValid, async (req, res) => {
 
 adminRouter.get('/getAllUserTypes', authValid, async (req, res) => {
     try {
-        const Limit = numberOrDefault(req.query.limit, 10);
+        const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
-        const Offset = Limit * Page;
-        const userTypes = await UserTypeController.getAllUserTypes(Limit, Offset)
+        const offset = limit * Page;
+        const userTypes = await UserTypeController.getAllUserTypes(limit, offset)
         res.status(200).json({
-            code: 200, user_types: userTypes.rows, totalpages: Math.ceil(userTypes.count / Limit)
+            code: 200, user_types: userTypes.rows, totalpages: Math.ceil(userTypes.count / limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -369,8 +369,8 @@ adminRouter.get('/getAllUserTypes', authValid, async (req, res) => {
 // Equipment Info
 adminRouter.get('/getSingleEquipmentInfo', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const Id = req.query.id as string;
-        const equipment = await EquipmentController.getSingleEquipmentInfoAdmin(Id)
+        const id = req.query.id as string;
+        const equipment = await EquipmentController.getSingleEquipmentInfoAdmin(id)
         res.status(200).json({
             code: 200, equipment
         });
@@ -383,15 +383,15 @@ adminRouter.get('/getAllEquipmentInfo', authValid, async (req, res) => {
     try {
         const filterType = Number(req.query.filter);
         const searchValue = String(req.query.value);
-        const Limit = numberOrDefault(req.query.limit, 10);
+        const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
-        const Offset = Limit * Page;
-        const data = await EquipmentController.getAllEquipmentInfoAdmin(filterType, searchValue, Limit, Offset)
+        const offset = limit * Page;
+        const data = await EquipmentController.getAllEquipmentInfoAdmin(filterType, searchValue, limit, offset)
         res.status(200).json({
-            code: 200, equipments: data.rows, total_pages: Math.ceil(data.count / Limit)
+            code: 200, equipments: data.rows, total_pages: Math.ceil(data.count / limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -400,15 +400,15 @@ adminRouter.get('/getAllEquipmentInfo', authValid, async (req, res) => {
 
 adminRouter.get('/getAllEquipmentInfoInRoom', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const Limit = numberOrDefault(req.query.limit, 10);
+        const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
-        const Offset = Limit * Page;
-        const equipmentInfoInRoom = await EquipmentController.getAllEquipmentInfoInRoomAdmin(req.query.id as string, Limit, Offset)
+        const offset = limit * Page;
+        const equipmentInfoInRoom = await EquipmentController.getAllEquipmentInfoInRoomAdmin(req.query.id as string, limit, offset)
         res.status(200).json({
-            code: 200, equipments: equipmentInfoInRoom.rows, total_pages: Math.ceil(equipmentInfoInRoom.count / Limit), count: equipmentInfoInRoom.count
+            code: 200, equipments: equipmentInfoInRoom.rows, total_pages: Math.ceil(equipmentInfoInRoom.count / limit), count: equipmentInfoInRoom.count
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -462,8 +462,8 @@ adminRouter.post('/updateEquipmentInfo', checkBodyEmpty, multerUpload.single("fi
 //Equipment Stock
 adminRouter.get('/getSingleEquipmentStock', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const Id = req.query.id as string;
-        const equipmentStock = await EquipmentController.getSingleEquipmentStock(Id)
+        const id = req.query.id as string;
+        const equipmentStock = await EquipmentController.getSingleEquipmentStock(id)
         res.status(200).json({
             code: 200, equipment_stock: equipmentStock
         });
@@ -474,15 +474,15 @@ adminRouter.get('/getSingleEquipmentStock', checkParamsEmpty, authValid, async (
 
 adminRouter.get('/getAllEquipmentStock', authValid, async (req, res) => {
     try {
-        const Limit = numberOrDefault(req.query.limit, 10);
+        const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
-        const Offset = Limit * Page;
-        const allEquipmentStock = await EquipmentController.getAllEquipmentStock(Limit, Offset)
+        const offset = limit * Page;
+        const allEquipmentStock = await EquipmentController.getAllEquipmentStock(limit, offset)
         res.status(200).json({
-            code: 200, equipment_stocks: allEquipmentStock.rows, total_pages: Math.ceil(allEquipmentStock.count / Limit)
+            code: 200, equipment_stocks: allEquipmentStock.rows, total_pages: Math.ceil(allEquipmentStock.count / limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -521,17 +521,18 @@ adminRouter.get('/getSingleReserve', checkParamsEmpty, authValid, async (req, re
     }
 });
 
-adminRouter.get('/getAllReserveRoom', authValid, async (req, res) => {
+adminRouter.get('/getAllReserveRoom', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const Limit = numberOrDefault(req.query.limit, 10);
+        const searchValue = req.query.searchValue as string;
+        const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
-        const Offset = Limit * Page;
-        const allReserve = await ReserveController.getAllReserveAndChild(Limit, Offset)
+        const offset = limit * Page;
+        const allReserve = await ReserveController.getAllReserveAndChild(searchValue, limit, offset)
         res.status(200).json({
-            code: 200, reserves: allReserve.rows, total_pages: Math.ceil(allReserve.count / Limit)
+            code: 200, reserves: allReserve.rows, total_pages: Math.ceil(allReserve.count / limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -583,69 +584,69 @@ adminRouter.post('/updateReserveEquipment', checkBodyEmpty, authValid, async (re
 });
 
 // reserve equipment
-adminRouter.get('/getSingleReserveEquipmentOnly', checkParamsEmpty, authValid, async (req, res) => {
-    try {
-        const id = req.query.id as string;
-        const reserve = await ReserveController.getReserveEquipmentByID(id)
-        res.status(200).json({ code: 200, reserve });
-    } catch (error) {
-        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
-    }
-});
+// adminRouter.get('/getSingleReserveEquipmentOnly', checkParamsEmpty, authValid, async (req, res) => {
+//     try {
+//         const id = req.query.id as string;
+//         const reserve = await ReserveController.getReserveEquipmentByID(id)
+//         res.status(200).json({ code: 200, reserve });
+//     } catch (error) {
+//         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+//     }
+// });
 
-adminRouter.get('/getAllReserveEquipmentOnly', authValid, async (req, res) => {
-    try {
-        const Limit = numberOrDefault(req.query.limit, 10);
-        let Page = numberOrDefault(req.query.page, 0);
-        if (Page != 0) {
-            Page = Page - 1
-        }
-        const Offset = Limit * Page;
-        const allReserve = await ReserveController.getAllReserveEquipment(Limit, Offset)
-        res.status(200).json({
-            code: 200, reserves: allReserve.rows, total_pages: Math.ceil(allReserve.count / Limit)
-        });
-    } catch (error) {
-        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
-    }
-});
+// adminRouter.get('/getAllReserveEquipmentOnly', authValid, async (req, res) => {
+//     try {
+//         const limit = numberOrDefault(req.query.limit, 10);
+//         let Page = numberOrDefault(req.query.page, 0);
+//         if (Page != 0) {
+//             Page = Page - 1
+//         }
+//         const offset = limit * Page;
+//         const allReserve = await ReserveController.getAllReserveEquipment(limit, offset)
+//         res.status(200).json({
+//             code: 200, reserves: allReserve.rows, total_pages: Math.ceil(allReserve.count / limit)
+//         });
+//     } catch (error) {
+//         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+//     }
+// });
 
-adminRouter.post('/createReserveEquipmentOnly', checkBodyEmpty, authValid, async (req, res) => {
-    try {
-        await ReserveController.createReserveEquipmentOnly(req.body)
-        res.status(200).json({ code: 200 });
-        // else {
-        //     res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
-        // }
-    } catch (error) {
-        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
-    }
+// adminRouter.post('/createReserveEquipmentOnly', checkBodyEmpty, authValid, async (req, res) => {
+//     try {
+//         await ReserveController.createReserveEquipmentOnly(req.body)
+//         res.status(200).json({ code: 200 });
+//         // else {
+//         //     res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+//         // }
+//     } catch (error) {
+//         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+//     }
 
-});
+// });
 
-adminRouter.post('/updateReserveEquipmentOnly', checkBodyEmpty, authValid, async (req, res) => {
-    try {
-        const Data = req.body;
-        await ReserveController.updateReserveEquipmentOnly(Data)
-        res.status(200).json({ code: 200 });
-    } catch (error) {
-        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
-    }
+// adminRouter.post('/updateReserveEquipmentOnly', checkBodyEmpty, authValid, async (req, res) => {
+//     try {
+//         const Data = req.body;
+//         await ReserveController.updateReserveEquipmentOnly(Data)
+//         res.status(200).json({ code: 200 });
+//     } catch (error) {
+//         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+//     }
 
-});
+// });
 
 //web info
 adminRouter.get('/getAllWebInfo', authValid, async (req, res) => {
     try {
-        const Limit = numberOrDefault(req.query.limit, 1);
+        const limit = numberOrDefault(req.query.limit, 1);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
-        const Offset = Limit * Page;
-        const webInfo = await WebInfoController.getAll(Limit, Offset)
+        const offset = limit * Page;
+        const webInfo = await WebInfoController.getAll(limit, offset)
         res.status(200).json({
-            code: 200, webinfo: webInfo.rows, total_pages: Math.ceil(webInfo.count / Limit)
+            code: 200, webinfo: webInfo.rows, total_pages: Math.ceil(webInfo.count / limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -690,15 +691,15 @@ adminRouter.get('/getSingleService', checkParamsEmpty, authValid, async (req, re
 
 adminRouter.get('/getAllService', authValid, async (req, res) => {
     try {
-        const Limit = numberOrDefault(req.query.limit, 10);
+        const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
-        const Offset = Limit * Page;
-        const allService = await ServiceController.getAll(Limit, Offset)
+        const offset = limit * Page;
+        const allService = await ServiceController.getAll(limit, offset)
         res.status(200).json({
-            code: 200, services: allService.rows, total_pages: Math.ceil(allService.count / Limit)
+            code: 200, services: allService.rows, total_pages: Math.ceil(allService.count / limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -752,15 +753,15 @@ adminRouter.get('/getSingleProductionLine', checkParamsEmpty, authValid, async (
 
 adminRouter.get('/getAllProductionLine', authValid, async (req, res) => {
     try {
-        const Limit = numberOrDefault(req.query.limit, 10);
+        const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
-        const Offset = Limit * Page;
-        const allProductionLine = await EquipmentController.getAllProductionLine(Limit, Offset)
+        const offset = limit * Page;
+        const allProductionLine = await EquipmentController.getAllProductionLine(limit, offset)
         res.status(200).json({
-            code: 200, production_lines: allProductionLine.rows, total_pages: Math.ceil(allProductionLine.count / Limit)
+            code: 200, production_lines: allProductionLine.rows, total_pages: Math.ceil(allProductionLine.count / limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -799,15 +800,15 @@ adminRouter.get('/getSingleEquipmentRentRate', checkParamsEmpty, authValid, asyn
 
 adminRouter.get('/getAllEquipmentRentRate', authValid, async (req, res) => {
     try {
-        const Limit = numberOrDefault(req.query.limit, 10);
+        const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
-        const Offset = Limit * Page;
-        const allEquipmentRentRate = await EquipmentController.getAllEquipmentRentRate(Limit, Offset)
+        const offset = limit * Page;
+        const allEquipmentRentRate = await EquipmentController.getAllEquipmentRentRate(limit, offset)
         res.status(200).json({
-            code: 200, equipment_rent_rates: allEquipmentRentRate.rows, total_pages: Math.ceil(allEquipmentRentRate.count / Limit)
+            code: 200, equipment_rent_rates: allEquipmentRentRate.rows, total_pages: Math.ceil(allEquipmentRentRate.count / limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -845,15 +846,15 @@ adminRouter.get('/getSingleSupplyStock', authValid, async (req, res) => {
 
 adminRouter.get('/getAllSupplyStock', authValid, async (req, res) => {
     try {
-        const Limit = numberOrDefault(req.query.limit, 10);
+        const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
-        const Offset = Limit * Page;
-        const allSupplyStock = await EquipmentController.getAllSupplyStock(Limit, Offset)
+        const offset = limit * Page;
+        const allSupplyStock = await EquipmentController.getAllSupplyStock(limit, offset)
         res.status(200).json({
-            code: 200, supply_stocks: allSupplyStock.rows, total_pages: Math.ceil(allSupplyStock.count / Limit)
+            code: 200, supply_stocks: allSupplyStock.rows, total_pages: Math.ceil(allSupplyStock.count / limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -893,15 +894,15 @@ adminRouter.get('/getSingleSupplier', checkParamsEmpty, authValid, async (req, r
 
 adminRouter.get('/getAllSupplier', authValid, async (req, res) => {
     try {
-        const Limit = numberOrDefault(req.query.limit, 10);
+        const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
-        const Offset = Limit * Page;
-        const allSuppliers = await EquipmentController.getAllSupplier(Limit, Offset)
+        const offset = limit * Page;
+        const allSuppliers = await EquipmentController.getAllSupplier(limit, offset)
         res.status(200).json({
-            code: 200, suppliers: allSuppliers.rows, total_pages: Math.ceil(allSuppliers.count / Limit)
+            code: 200, suppliers: allSuppliers.rows, total_pages: Math.ceil(allSuppliers.count / limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -999,8 +1000,8 @@ adminRouter.post('/updateTab2', checkBodyEmpty, authValid, async (req, res) => {
 //notification
 adminRouter.get('/getAllNotification', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const AdminId = req.body.credentials.id;
-        await NotificationController.getAllAdmin(AdminId)
+        const adminid = req.body.credentials.id;
+        await NotificationController.getAllAdmin(adminid)
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
