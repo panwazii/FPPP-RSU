@@ -79,14 +79,14 @@
               </div>
             </div>
             <v-btn
-              @click="$router.push(`/user/rooms/reserve/${room.id}`)"
+              @click="$router.push(`/user/rooms/booking/${room.id}`)"
               x-large
               elevation="2"
               max-width="200"
               class="text-h6 rounded-xl mt-8"
               dark
             >
-              <v-icon>mdi-cart-plus</v-icon>จองเลย
+              จองเลย<v-icon>mdi-calendar-edit</v-icon>
             </v-btn>
           </div>
         </v-col>
@@ -184,38 +184,39 @@ export default {
     }
   },
   methods: {
-    getEvents ({ start, end }) {
-        const events = []
+    getEvents({ start, end }) {
+      const events = []
 
-        const min = new Date(`${start.date}T00:00:00`)
-        const max = new Date(`${end.date}T23:59:59`)
-        const days = (max.getTime() - min.getTime()) / 86400000
-        const eventCount = this.rnd(days, days + 20)
+      const min = new Date(`${start.date}T00:00:00`)
+      const max = new Date(`${end.date}T23:59:59`)
+      const days = (max.getTime() - min.getTime()) / 86400000
+      const eventCount = this.rnd(days, days + 20)
 
-        for (let i = 0; i < eventCount; i++) {
-          const allDay = this.rnd(0, 3) === 0
-          const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-          const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-          const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
-          const second = new Date(first.getTime() + secondTimestamp)
+      for (let i = 0; i < eventCount; i++) {
+        const allDay = this.rnd(0, 3) === 0
+        const firstTimestamp = this.rnd(min.getTime(), max.getTime())
+        const first = new Date(firstTimestamp - (firstTimestamp % 900000))
+        const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
+        const second = new Date(first.getTime() + secondTimestamp)
 
-          events.push({
-            name: this.calenda.names[this.rnd(0, this.calenda.names.length - 1)],
-            start: first,
-            end: second,
-            color: this.calenda.colors[this.rnd(0, this.calenda.colors.length - 1)],
-            timed: !allDay,
-          })
-        }
+        events.push({
+          name: this.calenda.names[this.rnd(0, this.calenda.names.length - 1)],
+          start: first,
+          end: second,
+          color:
+            this.calenda.colors[this.rnd(0, this.calenda.colors.length - 1)],
+          timed: !allDay,
+        })
+      }
 
-        this.calenda.events = events
-      },
-      getEventColor (event) {
-        return event.color
-      },
-      rnd (a, b) {
-        return Math.floor((b - a + 1) * Math.random()) + a
-      },
+      this.calenda.events = events
+    },
+    getEventColor(event) {
+      return event.color
+    },
+    rnd(a, b) {
+      return Math.floor((b - a + 1) * Math.random()) + a
+    },
   },
 }
 </script>

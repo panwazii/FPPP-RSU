@@ -35,13 +35,13 @@
       </v-card-text>
       <v-card-actions class="justify-center">
         <v-btn
-          @click="$router.push(`/user/rooms/reserve/${id}`)"
+          @click="$router.push(`/user/rooms/booking/${id}`)"
           elevation="0"
           max-width="200"
           class="rounded-xl px-4"
           dark
         >
-          <v-icon>mdi-cart-plus</v-icon>เพิ่มลงตระกร้า
+          จองเลย<v-icon>mdi-calendar-edit</v-icon>
         </v-btn>
       </v-card-actions>
     </v-card>

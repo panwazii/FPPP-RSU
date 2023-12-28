@@ -1,22 +1,21 @@
 <template>
   <div>
     <ModalConfirm
-      :open="confirmModal"
-      :message="confirmMessage"
+      :open="modal.confirmRegister.open"
+      :message="modal.confirmRegister.message"
       :method="register"
-      :confirm.sync="confirmModal"
+      :confirm.sync="modal.confirmRegister.open"
     />
     <ModalComplete
-      :open="completeModal"
-      :message="completeMessage"
+      :open="modal.completeRegister.open"
+      :message="modal.completeRegister.message"
       :method="redirectToLogin"
-      :complete.sync="completeModal"
+      :complete.sync="modal.completeRegister.open"
     />
     <ModalError
-      :open="errorModal"
-      :message="errorMessage"
-      :method="redirectToLogin"
-      :error.sync="errorModal"
+      :open="modal.error.open"
+      :message="modal.error.message"
+      :error.sync="modal.error.open"
     />
     <v-card
       class="mx-auto text-center mt-12 pa-2 pt-10 justify-center rounded-xl"
@@ -25,24 +24,23 @@
     >
       <v-spacer></v-spacer>
       <h1>สมัครสมาชิก</h1>
+      {{ valid }}
+      {{ agree }}
       <v-card-text>
-        <v-row>
-          <v-col cols="12" sm="6">
-            <v-form ref="form" v-model="valid" lazy-validation>
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-row>
+            <v-col cols="12" sm="6">
               <v-text-field
                 v-model="form.fname"
-                :rules="[(v) => !!v || 'โปรดระบุชื่อ']"
+                :rules="[(v) => !!v || 'โปรดระบุชื่อจริง']"
                 label="ชื่อ"
                 outlined
                 required
-                type="email"
                 class="rounded-xl"
               >
               </v-text-field>
-            </v-form>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-form ref="form" v-model="valid" lazy-validation>
+            </v-col>
+            <v-col cols="12" sm="6">
               <v-text-field
                 v-model="form.lname"
                 :rules="[(v) => !!v || 'โปรดระบุนามสกุล']"
@@ -52,10 +50,8 @@
                 class="rounded-xl"
               >
               </v-text-field>
-            </v-form>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-form ref="form" v-model="valid" lazy-validation>
+            </v-col>
+            <v-col cols="12" sm="6">
               <v-text-field
                 v-model="form.email"
                 :rules="[(v) => !!v || 'โปรดระบุ Email']"
@@ -65,10 +61,8 @@
                 class="rounded-xl"
               >
               </v-text-field>
-            </v-form>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-form ref="form" v-model="valid" lazy-validation>
+            </v-col>
+            <v-col cols="12" sm="6">
               <v-select
                 :items="userTypes"
                 v-model="form.type_id"
@@ -80,11 +74,9 @@
                 class="rounded-xl"
               >
               </v-select>
-            </v-form>
-          </v-col>
+            </v-col>
 
-          <v-col cols="12" sm="6">
-            <v-form ref="form" v-model="valid" lazy-validation>
+            <v-col cols="12" sm="6">
               <v-text-field
                 :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="show1 ? 'text' : 'password'"
@@ -98,28 +90,24 @@
                 class="rounded-xl"
               >
               </v-text-field>
-            </v-form>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-form ref="form" v-model="valid" lazy-validation>
+            </v-col>
+            <v-col cols="12" sm="6">
               <v-text-field
                 :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="show2 ? 'text' : 'password'"
                 v-model="form.confirmPassword"
                 :rules="[(v) => !!v || 'โปรดระบุยืนยันรหัสผ่าน']"
                 password="input-10-2"
-                label="Comfrim Password"
+                label="Comfirm Password"
                 @click:append="show2 = !show2"
                 outlined
                 required
                 class="rounded-xl"
               >
               </v-text-field>
-            </v-form>
-          </v-col>
+            </v-col>
 
-          <v-col cols="12">
-            <v-form ref="form" v-model="valid" lazy-validation>
+            <v-col cols="12">
               <v-text-field
                 v-model="form.tel"
                 label="หมายเลขโทรศัพท์"
@@ -130,26 +118,29 @@
                 class="rounded-xl"
               >
               </v-text-field>
-              <v-checkbox label="ยืนยันข้อตกลงในการลงทะเบียน"></v-checkbox>
+              <v-checkbox
+                v-model="agree"
+                label="ยืนยันข้อตกลงในการลงทะเบียน"
+              ></v-checkbox>
               <v-card-actions class="justify-center">
                 <v-btn
                   @click="register"
+                  :disabled="!valid"
                   depressed
                   color="secondary"
                   class="rounded-xl"
                   >REGISTER</v-btn
                 >
               </v-card-actions>
-            </v-form>
-          </v-col>
-        </v-row>
+            </v-col>
+          </v-row>
+        </v-form>
       </v-card-text>
     </v-card>
   </div>
 </template>
 <script>
 export default {
-  // middleware: 'admin',
   head() {
     return {
       title: 'register',
@@ -164,36 +155,31 @@ export default {
         type_id: null,
         password: null,
         tel: null,
-        avatar: 'beta',
       },
       confirmPassword: '',
       userTypes: [],
       show1: false,
       show2: false,
-      confirmMessage: 'confirm register?',
-      confirmModal: false,
-      completeMessage: 'Register complete press ok to login',
-      completeModal: false,
-      errorMessage: '',
-      errorModal: false,
-      loadingMessage: 'registering',
-      loading: false,
-      Rules: {
-        firstName: [(v) => !!v || 'โปรดระบุชื่อจริง'],
-        lastName: [(v) => !!v || 'โปรดระบุนามสกุล'],
-        tel: [
-          (v) => !!v || 'โปรดระบุเบอร์โทรศัพท์',
-          (v) =>
-            /((\+66|0)(\d{1,2}\-?\d{3}\-?\d{3,4}))|((\+๖๖|๐)([๐-๙]{1,2}\-?[๐-๙]{3}\-?[๐-๙]{3,4}))/gm.test(
-              v
-            ) || 'โปรดระบุเบอร์โทรศัพท์ที่ถูกต้อง',
-        ],
-        email: [
-          (v) => !!v || 'โปรดระบุอีเมล',
-          (v) =>
-            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'โปรดระบุอีเมลที่ถูกต้อง',
-        ],
+      modal: {
+        confirmRegister: {
+          open: false,
+          message: 'confirm register?',
+        },
+        completeRegister: {
+          open: false,
+          message: 'Register complete press ok to login',
+        },
+        error: {
+          open: false,
+          message: '',
+        },
+        loading: {
+          open: false,
+          message: 'registering',
+        },
       },
+      valid: false,
+      agree: false,
     }
   },
   async fetch() {
@@ -205,23 +191,27 @@ export default {
   methods: {
     async register() {
       try {
-        this.loading = true
+        if (!this.$refs.form.validate() || !this.agree) {
+          this.modal.error.message = 'กรุณากรอกข้อมูลให้ถูกต้องครบถ้วน'
+          this.modal.error.open = true
+          console.log('asdasdasd')
+          return
+        }
+        this.modal.loading.open = true
         const Response = await this.$store.dispatch(
           'api/auth/userRegister',
           this.form
         )
-        console.log(Response)
         if (Response.code === 201) {
-          this.loading = false
-          this.completeModal = true
+          this.modal.loading.open = false
+          this.modal.completeRegister.open = true
         } else {
-          this.loading = false
+          this.modal.loading.open = false
         }
       } catch (error) {
-        this.loading = false
-        this.errorMessage = error
-        this.errorModal = true
-        console.log(error)
+        this.modal.loading.open = false
+        this.modal.error.message = String(error)
+        this.modal.error.open = true
       }
     },
     redirectToLogin() {
