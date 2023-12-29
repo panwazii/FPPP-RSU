@@ -133,7 +133,7 @@ userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) =>
             res.json({ code: 200 });
         }
         else if (newReserve) {
-            res.status(200).json({ code: 200 });
+            res.status(200).json({ code: 201 });
         }
         else {
             res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'RESERVE', 'ERROR'));

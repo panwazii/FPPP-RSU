@@ -8,13 +8,17 @@
     <SharedBreadCrumbs title="จองห้อง" :routes="routes" />
     <v-stepper v-model="step" class="rounded-xl">
       <v-stepper-header>
-        <v-stepper-step :complete="step > 1" step="1">
+        <v-stepper-step color="black" :complete="step > 1" step="1">
           ขั้นตอนที่ 1 (กรอกข้อมูลการจอง)
         </v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="2">
-          ขั้นตอนที่ 2 (ยืนยันข้อมูลการจอง)</v-stepper-step
-        >
+        <v-stepper-step color="black" :complete="step > 2" step="2">
+          ขั้นตอนที่ 2 (ยืนยันข้อมูลการจอง)
+        </v-stepper-step>
+        <v-divider></v-divider>
+        <v-stepper-step color="success" :complete="step === 3" step="3">
+          จองสำเร็จ
+        </v-stepper-step>
       </v-stepper-header>
       <v-stepper-items>
         <!-- Step 1 -->
@@ -269,10 +273,28 @@
             <v-btn class="rounded-xl mx-5" color="primary" @click="step = 1">
               ถอยกลับ
             </v-btn>
-            <v-btn class="rounded-xl mx-5" color="primary" :disabled="!valid">
+            <v-btn
+              class="rounded-xl mx-5"
+              color="primary"
+              :disabled="!valid"
+              @click="submit"
+            >
               ส่งข้อมูลการจอง
             </v-btn>
           </v-row>
+        </v-stepper-content>
+        <v-stepper-content step="3">
+          <v-card height="400" class="text-center" elevation="0">
+            <div class="mt-10 center-complete-card">
+              <h1>
+                <v-icon class="mr-2" color="black" x-large
+                  >mdi-calendar-check</v-icon
+                >จองสำเร็จ !
+              </h1>
+              <p>สามารถตรวจสอบสถานะการจองได้ที่หน้ารายการจองทั้งหมด</p>
+              <v-btn @click="$router.push('user/home')" class="rounded-xl text-h6" dark>ตกลง</v-btn>
+            </div>
+          </v-card>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -430,7 +452,31 @@ export default {
         this.modal.error.open = true
       }
     },
+    async submit() {
+      try {
+        const response = await this.$store.dispatch('api/user/createReserve', {
+          room_id: this.id,
+          time_start: this.form.time_start,
+          time_end: this.form.time_end,
+          details: this.form.etc,
+        })
+        if (response.code === 201) {
+          console.log('complete')
+          this.step = 3
+        }
+      } catch (error) {
+        this.modal.error.message = String(error)
+        this.modal.error.open = true
+      }
+    },
   },
 }
 </script>
-<style scoped></style>
+<style scoped>
+.center-complete-card {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>

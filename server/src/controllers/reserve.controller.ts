@@ -51,7 +51,7 @@ class ReserveController {
 
     public static async createReserve(data: any) {
         const packet: ReserveAttribute = {
-            user_id: data.user_id,
+            user_id: data.credentials.id,
             room_id: data.room_id,
             time_start: data.time_start,
             time_end: data.time_end,
