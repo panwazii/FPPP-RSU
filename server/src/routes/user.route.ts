@@ -10,6 +10,7 @@ import EquipmentController from '../controllers/equipment.controller';
 import { checkBodyEmpty, checkParamsEmpty } from '../middleware/validator.middleware';
 import CartController from '../controllers/cart.controller';
 import NotificationController from '../controllers/notification.controller';
+import { body } from 'express-validator';
 
 const userRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON();
@@ -126,10 +127,12 @@ userRouter.post('/update/password', checkBodyEmpty, authValid, (req, res) => {
 // reserve
 userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
-        const equipment = req.body.equipment_info_id;
+        const equipment = req.body.equipment;
         const newReserve = await ReserveController.createReserve(req.body)
         if (newReserve && equipment) {
-            ReserveController.createReserveEquipment(newReserve.id, req.body)
+            for (const data of equipment) {
+                await ReserveController.createReserveEquipment(newReserve.id, data)
+            }
             res.json({ code: 200 });
         }
         else if (newReserve) {
@@ -141,7 +144,6 @@ userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) =>
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
-
 });
 
 // userRouter.post('/createReserveEquipmentOnly', checkBodyEmpty, authValid, async (req, res) => {
@@ -167,7 +169,7 @@ userRouter.get('/getAllReserve', checkParamsEmpty, authValid, async (req, res) =
             Page = Page - 1
         }
         const offset = limit * Page;
-        const allReserve = await ReserveController.getAllReserveAndChildForUser(searchValue,userId, limit, offset)
+        const allReserve = await ReserveController.getAllReserveAndChildForUser(searchValue, userId, limit, offset)
         res.status(200).json({
             code: 200, reserve: allReserve.rows, total_pages: Math.ceil(allReserve.count / limit)
         });
@@ -254,6 +256,16 @@ userRouter.get('/getAllEquipmentInfoInRoom', checkParamsEmpty, async (req, res) 
         });
     } catch (error) {
         res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+//dropdown
+userRouter.get('/getDropdownEquipmentInfo', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        await EquipmentController.getDropdownEquipmentInfoInRoomPublic(req.query.id as string)
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
 

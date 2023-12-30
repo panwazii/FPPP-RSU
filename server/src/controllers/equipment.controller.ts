@@ -471,6 +471,17 @@ class EquipmentController {
             raw: true
         });
     }
+
+    public static async getDropdownEquipmentInfoInRoomPublic(id: string) {
+        return EquipmentInfoModel.findAndCountAll({
+            distinct: true,
+            where: { available_status: true },
+            include: [{
+                model: EquipmentsModel, as: 'stock',
+                where: { room_id: id, available_status: true, },
+            }],
+        });
+    }
 }
 
 export default EquipmentController;
