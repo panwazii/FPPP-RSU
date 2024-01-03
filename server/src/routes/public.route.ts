@@ -185,4 +185,27 @@ publicRouter.get('/getSingleWebInfo', async (req, res) => {
     }
 });
 
+//Tab1&2
+publicRouter.get('/getTab1', async (req, res) => {
+    try {
+        const data = await WebInfoController.getTab1()
+        res.status(200).json({
+            code: 200, tab: data,
+        });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+publicRouter.get('/getTab2', async (req, res) => {
+    try {
+        const data = await WebInfoController.getTab2()
+        res.status(200).json({
+            code: 200, tab: data,
+        });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 export default publicRouter;

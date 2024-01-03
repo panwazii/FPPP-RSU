@@ -6,8 +6,11 @@ import { authValid, requestLog } from '../middleware/user.middleware';
 import { numberOrDefault } from '../tools/util';
 import ReserveController from '../controllers/reserve.controller';
 import ServiceController from '../controllers/service.controller';
+import EquipmentController from '../controllers/equipment.controller';
 import { checkBodyEmpty, checkParamsEmpty } from '../middleware/validator.middleware';
 import CartController from '../controllers/cart.controller';
+import NotificationController from '../controllers/notification.controller';
+import { body } from 'express-validator';
 
 const userRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON();
@@ -15,8 +18,8 @@ const unknownErrorCode = createUnknownErrCodeJSON()
 
 userRouter.get('/getUserInfo', authValid, async (req, res) => {
     try {
-        const UserId = req.body.credentials.id;
-        const userInfo = await UserController.getByID(UserId)
+        const userId = req.body.credentials.id;
+        const userInfo = await UserController.getByID(userId)
         res.status(200).json({
             code: 200, user: {
                 id: userInfo!.id,
@@ -25,7 +28,7 @@ userRouter.get('/getUserInfo', authValid, async (req, res) => {
                 lname: userInfo!.lname,
                 email: userInfo!.email,
                 tel: userInfo!.tel,
-                avatar: userInfo!.avatar,
+                booking_permission: userInfo!.booking_permission,
                 created_at: userInfo!.created_at,
                 update_at: userInfo!.update_at
             }
@@ -121,37 +124,77 @@ userRouter.post('/update/password', checkBodyEmpty, authValid, (req, res) => {
 //     });
 // });
 
-userRouter.post('/createReserve', checkBodyEmpty, async (req, res) => {
+// reserve
+userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
+        const equipment = req.body.equipment;
         const newReserve = await ReserveController.createReserve(req.body)
-        if (newReserve) {
-            ReserveController.createReserveEquipment(newReserve.id, req.body)
+        if (newReserve && equipment) {
+            for (const data of equipment) {
+                await ReserveController.createReserveEquipment(newReserve.id, data)
+            }
             res.json({ code: 200 });
-        } else {
+        }
+        else if (newReserve) {
+            res.status(200).json({ code: 201 });
+        }
+        else {
             res.status(200).json(errorCode(HttpStatusCode.BAD_REQUEST, 'RESERVE', 'ERROR'));
         }
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
-
 });
 
-userRouter.get('/getAllReserve', checkParamsEmpty, async (req, res) => {
+// userRouter.post('/createReserveEquipmentOnly', checkBodyEmpty, authValid, async (req, res) => {
+//     try {
+//         await ReserveController.createReserveEquipmentOnly(req.body)
+//         res.status(200).json({ code: 200 });
+//         // else {
+//         //     res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+//         // }
+//     } catch (error) {
+//         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+//     }
+
+// });
+
+userRouter.get('/getAllReserve', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const Limit = numberOrDefault(req.query.limit, 10);
+        const userId = req.body.credentials.id;
+        const searchValue = req.query.value as string;
+        const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
-        const Offset = Limit * Page;
-        const allReserve = await ReserveController.getAllReserveAndChildForUser(req.query.id as string, Limit, Offset)
+        const offset = limit * Page;
+        const allReserve = await ReserveController.getAllReserveAndChildForUser(searchValue, userId, limit, offset)
         res.status(200).json({
-            code: 200, reserve: allReserve.rows, total_pages: Math.ceil(allReserve.count / Limit)
+            code: 200, reserve: allReserve.rows, total_pages: Math.ceil(allReserve.count / limit)
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
+
+// userRouter.get('/getAllReserveEquipment', checkParamsEmpty, authValid, async (req, res) => {
+//     try {
+//         const userId = req.body.credentials.id;
+//         const Limit = numberOrDefault(req.query.limit, 10);
+//         let Page = numberOrDefault(req.query.page, 0);
+//         if (Page != 0) {
+//             Page = Page - 1
+//         }
+//         const Offset = Limit * Page;
+//         const allReserve = await ReserveController.getAllReserveEquipmentUser(userId, Limit, Offset)
+//         res.status(200).json({
+//             code: 200, reserve: allReserve.rows, total_pages: Math.ceil(allReserve.count / Limit)
+//         });
+//     } catch (error) {
+//         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+//     }
+// });
 
 // Cart
 userRouter.post('/createCartItem', checkBodyEmpty, authValid, requestLog, async (req, res) => {
@@ -178,10 +221,48 @@ userRouter.get('/getAllCart', authValid, async (req, res) => {
     }
 });
 
-userRouter.delete('/deleteCartItem', checkParamsEmpty, authValid, requestLog,async (req, res) => {
+userRouter.delete('/deleteCartItem', checkParamsEmpty, authValid, requestLog, async (req, res) => {
     try {
         const cartItemId = String(req.query.id);
         await CartController.deleteItems(cartItemId);
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+//notification
+userRouter.get('/getAllNotification', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const userId = req.body.credentials.id;
+        await NotificationController.getAllAdmin(userId)
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+userRouter.get('/getAllEquipmentInfoInRoom', checkParamsEmpty, async (req, res) => {
+    try {
+        const Limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const Offset = Limit * Page;
+        const data = await EquipmentController.getAllEquipmentInfoInRoomPublic(req.query.id as string, Limit, Offset)
+        res.status(200).json({
+            code: 200, equipments: data.rows, total_pages: Math.ceil(data.count / Limit), count: data.count
+        });
+    } catch (error) {
+        res.status(401).json({ code: 2, msg: `"unknown error : "${error}` });
+    }
+});
+
+//dropdown
+userRouter.get('/getDropdownEquipmentInfo', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        await EquipmentController.getDropdownEquipmentInfoInRoomPublic(req.query.id as string)
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));

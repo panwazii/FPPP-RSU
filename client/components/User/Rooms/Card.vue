@@ -1,10 +1,5 @@
 <template>
   <div>
-    <SharedGoToLoginModal
-      :open="modal.goToLogin.open"
-      :message="modal.goToLogin.message"
-      :goToLogin.sync="modal.goToLogin.open"
-    />
     <v-card max-width="300" class="rounded-xl">
       <v-hover>
         <template v-slot:default="{ hover }">
@@ -40,13 +35,13 @@
       </v-card-text>
       <v-card-actions class="justify-center">
         <v-btn
-          @click="modal.goToLogin.open = true"
+          @click="$router.push(`/user/rooms/booking/${id}`)"
           elevation="0"
           max-width="200"
           class="rounded-xl px-4"
           dark
         >
-          <v-icon>mdi-cart-plus</v-icon>เพิ่มลงตระกร้า
+          จองเลย<v-icon>mdi-calendar-edit</v-icon>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -55,14 +50,7 @@
 <script>
 export default {
   data() {
-    return {
-      modal: {
-        goToLogin: {
-          open: false,
-          message: 'กรุณาเข้าสู่ระบบเพื่อใช้งานบริการทั้งหมด',
-        },
-      },
-    }
+    return {}
   },
   computed: {
     displayImage() {

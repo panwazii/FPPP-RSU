@@ -18,7 +18,8 @@ import { initNewsModel } from './models/news.model';
 import AdminModel, { initAdminModel } from './models/admins.model';
 import CartModel, { initCartModel } from './models/carts.model';
 import CartItemModel, { initCartItemModel } from './models/cart_items.model';
-import NotificationModel, { initNotificationModel } from './models/notifications.model';
+import UserNotificationModel, { initUserNotificationModel } from './models/user_notifications.model';
+import AdminNotificationModel, { initAdminNotificationModel } from './models/admin_notifications.model';
 
 import { initWebInfoModel } from './models/web_info.model';
 import { initServiceModel } from './models/services.model';
@@ -81,10 +82,11 @@ const initDatabase = async () => {
         initRoomPictureModel,
         initCartModel,
         initCartItemModel,
-        initNotificationModel,
+        initUserNotificationModel,
 
         //Admin
         initAdminModel,
+        initAdminNotificationModel,
 
         //Public
         initWebInfoModel,
@@ -146,8 +148,11 @@ const initDatabase = async () => {
     EquipmentInfoModel.hasMany(CartItemModel, { as: 'equipment', foreignKey: 'equipment_info_id' });
     CartItemModel.belongsTo(EquipmentInfoModel, { as: 'equipment', foreignKey: 'equipment_info_id' });
 
-    UserModel.hasMany(NotificationModel, { foreignKey: 'user_id' });
-    NotificationModel.belongsTo(UserModel, { foreignKey: 'user_id' });
+    UserModel.hasMany(UserNotificationModel, { foreignKey: 'user_id' });
+    UserNotificationModel.belongsTo(UserModel, { foreignKey: 'user_id' });
+
+    AdminModel.hasMany(AdminNotificationModel, { foreignKey: 'admin_id' });
+    AdminNotificationModel.belongsTo(AdminModel, { foreignKey: 'admin_id' });
 
     if (yn(config.database.dropAndCreateNew)) {
         log("Drop status :", config.database.dropAndCreateNew);

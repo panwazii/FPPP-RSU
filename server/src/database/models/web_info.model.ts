@@ -16,6 +16,12 @@ export interface WebInfoAttribute {
     contact_tel?: string;
     contact_address?: string;
     contact_location?: string;
+    tab_1_title?: string;
+    tab_1_content?: string;
+    tab_1_picture?: string;
+    tab_2_title?: string;
+    tab_2_content?: string;
+    tab_2_picture?: string;
     created_at?: Date;
     update_at?: Date;
 }
@@ -50,6 +56,18 @@ class WebInfoModel extends Model<WebInfoAttribute, WebInfoAttributeCreation> imp
     declare contact_address: string;
 
     declare contact_location: string;
+
+    declare tab_1_title: string;
+
+    declare tab_1_content?: string;
+
+    declare tab_1_picture?: string;
+
+    declare tab_2_title: string;
+
+    declare tab_2_content?: string;
+
+    declare tab_2_picture?: string;
 
     declare created_at: Date;
 
@@ -128,6 +146,30 @@ export const initWebInfoModel = (connection: Sequelize) => {
             contact_location: {
                 allowNull: false,
                 unique: true,
+                type: DataTypes.STRING,
+            },
+            tab_1_title: {
+                allowNull: true,
+                type: DataTypes.STRING,
+            },
+            tab_1_content: {
+                allowNull: true,
+                type: DataTypes.STRING,
+            },
+            tab_1_picture: {
+                allowNull: true,
+                type: DataTypes.STRING,
+            },
+            tab_2_title: {
+                allowNull: true,
+                type: DataTypes.STRING,
+            },
+            tab_2_content: {
+                allowNull: true,
+                type: DataTypes.STRING,
+            },
+            tab_2_picture: {
+                allowNull: true,
                 type: DataTypes.STRING,
             },
             created_at: {

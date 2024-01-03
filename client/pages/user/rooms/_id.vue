@@ -20,13 +20,13 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-skeleton-loader v-if="loading" type="text@2"></v-skeleton-loader>
-          <v-sheet tile height="54" class="d-flex">
+          <v-sheet tile height="54" class="d-flex mb-2">
             <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
             <v-select
-              v-model="type"
-              :items="types"
+              v-model="calenda.type"
+              :items="calenda.types"
               dense
               outlined
               hide-details
@@ -34,8 +34,8 @@
               label="type"
             ></v-select>
             <v-select
-              v-model="mode"
-              :items="modes"
+              v-model="calenda.mode"
+              :items="calenda.modes"
               dense
               outlined
               hide-details
@@ -43,8 +43,8 @@
               class="ma-2"
             ></v-select>
             <v-select
-              v-model="weekday"
-              :items="weekdays"
+              v-model="calenda.weekday"
+              :items="calenda.weekdays"
               dense
               outlined
               hide-details
@@ -56,20 +56,20 @@
               <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
           </v-sheet>
-          <v-sheet height="600">
+          <v-sheet max-height="600">
             <v-calendar
               ref="calendar"
-              v-model="value"
-              :weekdays="weekday"
-              :type="type"
-              :events="events"
-              :event-overlap-mode="mode"
+              v-model="calenda.value"
+              :weekdays="calenda.weekday"
+              :type="calenda.type"
+              :events="calenda.events"
+              :event-overlap-mode="calenda.mode"
               :event-overlap-threshold="30"
               :event-color="getEventColor"
               @change="getEvents"
             ></v-calendar>
           </v-sheet>
-          <div v-if="!loading" justify="center" align="center">
+          <div v-if="!loading" justify="center" align="center" class="mt-2">
             <div class="d-flex justify-space-around">
               <div class="text-h6 font-weight-bold">ราคา</div>
               <div>
@@ -79,14 +79,14 @@
               </div>
             </div>
             <v-btn
-              @click="$router.push(`/user/rooms/reserve/${room.id}`)"
+              @click="$router.push(`/user/rooms/booking/${room.id}`)"
               x-large
               elevation="2"
               max-width="200"
               class="text-h6 rounded-xl mt-8"
               dark
             >
-              <v-icon>mdi-cart-plus</v-icon>จองเลย
+              จองเลย<v-icon>mdi-calendar-edit</v-icon>
             </v-btn>
           </div>
         </v-col>
@@ -183,7 +183,41 @@ export default {
       },
     }
   },
-  methods: {},
+  methods: {
+    getEvents({ start, end }) {
+      const events = []
+
+      const min = new Date(`${start.date}T00:00:00`)
+      const max = new Date(`${end.date}T23:59:59`)
+      const days = (max.getTime() - min.getTime()) / 86400000
+      const eventCount = this.rnd(days, days + 20)
+
+      for (let i = 0; i < eventCount; i++) {
+        const allDay = this.rnd(0, 3) === 0
+        const firstTimestamp = this.rnd(min.getTime(), max.getTime())
+        const first = new Date(firstTimestamp - (firstTimestamp % 900000))
+        const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
+        const second = new Date(first.getTime() + secondTimestamp)
+
+        events.push({
+          name: this.calenda.names[this.rnd(0, this.calenda.names.length - 1)],
+          start: first,
+          end: second,
+          color:
+            this.calenda.colors[this.rnd(0, this.calenda.colors.length - 1)],
+          timed: !allDay,
+        })
+      }
+
+      this.calenda.events = events
+    },
+    getEventColor(event) {
+      return event.color
+    },
+    rnd(a, b) {
+      return Math.floor((b - a + 1) * Math.random()) + a
+    },
+  },
 }
 </script>
 <style scoped></style>

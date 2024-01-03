@@ -8,13 +8,13 @@ export interface ReserveAttribute {
     id?: string;
     user_id?: string;
     room_id?: string;
-    time_start?: string;
-    time_end?: string;
+    time_start?: Date;
+    time_end?: Date;
     details?: string;
-    approval_status?:boolean;
+    approval_status?: string;
     available_status?: boolean;
-    created_at?: string;
-    update_at?: string;
+    created_at?: Date;
+    update_at?: Date;
 }
 
 export interface ReserveAttributeCreation extends Optional<ReserveAttribute, 'id'> { }
@@ -28,13 +28,13 @@ class ReserveModel extends Model<ReserveAttribute, ReserveAttributeCreation> imp
 
     declare room_id: string;
 
-    declare time_start: string;
+    declare time_start: Date;
 
-    declare time_end: string;
+    declare time_end: Date;
 
     declare details: string;
 
-    declare approval_status: boolean;
+    declare approval_status: string;
 
     declare available_status: boolean;
 }
@@ -78,7 +78,7 @@ export const initReserveModel = (connection: Sequelize) => {
             },
             approval_status: {
                 allowNull: false,
-                type: DataTypes.BOOLEAN,
+                type: DataTypes.ENUM('WAITING', 'RETURN_QUOTATION','CONFIRM_QUOTATION', 'CONFIRM'),
             },
             available_status: {
                 allowNull: false,

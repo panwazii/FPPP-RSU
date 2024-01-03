@@ -10,8 +10,8 @@ const entries: UserAttribute[] = [
         email: 'tester01@gmail.com',
         password: '$2b$10$kaqSH2r8.EYGXVcKIEBwJ.cbaZAn0PJTj8HQoxTaGYymIRxl5PCl.',
         tel: '0100100100',
-        avatar: 'beta',
         verify_status: true,
+        booking_permission: 'NONE',
         available_status: true,
     },
     {
@@ -22,8 +22,8 @@ const entries: UserAttribute[] = [
         email: 'tester02@gmail.com',
         password: '$2b$10$kaqSH2r8.EYGXVcKIEBwJ.cbaZAn0PJTj8HQoxTaGYymIRxl5PCl.',
         tel: '0200200200',
-        avatar: 'beta',
         verify_status: true,
+        booking_permission: 'NONE',
         available_status: true,
     }
 ];

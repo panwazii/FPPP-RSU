@@ -8,8 +8,11 @@
         {{ otherError }}
       </h1>
     </div>
+    <p>error : {{ error.message }}</p>
     <div class="d-flex justify-end mt-6">
-      <v-btn class="rounded-xl" color="primary" @click="backHome()"> กลับหน้าหลัก </v-btn>
+      <v-btn class="rounded-xl" color="primary" @click="backHome()">
+        กลับหน้าหลัก
+      </v-btn>
     </div>
   </v-main>
 </template>
