@@ -17,7 +17,7 @@
         </v-stepper-step>
         <v-divider></v-divider>
         <v-stepper-step color="success" :complete="step === 3" step="3">
-          จองสำเร็จ
+          ส่งข้อมูลการจองสำเร็จ
         </v-stepper-step>
       </v-stepper-header>
       <v-stepper-items>
@@ -30,15 +30,17 @@
             v-if="loading"
             type="card-heading"
           ></v-skeleton-loader>
-          <v-card class="rounded-xl">
-            <v-img
-              aspect-ratio="1.7778"
-              max-width="1280"
-              max-height="720"
-              :src="roomPicture"
-              :lazy-src="require('~/static/img/default/no-image.png')"
-            />
-          </v-card>
+          <v-card-text>
+            <v-card class="rounded-xl">
+              <v-img
+                aspect-ratio="1.7778"
+                max-width="1280"
+                max-height="720"
+                :src="roomPicture"
+                :lazy-src="require('~/static/img/default/no-image.png')"
+              />
+            </v-card>
+          </v-card-text>
           <v-card-title class="mt-4 font-weight-bold">
             ข้อมูลส่วนตัว
           </v-card-title>
@@ -190,20 +192,200 @@
             เลือกอุปกรณ์เพิ่มเติม
           </v-card-subtitle>
           <v-card-text>
-            <v-row>
+            <!-- For Desktop -->
+            <div v-if="width">
+              <v-card
+                class="rounded-xl mb-2"
+                v-for="item in form.equipments"
+                :key="item.id"
+              >
+                <div class="d-flex justify-space-between">
+                  <div class="d-flex">
+                    <v-avatar class="ma-3 rounded-xl" size="125">
+                      <v-img
+                        :src="item.picture"
+                        :lazy-src="require('~/static/img/default/no-image.png')"
+                      ></v-img>
+                    </v-avatar>
+                    <div>
+                      <v-card-title>{{ item.name }}</v-card-title>
+                      <v-card-subtitle>{{ item.rent_price }}</v-card-subtitle>
+                    </div>
+                  </div>
+                  <div class="d-flex align-center justify-space-between mr-8">
+                    <v-card-title class="mr-4"
+                      >จำนวน :
+                      <div class="font-weight-bold ml-2">
+                        {{ item.quantity }}
+                      </div></v-card-title
+                    >
+                    <v-btn
+                      icon
+                      text
+                      color="error"
+                      @click="removeEquipment(item.id)"
+                    >
+                      <v-icon class="pa-2" large>mdi-trash-can</v-icon>
+                    </v-btn>
+                  </div>
+                </div>
+              </v-card>
+            </div>
+            <!-- For Mobile -->
+            <div v-if="!width">
+              <v-card
+                height="350"
+                class="rounded-xl mb-2"
+                v-for="item in form.equipments"
+                :key="item.id"
+              >
+                <v-img
+                  class="rounded-t-xl"
+                  aspect-ratio="1.3333"
+                  contain
+                  :src="item.picture"
+                  :lazy-src="require('~/static/img/default/no-image.png')"
+                ></v-img>
+                <v-divider class="my-0" />
+                <v-card-title class="mr-4">
+                  {{ item.name }}
+                </v-card-title>
+                <v-card-subtitle class="mr-4 d-flex">
+                  จำนวน :
+                  <div class="font-weight-bold ml-2">
+                    {{ item.quantity }}
+                  </div>
+                </v-card-subtitle>
+                <v-card-actions class="d-flex justify-center">
+                  <v-btn
+                    elevation="0"
+                    color="error"
+                    class="rounded-xl"
+                    width="100"
+                    @click="removeEquipment(item.id)"
+                  >
+                    <v-icon>mdi-trash-can</v-icon>
+                    ลบ
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </div>
+            <v-row v-if="!newEquipmentCard" class="mt-4">
               <v-col cols="12" class="d-flex justify-center">
-                <v-btn dark large class="rounded-xl subtitle-1 font-weight-bold"
+                <v-btn
+                  dark
+                  large
+                  class="rounded-xl subtitle-1 font-weight-bold"
+                  @click="newEquipmentCard = true"
                   >เพิ่มอุปกรณ์
                   <v-icon class="ml-1">mdi-plus</v-icon>
                 </v-btn>
               </v-col>
             </v-row>
+            <v-card v-if="newEquipmentCard" class="rounded-xl">
+              <v-card-title>เพิ่มอุปกรณ์</v-card-title>
+              <v-card-subtitle>
+                เลือกอุปกรณ์และจำนวนที่ต้องการจะเพิ่ม
+              </v-card-subtitle>
+              <v-divider />
+              <v-card-text class="mt-4">
+                <v-row>
+                  <v-col cols="12" md="6">
+                    <p class="mb-2 subtitle-2 font-weight-bold">อุปกรณ์</p>
+                    <v-autocomplete
+                      v-model="newEquipment.equipment"
+                      :items="equipments"
+                      filled
+                      outlined
+                      label="เลือกอุปกรณ์"
+                      item-text="name"
+                      item-value="id"
+                      class="rounded-xl"
+                      :menu-props="{
+                        rounded: 'xl',
+                        closeOnContentClick: true,
+                      }"
+                    >
+                      <template v-slot:item="{ item }">
+                        <v-list-item
+                          @click="handleItemClick(item)"
+                          :disabled="checkAvailableEquipment(item.id)"
+                        >
+                          <v-list-item-avatar>
+                            <v-img
+                              :src="item.picture"
+                              :lazy-src="
+                                require('~/static/img/default/no-image.png')
+                              "
+                            ></v-img>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              {{ item.name }}
+                            </v-list-item-title>
+                            <v-list-item-subtitle>
+                              ราคา : {{ item.rent_price.toLocaleString() }} บาท
+                            </v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </template>
+                    </v-autocomplete>
+                  </v-col>
+                  <v-col cols="12" md="6" v-if="isQuantityVisible">
+                    <p class="mb-2 subtitle-2 font-weight-bold">จำนวน</p>
+                    <div class="d-flex">
+                      <v-btn
+                        fab
+                        color="black"
+                        class="white--text my-0 mx-4"
+                        :disabled="minusDisable"
+                        @click="decreaseQuantity"
+                      >
+                        <v-icon>mdi-minus</v-icon>
+                      </v-btn>
+                      <div class="text-h6 font-weight-bold mx-6 my-3">
+                        {{ newEquipment.quantity }}
+                      </div>
+                      <v-btn
+                        fab
+                        color="black"
+                        class="white--text my-0 mx-4"
+                        :disabled="plusDisable"
+                        @click="increaseQuantity"
+                      >
+                        <v-icon>mdi-plus</v-icon>
+                      </v-btn>
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  class="white--text rounded-xl"
+                  elevation="0"
+                  color="black"
+                  :disabled="addEquipmentDisable"
+                  @click="addEquipment"
+                >
+                  เพิ่ม
+                </v-btn>
+                <v-btn
+                  class="rounded-xl"
+                  elevation="0"
+                  @click="closeNewEquipmentcard"
+                >
+                  ยกเลิก
+                </v-btn>
+              </v-card-actions>
+            </v-card>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-              class="rounded-xl"
-              color="primary"
+              class="rounded-xl white--text"
+              elevation="0"
+              color="black"
               :disabled="!valid"
               @click="confirmBookingData"
             >
@@ -213,75 +395,26 @@
         </v-stepper-content>
         <!-- Step 2 -->
         <v-stepper-content step="2">
-          <v-card-title class="font-weight-bold"> ยืนยันข้อมูล </v-card-title>
-          <v-card-subtitle class="subtitle-1 mb-4">
-            โปรดเช็ครายละเอียดก่อนกดส่งข้อมูลการจอง
-          </v-card-subtitle>
-          <v-card-text>
-            <v-row>
-              <v-col cols="12" md="4">
-                <p class="mb-0 subtitle-2 font-weight-bold">ชื่อจริง</p>
-                <p class="subtitle-1">{{ userInfo.fname }}</p>
-              </v-col>
-              <v-col cols="12" md="4">
-                <p class="mb-0 subtitle-2 font-weight-bold">นามสกุล</p>
-                <p class="subtitle-1">{{ userInfo.lname }}</p>
-              </v-col>
-              <v-col cols="12" md="4">
-                <p class="mb-0 subtitle-2 font-weight-bold">เบอร์ติดต่อ</p>
-                <p class="subtitle-1">{{ userInfo.tel }}</p>
-              </v-col>
-              <v-col cols="12" md="4">
-                <p class="mb-0 subtitle-2 font-weight-bold">อีเมล</p>
-                <p class="subtitle-1">{{ userInfo.email }}</p>
-              </v-col>
-              <v-col cols="12" md="4">
-                <p class="mb-0 subtitle-2 font-weight-bold">ประเภทผู้ใช้</p>
-                <p class="subtitle-1">{{ getuserTypeName }}</p>
-              </v-col>
-              <v-col cols="12" md="4"></v-col>
-            </v-row>
-            <v-divider class="mt-5"></v-divider>
-          </v-card-text>
-          <v-card-title class="font-weight-bold"> ข้อมูลการจอง </v-card-title>
-          <v-card-subtitle class="subtitle-1 mb-4">
-            รายละเอียดวันเวลาการจอง
-          </v-card-subtitle>
-          <v-card-text>
-            <v-row>
-              <v-col cols="12" md="6">
-                <p class="mb-0 subtitle-2 font-weight-bold">เวลาเริ่ม</p>
-                <p class="subtitle-1">{{ displayStartDateTime }}</p>
-              </v-col>
-              <v-col cols="12" md="6">
-                <p class="mb-0 subtitle-2 font-weight-bold">เวลาสิ้นสุด</p>
-                <p class="subtitle-1">{{ displayEndDateTime }}</p>
-              </v-col>
-              <v-col cols="12">
-                <v-textarea
-                  class="rounded-xl"
-                  v-model="form.etc"
-                  outlined
-                  disabled
-                  label="หมายเหตุ"
-                ></v-textarea>
-              </v-col>
-            </v-row>
-          </v-card-text>
-
-          <v-row class="justify-center mt-12 mb-12">
-            <v-btn class="rounded-xl mx-5" color="primary" @click="step = 1">
+          <UserRoomsBookingConfirmData
+            :bookingData="form"
+            :userData="userInfo"
+            :userTypes="userTypes"
+          />
+          <v-card-actions>
+            <v-btn class="rounded-xl" elevation="0" @click="step = 1">
               ถอยกลับ
             </v-btn>
+            <v-spacer></v-spacer>
             <v-btn
-              class="rounded-xl mx-5"
-              color="primary"
+              class="rounded-xl white--text"
+              elevation="0"
+              color="black"
               :disabled="!valid"
               @click="submit"
             >
               ส่งข้อมูลการจอง
             </v-btn>
-          </v-row>
+          </v-card-actions>
         </v-stepper-content>
         <v-stepper-content step="3">
           <v-card height="400" class="text-center" elevation="0">
@@ -289,10 +422,15 @@
               <h1>
                 <v-icon class="mr-2" color="black" x-large
                   >mdi-calendar-check</v-icon
-                >จองสำเร็จ !
+                >ส่งข้อมูลการจองสำเร็จ !
               </h1>
               <p>สามารถตรวจสอบสถานะการจองได้ที่หน้ารายการจองทั้งหมด</p>
-              <v-btn @click="$router.push('user/home')" class="rounded-xl text-h6" dark>ตกลง</v-btn>
+              <v-btn
+                @click="$router.push('/user/home')"
+                class="rounded-xl text-h6"
+                dark
+                >ตกลง
+              </v-btn>
             </div>
           </v-card>
         </v-stepper-content>
@@ -301,9 +439,15 @@
   </div>
 </template>
 <script>
+import { removeObjectWithId } from '../../../../utils/general-utils'
 export default {
   layout: 'user',
   middleware: 'user',
+  head() {
+    return {
+      title: 'จองห้องแลป',
+    }
+  },
   async asyncData({ params }) {
     const id = params.id
     return { id }
@@ -340,13 +484,9 @@ export default {
       this.userTypes = userTypes.user_types
     }
   },
-  head() {
-    return {
-      title: 'จองห้องแลป',
-    }
-  },
   data() {
     return {
+      test: { test2: {}, test: 'asdasdasda' },
       dateTimePicker: {
         datePicker: false,
         selectedDate: null,
@@ -359,7 +499,13 @@ export default {
         time_start: null,
         time_end: null,
         etc: '',
+        equipments: [],
       },
+      newEquipment: {
+        equipment: null,
+        quantity: 1,
+      },
+      newEquipmentCard: false,
       valid: false,
       step: 1,
       equipments: [],
@@ -394,7 +540,26 @@ export default {
       loading: true,
     }
   },
+  watch: {
+    'newEquipment.equipment': function () {
+      this.newEquipment.quantity = 1
+    },
+  },
   computed: {
+    width() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return false
+        case 'sm':
+          return false
+        case 'md':
+          return true
+        case 'lg':
+          return true
+        case 'xl':
+          return true
+      }
+    },
     getuserTypeName() {
       let name
       this.userTypes.forEach((type) => {
@@ -410,11 +575,39 @@ export default {
       tomorrow.setDate(tomorrow.getDate() + 1)
       return tomorrow.toISOString().substr(0, 10)
     },
-    displayStartDateTime() {
-      return this.$moment(this.form.time_start).format('DD/MM/YYYY HH:mm')
+    plusDisable() {
+      for (let i = 0; i < this.equipments.length; i++) {
+        if (this.equipments[i].id === this.newEquipment.equipment) {
+          if (this.newEquipment.quantity <= this.equipments[i].quantity - 1) {
+            return false
+          } else {
+            return true
+          }
+        }
+      }
     },
-    displayEndDateTime() {
-      return this.$moment(this.form.time_end).format('DD/MM/YYYY HH:mm')
+    minusDisable() {
+      if (this.newEquipment.quantity <= 1) {
+        return true
+      } else {
+        return false
+      }
+    },
+    isQuantityVisible() {
+      if (!this.newEquipment.equipment) {
+        return false
+      } else if (Object.keys(this.newEquipment.equipment).length === 0) {
+        return false
+      } else {
+        return true
+      }
+    },
+    addEquipmentDisable() {
+      if (typeof this.newEquipment.equipment === 'string') {
+        return false
+      } else {
+        return true
+      }
     },
   },
   methods: {
@@ -452,6 +645,57 @@ export default {
         this.modal.error.open = true
       }
     },
+    increaseQuantity() {
+      if (this.newEquipment.quantity >= this.newEquipment.equipment.quantity) {
+        return
+      }
+      this.newEquipment.quantity += 1
+    },
+    decreaseQuantity() {
+      if (this.newEquipment.quantity <= 1) {
+        return
+      }
+      this.newEquipment.quantity -= 1
+    },
+    handleItemClick(item) {
+      this.newEquipment.equipment = item.id
+    },
+    addEquipment() {
+      if (typeof this.newEquipment.equipment !== 'string') {
+        return
+      }
+      for (let i = 0; i < this.equipments.length; i++) {
+        if (this.equipments[i].id === this.newEquipment.equipment) {
+          this.form.equipments.push({
+            id: this.equipments[i].id,
+            name: this.equipments[i].name,
+            details: this.equipments[i].details,
+            rent_price: this.equipments[i].rent_price,
+            picture: this.equipments[i].picture,
+            quantity: this.newEquipment.quantity,
+          })
+        }
+      }
+      this.closeNewEquipmentcard()
+    },
+    removeEquipment(id) {
+      const newArray = removeObjectWithId(this.form.equipments, id)
+      this.form.equipments = newArray
+    },
+    checkAvailableEquipment(id) {
+      for (let i = 0; i < this.form.equipments.length; i++) {
+        if (this.form.equipments[i].id === id) {
+          return true
+        } else {
+          false
+        }
+      }
+    },
+    closeNewEquipmentcard() {
+      this.newEquipmentCard = false
+      this.newEquipment.equipment = {}
+      this.newEquipment.quantity = 1
+    },
     async submit() {
       try {
         const response = await this.$store.dispatch('api/user/createReserve', {
@@ -474,6 +718,12 @@ export default {
 </script>
 <style scoped>
 .center-complete-card {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.center-equipment-card {
   position: relative;
   top: 50%;
   left: 50%;

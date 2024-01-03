@@ -24,8 +24,6 @@
     >
       <v-spacer></v-spacer>
       <h1>สมัครสมาชิก</h1>
-      {{ valid }}
-      {{ agree }}
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-row>
