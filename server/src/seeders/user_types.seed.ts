@@ -2,15 +2,15 @@ import UserTypeModel, { UserTypeAttribute } from '../database/models/user_types.
 const entries: UserTypeAttribute[] = [
     {
         id: 1,
-        name: 'student',
+        name: 'นักศีกษา',
     },
     {
         id: 2,
-        name: 'teacher',
+        name: 'บุคลากร',
     },
     {
         id: 3,
-        name: 'guest',
+        name: 'บุคลากรภายนอก',
     },
 ];
 

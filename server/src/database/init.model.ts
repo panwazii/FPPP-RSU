@@ -20,7 +20,6 @@ import CartModel, { initCartModel } from './models/carts.model';
 import CartItemModel, { initCartItemModel } from './models/cart_items.model';
 import UserNotificationModel, { initUserNotificationModel } from './models/user_notifications.model';
 import AdminNotificationModel, { initAdminNotificationModel } from './models/admin_notifications.model';
-import ReserveEquipmentOnlyModel, { initReserveEquipmentOnlyModel } from './models/reserve_equipment_only.model';
 
 import { initWebInfoModel } from './models/web_info.model';
 import { initServiceModel } from './models/services.model';
@@ -80,7 +79,6 @@ const initDatabase = async () => {
         initEquipmentsModel,
         initSupplyModel,
         initReserveEquipmentModel,
-        initReserveEquipmentOnlyModel,
         initRoomPictureModel,
         initCartModel,
         initCartItemModel,
@@ -108,9 +106,6 @@ const initDatabase = async () => {
     UserModel.hasMany(ReserveModel, { foreignKey: 'user_id' });
     ReserveModel.belongsTo(UserModel, { foreignKey: 'user_id' });
 
-    UserModel.hasMany(ReserveEquipmentOnlyModel, { foreignKey: 'user_id' });
-    ReserveEquipmentOnlyModel.belongsTo(UserModel, { foreignKey: 'user_id' });
-
     RoomModel.hasMany(ReserveModel, { foreignKey: 'room_id' });
     ReserveModel.belongsTo(RoomModel, { foreignKey: 'room_id' });
 
@@ -131,12 +126,6 @@ const initDatabase = async () => {
 
     EquipmentInfoModel.hasMany(ReserveEquipmentModel, { foreignKey: 'equipment_info_id' });
     ReserveEquipmentModel.belongsTo(EquipmentInfoModel, { foreignKey: 'equipment_info_id' });
-
-    EquipmentsModel.hasMany(ReserveEquipmentOnlyModel, { foreignKey: 'equipments_id' });
-    ReserveEquipmentOnlyModel.belongsTo(EquipmentsModel, { foreignKey: 'equipments_id' });
-
-    EquipmentInfoModel.hasMany(ReserveEquipmentOnlyModel, { foreignKey: 'equipment_info_id' });
-    ReserveEquipmentOnlyModel.belongsTo(EquipmentInfoModel, { foreignKey: 'equipment_info_id' });
 
     ReserveModel.hasMany(ReserveEquipmentModel, { foreignKey: 'reserve_id' });
     ReserveEquipmentModel.belongsTo(ReserveModel, { foreignKey: 'reserve_id' });

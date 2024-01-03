@@ -1,6 +1,5 @@
 import ReserveModel, { ReserveAttribute } from '../database/models/reserve.model';
 import ReserveEquipmentModel, { ReserveEquipmentAttribute } from '../database/models/reserve_equipments.model';
-import ReserveEquipmentOnlyModel, { ReserveEquipmentOnlyAttribute } from '../database/models/reserve_equipment_only.model';
 import { Op } from 'sequelize';
 
 class ReserveController {
@@ -153,14 +152,12 @@ class ReserveController {
     //         time_end: data.time_end,
     //         quantity: data.quantity,
     //         available_status: data.available_status,
-    //     }, {
+    //     }, 
     //         where: {
     //             id: data.id,
     //         },
     //     })
     // }
 }
-
-
 
 export default ReserveController;
