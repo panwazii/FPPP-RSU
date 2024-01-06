@@ -2,6 +2,7 @@
   <div>
     <v-card min-height="550" class="rounded-xl mt-2 card">
       <div>
+        {{ allBooking }}
         <v-card class="rounded-xl mt-5">
           <v-row class="d-flex mx-5"><h3>กำลังดำเนินการจอง</h3></v-row>
           <v-row no-gutters class="flex-nowrap bg-surface-variant">
@@ -98,10 +99,18 @@
 </template>
 <script>
 export default {
-  computed: {},
+  async fetch() {
+    const getAllBookings = await this.$store.dispatch(
+      'api/user/getAllReserve',
+      {
+        params: { approval_status: 'WAITING' },
+      }
+    )
+    this.allBooking = getAllBookings
+  },
   data() {
     return {
-      reserve: [],
+      allBooking: [],
       search: { value: '', filter: 1 },
       fetchOption: { page: 1, totalPages: 0, itemsPerPage: 12 },
       routes: [{ id: 1, name: 'หน้าหลัก', to: '/' }],

@@ -77,7 +77,7 @@ class ReserveController {
 
     public static async createReserveEquipment(id: string, data: any) {
         const packet: ReserveEquipmentAttribute = {
-            equipment_info_id: data.equipment_info_id,
+            equipment_info_id: data.id,
             equipments_id: data.equipments_id,
             reserve_id: id,
             quantity: data.quantity,

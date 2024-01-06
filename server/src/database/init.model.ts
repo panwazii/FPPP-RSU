@@ -127,8 +127,8 @@ const initDatabase = async () => {
     EquipmentInfoModel.hasMany(ReserveEquipmentModel, { foreignKey: 'equipment_info_id' });
     ReserveEquipmentModel.belongsTo(EquipmentInfoModel, { foreignKey: 'equipment_info_id' });
 
-    ReserveModel.hasMany(ReserveEquipmentModel, { foreignKey: 'reserve_id' });
-    ReserveEquipmentModel.belongsTo(ReserveModel, { foreignKey: 'reserve_id' });
+    ReserveModel.hasMany(ReserveEquipmentModel, { as: 'reserve_equipment', foreignKey: 'reserve_id' });
+    ReserveEquipmentModel.belongsTo(ReserveModel, { as: 'reserve_equipment', foreignKey: 'reserve_id' });
 
     SupplierModel.hasMany(EquipmentsModel, { foreignKey: 'supplier_id' });
     EquipmentsModel.belongsTo(SupplierModel, { foreignKey: 'supplier_id' });

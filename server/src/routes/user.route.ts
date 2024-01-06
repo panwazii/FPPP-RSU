@@ -133,7 +133,7 @@ userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) =>
             for (const data of equipment) {
                 await ReserveController.createReserveEquipment(newReserve.id, data)
             }
-            res.json({ code: 200 });
+            res.json({ code: 201 });
         }
         else if (newReserve) {
             res.status(200).json({ code: 201 });
@@ -162,14 +162,14 @@ userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) =>
 userRouter.get('/getAllReserve', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const userId = req.body.credentials.id;
-        const searchValue = req.query.value as string;
+        const approvalStatus = req.query.approval_status as string;
         const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
         const offset = limit * Page;
-        const allReserve = await ReserveController.getAllReserveAndChildForUser(searchValue, userId, limit, offset)
+        const allReserve = await ReserveController.getAllReserveAndChildForUser(approvalStatus, userId, limit, offset)
         res.status(200).json({
             code: 200, reserve: allReserve.rows, total_pages: Math.ceil(allReserve.count / limit)
         });
