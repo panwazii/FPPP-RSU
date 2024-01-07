@@ -20,11 +20,11 @@ class ReserveController {
             distinct: true,
             where: {
                 user_id: id,
-                approval_status: { [Op.like]: '%' + searchValue + '%' },
+                approval_status: searchValue,
                 available_status: true
             },
             include: [{
-                model: ReserveEquipmentModel,
+                model: ReserveEquipmentModel, as: 'reserve_equipment',
             }],
             limit,
             offset,
@@ -35,12 +35,11 @@ class ReserveController {
         return ReserveModel.findAndCountAll({
             distinct: true,
             where: {
-                approval_status: { [Op.like]: '%' + searchValue + '%' },
+                approval_status: searchValue,
                 available_status: true
             },
             include: [{
-                model: ReserveEquipmentModel,
-                where: { available_status: true },
+                model: ReserveEquipmentModel, as: 'reserve_equipment',
             }],
             limit,
             offset,
