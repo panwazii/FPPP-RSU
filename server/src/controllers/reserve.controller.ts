@@ -3,14 +3,15 @@ import ReserveEquipmentModel, { ReserveEquipmentAttribute } from '../database/mo
 import { Op } from 'sequelize';
 
 class ReserveController {
-    public static async getReserveByID(id: string) {
+    public static async getSingleReserveAndChildForUser(id: string, userId: string) {
         return ReserveModel.findOne({
             where: {
-                id: id,
+                id,
+                user_id: userId,
+                available_status: true
             },
             include: [{
-                model: ReserveEquipmentModel,
-                where: { room_id: id }
+                model: ReserveEquipmentModel, as: 'reserve_equipment',
             }],
         });
     }

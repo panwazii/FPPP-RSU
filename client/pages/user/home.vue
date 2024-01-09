@@ -36,7 +36,7 @@
         >
           <div class="d-flex justify-center">
             <v-badge content="12" offset-x="20" offset-y="30">
-              <v-card-title>Return quotation</v-card-title>
+              <v-card-title>Confirm quotation</v-card-title>
             </v-badge>
           </div>
         </v-card>

@@ -128,6 +128,7 @@ userRouter.post('/update/password', checkBodyEmpty, authValid, (req, res) => {
 userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const equipment = req.body.equipment;
+        log(equipment)
         const newReserve = await ReserveController.createReserve(req.body)
         if (newReserve && equipment) {
             for (const data of equipment) {
@@ -172,6 +173,19 @@ userRouter.get('/getAllReserve', checkParamsEmpty, authValid, async (req, res) =
         const allReserve = await ReserveController.getAllReserveAndChildForUser(approvalStatus, userId, limit, offset)
         res.status(200).json({
             code: 200, reserve: allReserve.rows, total_pages: Math.ceil(allReserve.count / limit)
+        });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+userRouter.get('/getSingleReserve', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const reserveId = String(req.query.id)
+        const userId = req.body.credentials.id;
+        const reserve = await ReserveController.getSingleReserveAndChildForUser(reserveId, userId)
+        res.status(200).json({
+            code: 200, data: reserve
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));

@@ -511,15 +511,15 @@ adminRouter.post('/updateEquipmentStock', checkBodyEmpty, authValid, async (req,
 });
 
 // reserve
-adminRouter.get('/getSingleReserve', checkParamsEmpty, authValid, async (req, res) => {
-    try {
-        const id = req.query.id as string;
-        const reserve = await ReserveController.getReserveByID(id)
-        res.status(200).json({ code: 200, reserve });
-    } catch (error) {
-        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
-    }
-});
+// adminRouter.get('/getSingleReserve', checkParamsEmpty, authValid, async (req, res) => {
+//     try {
+//         const id = req.query.id as string;
+//         const reserve = await ReserveController.getReserveByID(id)
+//         res.status(200).json({ code: 200, reserve });
+//     } catch (error) {
+//         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+//     }
+// });
 
 adminRouter.get('/getAllReserveRoom', checkParamsEmpty, authValid, async (req, res) => {
     try {
