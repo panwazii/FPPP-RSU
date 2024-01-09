@@ -1,5 +1,7 @@
+import EquipmentInfoModel from '../database/models/equipment_infos.model';
 import ReserveModel, { ReserveAttribute } from '../database/models/reserve.model';
 import ReserveEquipmentModel, { ReserveEquipmentAttribute } from '../database/models/reserve_equipments.model';
+import RoomModel from '../database/models/rooms.model';
 import { Op } from 'sequelize';
 
 class ReserveController {
@@ -10,9 +12,13 @@ class ReserveController {
                 user_id: userId,
                 available_status: true
             },
-            include: [{
-                model: ReserveEquipmentModel, as: 'reserve_equipment',
-            }],
+            include: [
+                {
+                    model: RoomModel, as: 'room'
+                },
+                {
+                    model: ReserveEquipmentModel, as: 'reserve_equipment', include: [{ model: EquipmentInfoModel, as: 'equipment_info' }]
+                }],
         });
     }
 
@@ -45,6 +51,25 @@ class ReserveController {
             limit,
             offset,
 
+        });
+    }
+
+    public static async getAllReserveUser(id: string) {
+        return ReserveModel.findAll({
+            where: {
+                user_id: id,
+                available_status: true
+            },
+            raw:true
+        });
+    }
+
+    public static async getAllReserveAdmin() {
+        return ReserveModel.findAll({
+            where: {
+                available_status: true
+            },
+            raw:true
         });
     }
 

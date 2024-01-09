@@ -106,8 +106,8 @@ const initDatabase = async () => {
     UserModel.hasMany(ReserveModel, { foreignKey: 'user_id' });
     ReserveModel.belongsTo(UserModel, { foreignKey: 'user_id' });
 
-    RoomModel.hasMany(ReserveModel, { foreignKey: 'room_id' });
-    ReserveModel.belongsTo(RoomModel, { foreignKey: 'room_id' });
+    RoomModel.hasMany(ReserveModel, { as: 'room', foreignKey: 'room_id' });
+    ReserveModel.belongsTo(RoomModel, { as: 'room', foreignKey: 'room_id' });
 
     RoomModel.hasMany(RoomPictureModel, { as: 'picture', foreignKey: 'room_id' });
     RoomPictureModel.belongsTo(RoomModel, { as: 'picture', foreignKey: 'room_id' });
@@ -124,8 +124,8 @@ const initDatabase = async () => {
     EquipmentsModel.hasMany(ReserveEquipmentModel, { foreignKey: 'equipments_id' });
     ReserveEquipmentModel.belongsTo(EquipmentsModel, { foreignKey: 'equipments_id' });
 
-    EquipmentInfoModel.hasMany(ReserveEquipmentModel, { foreignKey: 'equipment_info_id' });
-    ReserveEquipmentModel.belongsTo(EquipmentInfoModel, { foreignKey: 'equipment_info_id' });
+    EquipmentInfoModel.hasMany(ReserveEquipmentModel, { as: 'equipment_info', foreignKey: 'equipment_info_id' });
+    ReserveEquipmentModel.belongsTo(EquipmentInfoModel, { as: 'equipment_info', foreignKey: 'equipment_info_id' });
 
     ReserveModel.hasMany(ReserveEquipmentModel, { as: 'reserve_equipment', foreignKey: 'reserve_id' });
     ReserveEquipmentModel.belongsTo(ReserveModel, { as: 'reserve_equipment', foreignKey: 'reserve_id' });

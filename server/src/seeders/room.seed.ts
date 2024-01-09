@@ -2,6 +2,13 @@ import RoomModel, { RoomAttribute } from "../database/models/rooms.model";
 
 const entries: RoomAttribute[] = [
     {
+        id: '579652d9-96bd-4cb3-9cd9-ed962fe21c93',
+        name: 'ห้องเก็บอุปกรณ์',
+        details: 'ห้องเก็บอุปกรณ์ที่สามารถเคลื่อนย้ายได้',
+        rent_price: 0,
+        available_status: false,
+    },
+    {
         id: '06bddb33-7e5a-476a-942c-cce5cd87f980',
         name: 'P102',
         details: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque excepturi dolor deserunt quasi vitae et cumque vel nihil! Incidunt, nobis dolores reprehenderit aspernatur officia sunt accusantium explicabo iste dolore eum?',

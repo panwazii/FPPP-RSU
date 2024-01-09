@@ -171,6 +171,7 @@ userRouter.get('/getAllReserve', checkParamsEmpty, authValid, async (req, res) =
         }
         const offset = limit * Page;
         const allReserve = await ReserveController.getAllReserveAndChildForUser(approvalStatus, userId, limit, offset)
+
         res.status(200).json({
             code: 200, reserve: allReserve.rows, total_pages: Math.ceil(allReserve.count / limit)
         });
@@ -186,6 +187,43 @@ userRouter.get('/getSingleReserve', checkParamsEmpty, authValid, async (req, res
         const reserve = await ReserveController.getSingleReserveAndChildForUser(reserveId, userId)
         res.status(200).json({
             code: 200, data: reserve
+        });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+userRouter.get('/countReserve', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const userId = req.body.credentials.id;
+        const reserve = await ReserveController.getAllReserveUser(userId)
+        let countReserve = {
+            waiting: 0,
+            return_quotation: 0,
+            confirm_quotation: 0,
+            confirm: 0,
+            cancel: 0,
+        }
+
+        reserve.forEach(reserve => {
+            if (reserve.approval_status == 'WAITING') {
+                countReserve.waiting += 1
+            }
+            if (reserve.approval_status == 'RETURN_QUOTATION') {
+                countReserve.waiting += 1
+            }
+            if (reserve.approval_status == 'CONFIRM_QUOTATION') {
+                countReserve.confirm_quotation += 1
+            }
+            if (reserve.approval_status == 'CONFIRM') {
+                countReserve.confirm += 1
+            }
+            if (reserve.approval_status == 'CANCEL') {
+                countReserve.cancel += 1
+            }
+        });
+        res.status(200).json({
+            code: 200, count_reserve: countReserve
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
