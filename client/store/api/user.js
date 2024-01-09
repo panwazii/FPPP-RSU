@@ -5,6 +5,7 @@ export const actions = {
       .then((res) => res.data)
   },
   async getAllReserve({ getters }, data) {
+    this.$axios.setHeader('authorization', this.$cookies.get('token'))
     return await this.$axios
       .get('api/user/getAllReserve', data)
       .then((res) => res.data)

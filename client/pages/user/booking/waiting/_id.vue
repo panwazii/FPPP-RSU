@@ -1,47 +1,183 @@
 <template>
   <div>
     <SharedBreadCrumbs title="รายละเอียดการจอง" :routes="routes" />
-    <v-card min-height="800" class="rounded-xl mt-2 pa-4">
-      <v-skeleton-loader v-if="loading" type="article"></v-skeleton-loader>
-      <v-card-title class="font-weight-bold"> รายละเอียดการจอง </v-card-title>
-      <v-card-subtitle class="subtitle-1 mb-4">
-        รายละเอียดวันและเวลาการจอง
-      </v-card-subtitle>
-      {{ bookingData }}
-      <v-row class="ma-1">
-        <v-col cols="12" md="6">
-          <p class="mb-0 subtitle-2 font-weight-bold">สถานะการจอง</p>
-          <p class="subtitle-1">{{ displayBookingStatus }}</p>
-        </v-col>
-        <v-col cols="12" md="6">
-          <p class="mb-0 subtitle-2 font-weight-bold">ประเภทการจอง</p>
-          <p class="subtitle-1">{{ displayBookingType }}</p>
-        </v-col>
-        <v-col cols="12">
-          <p class="mb-0 subtitle-2 font-weight-bold">วันที่จอง</p>
-          <p class="subtitle-1">{{ displayStartDate }}</p>
-        </v-col>
-        <v-col cols="12" md="6">
-          <p class="mb-0 subtitle-2 font-weight-bold">เวลาเริ่ม</p>
-          <p class="subtitle-1">{{ displayStartTime }}</p>
-        </v-col>
-        <v-col cols="12" md="6">
-          <p class="mb-0 subtitle-2 font-weight-bold">เวลาสิ้นสุด</p>
-          <p class="subtitle-1">{{ displayEndTime }}</p>
-        </v-col>
-        <v-col cols="12">
-          <p class="mb-0 subtitle-2 font-weight-bold">หมายเหตุ</p>
-          <p class="subtitle-1">{{ bookingData.details }}</p>
-          <!-- <v-textarea
+    <v-card min-height="200" v-if="loading" class="rounded-xl mt-2 pa-4">
+      <v-skeleton-loader type="article"></v-skeleton-loader>
+    </v-card>
+
+    <v-card min-height="800" v-if="!loading" class="rounded-xl mt-2 pa-4">
+      <div>
+        <div class="d-flex justify-space-between">
+          <div>
+            <v-card-title class="font-weight-bold">
+              <div class="d-flex">รายละเอียดการจอง</div>
+            </v-card-title>
+            <v-card-subtitle class="subtitle-1 mb-4">
+              รายละเอียดวันและเวลาการจอง
+            </v-card-subtitle>
+          </div>
+          <div>
+            <v-btn
+              dark
               class="rounded-xl"
-              v-model="bookingData.details"
-              outlined
-              disabled
-              label="หมายเหตุ"
-            ></v-textarea> -->
-        </v-col>
-      </v-row>
+              elevation="0"
+              @click="$router.push('/user/home')"
+              >กลับ</v-btn
+            >
+          </div>
+        </div>
+
+        <v-row class="ma-1">
+          <v-col cols="12" md="6">
+            <p class="ml-4 mb-1 subtitle-2 font-weight-bold">สถานะการจอง</p>
+            <p class="ml-2 subtitle-1">
+              <v-chip :input-value="true">{{ displayBookingStatus }}</v-chip>
+            </p>
+          </v-col>
+          <v-col cols="12" md="6">
+            <p class="ml-4 mb-1 subtitle-2 font-weight-bold">ประเภทการจอง</p>
+            <p class="ml-2 subtitle-1">
+              <v-chip :input-value="true">
+                {{ displayBookingType }}
+              </v-chip>
+            </p>
+          </v-col>
+          <v-col cols="12">
+            <p class="ml-4 mb-0 subtitle-2 font-weight-bold">วันที่จอง</p>
+            <p class="ml-4 subtitle-1">{{ displayStartDate }}</p>
+          </v-col>
+          <v-col cols="12" md="6">
+            <p class="ml-4 mb-0 subtitle-2 font-weight-bold">เวลาเริ่ม</p>
+            <p class="ml-4 subtitle-1">{{ displayStartTime }}</p>
+          </v-col>
+          <v-col cols="12" md="6">
+            <p class="ml-4 mb-0 subtitle-2 font-weight-bold">เวลาสิ้นสุด</p>
+            <p class="ml-4 subtitle-1">{{ displayEndTime }}</p>
+          </v-col>
+          <v-col cols="12">
+            <p class="ml-4 mb-0 subtitle-2 font-weight-bold">หมายเหตุ</p>
+            <p class="ml-4 subtitle-1">{{ bookingData.details }}</p>
+          </v-col>
+        </v-row>
+      </div>
       <v-divider class="mt-5"></v-divider>
+      <div v-if="bookingData.room_id !== null">
+        <v-card-title class="font-weight-bold"> ห้อง </v-card-title>
+        <v-card-subtitle class="subtitle-1 mb-4">
+          รายละเอียดห้องที่จอง
+        </v-card-subtitle>
+        <!-- For Desktop -->
+        <div v-if="width" class="ma-2">
+          <v-card class="rounded-xl mb-2">
+            <div class="d-flex justify-space-between">
+              <div class="d-flex">
+                <v-avatar class="ma-3 rounded-xl" size="125">
+                  <v-img
+                    :src="bookingData.room.picture"
+                    :lazy-src="require('~/static/img/default/no-image.png')"
+                  ></v-img>
+                </v-avatar>
+                <div>
+                  <v-card-title>{{ bookingData.room.name }}</v-card-title>
+                  <v-card-subtitle>
+                    <div class="line-clamp">
+                      {{ bookingData.room.details }}
+                    </div>
+                  </v-card-subtitle>
+                </div>
+              </div>
+            </div>
+          </v-card>
+        </div>
+        <!-- For Mobile -->
+        <div v-if="!width" class="ma-1">
+          <v-card height="350" class="rounded-xl mb-2">
+            <v-img
+              class="rounded-t-xl"
+              aspect-ratio="1.3333"
+              contain
+              :src="bookingData.room.picture"
+              :lazy-src="require('~/static/img/default/no-image.png')"
+            ></v-img>
+            <v-divider class="my-0" />
+            <v-card-title class="mr-4">
+              {{ bookingData.room.name }}
+            </v-card-title>
+            <v-card-subtitle class="mr-4 d-flex">
+              <div class="line-clamp">
+                {{ bookingData.room.details }}
+              </div>
+            </v-card-subtitle>
+          </v-card>
+        </div>
+      </div>
+      <v-divider class="mt-5"></v-divider>
+      <div v-if="bookingData.reserve_equipment.length > 0">
+        <v-card-title class="font-weight-bold"> อุปกรณ์ </v-card-title>
+        <v-card-subtitle class="subtitle-1 mb-4">
+          รายละเอียดอุปกรณ์ที่จอง
+        </v-card-subtitle>
+        <!-- For Desktop -->
+        <div v-if="width" class="ma-2">
+          <v-card
+            class="rounded-xl mb-2"
+            v-for="item in bookingData.reserve_equipment"
+            :key="item.id"
+          >
+            <div class="d-flex justify-space-between">
+              <div class="d-flex">
+                <v-avatar class="ma-3 rounded-xl" size="125">
+                  <v-img
+                    :src="item.equipment_info.picture"
+                    :lazy-src="require('~/static/img/default/no-image.png')"
+                  ></v-img>
+                </v-avatar>
+                <div>
+                  <v-card-title>{{ item.equipment_info.name }}</v-card-title>
+                  <v-card-subtitle>
+                    {{ item.equipment_info.details }}
+                  </v-card-subtitle>
+                </div>
+              </div>
+              <div class="d-flex align-center justify-space-between mr-8">
+                <v-card-title class="mr-4"
+                  >จำนวน :
+                  <div class="font-weight-bold ml-2">
+                    {{ item.equipment_info.quantity }}
+                  </div></v-card-title
+                >
+              </div>
+            </div>
+          </v-card>
+        </div>
+        <!-- For Mobile -->
+        <div v-if="!width" class="ma-1">
+          <v-card
+            height="350"
+            class="rounded-xl mb-2"
+            v-for="item in bookingData.reserve_equipment"
+            :key="item.id"
+          >
+            <v-img
+              class="rounded-t-xl"
+              aspect-ratio="1.3333"
+              contain
+              :src="item.equipment_info.picture"
+              :lazy-src="require('~/static/img/default/no-image.png')"
+            ></v-img>
+            <v-divider class="my-0" />
+            <v-card-title class="mr-4">
+              {{ item.equipment_info.name }}
+            </v-card-title>
+            <v-card-subtitle class="mr-4 d-flex">
+              จำนวน :
+              <div class="font-weight-bold ml-2">
+                {{ item.equipment_info.quantity }}
+              </div>
+            </v-card-subtitle>
+          </v-card>
+        </div>
+      </div>
     </v-card>
   </div>
 </template>
@@ -64,12 +200,26 @@ export default {
       })
       return
     } else {
-      this.routes[1].name = this.displayStartDate + ' ' + this.displayStartTime
       this.bookingData = booking.data
+      this.routes[1].name = this.displayStartDate + ' ' + this.displayStartTime
       this.loading = false
     }
   },
   computed: {
+    width() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return false
+        case 'sm':
+          return false
+        case 'md':
+          return true
+        case 'lg':
+          return true
+        case 'xl':
+          return true
+      }
+    },
     displayBookingStatus() {
       try {
         if (this.bookingData.approval_status === 'WAITING') {
@@ -147,5 +297,12 @@ export default {
   methods: {},
 }
 </script>
-  <style scoped>
+<style scoped>
+.line-clamp {
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
 </style>

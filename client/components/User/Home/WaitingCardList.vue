@@ -1,18 +1,27 @@
 <template>
-  <v-card min-height="350" class="rounded-xl mt-2">
-    <v-card-title>
-      วันที่จอง {{ displayStartDate }} เวลา
-      {{ displayStartTime }}
+  <v-card class="rounded-xl mt-4">
+    <v-card-title class="ml-2">
+      วันที่ {{ displayStartDate }} เวลา {{ displayStartTime }} -
+      {{ displayEndTime }}
     </v-card-title>
-    <v-card-subtitle>{{ data.time_start }}</v-card-subtitle>
-    {{ data }}
+    <v-card-subtitle class="subtitle-1 font-weight-bold">
+      <v-chip color="secondary" :input-value="true">
+        {{ displayBookingType }}</v-chip
+      >
+      <v-chip color="primary" :input-value="true" v-if="bookingData.room_id">
+        ห้อง : asdasd</v-chip
+      >
+      <v-chip :input-value="true" v-if="displayEquipmentCount !== 0">
+        อุปกรณ์ทั้งหมด : {{ displayEquipmentCount }}</v-chip
+      >
+    </v-card-subtitle>
     <v-card-actions>
       <v-spacer />
       <v-btn
         dark
         elevation="0"
         class="rounded-xl"
-        @click="$router.push(`/user/booking/waiting/${data.id}`)"
+        @click="$router.push(`/user/booking/waiting/${bookingData.id}`)"
         >ดูรายละเอียด
       </v-btn>
     </v-card-actions>
@@ -21,25 +30,57 @@
   <script>
 export default {
   props: {
-    data: {
+    bookingData: {
       type: Object,
       default: () => {},
     },
   },
   data() {
-    return {
-      allBooking: [],
-      search: { value: '', filter: 1 },
-      fetchOption: { page: 1, totalPages: 0, itemsPerPage: 12 },
-    }
+    return {}
   },
   methods: {},
   computed: {
+    displayEquipmentCount() {
+      try {
+        if (this.bookingData.reserve_equipment.length > 0) {
+          let count = 0
+          this.bookingData.reserve_equipment.forEach((item) => {
+            count += item.quantity
+          })
+          return count
+        } else {
+          return 0
+        }
+      } catch (error) {
+        return 0
+      }
+    },
+    displayBookingType() {
+      try {
+        if (
+          this.bookingData.room_id &&
+          this.bookingData.reserve_equipment.length > 0
+        ) {
+          return 'จ้องห้องพร้อมอุปกรณ์'
+        } else if (this.bookingData.room_id) {
+          return 'จ้องห้อง'
+        } else if (this.bookingData.reserve_equipment.length > 0) {
+          return 'จ้องอุปกรณ์'
+        } else {
+          return 'n/a'
+        }
+      } catch (error) {
+        return 'n/a'
+      }
+    },
     displayStartDate() {
-      return this.$moment(this.data.time_start).format('DD/MM/YYYY')
+      return this.$moment(this.bookingData.time_start).format('DD/MM/YYYY')
     },
     displayStartTime() {
-      return this.$moment(this.data.time_start).format('HH:mm')
+      return this.$moment(this.bookingData.time_start).format('HH:mm')
+    },
+    displayEndTime() {
+      return this.$moment(this.bookingData.time_end).format('HH:mm')
     },
   },
 }

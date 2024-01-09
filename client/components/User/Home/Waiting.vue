@@ -1,19 +1,16 @@
 <template>
   <div>
-    <v-card min-height="550" class="rounded-xl mt-2 card">
-      <div v-for="booking in allBooking" :key="booking.id">
-        <UserHomeWaitingCardList :data="booking" />
-      </div>
-
-      <v-pagination
-        circle
-        dark
-        class="mt-2"
-        v-model="fetchOption.page"
-        :length="fetchOption.totalPages"
-      >
-      </v-pagination>
-    </v-card>
+    <div v-for="booking in allBooking" :key="booking.id">
+      <UserHomeWaitingCardList :bookingData="booking" />
+    </div>
+    <v-pagination
+      circle
+      dark
+      class="mt-2"
+      v-model="fetchOption.page"
+      :length="fetchOption.totalPages"
+    >
+    </v-pagination>
   </div>
 </template>
 <script>
@@ -39,9 +36,9 @@ export default {
 }
 </script>
 <style scoped>
-.card {
+/* .card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
+} */
 </style>
