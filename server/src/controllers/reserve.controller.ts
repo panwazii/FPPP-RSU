@@ -1,8 +1,10 @@
+import ProductionLineModel from '../database/models/production_lines.model';
 import EquipmentInfoModel from '../database/models/equipment_infos.model';
 import ReserveModel, { ReserveAttribute } from '../database/models/reserve.model';
 import ReserveEquipmentModel, { ReserveEquipmentAttribute } from '../database/models/reserve_equipments.model';
 import RoomModel from '../database/models/rooms.model';
 import { Op } from 'sequelize';
+import RoomPictureModel from '../database/models/room_pictures.model';
 
 class ReserveController {
     public static async getSingleReserveAndChildForUser(id: string, userId: string) {
@@ -14,10 +16,19 @@ class ReserveController {
             },
             include: [
                 {
-                    model: RoomModel, as: 'room'
+                    model: RoomModel, as: 'room',
+                    include: [{
+                        model: RoomPictureModel, as: 'picture',
+                    }]
                 },
                 {
-                    model: ReserveEquipmentModel, as: 'reserve_equipment', include: [{ model: EquipmentInfoModel, as: 'equipment_info' }]
+                    model: ReserveEquipmentModel, as: 'reserve_equipment',
+                    include: [{
+                        model: EquipmentInfoModel, as: 'equipment_info',
+                        include: [{
+                            model: ProductionLineModel, as: 'production_line',
+                        }]
+                    }]
                 }],
         });
     }
@@ -30,9 +41,13 @@ class ReserveController {
                 approval_status: searchValue,
                 available_status: true
             },
-            include: [{
-                model: ReserveEquipmentModel, as: 'reserve_equipment',
-            }],
+            include: [
+                {
+                    model: RoomModel, as: 'room',
+                },
+                {
+                    model: ReserveEquipmentModel, as: 'reserve_equipment',
+                }],
             limit,
             offset,
         });
@@ -60,7 +75,7 @@ class ReserveController {
                 user_id: id,
                 available_status: true
             },
-            raw:true
+            raw: true
         });
     }
 
@@ -69,7 +84,7 @@ class ReserveController {
             where: {
                 available_status: true
             },
-            raw:true
+            raw: true
         });
     }
 
