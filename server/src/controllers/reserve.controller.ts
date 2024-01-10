@@ -56,6 +56,30 @@ class ReserveController {
         });
     }
 
+    public static async getSingleReserveAndChild(id: string) {
+        return ReserveModel.findOne({
+            where: {
+                id
+            },
+            include: [
+                {
+                    model: RoomModel, as: 'room',
+                    include: [{
+                        model: RoomPictureModel, as: 'picture',
+                    }]
+                },
+                {
+                    model: ReserveEquipmentModel, as: 'reserve_equipment',
+                    include: [{
+                        model: EquipmentInfoModel, as: 'equipment_info',
+                        include: [{
+                            model: ProductionLineModel, as: 'production_line',
+                        }]
+                    }]
+                }],
+        });
+    }
+
     public static async getAllReserveAndChild(searchValue: string, limit: number, offset: number) {
         return ReserveModel.findAndCountAll({
             distinct: true,

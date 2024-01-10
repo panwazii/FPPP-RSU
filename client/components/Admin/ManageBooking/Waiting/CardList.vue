@@ -21,7 +21,7 @@
           dark
           elevation="0"
           class="rounded-xl"
-          @click="$router.push(`/user/booking/waiting/${bookingData.id}`)"
+          @click="$router.push(`/admin/manage-booking/waiting/${bookingData.id}`)"
           >ดูรายละเอียด
         </v-btn>
       </v-card-actions>

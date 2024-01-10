@@ -173,18 +173,12 @@ export default {
         },
         {
           id: 11,
-          name: 'จัดการการจอง',
-          icon: 'mdi-calendar-check',
-          path: '/admin/manage-reserve',
-        },
-        {
-          id: 12,
           name: 'จัดการผู้ผลิต',
           icon: 'mdi-briefcase-account-outline',
           path: '/admin/manage-supplier',
         },
         {
-          id: 13,
+          id: 12,
           name: 'จัดการ Supply stock',
           icon: 'mdi-warehouse',
           path: '/admin/manage-supplystock',

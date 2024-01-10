@@ -539,6 +539,19 @@ adminRouter.get('/getAllReserve', checkParamsEmpty, authValid, async (req, res) 
     }
 });
 
+adminRouter.get('/getSingleReserve', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const reserveId = String(req.query.id)
+        const userId = req.body.credentials.id;
+        const reserve = await ReserveController.getSingleReserveAndChild(reserveId)
+        res.status(200).json({
+            code: 200, data: reserve
+        });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 adminRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const equipment = req.body.equipment_info_id;

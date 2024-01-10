@@ -183,8 +183,8 @@
   </template>
   <script>
   export default {
-    layout: 'user',
-    middleware: 'user',
+    layout: 'admin',
+    middleware: 'admin',
     async asyncData({ params }) {
       const id = params.id
       return { id }
