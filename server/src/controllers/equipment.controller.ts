@@ -479,7 +479,12 @@ class EquipmentController {
             include: [{
                 model: EquipmentsModel, as: 'stock',
                 where: { room_id: id, available_status: true, },
-            }],
+            }, {
+                model: RentRate, as: 'rent_rate',
+                attributes: ['name'],
+            }
+            ],
+
         });
     }
 }

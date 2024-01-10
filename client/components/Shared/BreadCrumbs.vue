@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mb-4 pa-2 rounded-xl" height="120">
+  <v-card class="mb-4 pa-2 rounded-xl" min-height="120">
     <v-card-title class="text-h5 font-weight-bold">{{ title }}</v-card-title>
     <v-card-text class="text-subtitle-1">
       <div class="d-flex">

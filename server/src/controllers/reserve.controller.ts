@@ -1,17 +1,38 @@
+import ProductionLineModel from '../database/models/production_lines.model';
+import EquipmentInfoModel from '../database/models/equipment_infos.model';
 import ReserveModel, { ReserveAttribute } from '../database/models/reserve.model';
 import ReserveEquipmentModel, { ReserveEquipmentAttribute } from '../database/models/reserve_equipments.model';
+import RoomModel from '../database/models/rooms.model';
 import { Op } from 'sequelize';
+import RoomPictureModel from '../database/models/room_pictures.model';
+import QuotationModel, { QuotationAttribute } from '../database/models/quotations.model';
+import AdminModel from '../database/models/admins.model';
+import UserModel from '../database/models/users.model';
 
 class ReserveController {
-    public static async getReserveByID(id: string) {
+    public static async getSingleReserveAndChildForUser(id: string, userId: string) {
         return ReserveModel.findOne({
             where: {
-                id: id,
+                id,
+                user_id: userId,
+                available_status: true
             },
-            include: [{
-                model: ReserveEquipmentModel,
-                where: { room_id: id }
-            }],
+            include: [
+                {
+                    model: RoomModel, as: 'room',
+                    include: [{
+                        model: RoomPictureModel, as: 'picture',
+                    }]
+                },
+                {
+                    model: ReserveEquipmentModel, as: 'reserve_equipment',
+                    include: [{
+                        model: EquipmentInfoModel, as: 'equipment_info',
+                        include: [{
+                            model: ProductionLineModel, as: 'production_line',
+                        }]
+                    }]
+                }],
         });
     }
 
@@ -20,12 +41,16 @@ class ReserveController {
             distinct: true,
             where: {
                 user_id: id,
-                approval_status: { [Op.like]: '%' + searchValue + '%' },
+                approval_status: searchValue,
                 available_status: true
             },
-            include: [{
-                model: ReserveEquipmentModel,
-            }],
+            include: [
+                {
+                    model: RoomModel, as: 'room',
+                },
+                {
+                    model: ReserveEquipmentModel, as: 'reserve_equipment',
+                }],
             limit,
             offset,
         });
@@ -35,16 +60,37 @@ class ReserveController {
         return ReserveModel.findAndCountAll({
             distinct: true,
             where: {
-                approval_status: { [Op.like]: '%' + searchValue + '%' },
+                approval_status: searchValue,
                 available_status: true
             },
-            include: [{
-                model: ReserveEquipmentModel,
-                where: { available_status: true },
-            }],
+            include: [
+                {
+                    model: RoomModel, as: 'room',
+                }, {
+                    model: ReserveEquipmentModel, as: 'reserve_equipment',
+                }
+            ],
             limit,
             offset,
+        });
+    }
 
+    public static async getAllReserveUser(id: string) {
+        return ReserveModel.findAll({
+            where: {
+                user_id: id,
+                available_status: true
+            },
+            raw: true
+        });
+    }
+
+    public static async getAllReserveAdmin() {
+        return ReserveModel.findAll({
+            where: {
+                available_status: true
+            },
+            raw: true
         });
     }
 
@@ -77,7 +123,7 @@ class ReserveController {
 
     public static async createReserveEquipment(id: string, data: any) {
         const packet: ReserveEquipmentAttribute = {
-            equipment_info_id: data.equipment_info_id,
+            equipment_info_id: data.id,
             equipments_id: data.equipments_id,
             reserve_id: id,
             quantity: data.quantity,
@@ -93,6 +139,78 @@ class ReserveController {
             equipments_id: data.equipments_id,
             quantity: data.quantity,
             available_status: data.available_status,
+        }, {
+            where: {
+                id: data.id,
+            },
+        })
+    }
+
+    public static async getSingleQuotationUser(user_id: string, reserve_id: string) {
+        return QuotationModel.findOne({
+            where: {
+                reserve_id: reserve_id,
+            },
+            include: [{
+                model: ReserveModel,
+                where: { user_id: user_id },
+                include: [{
+                    model: UserModel,
+                }, {
+                    model: RoomModel, as: 'room',
+                }, {
+                    model: ReserveEquipmentModel, as: 'reserve_equipment',
+                    include: [{ model: EquipmentInfoModel, as: 'equipment_info' }]
+                }
+                ]
+            },
+            {
+                model: AdminModel
+            }
+            ]
+        });
+    }
+
+    public static async getSingleQuotation(id: string) {
+        return QuotationModel.findOne({
+            where: {
+                reserve_id: id,
+            },
+            include: [{
+                model: ReserveModel,
+                include: [{
+                    model: UserModel,
+                }, {
+                    model: RoomModel, as: 'room',
+                }, {
+                    model: ReserveEquipmentModel, as: 'reserve_equipment',
+                    include: [{ model: EquipmentInfoModel, as: 'equipment_info' }]
+                }
+                ]
+            },
+            {
+                model: AdminModel
+            }
+            ]
+        });
+    }
+
+    public static async createQuotation(id: string, data: any) {
+        const packet: QuotationAttribute = {
+            reserve_id: data.reserve_id,
+            admin_id: id,
+            equipment_price: data.equipment_price,
+            room_price: data.room_price,
+        };
+        return QuotationModel.create(packet)
+    }
+
+    public static async updateQuotation(id: string, data: any) {
+        return QuotationModel.update({
+            reserve_id: data.reserve_id,
+            admin_id: id,
+            equipment_price: data.equipment_price,
+            room_price: data.room_price,
         }, {
             where: {
                 id: data.id,
