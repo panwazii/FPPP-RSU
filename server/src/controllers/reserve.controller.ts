@@ -8,6 +8,7 @@ import RoomPictureModel from '../database/models/room_pictures.model';
 import QuotationModel, { QuotationAttribute } from '../database/models/quotations.model';
 import AdminModel from '../database/models/admins.model';
 import UserModel from '../database/models/users.model';
+import UserTypeModel from '../database/models/user_types.model';
 
 class ReserveController {
     public static async getSingleReserveAndChildForUser(id: string, userId: string) {
@@ -62,6 +63,13 @@ class ReserveController {
                 id
             },
             include: [
+                {
+                    model: UserModel, as: 'user',
+                    attributes: { exclude: ['password', 'created_at', 'updated_at'] },
+                    include: [{
+                        model: UserTypeModel, as: 'user_type',
+                    }]
+                },
                 {
                     model: RoomModel, as: 'room',
                     include: [{

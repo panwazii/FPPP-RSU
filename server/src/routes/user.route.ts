@@ -30,7 +30,7 @@ userRouter.get('/getUserInfo', authValid, async (req, res) => {
                 tel: userInfo!.tel,
                 booking_permission: userInfo!.booking_permission,
                 created_at: userInfo!.created_at,
-                update_at: userInfo!.update_at
+                updated_at: userInfo!.updated_at
             }
         });
     } catch (error) {

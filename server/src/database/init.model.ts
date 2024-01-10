@@ -88,7 +88,7 @@ const initDatabase = async () => {
         //Admin
         initAdminModel,
         initAdminNotificationModel,
-        
+
         initQuotationModel,
 
         //Public
@@ -106,8 +106,8 @@ const initDatabase = async () => {
     UserTypeModel.hasMany(UserModel, { as: 'user_type', foreignKey: 'type_id' });
     UserModel.belongsTo(UserTypeModel, { as: 'user_type', foreignKey: 'type_id' });
 
-    UserModel.hasMany(ReserveModel, { foreignKey: 'user_id' });
-    ReserveModel.belongsTo(UserModel, { foreignKey: 'user_id' });
+    UserModel.hasMany(ReserveModel, { as: 'user', foreignKey: 'user_id' });
+    ReserveModel.belongsTo(UserModel, { as: 'user', foreignKey: 'user_id' });
 
     RoomModel.hasMany(ReserveModel, { as: 'room', foreignKey: 'room_id' });
     ReserveModel.belongsTo(RoomModel, { as: 'room', foreignKey: 'room_id' });

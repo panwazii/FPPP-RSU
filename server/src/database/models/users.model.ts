@@ -15,7 +15,7 @@ export interface UserAttribute {
     booking_permission?: string;
     available_status?: boolean;
     created_at?: Date;
-    update_at?: Date;
+    updated_at?: Date;
 }
 
 export interface UserAttributeCreation extends Optional<UserAttribute, 'id'> { }
@@ -43,7 +43,7 @@ class UserModel extends Model<UserAttribute, UserAttributeCreation> implements U
 
     declare created_at: Date;
 
-    declare update_at: Date;
+    declare updated_at: Date;
 }
 
 export const initUserModel = (connection: Sequelize) => {
@@ -106,7 +106,7 @@ export const initUserModel = (connection: Sequelize) => {
                 type: DataTypes.DATE,
                 defaultValue: DataTypes.NOW,
             },
-            update_at: {
+            updated_at: {
                 allowNull: false,
                 type: DataTypes.DATE,
                 defaultValue: DataTypes.NOW,
