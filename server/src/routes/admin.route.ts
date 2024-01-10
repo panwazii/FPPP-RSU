@@ -511,26 +511,26 @@ adminRouter.post('/updateEquipmentStock', checkBodyEmpty, authValid, async (req,
 });
 
 // reserve
-adminRouter.get('/getSingleReserve', checkParamsEmpty, authValid, async (req, res) => {
-    try {
-        const id = req.query.id as string;
-        const reserve = await ReserveController.getReserveByID(id)
-        res.status(200).json({ code: 200, reserve });
-    } catch (error) {
-        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
-    }
-});
+// adminRouter.get('/getSingleReserve', checkParamsEmpty, authValid, async (req, res) => {
+//     try {
+//         const id = req.query.id as string;
+//         const reserve = await ReserveController.getReserveByID(id)
+//         res.status(200).json({ code: 200, reserve });
+//     } catch (error) {
+//         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+//     }
+// });
 
-adminRouter.get('/getAllReserveRoom', checkParamsEmpty, authValid, async (req, res) => {
+adminRouter.get('/getAllReserve', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const searchValue = req.query.searchValue as string;
+        const approvalStatus = req.query.approval_status as string;
         const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
         const offset = limit * Page;
-        const allReserve = await ReserveController.getAllReserveAndChild(searchValue, limit, offset)
+        const allReserve = await ReserveController.getAllReserveAndChild(approvalStatus, limit, offset)
         res.status(200).json({
             code: 200, reserves: allReserve.rows, total_pages: Math.ceil(allReserve.count / limit)
         });
@@ -539,7 +539,7 @@ adminRouter.get('/getAllReserveRoom', checkParamsEmpty, authValid, async (req, r
     }
 });
 
-adminRouter.post('/createReserveRoom', checkBodyEmpty, authValid, async (req, res) => {
+adminRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const equipment = req.body.equipment_info_id;
         const newReserve = await ReserveController.createReserve(req.body)
@@ -562,7 +562,7 @@ adminRouter.post('/createReserveRoom', checkBodyEmpty, authValid, async (req, re
 
 });
 
-adminRouter.post('/updateReserveRoom', checkBodyEmpty, authValid, async (req, res) => {
+adminRouter.post('/updateReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
         await ReserveController.update(Data)
@@ -578,6 +578,42 @@ adminRouter.post('/updateReserveEquipment', checkBodyEmpty, authValid, async (re
         const Data = req.body;
         await ReserveController.updateReserveEquipment(Data)
         res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.get('/countReserve', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const reserve = await ReserveController.getAllReserveAdmin()
+        let countReserve = {
+            waiting: 0,
+            return_quotation: 0,
+            confirm_quotation: 0,
+            confirm: 0,
+            cancel: 0,
+        }
+
+        reserve.forEach(reserve => {
+            if (reserve.approval_status == 'WAITING') {
+                countReserve.waiting += 1
+            }
+            if (reserve.approval_status == 'RETURN_QUOTATION') {
+                countReserve.waiting += 1
+            }
+            if (reserve.approval_status == 'CONFIRM_QUOTATION') {
+                countReserve.confirm_quotation += 1
+            }
+            if (reserve.approval_status == 'CONFIRM') {
+                countReserve.confirm += 1
+            }
+            if (reserve.approval_status == 'CANCEL') {
+                countReserve.cancel += 1
+            }
+        });
+        res.status(200).json({
+            code: 200, count_reserve: countReserve
+        });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
@@ -1001,7 +1037,37 @@ adminRouter.post('/updateTab2', checkBodyEmpty, authValid, async (req, res) => {
 adminRouter.get('/getAllNotification', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const adminid = req.body.credentials.id;
-        await NotificationController.getAllAdmin(adminid)
+        const notification = await NotificationController.getAllAdmin(adminid)
+        res.status(200).json({ code: 200, notification: notification, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+//quotation
+adminRouter.get('/getSingleQuotation', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const quotation = await ReserveController.getSingleQuotation(req.query.reserve_id as string)
+        res.status(200).json({ code: 200, quotation: quotation, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.get('/createQuotation', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const adminid = req.body.credentials.id;
+        await ReserveController.createQuotation(adminid, req.body)
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.get('/updateQuotation', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const adminid = req.body.credentials.id;
+        await ReserveController.updateQuotation(adminid, req.body)
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));

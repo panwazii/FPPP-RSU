@@ -512,7 +512,7 @@ export default {
       userTypes: [],
       room: {},
       roomPicture: '',
-      userInfo: [],
+      userInfo: {},
       modal: {
         confirm: {
           open: false,
@@ -703,9 +703,9 @@ export default {
           time_start: this.form.time_start,
           time_end: this.form.time_end,
           details: this.form.etc,
+          equipment: this.form.equipments,
         })
         if (response.code === 201) {
-          console.log('complete')
           this.step = 3
         }
       } catch (error) {

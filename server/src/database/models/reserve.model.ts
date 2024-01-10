@@ -78,7 +78,7 @@ export const initReserveModel = (connection: Sequelize) => {
             },
             approval_status: {
                 allowNull: false,
-                type: DataTypes.ENUM('WAITING', 'RETURN_QUOTATION','CONFIRM_QUOTATION', 'CONFIRM'),
+                type: DataTypes.ENUM('WAITING', 'RETURN_QUOTATION','CONFIRM_QUOTATION', 'CONFIRM','CANCEL'),
             },
             available_status: {
                 allowNull: false,

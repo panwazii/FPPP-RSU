@@ -128,12 +128,13 @@ userRouter.post('/update/password', checkBodyEmpty, authValid, (req, res) => {
 userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const equipment = req.body.equipment;
+        log(equipment)
         const newReserve = await ReserveController.createReserve(req.body)
         if (newReserve && equipment) {
             for (const data of equipment) {
                 await ReserveController.createReserveEquipment(newReserve.id, data)
             }
-            res.json({ code: 200 });
+            res.json({ code: 201 });
         }
         else if (newReserve) {
             res.status(200).json({ code: 201 });
@@ -162,16 +163,67 @@ userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) =>
 userRouter.get('/getAllReserve', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const userId = req.body.credentials.id;
-        const searchValue = req.query.value as string;
+        const approvalStatus = req.query.approval_status as string;
         const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
         const offset = limit * Page;
-        const allReserve = await ReserveController.getAllReserveAndChildForUser(searchValue, userId, limit, offset)
+        const allReserve = await ReserveController.getAllReserveAndChildForUser(approvalStatus, userId, limit, offset)
+
         res.status(200).json({
             code: 200, reserve: allReserve.rows, total_pages: Math.ceil(allReserve.count / limit)
+        });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+userRouter.get('/getSingleReserve', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const reserveId = String(req.query.id)
+        const userId = req.body.credentials.id;
+        const reserve = await ReserveController.getSingleReserveAndChildForUser(reserveId, userId)
+        res.status(200).json({
+            code: 200, data: reserve
+        });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+userRouter.get('/countReserve', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const userId = req.body.credentials.id;
+        const reserve = await ReserveController.getAllReserveUser(userId)
+        let countReserve = {
+            waiting: 0,
+            return_quotation: 0,
+            confirm_quotation: 0,
+            confirm: 0,
+            cancel: 0,
+        }
+
+        reserve.forEach(reserve => {
+            if (reserve.approval_status == 'WAITING') {
+                countReserve.waiting += 1
+            }
+            if (reserve.approval_status == 'RETURN_QUOTATION') {
+                countReserve.waiting += 1
+            }
+            if (reserve.approval_status == 'CONFIRM_QUOTATION') {
+                countReserve.confirm_quotation += 1
+            }
+            if (reserve.approval_status == 'CONFIRM') {
+                countReserve.confirm += 1
+            }
+            if (reserve.approval_status == 'CANCEL') {
+                countReserve.cancel += 1
+            }
+        });
+        res.status(200).json({
+            code: 200, count_reserve: countReserve
         });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -235,8 +287,8 @@ userRouter.delete('/deleteCartItem', checkParamsEmpty, authValid, requestLog, as
 userRouter.get('/getAllNotification', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const userId = req.body.credentials.id;
-        await NotificationController.getAllAdmin(userId)
-        res.status(200).json({ code: 200 });
+        const notification = await NotificationController.getAllAdmin(userId)
+        res.status(200).json({ code: 200, notification: notification, });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
@@ -264,6 +316,17 @@ userRouter.get('/getDropdownEquipmentInfo', checkParamsEmpty, authValid, async (
     try {
         await EquipmentController.getDropdownEquipmentInfoInRoomPublic(req.query.id as string)
         res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+//quotation
+userRouter.get('/getSingleQuotation', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const userId = req.body.credentials.id;
+        const quotation = await ReserveController.getSingleQuotationUser(userId,req.query.reserve_id as string)
+        res.status(200).json({ code: 200, quotation: quotation, });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
