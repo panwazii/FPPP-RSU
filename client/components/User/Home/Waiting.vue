@@ -1,5 +1,14 @@
 <template>
   <div>
+    <v-card
+      v-if="allBooking.length === 0"
+      class="rounded-xl mt-4 text-center"
+      height="100"
+    >
+      <div class="center">
+        <h4>ไม่มีข้อมูล</h4>
+      </div>
+    </v-card>
     <div v-for="booking in allBooking" :key="booking.id">
       <UserHomeWaitingCardList :bookingData="booking" />
     </div>
@@ -9,6 +18,7 @@
       class="mt-2"
       v-model="fetchOption.page"
       :length="fetchOption.totalPages"
+      v-if="allBooking.length !== 0"
     >
     </v-pagination>
   </div>
@@ -19,7 +29,11 @@ export default {
     const getAllBookings = await this.$store.dispatch(
       'api/user/getAllReserve',
       {
-        params: { approval_status: 'WAITING' },
+        params: {
+          approval_status: 'WAITING',
+          limit: this.fetchOption.itemsPerPage,
+          page: this.fetchOption.page,
+        },
       }
     )
     this.allBooking = getAllBookings.reserve
@@ -36,9 +50,10 @@ export default {
 }
 </script>
 <style scoped>
-/* .card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-} */
+.center {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 </style>

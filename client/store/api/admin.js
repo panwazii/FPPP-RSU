@@ -158,6 +158,10 @@ export const actions = {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
         return await this.$axios.get('api/admin/getAllReserve', data).then((res) => res.data)
     },
+    async countReserve({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/countReserve', data).then((res) => res.data)
+    },
     async getSingleReserve({ getters }, data) {
         return await this.$axios.get('api/admin/getSingleReserve', data).then((res) => res.data)
     },

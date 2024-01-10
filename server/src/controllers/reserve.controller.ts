@@ -63,9 +63,13 @@ class ReserveController {
                 approval_status: searchValue,
                 available_status: true
             },
-            include: [{
-                model: ReserveEquipmentModel, as: 'reserve_equipment',
-            }],
+            include: [
+                {
+                    model: RoomModel, as: 'room',
+                }, {
+                    model: ReserveEquipmentModel, as: 'reserve_equipment',
+                }
+            ],
             limit,
             offset,
         });

@@ -9,7 +9,7 @@
         {{ displayBookingType }}</v-chip
       >
       <v-chip color="primary" :input-value="true" v-if="bookingData.room_id">
-        ห้อง : asdasd</v-chip
+        ห้อง : {{ bookingData.room.name }}</v-chip
       >
       <v-chip :input-value="true" v-if="displayEquipmentCount !== 0">
         อุปกรณ์ทั้งหมด : {{ displayEquipmentCount }}</v-chip

@@ -521,16 +521,16 @@ adminRouter.post('/updateEquipmentStock', checkBodyEmpty, authValid, async (req,
 //     }
 // });
 
-adminRouter.get('/getAllReserveRoom', checkParamsEmpty, authValid, async (req, res) => {
+adminRouter.get('/getAllReserve', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const searchValue = req.query.searchValue as string;
+        const approvalStatus = req.query.approval_status as string;
         const limit = numberOrDefault(req.query.limit, 10);
         let Page = numberOrDefault(req.query.page, 0);
         if (Page != 0) {
             Page = Page - 1
         }
         const offset = limit * Page;
-        const allReserve = await ReserveController.getAllReserveAndChild(searchValue, limit, offset)
+        const allReserve = await ReserveController.getAllReserveAndChild(approvalStatus, limit, offset)
         res.status(200).json({
             code: 200, reserves: allReserve.rows, total_pages: Math.ceil(allReserve.count / limit)
         });
@@ -539,7 +539,7 @@ adminRouter.get('/getAllReserveRoom', checkParamsEmpty, authValid, async (req, r
     }
 });
 
-adminRouter.post('/createReserveRoom', checkBodyEmpty, authValid, async (req, res) => {
+adminRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const equipment = req.body.equipment_info_id;
         const newReserve = await ReserveController.createReserve(req.body)
@@ -562,7 +562,7 @@ adminRouter.post('/createReserveRoom', checkBodyEmpty, authValid, async (req, re
 
 });
 
-adminRouter.post('/updateReserveRoom', checkBodyEmpty, authValid, async (req, res) => {
+adminRouter.post('/updateReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
         await ReserveController.update(Data)

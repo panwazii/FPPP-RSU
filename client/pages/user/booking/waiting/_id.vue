@@ -73,7 +73,7 @@
               <div class="d-flex">
                 <v-avatar class="ma-3 rounded-xl" size="125">
                   <v-img
-                    :src="bookingData.room.picture"
+                    :src="roomPicture"
                     :lazy-src="require('~/static/img/default/no-image.png')"
                   ></v-img>
                 </v-avatar>
@@ -96,7 +96,7 @@
               class="rounded-t-xl"
               aspect-ratio="1.3333"
               contain
-              :src="bookingData.room.picture"
+              :src="roomPicture"
               :lazy-src="require('~/static/img/default/no-image.png')"
             ></v-img>
             <v-divider class="my-0" />
@@ -135,7 +135,7 @@
                 <div>
                   <v-card-title>{{ item.equipment_info.name }}</v-card-title>
                   <v-card-subtitle>
-                    {{ item.equipment_info.details }}
+                    {{ item.equipment_info.production_line.name }}
                   </v-card-subtitle>
                 </div>
               </div>
@@ -167,7 +167,7 @@
             ></v-img>
             <v-divider class="my-0" />
             <v-card-title class="mr-4">
-              {{ item.equipment_info.name }}
+              {{ item.equipment_info.production_line.name }}
             </v-card-title>
             <v-card-subtitle class="mr-4 d-flex">
               จำนวน :
@@ -201,6 +201,7 @@ export default {
       return
     } else {
       this.bookingData = booking.data
+      this.setRoomPicture()
       this.routes[1].name = this.displayStartDate + ' ' + this.displayStartTime
       this.loading = false
     }
@@ -282,6 +283,7 @@ export default {
   data() {
     return {
       bookingData: {},
+      roomPicture: '',
       tool: [],
       routes: [
         { id: 1, name: 'รายการจอง', to: '/user/home' },
@@ -294,7 +296,17 @@ export default {
       loading: true,
     }
   },
-  methods: {},
+  methods: {
+    setRoomPicture() {
+      try {
+        if (this.bookingData.room.picture.length > 0) {
+          this.roomPicture = this.bookingData.room.picture[0].url
+        }
+      } catch (error) {
+        this.roomPicture = require('~/static/img/default/no-image.png')
+      }
+    },
+  },
 }
 </script>
 <style scoped>
