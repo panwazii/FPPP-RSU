@@ -5,6 +5,9 @@ import ReserveEquipmentModel, { ReserveEquipmentAttribute } from '../database/mo
 import RoomModel from '../database/models/rooms.model';
 import { Op } from 'sequelize';
 import RoomPictureModel from '../database/models/room_pictures.model';
+import QuotationModel, { QuotationAttribute } from '../database/models/quotations.model';
+import AdminModel from '../database/models/admins.model';
+import UserModel from '../database/models/users.model';
 
 class ReserveController {
     public static async getSingleReserveAndChildForUser(id: string, userId: string) {
@@ -65,7 +68,6 @@ class ReserveController {
             }],
             limit,
             offset,
-
         });
     }
 
@@ -133,6 +135,78 @@ class ReserveController {
             equipments_id: data.equipments_id,
             quantity: data.quantity,
             available_status: data.available_status,
+        }, {
+            where: {
+                id: data.id,
+            },
+        })
+    }
+
+    public static async getSingleQuotationUser(user_id: string, reserve_id: string) {
+        return QuotationModel.findOne({
+            where: {
+                reserve_id: reserve_id,
+            },
+            include: [{
+                model: ReserveModel,
+                where: { user_id: user_id },
+                include: [{
+                    model: UserModel,
+                }, {
+                    model: RoomModel, as: 'room',
+                }, {
+                    model: ReserveEquipmentModel, as: 'reserve_equipment',
+                    include: [{ model: EquipmentInfoModel, as: 'equipment_info' }]
+                }
+                ]
+            },
+            {
+                model: AdminModel
+            }
+            ]
+        });
+    }
+
+    public static async getSingleQuotation(id: string) {
+        return QuotationModel.findOne({
+            where: {
+                reserve_id: id,
+            },
+            include: [{
+                model: ReserveModel,
+                include: [{
+                    model: UserModel,
+                }, {
+                    model: RoomModel, as: 'room',
+                }, {
+                    model: ReserveEquipmentModel, as: 'reserve_equipment',
+                    include: [{ model: EquipmentInfoModel, as: 'equipment_info' }]
+                }
+                ]
+            },
+            {
+                model: AdminModel
+            }
+            ]
+        });
+    }
+
+    public static async createQuotation(id: string, data: any) {
+        const packet: QuotationAttribute = {
+            reserve_id: data.reserve_id,
+            admin_id: id,
+            equipment_price: data.equipment_price,
+            room_price: data.room_price,
+        };
+        return QuotationModel.create(packet)
+    }
+
+    public static async updateQuotation(id: string, data: any) {
+        return QuotationModel.update({
+            reserve_id: data.reserve_id,
+            admin_id: id,
+            equipment_price: data.equipment_price,
+            room_price: data.room_price,
         }, {
             where: {
                 id: data.id,

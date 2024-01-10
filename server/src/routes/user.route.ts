@@ -287,8 +287,8 @@ userRouter.delete('/deleteCartItem', checkParamsEmpty, authValid, requestLog, as
 userRouter.get('/getAllNotification', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const userId = req.body.credentials.id;
-        await NotificationController.getAllAdmin(userId)
-        res.status(200).json({ code: 200 });
+        const notification = await NotificationController.getAllAdmin(userId)
+        res.status(200).json({ code: 200, notification: notification, });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
@@ -316,6 +316,17 @@ userRouter.get('/getDropdownEquipmentInfo', checkParamsEmpty, authValid, async (
     try {
         await EquipmentController.getDropdownEquipmentInfoInRoomPublic(req.query.id as string)
         res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+//quotation
+userRouter.get('/getSingleQuotation', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const userId = req.body.credentials.id;
+        const quotation = await ReserveController.getSingleQuotationUser(userId,req.query.reserve_id as string)
+        res.status(200).json({ code: 200, quotation: quotation, });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
