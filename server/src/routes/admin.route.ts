@@ -583,6 +583,42 @@ adminRouter.post('/updateReserveEquipment', checkBodyEmpty, authValid, async (re
     }
 });
 
+adminRouter.get('/countReserve', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const reserve = await ReserveController.getAllReserveAdmin()
+        let countReserve = {
+            waiting: 0,
+            return_quotation: 0,
+            confirm_quotation: 0,
+            confirm: 0,
+            cancel: 0,
+        }
+
+        reserve.forEach(reserve => {
+            if (reserve.approval_status == 'WAITING') {
+                countReserve.waiting += 1
+            }
+            if (reserve.approval_status == 'RETURN_QUOTATION') {
+                countReserve.waiting += 1
+            }
+            if (reserve.approval_status == 'CONFIRM_QUOTATION') {
+                countReserve.confirm_quotation += 1
+            }
+            if (reserve.approval_status == 'CONFIRM') {
+                countReserve.confirm += 1
+            }
+            if (reserve.approval_status == 'CANCEL') {
+                countReserve.cancel += 1
+            }
+        });
+        res.status(200).json({
+            code: 200, count_reserve: countReserve
+        });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 // reserve equipment
 // adminRouter.get('/getSingleReserveEquipmentOnly', checkParamsEmpty, authValid, async (req, res) => {
 //     try {
