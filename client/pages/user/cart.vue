@@ -198,47 +198,126 @@
             <v-card-subtitle class="subtitle-1 mb-4">
               สามารถเพิ่มจำนวนหรือลบสินค้าออกจากตระกร้า
             </v-card-subtitle>
-
             <v-divider class="mb-12"></v-divider>
 
-            <v-card
-              class="rounded-xl mb-2"
-              v-for="item in cartItems"
-              :key="item.id"
-            >
-              <div class="d-flex justify-space-between">
-                <div class="d-flex">
-                  <v-avatar class="ma-3 rounded-xl" size="125">
-                    <v-img :src="item.equipment.picture"></v-img>
-                  </v-avatar>
-                  <div>
-                    <v-card-title>{{ item.equipment.name }}</v-card-title>
-                    <v-card-subtitle>{{
-                      item.equipment.rent_price
-                    }}</v-card-subtitle>
+            <!-- For Desktop -->
+            <div v-if="width">
+              <v-card
+                class="rounded-xl mb-2"
+                v-for="item in cartItems"
+                :key="item.id"
+              >
+                <div class="d-flex justify-space-between">
+                  <div class="d-flex">
+                    <v-avatar class="ma-3 rounded-xl" size="125">
+                      <v-img
+                        :src="item.equipment.picture"
+                        :lazy-src="require('~/static/img/default/no-image.png')"
+                      ></v-img>
+                    </v-avatar>
+                    <div>
+                      <v-card-title>{{ item.equipment.name }}</v-card-title>
+                      <v-card-subtitle>{{
+                        item.equipment.rent_price
+                      }}</v-card-subtitle>
+                    </div>
+                  </div>
+                  <div class="d-flex align-center justify-space-between mr-8">
+                    <v-card-title class="mr-4"
+                      >จำนวน :
+                      <div class="d-flex">
+                        <v-btn
+                          fab
+                          color="black"
+                          class="white--text my-0 mx-4"
+                          @click=""
+                        >
+                          <v-icon>mdi-minus</v-icon>
+                        </v-btn>
+                        <div class="text-h6 font-weight-bold mx-6 my-3">
+                          {{ item.equipment.quantity }}
+                        </div>
+                        <v-btn
+                          fab
+                          color="black"
+                          class="white--text my-0 mx-4"
+                          @click=""
+                        >
+                          <v-icon>mdi-plus</v-icon>
+                        </v-btn>
+                      </div></v-card-title
+                    >
+                    <v-btn
+                      icon
+                      text
+                      color="error"
+                      @click="removeEquipment(item.id)"
+                    >
+                      <v-icon class="pa-2" large>mdi-trash-can</v-icon>
+                    </v-btn>
                   </div>
                 </div>
-                <div class="d-flex align-center justify-space-between mr-8">
-                  <v-card-title class="mr-4"
-                    >จำนวน :
-                    <UserCartPlusMinusField
-                      class="ma-2 pa-2 align-self-center"
-                      :value="1"
-                      :min="1"
-                      :max="10"
-                    ></UserCartPlusMinusField
-                  ></v-card-title>
+              </v-card>
+            </div>
+            <!-- For Mobile -->
+            <div v-if="!width">
+              <v-card
+                height="380"
+                class="rounded-xl mb-2"
+                v-for="item in cartItems"
+                :key="item.id"
+              >
+                <v-img
+                  class="rounded-t-xl"
+                  aspect-ratio="1.3333"
+                  contain
+                  :src="item.equipment.picture"
+                  :lazy-src="require('~/static/img/default/no-image.png')"
+                ></v-img>
+                <v-divider class="my-0" />
+                <v-card-title class="mr-4">
+                  {{ item.equipment.name }}
+                </v-card-title>
+                <v-card-subtitle class="mr-4 d-flex">
+                  จำนวน :
+                  <div class="d-flex">
+                    <v-btn
+                      x-small
+                      fab
+                      color="black"
+                      class="white--text my-0 mx-4"
+                      @click=""
+                    >
+                      <v-icon>mdi-minus</v-icon>
+                    </v-btn>
+                    <div class="text-h6 font-weight-bold mx-6">
+                      {{ item.equipment.quantity }}
+                    </div>
+                    <v-btn
+                      x-small
+                      fab
+                      color="black"
+                      class="white--text my-0 mx-4"
+                      @click=""
+                    >
+                      <v-icon>mdi-plus</v-icon>
+                    </v-btn>
+                  </div>
+                </v-card-subtitle>
+                <v-card-actions class="d-flex justify-center">
                   <v-btn
-                    icon
-                    text
+                    elevation="0"
                     color="error"
-                    @click="$store.dispatch('removeCartItem', item.id)"
+                    class="rounded-xl"
+                    width="100"
+                    @click="removeEquipment(item.id)"
                   >
-                    <v-icon class="pa-2" large>mdi-trash-can</v-icon>
+                    <v-icon>mdi-trash-can</v-icon>
+                    ลบ
                   </v-btn>
-                </div>
-              </div>
-            </v-card>
+                </v-card-actions>
+              </v-card>
+            </div>
           </div>
 
           <v-card-actions>
@@ -410,6 +489,7 @@
   </div>
 </template>
 <script>
+import { removeObjectWithId } from '~/utils/general-utils'
 export default {
   layout: 'user',
   middleware: 'user',
@@ -451,7 +531,7 @@ export default {
       time_end: null,
       foo: 0,
       etc: '',
-      quantity: '',
+      valid: false,
       dateTimePicker: {
         datePicker: false,
         selectedDate: null,
@@ -491,6 +571,11 @@ export default {
         },
       },
     }
+  },
+  watch: {
+    'newEquipment.equipment': function () {
+      this.newEquipment.quantity = 1
+    },
   },
   methods: {
     increment() {
@@ -567,8 +652,9 @@ export default {
       this.closeNewEquipmentcard()
     },
     removeEquipment(id) {
-      const newArray = removeObjectWithId(this.form.equipments, id)
-      this.form.equipments = newArray
+      this.$store.dispatch('removeCartItem', id)
+      const newArray = removeObjectWithId(this.cartItems, id)
+      this.cartItems = newArray
     },
     checkAvailableEquipment(id) {
       for (let i = 0; i < this.form.equipments.length; i++) {
@@ -602,6 +688,7 @@ export default {
       }
     },
   },
+
   computed: {
     width() {
       switch (this.$vuetify.breakpoint.name) {
