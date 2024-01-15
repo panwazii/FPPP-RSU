@@ -60,8 +60,9 @@
           </v-col>
         </v-row>
       </div>
-      <v-divider class="mt-5"></v-divider>
+
       <div v-if="bookingData.room_id !== null">
+        <v-divider class="mt-5"></v-divider>
         <v-card-title class="font-weight-bold"> ห้อง </v-card-title>
         <v-card-subtitle class="subtitle-1 mb-4">
           รายละเอียดห้องที่จอง
@@ -111,8 +112,9 @@
           </v-card>
         </div>
       </div>
-      <v-divider class="mt-5"></v-divider>
+
       <div v-if="bookingData.reserve_equipment.length > 0">
+        <v-divider class="mt-5"></v-divider>
         <v-card-title class="font-weight-bold"> อุปกรณ์ </v-card-title>
         <v-card-subtitle class="subtitle-1 mb-4">
           รายละเอียดอุปกรณ์ที่จอง

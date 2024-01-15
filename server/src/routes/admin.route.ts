@@ -578,7 +578,20 @@ adminRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) =
 adminRouter.post('/updateReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
-        await ReserveController.update(Data)
+        const reserveId = req.body.reserve_id;
+        await ReserveController.update(reserveId, Data)
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+
+});
+
+adminRouter.post('/cancelReserve', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const reserveId = req.body.id;
+        await ReserveController.deleteQuotationByReserveId(reserveId)
+        await ReserveController.update(reserveId, { approval_status: "CANCEL" })
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -612,7 +625,7 @@ adminRouter.get('/countReserve', checkParamsEmpty, authValid, async (req, res) =
                 countReserve.waiting += 1
             }
             if (reserve.approval_status == 'RETURN_QUOTATION') {
-                countReserve.waiting += 1
+                countReserve.return_quotation += 1
             }
             if (reserve.approval_status == 'CONFIRM_QUOTATION') {
                 countReserve.confirm_quotation += 1
@@ -1049,8 +1062,8 @@ adminRouter.post('/updateTab2', checkBodyEmpty, authValid, async (req, res) => {
 //notification
 adminRouter.get('/getAllNotification', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const adminid = req.body.credentials.id;
-        const notification = await NotificationController.getAllAdmin(adminid)
+        const adminId = req.body.credentials.id;
+        const notification = await NotificationController.getAllAdmin(adminId)
         res.status(200).json({ code: 200, notification: notification, });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -1067,20 +1080,22 @@ adminRouter.get('/getSingleQuotation', checkParamsEmpty, authValid, async (req, 
     }
 });
 
-adminRouter.get('/createQuotation', checkBodyEmpty, authValid, async (req, res) => {
+adminRouter.post('/createQuotation', checkBodyEmpty, authValid, async (req, res) => {
     try {
-        const adminid = req.body.credentials.id;
-        await ReserveController.createQuotation(adminid, req.body)
-        res.status(200).json({ code: 200 });
+        const adminId = req.body.credentials.id;
+        const reserveId = req.body.reserve_id;
+        await ReserveController.createQuotation(adminId, req.body)
+        await ReserveController.update(reserveId, { approval_status: "RETURN_QUOTATION" })
+        res.status(200).json({ code: 201 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
 
-adminRouter.get('/updateQuotation', checkBodyEmpty, authValid, async (req, res) => {
+adminRouter.post('/updateQuotation', checkBodyEmpty, authValid, async (req, res) => {
     try {
-        const adminid = req.body.credentials.id;
-        await ReserveController.updateQuotation(adminid, req.body)
+        const adminId = req.body.credentials.id;
+        await ReserveController.updateQuotation(adminId, req.body)
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));

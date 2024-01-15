@@ -42,23 +42,23 @@
             <v-row>
               <v-col cols="12" md="4">
                 <p class="mb-0 subtitle-2 font-weight-bold">ชื่อจริง</p>
-                <p class="subtitle-1">{{ UserInfo.fname }}</p>
+                <p class="subtitle-1">{{ userInfo.fname }}</p>
               </v-col>
               <v-col cols="12" md="4">
                 <p class="mb-0 subtitle-2 font-weight-bold">นามสกุล</p>
-                <p class="subtitle-1">{{ UserInfo.lname }}</p>
+                <p class="subtitle-1">{{ userInfo.lname }}</p>
               </v-col>
               <v-col cols="12" md="4">
                 <p class="mb-0 subtitle-2 font-weight-bold">เบอร์ติดต่อ</p>
-                <p class="subtitle-1">{{ UserInfo.tel }}</p>
+                <p class="subtitle-1">{{ userInfo.tel }}</p>
               </v-col>
               <v-col cols="12" md="4">
                 <p class="mb-0 subtitle-2 font-weight-bold">อีเมล</p>
-                <p class="subtitle-1">{{ UserInfo.email }}</p>
+                <p class="subtitle-1">{{ userInfo.email }}</p>
               </v-col>
               <v-col cols="12" md="4">
                 <p class="mb-0 subtitle-2 font-weight-bold">ประเภทผู้ใช้</p>
-                <p class="subtitle-1">{{ getuserTypeName }}</p>
+                <p class="subtitle-1">{{ getUserTypeName }}</p>
               </v-col>
               <v-col cols="12" md="4"></v-col>
             </v-row>
@@ -198,28 +198,36 @@
             <v-card-subtitle class="subtitle-1 mb-4">
               สามารถเพิ่มจำนวนหรือลบสินค้าออกจากตระกร้า
             </v-card-subtitle>
-            <v-divider class="mb-12"></v-divider>
-
+            <v-row v-if="form.equipments.length === 0" class="mt-4">
+              <v-col cols="12" class="d-flex justify-center">
+                <v-btn
+                  dark
+                  large
+                  class="rounded-xl subtitle-1 font-weight-bold"
+                  @click="$router.push('/user/equipments')"
+                  >เพิ่มอุปกรณ์
+                  <v-icon class="ml-1">mdi-plus</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
             <!-- For Desktop -->
-            <div v-if="width">
+            <div class="mx-2" v-if="width">
               <v-card
                 class="rounded-xl mb-2"
-                v-for="item in cartItems"
+                v-for="item in form.equipments"
                 :key="item.id"
               >
                 <div class="d-flex justify-space-between">
                   <div class="d-flex">
                     <v-avatar class="ma-3 rounded-xl" size="125">
                       <v-img
-                        :src="item.equipment.picture"
+                        :src="item.picture"
                         :lazy-src="require('~/static/img/default/no-image.png')"
                       ></v-img>
                     </v-avatar>
                     <div>
-                      <v-card-title>{{ item.equipment.name }}</v-card-title>
-                      <v-card-subtitle>{{
-                        item.equipment.rent_price
-                      }}</v-card-subtitle>
+                      <v-card-title>{{ item.name }}</v-card-title>
+                      <v-card-subtitle>{{ item.rent_price }}</v-card-subtitle>
                     </div>
                   </div>
                   <div class="d-flex align-center justify-space-between mr-8">
@@ -230,18 +238,20 @@
                           fab
                           color="black"
                           class="white--text my-0 mx-4"
-                          @click=""
+                          :disabled="minusDisable(item.quantity)"
+                          @click="decreaseQuantity(item.id)"
                         >
                           <v-icon>mdi-minus</v-icon>
                         </v-btn>
                         <div class="text-h6 font-weight-bold mx-6 my-3">
-                          {{ item.equipment.quantity }}
+                          {{ item.quantity }}
                         </div>
                         <v-btn
                           fab
                           color="black"
                           class="white--text my-0 mx-4"
-                          @click=""
+                          :disable="plusDisable(item.id)"
+                          @click="increaseQuantity(item.id)"
                         >
                           <v-icon>mdi-plus</v-icon>
                         </v-btn>
@@ -264,19 +274,19 @@
               <v-card
                 height="380"
                 class="rounded-xl mb-2"
-                v-for="item in cartItems"
+                v-for="item in form.equipments"
                 :key="item.id"
               >
                 <v-img
                   class="rounded-t-xl"
                   aspect-ratio="1.3333"
                   contain
-                  :src="item.equipment.picture"
+                  :src="item.picture"
                   :lazy-src="require('~/static/img/default/no-image.png')"
                 ></v-img>
                 <v-divider class="my-0" />
                 <v-card-title class="mr-4">
-                  {{ item.equipment.name }}
+                  {{ item.name }}
                 </v-card-title>
                 <v-card-subtitle class="mr-4 d-flex">
                   จำนวน :
@@ -286,19 +296,21 @@
                       fab
                       color="black"
                       class="white--text my-0 mx-4"
-                      @click=""
+                      :disabled="minusDisable(item.quantity)"
+                      @click="decreaseQuantity(item.id)"
                     >
                       <v-icon>mdi-minus</v-icon>
                     </v-btn>
                     <div class="text-h6 font-weight-bold mx-6">
-                      {{ item.equipment.quantity }}
+                      {{ item.quantity }}
                     </div>
                     <v-btn
                       x-small
                       fab
                       color="black"
                       class="white--text my-0 mx-4"
-                      @click=""
+                      :disable="plusDisable(item.id)"
+                      @click="increaseQuantity(item.id)"
                     >
                       <v-icon>mdi-plus</v-icon>
                     </v-btn>
@@ -319,7 +331,7 @@
               </v-card>
             </div>
           </div>
-
+          <v-divider class="mt-4 mb-10"></v-divider>
           <v-card-actions>
             <v-btn class="rounded-xl" elevation="0" @click="step = 1">
               ถอยกลับ
@@ -348,23 +360,23 @@
             <v-row>
               <v-col cols="12" md="4">
                 <p class="mb-0 subtitle-2 font-weight-bold">ชื่อจริง</p>
-                <p class="subtitle-1">{{ UserInfo.fname }}</p>
+                <p class="subtitle-1">{{ userInfo.fname }}</p>
               </v-col>
               <v-col cols="12" md="4">
                 <p class="mb-0 subtitle-2 font-weight-bold">นามสกุล</p>
-                <p class="subtitle-1">{{ UserInfo.lname }}</p>
+                <p class="subtitle-1">{{ userInfo.lname }}</p>
               </v-col>
               <v-col cols="12" md="4">
                 <p class="mb-0 subtitle-2 font-weight-bold">เบอร์ติดต่อ</p>
-                <p class="subtitle-1">{{ UserInfo.tel }}</p>
+                <p class="subtitle-1">{{ userInfo.tel }}</p>
               </v-col>
               <v-col cols="12" md="4">
                 <p class="mb-0 subtitle-2 font-weight-bold">อีเมล</p>
-                <p class="subtitle-1">{{ UserInfo.email }}</p>
+                <p class="subtitle-1">{{ userInfo.email }}</p>
               </v-col>
               <v-col cols="12" md="4">
                 <p class="mb-0 subtitle-2 font-weight-bold">ประเภทผู้ใช้</p>
-                <p class="subtitle-1">{{ getuserTypeName }}</p>
+                <p class="subtitle-1">{{ getUserTypeName }}</p>
               </v-col>
               <v-col cols="12" md="4"></v-col>
             </v-row>
@@ -388,23 +400,23 @@
               <div v-if="width" class="ma-2">
                 <v-card
                   class="rounded-xl mb-2"
-                  v-for="item in cartItems"
+                  v-for="item in form.equipments"
                   :key="item.id"
                 >
                   <div class="d-flex justify-space-between">
                     <div class="d-flex">
                       <v-avatar class="ma-3 rounded-xl" size="125">
                         <v-img
-                          :src="item.equipment.picture"
+                          :src="item.picture"
                           :lazy-src="
                             require('~/static/img/default/no-image.png')
                           "
                         ></v-img>
                       </v-avatar>
                       <div>
-                        <v-card-title>{{ item.equipment.name }}</v-card-title>
+                        <v-card-title>{{ item.name }}</v-card-title>
                         <v-card-subtitle>
-                          {{ item.equipment.production_line.name }}
+                          {{ item.production_line.name }}
                         </v-card-subtitle>
                       </div>
                     </div>
@@ -412,7 +424,7 @@
                       <v-card-title class="mr-4"
                         >จำนวน :
                         <div class="font-weight-bold ml-2">
-                          {{ item.equipment.quantity }}
+                          {{ item.quantity }}
                         </div></v-card-title
                       >
                     </div>
@@ -424,24 +436,24 @@
                 <v-card
                   height="350"
                   class="rounded-xl mb-2"
-                  v-for="item in cartItems"
+                  v-for="item in form.equipments"
                   :key="item.id"
                 >
                   <v-img
                     class="rounded-t-xl"
                     aspect-ratio="1.3333"
                     contain
-                    :src="item.equipment.picture"
+                    :src="item.picture"
                     :lazy-src="require('~/static/img/default/no-image.png')"
                   ></v-img>
                   <v-divider class="my-0" />
                   <v-card-title class="mr-4">
-                    {{ item.equipment.name }}
+                    {{ item.name }}
                   </v-card-title>
                   <v-card-subtitle class="mr-4 d-flex">
                     จำนวน :
                     <div class="font-weight-bold ml-2">
-                      {{ item.equipment.quantity }}
+                      {{ item.quantity }}
                     </div>
                   </v-card-subtitle>
                 </v-card>
@@ -459,7 +471,7 @@
               elevation="0"
               color="black"
               :disabled="!valid"
-              @click="step = 4"
+              @click="submit"
             >
               ส่งข้อมูลการจอง
             </v-btn>
@@ -493,9 +505,10 @@ import { removeObjectWithId } from '~/utils/general-utils'
 export default {
   layout: 'user',
   middleware: 'user',
-  async asyncData({ params }) {
-    const id = params.id
-    return { id }
+  head() {
+    return {
+      title: 'ตะกร้า',
+    }
   },
   async fetch() {
     let Data = await this.$store.dispatch('api/user/getUserInfo', {
@@ -511,26 +524,20 @@ export default {
       })
       return
     } else {
-      this.UserInfo = Data.user
+      this.userInfo = Data.user
       this.userTypes = userTypes.user_types
-    }
-  },
-  head() {
-    return {
-      title: 'ตะกร้า',
+      this.refreshCartData()
     }
   },
   data() {
     return {
       userTypes: [],
       step: 1,
-      UserInfo: [],
+      userInfo: {},
       date_start: null,
       date_end: null,
       time_start: null,
       time_end: null,
-      foo: 0,
-      etc: '',
       valid: false,
       dateTimePicker: {
         datePicker: false,
@@ -546,12 +553,11 @@ export default {
         etc: '',
         equipments: [],
       },
-
+      cartItems: [],
       routes: [
         { id: 1, name: 'หน้าหลัก', to: '/user/home' },
         { id: 2, name: 'ตะกร้า', to: '/user/cart' },
       ],
-      cartItems: this.$store.getters.getCartItems,
       modal: {
         confirm: {
           open: false,
@@ -577,13 +583,38 @@ export default {
       this.newEquipment.quantity = 1
     },
   },
+  computed: {
+    width() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return false
+        case 'sm':
+          return false
+        case 'md':
+          return true
+        case 'lg':
+          return true
+        case 'xl':
+          return true
+      }
+    },
+    getUserTypeName() {
+      let name
+      this.userTypes.forEach((type) => {
+        if (type.id === this.userInfo.type_id) {
+          return (name = type.name)
+        }
+      })
+      return name
+    },
+    tomorrow() {
+      const today = new Date()
+      const tomorrow = new Date(today)
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      return tomorrow.toISOString().substr(0, 10)
+    },
+  },
   methods: {
-    increment() {
-      this.foo = parseInt(this.foo, 10) + 1
-    },
-    decrement() {
-      this.foo = parseInt(this.foo, 10) - 1
-    },
     combineDateTime() {
       const timeStart = new Date(
         `${this.dateTimePicker.selectedDate}T${this.dateTimePicker.timeStart}`
@@ -618,20 +649,80 @@ export default {
         this.modal.error.open = true
       }
     },
-    increaseQuantity() {
-      if (this.newEquipment.quantity >= this.newEquipment.equipment.quantity) {
-        return
-      }
-      this.newEquipment.quantity += 1
+    async refreshCartData() {
+      const cartStoreItem = await this.$store.getters.getCartItems
+      this.cartItems = []
+      this.form.equipments = []
+      cartStoreItem.forEach((item) => {
+        let newItem = { ...item.equipment }
+        this.cartItems.push(newItem)
+      })
+      this.cartItems.forEach((item) => {
+        let newItem = { ...item }
+        newItem.quantity = 1
+        this.form.equipments.push(newItem)
+      })
     },
-    decreaseQuantity() {
-      if (this.newEquipment.quantity <= 1) {
-        return
+    increaseQuantity(id) {
+      for (let i = 0; i < this.cartItems.length; i++) {
+        if (this.cartItems[i].id === id) {
+          for (let j = 0; j < this.form.equipments.length; j++) {
+            if (this.form.equipments[j].id === id) {
+              if (
+                this.form.equipments[j].quantity <=
+                this.cartItems[i].quantity - 1
+              ) {
+                return (this.form.equipments[j].quantity += 1)
+              } else {
+                return
+              }
+            }
+          }
+        }
       }
-      this.newEquipment.quantity -= 1
     },
-    handleItemClick(item) {
-      this.newEquipment.equipment = item.id
+    decreaseQuantity(id) {
+      for (let i = 0; i < this.cartItems.length; i++) {
+        if (this.cartItems[i].id === id) {
+          for (let j = 0; j < this.form.equipments.length; j++) {
+            if (this.form.equipments[j].id === id) {
+              if (this.form.equipments[j].quantity <= 1) {
+                return
+              } else {
+                return (this.form.equipments[j].quantity -= 1)
+              }
+            }
+          }
+        }
+      }
+    },
+    plusDisable(id) {
+      for (let i = 0; i < this.cartItems.length; i++) {
+        if (this.cartItems[i].id === id) {
+          for (let j = 0; j < this.form.equipments.length; j++) {
+            if (this.form.equipments[j].id === id) {
+              console.log('1---', this.form.equipments[j].id)
+              console.log('1---', this.form.equipments[j].quantity)
+              console.log('2---', this.cartItems[i].quantity)
+              if (
+                this.form.equipments[j].quantity < this.cartItems[i].quantity
+              ) {
+                return false
+              } else {
+                console.log('true')
+                return true
+              }
+            }
+          }
+        }
+      }
+    },
+    minusDisable(quantity) {
+      if (quantity <= 1) {
+        return true
+      } else {
+        return false
+      }
     },
     addEquipment() {
       if (typeof this.newEquipment.equipment !== 'string') {
@@ -651,106 +742,30 @@ export default {
       }
       this.closeNewEquipmentcard()
     },
-    removeEquipment(id) {
-      this.$store.dispatch('removeCartItem', id)
-      const newArray = removeObjectWithId(this.cartItems, id)
-      this.cartItems = newArray
-    },
-    checkAvailableEquipment(id) {
-      for (let i = 0; i < this.form.equipments.length; i++) {
-        if (this.form.equipments[i].id === id) {
-          return true
-        } else {
-          false
-        }
-      }
-    },
-    closeNewEquipmentcard() {
-      this.newEquipmentCard = false
-      this.newEquipment.equipment = {}
-      this.newEquipment.quantity = 1
+    async removeEquipment(id) {
+      console.log(id)
+      await this.$store.dispatch('removeCartItem', id)
+      const newCartItems = removeObjectWithId(this.cartItems, id)
+      this.cartItems = newCartItems
+      const newEquipments = removeObjectWithId(this.form.equipments, id)
+      this.form.equipments = newEquipments
+      // this.refreshCartData()
     },
     async submit() {
       try {
         const response = await this.$store.dispatch('api/user/createReserve', {
-          room_id: this.id,
+          room_id: null,
           time_start: this.form.time_start,
           time_end: this.form.time_end,
           details: this.form.etc,
           equipment: this.form.equipments,
         })
         if (response.code === 201) {
-          this.step = 3
+          this.step = 4
         }
       } catch (error) {
         this.modal.error.message = String(error)
         this.modal.error.open = true
-      }
-    },
-  },
-
-  computed: {
-    width() {
-      switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-          return false
-        case 'sm':
-          return false
-        case 'md':
-          return true
-        case 'lg':
-          return true
-        case 'xl':
-          return true
-      }
-    },
-    getuserTypeName() {
-      let name
-      this.userTypes.forEach((type) => {
-        if (type.id === this.UserInfo.type_id) {
-          return (name = type.name)
-        }
-      })
-      return name
-    },
-    tomorrow() {
-      const today = new Date()
-      const tomorrow = new Date(today)
-      tomorrow.setDate(tomorrow.getDate() + 1)
-      return tomorrow.toISOString().substr(0, 10)
-    },
-    plusDisable() {
-      for (let i = 0; i < this.equipments.length; i++) {
-        if (this.equipments[i].id === this.newEquipment.equipment) {
-          if (this.newEquipment.quantity <= this.equipments[i].quantity - 1) {
-            return false
-          } else {
-            return true
-          }
-        }
-      }
-    },
-    minusDisable() {
-      if (this.newEquipment.quantity <= 1) {
-        return true
-      } else {
-        return false
-      }
-    },
-    isQuantityVisible() {
-      if (!this.newEquipment.equipment) {
-        return false
-      } else if (Object.keys(this.newEquipment.equipment).length === 0) {
-        return false
-      } else {
-        return true
-      }
-    },
-    addEquipmentDisable() {
-      if (typeof this.newEquipment.equipment === 'string') {
-        return false
-      } else {
-        return true
       }
     },
   },

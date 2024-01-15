@@ -78,13 +78,13 @@
           </v-list>
         </div>
       </v-navigation-drawer>
-      <v-app-bar transparent fixed app :color="bg" elevation="3">
+      <v-app-bar transparent fixed app dark elevation="3">
         <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
         <h3>FPPP</h3>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-toolbar-title> {{ navPathName }}</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn text rounded><v-icon>mdi-cog</v-icon></v-btn>
+        <!-- <v-btn text rounded><v-icon>mdi-cog</v-icon></v-btn> -->
         <v-btn @click="logout_modal = true" text rounded
           ><v-icon>mdi-logout-variant</v-icon></v-btn
         >

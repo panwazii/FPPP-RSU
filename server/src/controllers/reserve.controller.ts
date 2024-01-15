@@ -97,6 +97,13 @@ class ReserveController {
             },
             include: [
                 {
+                    model: UserModel, as: 'user',
+                    attributes: { exclude: ['password', 'created_at', 'updated_at'] },
+                    include: [{
+                        model: UserTypeModel, as: 'user_type',
+                    }]
+                },
+                {
                     model: RoomModel, as: 'room',
                 }, {
                     model: ReserveEquipmentModel, as: 'reserve_equipment',
@@ -139,7 +146,7 @@ class ReserveController {
         return ReserveModel.create(packet)
     }
 
-    public static async update(data: any) {
+    public static async update(id: string, data: any) {
         return ReserveModel.update({
             time_start: data.time_start,
             time_end: data.time_end,
@@ -148,7 +155,7 @@ class ReserveController {
             available_status: data.available_status,
         }, {
             where: {
-                id: data.id,
+                id,
             },
         })
     }
@@ -247,6 +254,14 @@ class ReserveController {
             where: {
                 id: data.id,
             },
+        })
+    }
+
+    public static async deleteQuotationByReserveId(id: string) {
+        return QuotationModel.destroy({
+            where: {
+                reserve_id: id,
+            }
         })
     }
 
