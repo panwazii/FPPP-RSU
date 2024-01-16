@@ -1101,6 +1101,52 @@ adminRouter.post('/updateQuotation', checkBodyEmpty, authValid, async (req, res)
     }
 });
 
+//report
+adminRouter.get('/getAllReport', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const offset = limit * Page;
+        const report = await EquipmentController.getAllReport(limit,offset)
+        res.status(200).json({ code: 200, report: report, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.get('/getSingleReport', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const id = req.body.id
+        const report = await EquipmentController.getSingleReport(id)
+        res.status(200).json({ code: 200, report: report, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.delete('/deleteReport', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const id = req.body.id
+        await EquipmentController.deleteReport(id)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.post('/updateReport', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const id = req.body.id
+        await EquipmentController.updateReport(id)
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 export default adminRouter;
 
 

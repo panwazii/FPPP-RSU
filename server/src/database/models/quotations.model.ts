@@ -63,6 +63,7 @@ export const initQuotationModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'quotations',

@@ -57,6 +57,7 @@ export const initNewsModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'news',

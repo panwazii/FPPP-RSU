@@ -53,6 +53,7 @@ export const initRoomPictureModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'room_pictures',

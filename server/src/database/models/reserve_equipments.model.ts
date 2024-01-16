@@ -74,6 +74,7 @@ export const initReserveEquipmentModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'reserve_equipments',

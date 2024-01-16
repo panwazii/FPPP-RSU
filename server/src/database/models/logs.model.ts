@@ -106,6 +106,7 @@ export const initLogModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'logs',

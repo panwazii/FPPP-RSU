@@ -7,6 +7,7 @@ import RentRate, { RentRateAttribute } from '../database/models/rent_rate.model'
 import ProductionLineModel, { ProductionLineAttribute } from '../database/models/production_lines.model';
 import SupplierModel, { SupplierAttribute } from '../database/models/supplier.model';
 import SupplyModel, { SupplyAttribute } from '../database/models/supply.model';
+import ReportModel, { ReportAttribute } from '../database/models/report.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
 
@@ -486,6 +487,51 @@ class EquipmentController {
             ],
 
         });
+    }
+
+    //report
+    public static async getSingleReport(id: number) {
+        return ReportModel.findOne({
+            where: { id: id },
+            raw: true
+        });
+    }
+
+    public static async getAllReport(limit: number, offset: number) {
+        return ReportModel.findAndCountAll({
+            limit,
+            offset,
+            raw: true
+        });
+    }
+
+    public static async createReport(id: string, equipment: string, desc: string) {
+        const packet: ReportAttribute = {
+            user_id: id,
+            equipment_id: equipment,
+            desc: desc,
+            fix_status: false,
+        };
+
+        return ReportModel.create(packet)
+    }
+
+    public static async updateReport(id: number) {
+        return ReportModel.update({
+            fix_status: true,
+        }, {
+            where: {
+                id: id,
+            },
+        })
+    }
+
+    public static async deleteReport(id: number) {
+        return ReportModel.destroy({      
+            where: {
+                id: id,
+            },
+        })
     }
 }
 

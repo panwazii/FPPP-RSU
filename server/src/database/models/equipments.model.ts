@@ -95,6 +95,7 @@ export const initEquipmentsModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'equipments',

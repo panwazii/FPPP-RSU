@@ -60,6 +60,7 @@ export const initSupplierModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'supplier',
