@@ -508,7 +508,7 @@ class EquipmentController {
     public static async createReport(id: string, equipment: string, desc: string) {
         const packet: ReportAttribute = {
             user_id: id,
-            equipment_id: equipment,
+            equipment_info_id: equipment,
             desc: desc,
             fix_status: false,
         };

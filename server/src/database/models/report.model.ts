@@ -2,12 +2,12 @@ import {
     Model, Optional, Sequelize, DataTypes,
 } from 'sequelize';
 import UserModel from './users.model';
-import EquipmentsModel from './equipments.model';
+import EquipmentInfoModel from './equipment_infos.model';
 
 export interface ReportAttribute {
     id?: number;
     user_id?: string;
-    equipment_id?: string;
+    equipment_info_id?: string;
     desc?: string;
     fix_status?: boolean;
     created_at?: Date;
@@ -23,7 +23,7 @@ class ReportModel extends Model<ReportAttribute, ReportAttributeCreation> implem
 
     declare user_id: string;
 
-    declare equipment_id: string;
+    declare equipment_info_id: string;
 
     declare desc: string;
 
@@ -47,11 +47,11 @@ export const initReportModel = (connection: Sequelize) => {
                     key: 'id',
                 },
             },
-            equipment_id: {
+            equipment_info_id: {
                 type: DataTypes.UUID,
                 allowNull: true,
                 references: {
-                    model: EquipmentsModel,
+                    model: EquipmentInfoModel,
                     key: 'id',
                 },
             },

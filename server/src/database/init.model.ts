@@ -168,8 +168,8 @@ const initDatabase = async () => {
     UserModel.hasMany(ReportModel, { foreignKey: 'user_id' });
     ReportModel.belongsTo(UserModel, { foreignKey: 'user_id' });
 
-    EquipmentsModel.hasMany(ReportModel, { foreignKey: 'equipment_info_id' });
-    ReportModel.belongsTo(EquipmentsModel, { foreignKey: 'equipment_info_id' });
+    EquipmentInfoModel.hasMany(ReportModel, { foreignKey: 'equipment_info_id' });
+    ReportModel.belongsTo(EquipmentInfoModel, { foreignKey: 'equipment_info_id' });
 
     if (yn(config.database.dropAndCreateNew)) {
         log("Drop status :", config.database.dropAndCreateNew);
