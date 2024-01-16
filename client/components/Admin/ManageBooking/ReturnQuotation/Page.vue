@@ -31,7 +31,7 @@ export default {
       'api/admin/getAllReserve',
       {
         params: {
-          approval_status: 'WAITING',
+          approval_status: 'RETURN_QUOTATION',
           limit: this.fetchOption.itemsPerPage,
           page: this.fetchOption.page,
         },

@@ -8,3 +8,25 @@ export function removeObjectWithId(arr, id) {
 export function goTo(path) {
     return $nuxt.$router.push(path)
 }
+
+export function checkValidPrice(value) {
+    const regex = /^\d+\.\d{2}$/;
+    if (typeof value === 'number' && !Number.isNaN(value)) {
+        return true
+    }
+    else if (regex.test(value)) {
+        return true
+    } else { return false }
+
+}
+
+export function formatToIsoNumber(value) {
+    if (typeof value === 'number' && !isNaN(value)) {
+        return value.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        })
+    } else {
+        return '0.00'
+    }
+}

@@ -53,6 +53,7 @@ export const initProductionLineModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'production_lines',

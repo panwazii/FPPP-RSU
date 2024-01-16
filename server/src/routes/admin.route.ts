@@ -53,10 +53,9 @@ adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
                     lname: adminInfo.lname,
                     email: adminInfo.email,
                     tel: adminInfo.tel,
-                    avatar: adminInfo.avatar,
                     status: adminInfo.status,
                     created_at: adminInfo.created_at,
-                    update_at: adminInfo.update_at
+                    updated_at: adminInfo.updated_at
                 }
             });
         } else {
@@ -539,6 +538,19 @@ adminRouter.get('/getAllReserve', checkParamsEmpty, authValid, async (req, res) 
     }
 });
 
+adminRouter.get('/getSingleReserve', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const reserveId = String(req.query.id)
+        const userId = req.body.credentials.id;
+        const reserve = await ReserveController.getSingleReserveAndChild(reserveId)
+        res.status(200).json({
+            code: 200, data: reserve
+        });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 adminRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const equipment = req.body.equipment_info_id;
@@ -565,7 +577,20 @@ adminRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) =
 adminRouter.post('/updateReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const Data = req.body;
-        await ReserveController.update(Data)
+        const reserveId = req.body.reserve_id;
+        await ReserveController.update(reserveId, Data)
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+
+});
+
+adminRouter.post('/cancelReserve', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const reserveId = req.body.id;
+        await ReserveController.deleteQuotationByReserveId(reserveId)
+        await ReserveController.update(reserveId, { approval_status: "CANCEL" })
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -599,7 +624,7 @@ adminRouter.get('/countReserve', checkParamsEmpty, authValid, async (req, res) =
                 countReserve.waiting += 1
             }
             if (reserve.approval_status == 'RETURN_QUOTATION') {
-                countReserve.waiting += 1
+                countReserve.return_quotation += 1
             }
             if (reserve.approval_status == 'CONFIRM_QUOTATION') {
                 countReserve.confirm_quotation += 1
@@ -1036,8 +1061,8 @@ adminRouter.post('/updateTab2', checkBodyEmpty, authValid, async (req, res) => {
 //notification
 adminRouter.get('/getAllNotification', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const adminid = req.body.credentials.id;
-        const notification = await NotificationController.getAllAdmin(adminid)
+        const adminId = req.body.credentials.id;
+        const notification = await NotificationController.getAllAdmin(adminId)
         res.status(200).json({ code: 200, notification: notification, });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -1054,20 +1079,68 @@ adminRouter.get('/getSingleQuotation', checkParamsEmpty, authValid, async (req, 
     }
 });
 
-adminRouter.get('/createQuotation', checkBodyEmpty, authValid, async (req, res) => {
+adminRouter.post('/createQuotation', checkBodyEmpty, authValid, async (req, res) => {
     try {
-        const adminid = req.body.credentials.id;
-        await ReserveController.createQuotation(adminid, req.body)
+        const adminId = req.body.credentials.id;
+        const reserveId = req.body.reserve_id;
+        await ReserveController.createQuotation(adminId, req.body)
+        await ReserveController.update(reserveId, { approval_status: "RETURN_QUOTATION" })
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.post('/updateQuotation', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const adminId = req.body.credentials.id;
+        await ReserveController.updateQuotation(adminId, req.body)
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
 
-adminRouter.get('/updateQuotation', checkBodyEmpty, authValid, async (req, res) => {
+//report
+adminRouter.get('/getAllReport', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const adminid = req.body.credentials.id;
-        await ReserveController.updateQuotation(adminid, req.body)
+        const limit = numberOrDefault(req.query.limit, 10);
+        let Page = numberOrDefault(req.query.page, 0);
+        if (Page != 0) {
+            Page = Page - 1
+        }
+        const offset = limit * Page;
+        const report = await EquipmentController.getAllReport(limit,offset)
+        res.status(200).json({ code: 200, report: report, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.get('/getSingleReport', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const id = req.body.id
+        const report = await EquipmentController.getSingleReport(id)
+        res.status(200).json({ code: 200, report: report, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.delete('/deleteReport', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const id = req.body.id
+        await EquipmentController.deleteReport(id)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.post('/updateReport', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const id = req.body.id
+        await EquipmentController.updateReport(id)
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));

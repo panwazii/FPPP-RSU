@@ -21,6 +21,7 @@ import CartItemModel, { initCartItemModel } from './models/cart_items.model';
 import UserNotificationModel, { initUserNotificationModel } from './models/user_notifications.model';
 import AdminNotificationModel, { initAdminNotificationModel } from './models/admin_notifications.model';
 import QuotationModel, { initQuotationModel } from './models/quotations.model';
+import ReportModel, { initReportModel } from './models/report.model';
 
 import { initWebInfoModel } from './models/web_info.model';
 import { initServiceModel } from './models/services.model';
@@ -88,8 +89,9 @@ const initDatabase = async () => {
         //Admin
         initAdminModel,
         initAdminNotificationModel,
-        
+
         initQuotationModel,
+        initReportModel,
 
         //Public
         initWebInfoModel,
@@ -106,8 +108,8 @@ const initDatabase = async () => {
     UserTypeModel.hasMany(UserModel, { as: 'user_type', foreignKey: 'type_id' });
     UserModel.belongsTo(UserTypeModel, { as: 'user_type', foreignKey: 'type_id' });
 
-    UserModel.hasMany(ReserveModel, { foreignKey: 'user_id' });
-    ReserveModel.belongsTo(UserModel, { foreignKey: 'user_id' });
+    UserModel.hasMany(ReserveModel, { as: 'user', foreignKey: 'user_id' });
+    ReserveModel.belongsTo(UserModel, { as: 'user', foreignKey: 'user_id' });
 
     RoomModel.hasMany(ReserveModel, { as: 'room', foreignKey: 'room_id' });
     ReserveModel.belongsTo(RoomModel, { as: 'room', foreignKey: 'room_id' });
@@ -157,11 +159,17 @@ const initDatabase = async () => {
     AdminModel.hasMany(AdminNotificationModel, { foreignKey: 'admin_id' });
     AdminNotificationModel.belongsTo(AdminModel, { foreignKey: 'admin_id' });
 
-    ReserveModel.hasOne(QuotationModel, { foreignKey: 'reserve_id' });
-    QuotationModel.belongsTo(ReserveModel, { foreignKey: 'reserve_id' });
+    ReserveModel.hasOne(QuotationModel, { as: 'quotation', foreignKey: 'reserve_id' });
+    QuotationModel.belongsTo(ReserveModel, { as: 'quotation', foreignKey: 'reserve_id' });
 
-    AdminModel.hasMany(QuotationModel, { foreignKey: 'admin_id' });
-    QuotationModel.belongsTo(AdminModel, { foreignKey: 'admin_id' });
+    AdminModel.hasMany(QuotationModel, { as: 'admin', foreignKey: 'admin_id' });
+    QuotationModel.belongsTo(AdminModel, { as: 'admin', foreignKey: 'admin_id' });
+
+    UserModel.hasMany(ReportModel, { foreignKey: 'user_id' });
+    ReportModel.belongsTo(UserModel, { foreignKey: 'user_id' });
+
+    EquipmentInfoModel.hasMany(ReportModel, { foreignKey: 'equipment_info_id' });
+    ReportModel.belongsTo(EquipmentInfoModel, { foreignKey: 'equipment_info_id' });
 
     if (yn(config.database.dropAndCreateNew)) {
         log("Drop status :", config.database.dropAndCreateNew);
