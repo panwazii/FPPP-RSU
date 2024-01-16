@@ -53,10 +53,9 @@ adminRouter.get('/getAdminInfo', authValid, async (req, res) => {
                     lname: adminInfo.lname,
                     email: adminInfo.email,
                     tel: adminInfo.tel,
-                    avatar: adminInfo.avatar,
                     status: adminInfo.status,
                     created_at: adminInfo.created_at,
-                    update_at: adminInfo.update_at
+                    updated_at: adminInfo.updated_at
                 }
             });
         } else {

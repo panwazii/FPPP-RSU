@@ -84,7 +84,15 @@ class ReserveController {
                             model: ProductionLineModel, as: 'production_line',
                         }]
                     }]
-                }],
+                },
+                {
+                    model: QuotationModel, as: 'quotation',
+                    include: [{
+                        model: AdminModel, as: 'admin',
+                        attributes: { exclude: ['password', 'created_at', 'updated_at'] },
+                    }]
+                }
+            ],
         });
     }
 
