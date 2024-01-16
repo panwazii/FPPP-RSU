@@ -219,10 +219,11 @@ export default {
       this.form.room_price = 0
     },
     refresh() {
-      if (this.method() !== null) {
-        return this.method()
+      try {
+        this.method()
+      } catch (error) {
+        this.$nuxt.refresh()
       }
-      this.$nuxt.refresh()
     },
   },
 }
