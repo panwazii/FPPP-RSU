@@ -65,7 +65,7 @@ export const initReportModel = (connection: Sequelize) => {
             },
         },
         {
-            // paranoid: true,
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'report',
