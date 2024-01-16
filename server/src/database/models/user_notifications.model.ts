@@ -65,6 +65,7 @@ export const initUserNotificationModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'user_notifications',

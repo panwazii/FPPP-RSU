@@ -97,6 +97,7 @@ export const initAdminModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'admins',

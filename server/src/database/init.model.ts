@@ -21,6 +21,7 @@ import CartItemModel, { initCartItemModel } from './models/cart_items.model';
 import UserNotificationModel, { initUserNotificationModel } from './models/user_notifications.model';
 import AdminNotificationModel, { initAdminNotificationModel } from './models/admin_notifications.model';
 import QuotationModel, { initQuotationModel } from './models/quotations.model';
+import ReportModel, { initReportModel } from './models/report.model';
 
 import { initWebInfoModel } from './models/web_info.model';
 import { initServiceModel } from './models/services.model';
@@ -90,6 +91,7 @@ const initDatabase = async () => {
         initAdminNotificationModel,
 
         initQuotationModel,
+        initReportModel,
 
         //Public
         initWebInfoModel,
@@ -162,6 +164,12 @@ const initDatabase = async () => {
 
     AdminModel.hasMany(QuotationModel, { foreignKey: 'admin_id' });
     QuotationModel.belongsTo(AdminModel, { foreignKey: 'admin_id' });
+
+    UserModel.hasMany(ReportModel, { foreignKey: 'user_id' });
+    ReportModel.belongsTo(UserModel, { foreignKey: 'user_id' });
+
+    EquipmentsModel.hasMany(ReportModel, { foreignKey: 'equipment_info_id' });
+    ReportModel.belongsTo(EquipmentsModel, { foreignKey: 'equipment_info_id' });
 
     if (yn(config.database.dropAndCreateNew)) {
         log("Drop status :", config.database.dropAndCreateNew);

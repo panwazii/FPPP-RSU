@@ -105,6 +105,7 @@ export const initEquipmentInfoModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'equipment_infos',

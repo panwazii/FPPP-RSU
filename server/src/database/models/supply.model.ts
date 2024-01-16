@@ -98,6 +98,7 @@ export const initSupplyModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'supply',

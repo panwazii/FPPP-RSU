@@ -65,6 +65,7 @@ export const initAdminNotificationModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'admin_notifications',

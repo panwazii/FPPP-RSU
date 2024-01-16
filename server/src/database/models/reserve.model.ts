@@ -86,6 +86,7 @@ export const initReserveModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'reserve',
