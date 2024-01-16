@@ -8,6 +8,7 @@ import RoomPictureModel from '../database/models/room_pictures.model';
 import QuotationModel, { QuotationAttribute } from '../database/models/quotations.model';
 import AdminModel from '../database/models/admins.model';
 import UserModel from '../database/models/users.model';
+import UserTypeModel from '../database/models/user_types.model';
 
 class ReserveController {
     public static async getSingleReserveAndChildForUser(id: string, userId: string) {
@@ -56,6 +57,45 @@ class ReserveController {
         });
     }
 
+    public static async getSingleReserveAndChild(id: string) {
+        return ReserveModel.findOne({
+            where: {
+                id
+            },
+            include: [
+                {
+                    model: UserModel, as: 'user',
+                    attributes: { exclude: ['password', 'created_at', 'updated_at'] },
+                    include: [{
+                        model: UserTypeModel, as: 'user_type',
+                    }]
+                },
+                {
+                    model: RoomModel, as: 'room',
+                    include: [{
+                        model: RoomPictureModel, as: 'picture',
+                    }]
+                },
+                {
+                    model: ReserveEquipmentModel, as: 'reserve_equipment',
+                    include: [{
+                        model: EquipmentInfoModel, as: 'equipment_info',
+                        include: [{
+                            model: ProductionLineModel, as: 'production_line',
+                        }]
+                    }]
+                },
+                {
+                    model: QuotationModel, as: 'quotation',
+                    include: [{
+                        model: AdminModel, as: 'admin',
+                        attributes: { exclude: ['password', 'created_at', 'updated_at'] },
+                    }]
+                }
+            ],
+        });
+    }
+
     public static async getAllReserveAndChild(searchValue: string, limit: number, offset: number) {
         return ReserveModel.findAndCountAll({
             distinct: true,
@@ -64,6 +104,13 @@ class ReserveController {
                 available_status: true
             },
             include: [
+                {
+                    model: UserModel, as: 'user',
+                    attributes: { exclude: ['password', 'created_at', 'updated_at'] },
+                    include: [{
+                        model: UserTypeModel, as: 'user_type',
+                    }]
+                },
                 {
                     model: RoomModel, as: 'room',
                 }, {
@@ -107,7 +154,7 @@ class ReserveController {
         return ReserveModel.create(packet)
     }
 
-    public static async update(data: any) {
+    public static async update(id: string, data: any) {
         return ReserveModel.update({
             time_start: data.time_start,
             time_end: data.time_end,
@@ -116,7 +163,7 @@ class ReserveController {
             available_status: data.available_status,
         }, {
             where: {
-                id: data.id,
+                id,
             },
         })
     }
@@ -215,6 +262,14 @@ class ReserveController {
             where: {
                 id: data.id,
             },
+        })
+    }
+
+    public static async deleteQuotationByReserveId(id: string) {
+        return QuotationModel.destroy({
+            where: {
+                reserve_id: id,
+            }
         })
     }
 

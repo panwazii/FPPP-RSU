@@ -30,7 +30,7 @@ userRouter.get('/getUserInfo', authValid, async (req, res) => {
                 tel: userInfo!.tel,
                 booking_permission: userInfo!.booking_permission,
                 created_at: userInfo!.created_at,
-                update_at: userInfo!.update_at
+                updated_at: userInfo!.updated_at
             }
         });
     } catch (error) {
@@ -325,8 +325,20 @@ userRouter.get('/getDropdownEquipmentInfo', checkParamsEmpty, authValid, async (
 userRouter.get('/getSingleQuotation', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const userId = req.body.credentials.id;
-        const quotation = await ReserveController.getSingleQuotationUser(userId,req.query.reserve_id as string)
+        const quotation = await ReserveController.getSingleQuotationUser(userId, req.query.reserve_id as string)
         res.status(200).json({ code: 200, quotation: quotation, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+//report
+userRouter.post('/createReport', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const userId = req.body.credentials.id;
+        const { equipmentId, desc } = req.body
+        await EquipmentController.createReport(userId, equipmentId, desc)
+        res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }

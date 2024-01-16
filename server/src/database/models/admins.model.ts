@@ -10,10 +10,9 @@ export interface AdminAttribute {
     email?: string;
     password?: string;
     tel?: string;
-    avatar?: string;
     status?: number;
     created_at?: Date;
-    update_at?: Date;
+    updated_at?: Date;
 }
 
 export interface AdminAttributeCreation extends Optional<AdminAttribute, 'id'> { }
@@ -33,13 +32,11 @@ class AdminModel extends Model<AdminAttribute, AdminAttributeCreation> implement
 
     declare tel: string;
 
-    declare avatar: string;
-
     declare status: number;
 
     declare created_at: Date;
 
-    declare update_at: Date;
+    declare updated_at: Date;
 }
 
 export const initAdminModel = (connection: Sequelize) => {
@@ -76,10 +73,6 @@ export const initAdminModel = (connection: Sequelize) => {
                 allowNull: true,
                 type: DataTypes.STRING,
             },
-            avatar: {
-                allowNull: true,
-                type: DataTypes.STRING(500),
-            },
             status: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
@@ -90,13 +83,14 @@ export const initAdminModel = (connection: Sequelize) => {
                 type: DataTypes.DATE,
                 defaultValue: DataTypes.NOW,
             },
-            update_at: {
+            updated_at: {
                 allowNull: false,
                 type: DataTypes.DATE,
                 defaultValue: DataTypes.NOW,
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'admins',

@@ -53,6 +53,7 @@ export const initRentRateModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'rent_rates',

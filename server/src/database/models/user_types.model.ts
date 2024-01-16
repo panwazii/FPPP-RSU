@@ -49,6 +49,7 @@ export const initUserTypeModel = (connection: Sequelize) => {
             },
         },
         {
+            paranoid: true,
             sequelize: connection,
             timestamps: false,
             tableName: 'user_types',

@@ -192,7 +192,6 @@ export default {
         if (!this.$refs.form.validate() || !this.agree) {
           this.modal.error.message = 'กรุณากรอกข้อมูลให้ถูกต้องครบถ้วน'
           this.modal.error.open = true
-          console.log('asdasdasd')
           return
         }
         this.modal.loading.open = true
