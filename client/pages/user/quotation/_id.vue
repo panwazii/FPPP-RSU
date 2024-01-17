@@ -81,7 +81,6 @@ export default {
     if (response.code === 200) {
       this.quotation = response.quotation
       this.loading = false
-      // this.printPage()
     } else {
       this.$nuxt.error({
         statusCode: 404,
@@ -89,6 +88,9 @@ export default {
       })
       return
     }
+  },
+  mounted() {
+    this.printPage()
   },
   data() {
     return {
@@ -124,7 +126,9 @@ export default {
   },
   methods: {
     printPage() {
-      window.print()
+      this.$nextTick(() => {
+        window.print()
+      })
     },
   },
 }
