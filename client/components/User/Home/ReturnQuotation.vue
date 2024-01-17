@@ -10,7 +10,7 @@
       </div>
     </v-card>
     <div v-for="booking in allBooking" :key="booking.id">
-      <!-- <UserHomeWaitingCardList :bookingData="booking" /> -->
+      <UserHomeReturnQuotationCardList :bookingData="booking" />
     </div>
     <v-pagination
       circle

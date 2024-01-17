@@ -222,7 +222,7 @@
                 <v-card-title class="mr-4"
                   >จำนวน :
                   <div class="font-weight-bold ml-2">
-                    {{ item.equipment_info.quantity }}
+                    {{ item.quantity }}
                   </div></v-card-title
                 >
               </div>
@@ -251,7 +251,7 @@
             <v-card-subtitle class="mr-4 d-flex">
               จำนวน :
               <div class="font-weight-bold ml-2">
-                {{ item.equipment_info.quantity }}
+                {{ item.quantity }}
               </div>
             </v-card-subtitle>
           </v-card>

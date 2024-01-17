@@ -109,7 +109,13 @@ export default {
   computed: {},
   data() {
     return {
-      reserveCount: {},
+      reserveCount: {
+        waiting: 0,
+        return_quotation: 0,
+        confirm_quotation: 0,
+        confirm: 0,
+        cancel: 0,
+      },
       routes: [{ id: 1, name: 'หน้าหลัก', to: '/' }],
       selectedType: 1,
     }

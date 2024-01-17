@@ -145,7 +145,7 @@
                 <v-card-title class="mr-4"
                   >จำนวน :
                   <div class="font-weight-bold ml-2">
-                    {{ item.equipment_info.quantity }}
+                    {{ item.quantity }}
                   </div></v-card-title
                 >
               </div>
@@ -248,11 +248,11 @@ export default {
           this.bookingData.room_id &&
           this.bookingData.reserve_equipment.length > 0
         ) {
-          return 'จ้องห้องพร้อมอุปกรณ์'
+          return 'จองห้องพร้อมอุปกรณ์'
         } else if (this.bookingData.room_id) {
-          return 'จ้องห้อง'
+          return 'จองห้อง'
         } else if (this.bookingData.reserve_equipment.length > 0) {
-          return 'จ้องอุปกรณ์'
+          return 'จองอุปกรณ์'
         } else {
           return 'n/a'
         }

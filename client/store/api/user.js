@@ -47,4 +47,17 @@ export const actions = {
       .get('api/user/getAllEquipmentInfoInRoom', data)
       .then((res) => res.data)
   },
+  //Quotation
+  async getSingleQuotation({ getters }, data) {
+    this.$axios.setHeader('authorization', this.$cookies.get('token'))
+    return await this.$axios
+      .get('api/user/getSingleQuotation', data)
+      .then((res) => res.data)
+  },
+  async confirmPrice({ getters }, data) {
+    this.$axios.setHeader('authorization', this.$cookies.get('token'))
+    return await this.$axios
+      .post('api/user/confirmPrice', data)
+      .then((res) => res.data)
+  },
 }

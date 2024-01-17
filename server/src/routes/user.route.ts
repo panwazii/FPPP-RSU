@@ -210,7 +210,7 @@ userRouter.get('/countReserve', checkParamsEmpty, authValid, async (req, res) =>
                 countReserve.waiting += 1
             }
             if (reserve.approval_status == 'RETURN_QUOTATION') {
-                countReserve.waiting += 1
+                countReserve.return_quotation += 1
             }
             if (reserve.approval_status == 'CONFIRM_QUOTATION') {
                 countReserve.confirm_quotation += 1
@@ -325,8 +325,21 @@ userRouter.get('/getDropdownEquipmentInfo', checkParamsEmpty, authValid, async (
 userRouter.get('/getSingleQuotation', checkParamsEmpty, authValid, async (req, res) => {
     try {
         const userId = req.body.credentials.id;
-        const quotation = await ReserveController.getSingleQuotationUser(userId, req.query.reserve_id as string)
+        const reserveId = req.query.id;
+        const quotation = await ReserveController.getSingleQuotationUser(userId, String(reserveId))
         res.status(200).json({ code: 200, quotation: quotation, });
+    } catch (error) {
+        console.log(error);
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+userRouter.post('/confirmPrice', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const userId = req.body.credentials.id;
+        const reserveId = req.body.id;
+        const reserve = await ReserveController.update(reserveId, { approval_status: "CONFIRM_QUOTATION" })
+        res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }

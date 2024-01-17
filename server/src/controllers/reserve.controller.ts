@@ -199,22 +199,23 @@ class ReserveController {
                 reserve_id: reserve_id,
             },
             include: [{
-                model: ReserveModel,
+                model: ReserveModel, as: "reserve",
                 where: { user_id: user_id },
                 include: [{
-                    model: UserModel,
+                    model: UserModel, as: 'user',
+                    attributes: { exclude: ['password'] }
                 }, {
                     model: RoomModel, as: 'room',
                 }, {
                     model: ReserveEquipmentModel, as: 'reserve_equipment',
                     include: [{ model: EquipmentInfoModel, as: 'equipment_info' }]
-                }
+                },
                 ]
             },
             {
-                model: AdminModel
-            }
-            ]
+                model: AdminModel, as: 'admin',
+                attributes: { exclude: ['email', 'password', 'created_at', 'updated_at'] }
+            }]
         });
     }
 
