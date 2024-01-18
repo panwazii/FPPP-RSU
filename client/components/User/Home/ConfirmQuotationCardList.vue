@@ -1,33 +1,37 @@
 <template>
-  <v-card class="rounded-xl mt-4">
-    <v-card-title class="ml-2">
-      วันที่ {{ displayStartDate }} เวลา {{ displayStartTime }} -
-      {{ displayEndTime }}
-    </v-card-title>
-    <v-card-subtitle class="subtitle-1 font-weight-bold">
-      <v-chip color="secondary" :input-value="true">
-        {{ displayBookingType }}</v-chip
-      >
-      <v-chip color="primary" :input-value="true" v-if="bookingData.room_id">
-        ห้อง : {{ bookingData.room.name }}</v-chip
-      >
-      <v-chip :input-value="true" v-if="displayEquipmentCount !== 0">
-        อุปกรณ์ทั้งหมด : {{ displayEquipmentCount }}</v-chip
-      >
-    </v-card-subtitle>
-    <v-card-actions>
-      <v-spacer />
-      <v-btn
-        dark
-        elevation="0"
-        class="rounded-xl"
-        @click="$router.push(`/user/booking/waiting/${bookingData.id}`)"
-        >ดูรายละเอียด
-      </v-btn>
-    </v-card-actions>
-  </v-card>
+  <div>
+    <v-card class="rounded-xl mt-4">
+      <v-card-title class="ml-2">
+        วันที่ {{ displayStartDate }} เวลา {{ displayStartTime }} -
+        {{ displayEndTime }}
+      </v-card-title>
+      <v-card-subtitle class="subtitle-1 font-weight-bold">
+        <v-chip color="secondary" :input-value="true">
+          {{ displayBookingType }}</v-chip
+        >
+        <v-chip color="primary" :input-value="true" v-if="bookingData.room_id">
+          ห้อง : {{ bookingData.room.name }}</v-chip
+        >
+        <v-chip :input-value="true" v-if="displayEquipmentCount !== 0">
+          อุปกรณ์ทั้งหมด : {{ displayEquipmentCount }}</v-chip
+        >
+      </v-card-subtitle>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn
+          dark
+          elevation="0"
+          class="rounded-xl"
+          @click="
+            $router.push(`/user/booking/confirm-quotation/${bookingData.id}`)
+          "
+          >ดูรายละเอียด
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </div>
 </template>
-  <script>
+      <script>
 export default {
   props: {
     bookingData: {
@@ -45,7 +49,6 @@ export default {
         if (this.bookingData.reserve_equipment.length > 0) {
           let count = 0
           this.bookingData.reserve_equipment.forEach((item) => {
-            console.log(count);
             count += item.quantity
           })
           return count

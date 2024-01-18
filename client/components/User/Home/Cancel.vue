@@ -10,7 +10,7 @@
       </div>
     </v-card>
     <div v-for="booking in allBooking" :key="booking.id">
-      <!-- <UserHomeWaitingCardList :bookingData="booking" /> -->
+      <UserHomeCancelCardList :bookingData="booking" />
     </div>
     <v-pagination
       circle
@@ -23,7 +23,7 @@
     </v-pagination>
   </div>
 </template>
-  <script>
+<script>
 export default {
   async fetch() {
     const getAllBookings = await this.$store.dispatch(
@@ -49,7 +49,7 @@ export default {
   methods: {},
 }
 </script>
-  <style scoped>
+<style scoped>
 .center {
   position: relative;
   top: 50%;
@@ -57,4 +57,3 @@ export default {
   transform: translate(-50%, -50%);
 }
 </style>
-  
