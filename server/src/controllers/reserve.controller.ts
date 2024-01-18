@@ -168,6 +168,14 @@ class ReserveController {
         })
     }
 
+    public static async deleteReserve(id: string) {
+        return ReserveModel.destroy({
+            where: {
+                id: id,
+            }
+        })
+    }
+
     public static async createReserveEquipment(id: string, data: any) {
         const packet: ReserveEquipmentAttribute = {
             equipment_info_id: data.id,

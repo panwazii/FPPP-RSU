@@ -299,6 +299,16 @@ userRouter.get('/getAllNotification', checkParamsEmpty, authValid, async (req, r
     }
 });
 
+userRouter.delete('/deleteNotification', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const id = req.body.id
+        await NotificationController.deleteUser(id)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 userRouter.get('/getAllEquipmentInfoInRoom', checkParamsEmpty, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);

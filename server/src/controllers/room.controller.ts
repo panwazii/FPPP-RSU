@@ -77,6 +77,14 @@ class RoomController {
             .catch(() => false);
     }
 
+    public static async deleteRoom(id: string) {
+        return RoomModel.destroy({
+            where: {
+                id: id,
+            }
+        })
+    }
+
     public static async createRoomPicture(url: string, id: string) {
         const packet: RoomPictureAttribute = {
             url: url,
@@ -85,6 +93,14 @@ class RoomController {
         };
 
         return RoomPictureModel.create(packet)
+    }
+
+    public static async deleteRoomPicture(id: string) {
+        return RoomPictureModel.destroy({
+            where: {
+                id: id,
+            }
+        })
     }
 
     // Drop down

@@ -50,7 +50,7 @@ class CartController {
             where: {
                 id: id,
             },
-        }).then((rowDeleted) => rowDeleted > 0);
+        });
     }
 
     public static async deleteItems(id: string) {
@@ -58,7 +58,7 @@ class CartController {
             where: {
                 id: id,
             },
-        }).then((rowDeleted) => rowDeleted > 0);
+        });
     }
 
     public static async deleteAllItems(id: string) {
@@ -66,7 +66,7 @@ class CartController {
             where: {
                 cart_id: id,
             },
-        }).then((rowDeleted) => rowDeleted > 0);
+        });
     }
 
 }

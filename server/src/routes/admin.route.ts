@@ -75,6 +75,19 @@ adminRouter.post('/setUserBookingPermission', checkParamsEmpty, authValid, async
     }
 })
 
+adminRouter.delete('/deleteAdmin', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const type = req.body.credentials.type;
+        if (type !== "SUPERADMIN") {
+            return res.status(HttpStatusCode.UNAUTHORIZED);
+        }
+        await AdminController.delete(req.body.id)
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 //News
 adminRouter.get('/getSingleNews', checkParamsEmpty, authValid, async (req, res) => {
     try {
@@ -161,6 +174,16 @@ adminRouter.post('/updateNews', checkBodyEmpty, multerUpload.single("file"), aut
 
 });
 
+adminRouter.delete('/deleteNews', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const id = req.body.id
+        await NewsController.delete(id)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 //Room
 adminRouter.get('/getSingleRoom', checkParamsEmpty, authValid, async (req, res) => {
     try {
@@ -213,6 +236,16 @@ adminRouter.post('/createRoom', checkBodyEmpty, multerUpload.single("file"), aut
 
 });
 
+adminRouter.delete('/deleteRoom', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const id = req.body.id
+        await RoomController.deleteRoom(id)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 adminRouter.post('/createRoomPicture', checkBodyEmpty, multerUpload.single("file"), authValid, async (req, res) => {
     try {
         const picture = req.file;
@@ -247,10 +280,30 @@ adminRouter.post('/updateRoom', checkBodyEmpty, authValid, async (req, res) => {
 
 });
 
+adminRouter.delete('/deleteRoomPicture', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const id = req.body.id
+        await RoomController.deleteRoomPicture(id)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 // User
 adminRouter.post('/createUserType', checkBodyEmpty, authValid, async (req, res) => {
     try {
         await UserTypeController.createUserType(req.body)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.delete('/deleteUserType', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const id = req.body.id
+        await UserTypeController.delete(id)
         res.status(200).json({ code: 201 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -458,6 +511,17 @@ adminRouter.post('/updateEquipmentInfo', checkBodyEmpty, multerUpload.single("fi
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
+
+adminRouter.delete('/deleteEquipmentInfo', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const id = req.body.id
+        await EquipmentController.deleteEquipmentInfo(id)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 //Equipment Stock
 adminRouter.get('/getSingleEquipmentStock', checkParamsEmpty, authValid, async (req, res) => {
     try {
@@ -507,6 +571,16 @@ adminRouter.post('/updateEquipmentStock', checkBodyEmpty, authValid, async (req,
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 
+});
+
+adminRouter.delete('/deleteEquipmentStock', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const id = req.body.id
+        await EquipmentController.deleteEquipment(id)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
 });
 
 // reserve
@@ -596,6 +670,16 @@ adminRouter.post('/cancelReserve', checkBodyEmpty, authValid, async (req, res) =
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 
+});
+
+adminRouter.delete('/deleteReserve', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const id = req.body.id
+        await ReserveController.deleteReserve(id)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
 });
 
 adminRouter.post('/updateReserveEquipment', checkBodyEmpty, authValid, async (req, res) => {
@@ -848,6 +932,16 @@ adminRouter.post('/updateProductionLine', checkBodyEmpty, authValid, async (req,
     }
 });
 
+adminRouter.delete('/deleteProductionLine', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const id = req.body.id
+        await EquipmentController.deleteProductionLine(id)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 //Equipment Rent Rate
 adminRouter.get('/getSingleEquipmentRentRate', checkParamsEmpty, authValid, async (req, res) => {
     try {
@@ -894,6 +988,17 @@ adminRouter.post('/updateEquipmentRentRate', checkBodyEmpty, authValid, async (r
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
+
+adminRouter.delete('/deleteEquipmentRentRate', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const id = req.body.id
+        await EquipmentController.deleteEquipmentRentRate(id)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 //Supply
 adminRouter.get('/getSingleSupplyStock', authValid, async (req, res) => {
     try {
@@ -937,6 +1042,16 @@ adminRouter.post('/updateSupplyStock', checkBodyEmpty, authValid, async (req, re
         const Data = req.body;
         await EquipmentController.updateSupplyStock(Data)
         res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.delete('/deleteSupply', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const id = req.body.id
+        await EquipmentController.deleteSupply(id)
+        res.status(200).json({ code: 201 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
@@ -990,6 +1105,16 @@ adminRouter.post('/updateSupplier', checkBodyEmpty, authValid, async (req, res) 
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 
+});
+
+adminRouter.delete('/deleteSupplier', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const id = req.body.id
+        await EquipmentController.deleteSupplier(id)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
 });
 
 //Drop down
@@ -1069,6 +1194,16 @@ adminRouter.get('/getAllNotification', checkParamsEmpty, authValid, async (req, 
     }
 });
 
+adminRouter.delete('/deleteNotification', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const id = req.body.id
+        await NotificationController.deleteAdmin(id)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 //quotation
 adminRouter.get('/getSingleQuotation', checkParamsEmpty, authValid, async (req, res) => {
     try {
@@ -1101,6 +1236,16 @@ adminRouter.post('/updateQuotation', checkBodyEmpty, authValid, async (req, res)
     }
 });
 
+adminRouter.delete('/deleteQuotation', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const id = req.body.id
+        await ReserveController.deleteQuotationByReserveId(id)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 //report
 adminRouter.get('/getAllReport', checkParamsEmpty, authValid, async (req, res) => {
     try {
@@ -1110,7 +1255,7 @@ adminRouter.get('/getAllReport', checkParamsEmpty, authValid, async (req, res) =
             Page = Page - 1
         }
         const offset = limit * Page;
-        const report = await EquipmentController.getAllReport(limit,offset)
+        const report = await EquipmentController.getAllReport(limit, offset)
         res.status(200).json({ code: 200, report: report, });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));

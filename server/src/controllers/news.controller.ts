@@ -85,6 +85,14 @@ class NewsController {
             },
         })
     }
+
+    public static async delete(id: string) {
+        return NewsModel.destroy({
+            where: {
+                id: id,
+            },
+        });
+    }
 }
 
 export default NewsController;
