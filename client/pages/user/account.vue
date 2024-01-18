@@ -52,7 +52,7 @@
                 required
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6">
               <v-text-field
                 class="rounded-xl"
                 v-model="UserInfo.email"
@@ -63,31 +63,19 @@
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="4">
-              <v-text-field
-                class="rounded-xl"
+            <v-col cols="12" md="6">
+              <v-select
+                :items="userTypes"
                 v-model="UserInfo.type_id"
+                item-text="name"
+                item-value="id"
+                label="user type"
+                disabled
                 outlined
-                label="ประเภทผู้ใช้"
-              ></v-text-field>
-            </v-col>
-
-            <v-col cols="12" md="4">
-              <v-text-field
+                required
                 class="rounded-xl"
-                v-model="UserInfo.created_at"
-                outlined
-                label="สร้างเมื่อ"
-              ></v-text-field>
-            </v-col>
-
-            <v-col cols="12" md="4">
-              <v-text-field
-                class="rounded-xl"
-                v-model="UserInfo.update_at"
-                outlined
-                label="อัพเดทล่าสุด"
-              ></v-text-field>
+              >
+              </v-select>
             </v-col>
           </v-row>
           <v-divider class="my-5"></v-divider>
@@ -138,6 +126,10 @@ export default {
     return { id }
   },
   async fetch() {
+    const UserTypes = await this.$store.dispatch(
+      'api/public/getAllUserTypesDropdown'
+    )
+    this.userTypes = UserTypes.user_types
     let Data = await this.$store.dispatch('api/user/getUserInfo', {
       params: { id: this.id },
     })
@@ -149,6 +141,7 @@ export default {
       return
     } else {
       this.UserInfo = Data.user
+      console.log
     }
   },
   layout: 'user',
@@ -174,6 +167,7 @@ export default {
         update_at: '',
         created_at: '',
       },
+      userTypes: [],
       edit: false,
       selectLoading1: false,
       selectLoading2: false,
