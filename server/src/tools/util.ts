@@ -36,7 +36,7 @@ export function uploadSinglePicture(fileorinalname: any, mimetype: any, buffer: 
                         contentType: mimetype,
                     },
                 });
-                blobStream.on("error", (e:any) => {
+                blobStream.on("error", (e: any) => {
                     reject(e);
                 });
 
@@ -45,7 +45,7 @@ export function uploadSinglePicture(fileorinalname: any, mimetype: any, buffer: 
                     const publicUrl = `https://storage.googleapis.com/${bucket.name}/${encodeURI(fileName)}`;
                     fileUpload.makePublic().then(() => {
                         resolve(publicUrl);
-                    }).catch((e:any) => {
+                    }).catch((e: any) => {
                         reject(e);
                     })
                 });
@@ -74,7 +74,7 @@ export function uploadSinglePictureV2(fileorinalname: any, mimetype: any, buffer
                         contentType: mimetype,
                     },
                 });
-                blobStream.on("error", (e:any) => {
+                blobStream.on("error", (e: any) => {
                     reject(e);
                 });
 
@@ -82,9 +82,9 @@ export function uploadSinglePictureV2(fileorinalname: any, mimetype: any, buffer
                     console.log("success");
                     const publicUrl = `https://storage.googleapis.com/${bucket.name}/${encodeURI(fileName)}`;
                     fileUpload.makePublic().then(() => {
-                        resolve({url:publicUrl,name:fileName});
-                    }).catch((e:any) => {
-                        reject({e,url:null,name:null});
+                        resolve({ url: publicUrl, name: fileName });
+                    }).catch((e: any) => {
+                        reject({ e, url: null, name: null });
                     })
                 });
 
@@ -110,4 +110,16 @@ export function idGenerate(x: any, val: any) {
         }
     }
     catch (error) { console.log(error); }
+}
+
+export function getMonthRange(inputDate?: Date): { startOfMonth: Date, startOfNextMonth: Date } {
+    const currentDate = inputDate ? new Date(inputDate) : new Date();
+    currentDate.setDate(1);
+    const startOfMonth = new Date(currentDate);
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    const startOfNextMonth = new Date(currentDate);
+    return {
+        startOfMonth,
+        startOfNextMonth,
+    };
 }

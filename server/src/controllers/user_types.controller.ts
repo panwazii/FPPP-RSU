@@ -40,6 +40,14 @@ class UserTypeController {
         })
     }
 
+    public static async delete(id: string) {
+        return UserTypeModel.destroy({
+            where: {
+                id: id,
+            }
+        })
+    }
+
 }
 
 export default UserTypeController;

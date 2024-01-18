@@ -26,20 +26,7 @@
   <script>
 export default {
   async fetch() {
-    const getAllBookings = await this.$store.dispatch(
-      'api/admin/getAllReserve',
-      {
-        params: {
-          approval_status: 'CONFIRM',
-          limit: this.fetchOption.itemsPerPage,
-          page: this.fetchOption.page,
-        },
-      }
-    )
-    if (getAllBookings.code === 200) {
-      this.allBooking = getAllBookings.reserves
-      this.fetchOption.totalPages = getAllBookings.total_pages
-    }
+    await this.getAllBookings()
   },
   data() {
     return {
@@ -48,7 +35,29 @@ export default {
       fetchOption: { page: 1, totalPages: 0, itemsPerPage: 8 },
     }
   },
-  methods: {},
+  watch: {
+    'fetchOption.page'() {
+      this.getAllBookings()
+    },
+  },
+  methods: {
+    async getAllBookings() {
+      const getAllBookings = await this.$store.dispatch(
+        'api/admin/getAllReserve',
+        {
+          params: {
+            approval_status: 'CONFIRM',
+            limit: this.fetchOption.itemsPerPage,
+            page: this.fetchOption.page,
+          },
+        }
+      )
+      if (getAllBookings.code === 200) {
+        this.allBooking = getAllBookings.reserves
+        this.fetchOption.totalPages = getAllBookings.total_pages
+      }
+    },
+  },
 }
 </script>
 <style scoped>

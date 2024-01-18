@@ -35,7 +35,7 @@ class NotificationController {
             where: {
                 id: id,
             },
-        }).then((rowDeleted) => rowDeleted > 0);
+        });
     }
 
     public static async getAllAdmin(admin_id: string) {
@@ -71,7 +71,7 @@ class NotificationController {
             where: {
                 id: id,
             },
-        }).then((rowDeleted) => rowDeleted > 0);
+        });
     }
 }
 
