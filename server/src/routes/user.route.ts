@@ -127,10 +127,15 @@ userRouter.post('/update/password', checkBodyEmpty, authValid, (req, res) => {
 // reserve
 userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
+        const userId = req.body.credentials.id;
         const equipment = req.body.equipment;
         log(equipment)
         const newReserve = await ReserveController.createReserve(req.body)
         if (newReserve && equipment) {
+            if(newReserve.room_id === null){
+                const cart = await CartController.getByUserId(userId)
+                await CartController.deleteAllItems(cart!.id)
+            }
             for (const data of equipment) {
                 await ReserveController.createReserveEquipment(newReserve.id, data)
             }
