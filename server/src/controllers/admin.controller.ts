@@ -88,6 +88,15 @@ class AdminController {
 
         return { code: 401, desc_code: 'password-incorrect' };
     }
+
+    //delete
+    public static async delete(adminId: string) {
+        return AdminModel.destroy({
+            where: {
+                id: adminId,
+            },
+        });
+    }
 }
 
 export default AdminController;

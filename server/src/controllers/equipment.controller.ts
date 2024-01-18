@@ -254,6 +254,14 @@ class EquipmentController {
         })
     }
 
+    public static async deleteEquipmentInfo(id: string) {
+        return EquipmentInfoModel.destroy({
+            where: {
+                id: id,
+            },
+        });
+    }
+
     // Equipment Stock
     public static async getSingleEquipmentStock(id: string) {
         return EquipmentsModel.findOne({
@@ -296,6 +304,14 @@ class EquipmentController {
         })
     }
 
+    public static async deleteEquipment(id: string) {
+        return EquipmentsModel.destroy({
+            where: {
+                id: id,
+            },
+        });
+    }
+
     // Equipment Rent Rate
     public static async getSingleEquipmentRentRate(id: string) {
         return RentRate.findOne({
@@ -332,6 +348,14 @@ class EquipmentController {
         })
     }
 
+    public static async deleteEquipmentRentRate(id: string) {
+        return RentRate.destroy({
+            where: {
+                id: id,
+            },
+        });
+    }
+
     // production line
     public static async getSingleProductionLine(id: string) {
         return ProductionLineModel.findOne({
@@ -365,6 +389,14 @@ class EquipmentController {
                 id: data.id,
             },
         })
+    }
+
+    public static async deleteProductionLine(id: string) {
+        return ProductionLineModel.destroy({
+            where: {
+                id: id,
+            },
+        });
     }
 
     //Supply
@@ -413,6 +445,14 @@ class EquipmentController {
         })
     }
 
+    public static async deleteSupply(id: string) {
+        return SupplyModel.destroy({
+            where: {
+                id: id,
+            },
+        });
+    }
+
     //Supplier
     public static async getSingleSupplier(id: number) {
         return SupplierModel.findOne({
@@ -449,6 +489,14 @@ class EquipmentController {
                 id: data.id,
             },
         })
+    }
+
+    public static async deleteSupplier(id: string) {
+        return SupplierModel.destroy({
+            where: {
+                id: id,
+            },
+        });
     }
 
     //Drop down
