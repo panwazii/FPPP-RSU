@@ -9,9 +9,8 @@
         <h4>ไม่มีข้อมูล</h4>
       </div>
     </v-card>
-    {{ allBooking }}
     <div v-for="booking in allBooking" :key="booking.id">
-      <AdminManageBookingWaitingCardList :bookingData="booking" />
+      <AdminManageBookingReturnQuotationCardList :bookingData="booking" />
     </div>
     <v-pagination
       circle

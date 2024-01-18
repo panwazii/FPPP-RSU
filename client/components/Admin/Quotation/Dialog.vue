@@ -77,7 +77,7 @@
           color="primary"
           elevation="0"
           class="rounded-xl"
-          :to="'/user/quotation/' + bookingData.id"
+          :to="'/admin/quotation/' + bookingData.id"
           target="_blank"
         >
           <v-icon class="mr-1">mdi-printer</v-icon>
@@ -104,7 +104,7 @@ export default {
     },
   },
   async fetch() {
-    const response = await this.$store.dispatch('api/user/getSingleQuotation', {
+    const response = await this.$store.dispatch('api/admin/getSingleQuotation', {
       params: { id: this.bookingData.id },
     })
     if (response.code === 200) {

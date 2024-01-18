@@ -14,7 +14,7 @@ import { body } from 'express-validator';
 
 const userRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON();
-const unknownErrorCode = createUnknownErrCodeJSON()
+const unknownErrorCode = createUnknownErrCodeJSON();
 
 userRouter.get('/getUserInfo', authValid, async (req, res) => {
     try {
@@ -34,7 +34,6 @@ userRouter.get('/getUserInfo', authValid, async (req, res) => {
             }
         });
     } catch (error) {
-        log(error)
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
@@ -127,10 +126,15 @@ userRouter.post('/update/password', checkBodyEmpty, authValid, (req, res) => {
 // reserve
 userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) => {
     try {
+        const userId = req.body.credentials.id;
         const equipment = req.body.equipment;
         log(equipment)
         const newReserve = await ReserveController.createReserve(req.body)
         if (newReserve && equipment) {
+            if(newReserve.room_id === null){
+                const cart = await CartController.getByUserId(userId)
+                await CartController.deleteAllItems(cart!.id)
+            }
             for (const data of equipment) {
                 await ReserveController.createReserveEquipment(newReserve.id, data)
             }
