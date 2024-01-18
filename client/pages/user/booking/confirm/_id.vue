@@ -202,6 +202,11 @@
 export default {
   layout: 'user',
   middleware: 'user',
+  head() {
+    return {
+      title: 'สำเร็จ',
+    }
+  },
   async asyncData({ params }) {
     const id = params.id
     return { id }

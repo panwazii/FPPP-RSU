@@ -228,6 +228,11 @@
 export default {
   layout: 'user',
   middleware: 'user',
+  head() {
+    return {
+      title: 'ได้รับใบเสนอราคา',
+    }
+  },
   async asyncData({ params }) {
     const id = params.id
     return { id }

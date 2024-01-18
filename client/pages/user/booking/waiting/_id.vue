@@ -187,6 +187,11 @@
 export default {
   layout: 'user',
   middleware: 'user',
+  head() {
+    return {
+      title: 'รอการตรวจสอบ',
+    }
+  },
   async asyncData({ params }) {
     const id = params.id
     return { id }
