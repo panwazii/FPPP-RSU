@@ -84,7 +84,9 @@
             offset-x="20"
             offset-y="30"
           >
-            <v-card-title class="text-subtitle-1 font-weight-bold">รอการตรวจสอบ</v-card-title>
+            <v-card-title class="text-subtitle-1 font-weight-bold"
+              >รอการตรวจสอบ</v-card-title
+            >
           </v-badge>
         </div>
       </v-card>
@@ -100,7 +102,9 @@
             offset-x="20"
             offset-y="30"
           >
-            <v-card-title class="text-subtitle-1 font-weight-bold">ได้รับใบเสนอราคา</v-card-title>
+            <v-card-title class="text-subtitle-1 font-weight-bold"
+              >ได้รับใบเสนอราคา</v-card-title
+            >
           </v-badge>
         </div>
       </v-card>
@@ -116,7 +120,9 @@
             offset-x="20"
             offset-y="30"
           >
-            <v-card-title class="text-subtitle-1 font-weight-bold">รอการชำระเงิน</v-card-title>
+            <v-card-title class="text-subtitle-1 font-weight-bold"
+              >รอการชำระเงิน</v-card-title
+            >
           </v-badge>
         </div>
       </v-card>
@@ -132,7 +138,9 @@
             offset-x="20"
             offset-y="30"
           >
-            <v-card-title class="text-subtitle-1 font-weight-bold">สำเร็จ</v-card-title>
+            <v-card-title class="text-subtitle-1 font-weight-bold"
+              >สำเร็จ</v-card-title
+            >
           </v-badge>
         </div>
       </v-card>
@@ -148,7 +156,9 @@
             offset-x="20"
             offset-y="30"
           >
-            <v-card-title class="text-subtitle-1 font-weight-bold">ยกเลิก</v-card-title>
+            <v-card-title class="text-subtitle-1 font-weight-bold"
+              >ยกเลิก</v-card-title
+            >
           </v-badge>
         </div>
       </v-card>
@@ -176,7 +186,13 @@ export default {
   computed: {},
   data() {
     return {
-      reserveCount: {},
+      reserveCount: {
+        waiting: 0,
+        return_quotation: 0,
+        confirm_quotation: 0,
+        confirm: 0,
+        cancel: 0,
+      },
       routes: [{ id: 1, name: 'หน้าหลัก', to: '/' }],
       selectedType: 1,
     }

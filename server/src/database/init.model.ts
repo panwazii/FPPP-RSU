@@ -159,8 +159,8 @@ const initDatabase = async () => {
     AdminModel.hasMany(AdminNotificationModel, { foreignKey: 'admin_id' });
     AdminNotificationModel.belongsTo(AdminModel, { foreignKey: 'admin_id' });
 
-    ReserveModel.hasOne(QuotationModel, { as: 'quotation', foreignKey: 'reserve_id' });
-    QuotationModel.belongsTo(ReserveModel, { as: 'quotation', foreignKey: 'reserve_id' });
+    ReserveModel.hasOne(QuotationModel, { as: 'reserve', foreignKey: 'reserve_id' });
+    QuotationModel.belongsTo(ReserveModel, { as: 'reserve', foreignKey: 'reserve_id' });
 
     AdminModel.hasMany(QuotationModel, { as: 'admin', foreignKey: 'admin_id' });
     QuotationModel.belongsTo(AdminModel, { as: 'admin', foreignKey: 'admin_id' });
