@@ -61,6 +61,14 @@ class CartController {
         }).then((rowDeleted) => rowDeleted > 0);
     }
 
+    public static async deleteAllItems(id: string) {
+        return CartItemModel.destroy({
+            where: {
+                cart_id: id,
+            },
+        }).then((rowDeleted) => rowDeleted > 0);
+    }
+
 }
 
 export default CartController;

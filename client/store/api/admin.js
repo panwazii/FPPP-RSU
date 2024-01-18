@@ -174,6 +174,10 @@ export const actions = {
     async updateReserveEquipment({ getters }, data) {
         return await this.$axios.post('api/admin/updateReserveEquipment', data).then((res) => res.data)
     },
+    async confirmReserve({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.post('api/admin/confirmReserve', data).then((res) => res.data)
+    },
     async cancelReserve({ getters }, data) {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
         return await this.$axios.post('api/admin/cancelReserve', data).then((res) => res.data)
@@ -181,6 +185,10 @@ export const actions = {
     async createQuotation({ getters }, data) {
         this.$axios.setHeader('authorization', this.$cookies.get('token'))
         return await this.$axios.post('api/admin/createQuotation', data).then((res) => res.data)
+    },
+    async getSingleQuotation({ getters }, data) {
+        this.$axios.setHeader('authorization', this.$cookies.get('token'))
+        return await this.$axios.get('api/admin/getSingleQuotation', data).then((res) => res.data)
     },
     //Service
     async getAllService({ getters }, data) {
