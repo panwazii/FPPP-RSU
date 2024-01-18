@@ -3,7 +3,7 @@
     <ModalConfirmLogout
       :open="logout_modal"
       :method="logout"
-      message="are you sure about that son ?"
+      message="คุณกำลังจะออกจากระบบ ?"
       :confirmLogout.sync="logout_modal"
     />
     <v-navigation-drawer

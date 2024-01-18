@@ -3,12 +3,13 @@ import EquipmentInfoModel from '../database/models/equipment_infos.model';
 import ReserveModel, { ReserveAttribute } from '../database/models/reserve.model';
 import ReserveEquipmentModel, { ReserveEquipmentAttribute } from '../database/models/reserve_equipments.model';
 import RoomModel from '../database/models/rooms.model';
-import { Op } from 'sequelize';
+import { Op, fn, col, literal } from 'sequelize';
 import RoomPictureModel from '../database/models/room_pictures.model';
 import QuotationModel, { QuotationAttribute } from '../database/models/quotations.model';
 import AdminModel from '../database/models/admins.model';
 import UserModel from '../database/models/users.model';
 import UserTypeModel from '../database/models/user_types.model';
+import { getMonthRange } from '../tools/util';
 
 class ReserveController {
     public static async getSingleReserveAndChildForUser(id: string, userId: string) {
@@ -273,6 +274,29 @@ class ReserveController {
             where: {
                 reserve_id: id,
             }
+        })
+    }
+
+    public static async getReserveListByDate(id: string, date: Date) {
+        const { startOfMonth, startOfNextMonth } = getMonthRange(date)
+        return ReserveModel.findAll({
+            where: {
+                room_id: id,
+                approval_status: 'CONFIRM',
+                time_start: {
+                    [Op.and]: [
+                        { [Op.gte]: new Date(startOfMonth) },
+                        { [Op.lt]: new Date(startOfNextMonth) },
+                    ],
+                }
+            },
+            attributes: [
+                'id',
+                [literal("TO_CHAR(\"time_start\", 'YYYY-MM-DD HH24:MI:SS')"), 'start'],
+                [literal("TO_CHAR(\"time_end\", 'YYYY-MM-DD HH24:MI:SS')"), 'end'],
+                // ['time_start', 'start'], 
+                // ['time_end', 'end'],
+            ],
         })
     }
 
