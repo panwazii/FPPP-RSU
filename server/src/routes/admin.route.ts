@@ -547,6 +547,7 @@ adminRouter.get('/getSingleReserve', checkParamsEmpty, authValid, async (req, re
             code: 200, data: reserve
         });
     } catch (error) {
+        log(error)
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
@@ -579,6 +580,18 @@ adminRouter.post('/updateReserve', checkBodyEmpty, authValid, async (req, res) =
         const Data = req.body;
         const reserveId = req.body.reserve_id;
         await ReserveController.update(reserveId, Data)
+        res.status(200).json({ code: 200 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+
+});
+
+adminRouter.post('/confirmReserve', checkBodyEmpty, authValid, async (req, res) => {
+    try {
+        const reserveId = req.body.id;
+        await ReserveController.deleteQuotationByReserveId(reserveId)
+        await ReserveController.update(reserveId, { approval_status: "CONFIRM" })
         res.status(200).json({ code: 200 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -1072,9 +1085,10 @@ adminRouter.get('/getAllNotification', checkParamsEmpty, authValid, async (req, 
 //quotation
 adminRouter.get('/getSingleQuotation', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const quotation = await ReserveController.getSingleQuotation(req.query.reserve_id as string)
+        const quotation = await ReserveController.getSingleQuotation(req.query.id as string)
         res.status(200).json({ code: 200, quotation: quotation, });
     } catch (error) {
+        log(error)
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
@@ -1110,7 +1124,7 @@ adminRouter.get('/getAllReport', checkParamsEmpty, authValid, async (req, res) =
             Page = Page - 1
         }
         const offset = limit * Page;
-        const report = await EquipmentController.getAllReport(limit,offset)
+        const report = await EquipmentController.getAllReport(limit, offset)
         res.status(200).json({ code: 200, report: report, });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));

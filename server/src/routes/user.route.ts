@@ -14,7 +14,7 @@ import { body } from 'express-validator';
 
 const userRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON();
-const unknownErrorCode = createUnknownErrCodeJSON()
+const unknownErrorCode = createUnknownErrCodeJSON();
 
 userRouter.get('/getUserInfo', authValid, async (req, res) => {
     try {
@@ -34,7 +34,6 @@ userRouter.get('/getUserInfo', authValid, async (req, res) => {
             }
         });
     } catch (error) {
-        log(error)
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
