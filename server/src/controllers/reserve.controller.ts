@@ -85,13 +85,13 @@ class ReserveController {
                         }]
                     }]
                 },
-                {
-                    model: QuotationModel, as: 'quotation',
-                    include: [{
-                        model: AdminModel, as: 'admin',
-                        attributes: { exclude: ['password', 'created_at', 'updated_at'] },
-                    }]
-                }
+                // {
+                //     model: QuotationModel, as: 'reserve',
+                //     include: [{
+                //         model: AdminModel, as: 'admin',
+                //         attributes: { exclude: ['password', 'created_at', 'updated_at'] },
+                //     }]
+                // }
             ],
         });
     }
@@ -233,9 +233,10 @@ class ReserveController {
                 reserve_id: id,
             },
             include: [{
-                model: ReserveModel,
+                model: ReserveModel, as: "reserve",
                 include: [{
-                    model: UserModel,
+                    model: UserModel, as: 'user',
+                    attributes: { exclude: ['password'] }
                 }, {
                     model: RoomModel, as: 'room',
                 }, {
@@ -245,7 +246,8 @@ class ReserveController {
                 ]
             },
             {
-                model: AdminModel
+                model: AdminModel, as: 'admin',
+                attributes: { exclude: ['email', 'password', 'created_at', 'updated_at'] }
             }
             ]
         });

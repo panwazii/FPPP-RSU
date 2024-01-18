@@ -9,9 +9,8 @@
         <h4>ไม่มีข้อมูล</h4>
       </div>
     </v-card>
-    {{ allBooking }}
     <div v-for="booking in allBooking" :key="booking.id">
-      <AdminManageBookingWaitingCardList :bookingData="booking" />
+      <AdminManageBookingConfirmQuotationCardList :bookingData="booking" />
     </div>
     <v-pagination
       circle
@@ -31,7 +30,7 @@ export default {
       'api/admin/getAllReserve',
       {
         params: {
-          approval_status: 'WAITING',
+          approval_status: 'CONFIRM_QUOTATION',
           limit: this.fetchOption.itemsPerPage,
           page: this.fetchOption.page,
         },
