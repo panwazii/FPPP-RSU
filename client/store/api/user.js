@@ -60,4 +60,11 @@ export const actions = {
       .post('api/user/confirmPrice', data)
       .then((res) => res.data)
   },
+  // Calendar
+  async getRoomCalendar({ getters }, data) {
+    this.$axios.setHeader('authorization', this.$cookies.get('token'))
+    return await this.$axios
+      .get('api/user/getRoomCalendar', data)
+      .then((res) => res.data)
+  },
 }

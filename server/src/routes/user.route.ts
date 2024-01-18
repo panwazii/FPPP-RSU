@@ -131,7 +131,7 @@ userRouter.post('/createReserve', checkBodyEmpty, authValid, async (req, res) =>
         log(equipment)
         const newReserve = await ReserveController.createReserve(req.body)
         if (newReserve && equipment) {
-            if(newReserve.room_id === null){
+            if (newReserve.room_id === null) {
                 const cart = await CartController.getByUserId(userId)
                 await CartController.deleteAllItems(cart!.id)
             }
@@ -298,6 +298,16 @@ userRouter.get('/getAllNotification', checkParamsEmpty, authValid, async (req, r
     }
 });
 
+userRouter.delete('/deleteNotification', checkBodyEmpty, authValid, requestLog, async (req, res) => {
+    try {
+        const id = req.body.id
+        await NotificationController.deleteUser(id)
+        res.status(200).json({ code: 201 });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 userRouter.get('/getAllEquipmentInfoInRoom', checkParamsEmpty, async (req, res) => {
     try {
         const Limit = numberOrDefault(req.query.limit, 10);
@@ -338,7 +348,7 @@ userRouter.get('/getSingleQuotation', checkParamsEmpty, authValid, async (req, r
     }
 });
 
-userRouter.post('/confirmPrice', checkParamsEmpty, authValid, async (req, res) => {
+userRouter.post('/confirmPrice', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const userId = req.body.credentials.id;
         const reserveId = req.body.id;
@@ -348,6 +358,21 @@ userRouter.post('/confirmPrice', checkParamsEmpty, authValid, async (req, res) =
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
+
+
+userRouter.get('/getRoomCalendar', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const reserveId = String(req.query.id);
+        const requestDate = req.query.date;
+        console.log('requestDate ',requestDate);
+        const reserve = await ReserveController.getReserveListByDate(reserveId, requestDate as unknown as Date)
+        res.status(200).json({ code: 200, data: reserve });
+    } catch (error) {
+        console.log(error);
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 
 //report
 userRouter.post('/createReport', checkBodyEmpty, authValid, async (req, res) => {
