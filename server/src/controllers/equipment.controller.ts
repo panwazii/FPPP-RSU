@@ -113,6 +113,9 @@ class EquipmentController {
             include: [{
                 model: EquipmentsModel, as: 'stock',
                 where: { room_id: id, available_status: true, },
+            },
+            {
+                model: ProductionLineModel, as: 'production_line',
             }],
             limit,
             offset,
@@ -584,7 +587,7 @@ class EquipmentController {
     }
 
     public static async deleteReport(id: number) {
-        return ReportModel.destroy({      
+        return ReportModel.destroy({
             where: {
                 id: id,
             },

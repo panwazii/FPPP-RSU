@@ -209,7 +209,9 @@
                     </v-avatar>
                     <div>
                       <v-card-title>{{ item.name }}</v-card-title>
-                      <v-card-subtitle>{{ item.rent_price }}</v-card-subtitle>
+                      <v-card-subtitle>{{
+                        item.production_line
+                      }}</v-card-subtitle>
                     </div>
                   </div>
                   <div class="d-flex align-center justify-space-between mr-8">
@@ -324,7 +326,8 @@
                               {{ item.name }}
                             </v-list-item-title>
                             <v-list-item-subtitle>
-                              ราคา : {{ item.rent_price.toLocaleString() }} บาท
+                              <!-- ราคา : {{ item.rent_price.toLocaleString() }} บาท -->
+                              {{ item.production_line.name }}
                             </v-list-item-subtitle>
                           </v-list-item-content>
                         </v-list-item>
@@ -673,6 +676,7 @@ export default {
             rent_price: this.equipments[i].rent_price,
             picture: this.equipments[i].picture,
             quantity: this.newEquipment.quantity,
+            production_line: this.equipments[i].production_line.name,
           })
         }
       }

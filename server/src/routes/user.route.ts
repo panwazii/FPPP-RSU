@@ -364,7 +364,7 @@ userRouter.get('/getRoomCalendar', checkParamsEmpty, authValid, async (req, res)
     try {
         const reserveId = String(req.query.id);
         const requestDate = req.query.date;
-        console.log('requestDate ',requestDate);
+        console.log('requestDate ', requestDate);
         const reserve = await ReserveController.getReserveListByDate(reserveId, requestDate as unknown as Date)
         res.status(200).json({ code: 200, data: reserve });
     } catch (error) {
@@ -378,10 +378,12 @@ userRouter.get('/getRoomCalendar', checkParamsEmpty, authValid, async (req, res)
 userRouter.post('/createReport', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const userId = req.body.credentials.id;
-        const { equipmentId, desc } = req.body
-        await EquipmentController.createReport(userId, equipmentId, desc)
-        res.status(200).json({ code: 200 });
+        const { id, desc } = req.body
+        await EquipmentController.createReport(userId, id, desc)
+        res.status(200).json({ code: 201 });
     } catch (error) {
+        console.log(error);
+
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });

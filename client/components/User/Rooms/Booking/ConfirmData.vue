@@ -79,7 +79,7 @@
                 </v-avatar>
                 <div>
                   <v-card-title>{{ item.name }}</v-card-title>
-                  <v-card-subtitle>{{ item.rent_price }}</v-card-subtitle>
+                  <v-card-subtitle>{{ item.production_line }}</v-card-subtitle>
                 </div>
               </div>
               <div class="d-flex align-center justify-space-between mr-8">

@@ -1,5 +1,11 @@
 <template>
   <div>
+    <UserEquipmentsReportMalfunctionCard
+      v-if="!loading"
+      :data="equipmentInfo"
+      :open="modalCreateReport"
+      :create.sync="modalCreateReport"
+    />
     <SharedBreadCrumbs title="รายละเอียดอุปกรณ์" :routes="routes" />
     <v-card min-height="800" class="rounded-xl mt-2 pa-4">
       <v-card-title v-if="!loading" class="text-h5 font-weight-bold">
@@ -21,7 +27,7 @@
         <v-col cols="12" md="6">
           <v-skeleton-loader v-if="loading" type="text@2"></v-skeleton-loader>
           <div v-if="!loading" justify="center" align="center">
-            <div class="d-flex justify-space-around">
+            <!-- <div class="d-flex justify-space-around">
               <div class="text-h6 font-weight-bold">ราคา</div>
               <div>
                 <v-chip class="text-h5 font-weight-bold">
@@ -33,7 +39,7 @@
                   ต่อ {{ equipmentInfo.rent_rate.name }}
                 </v-chip>
               </div>
-            </div>
+            </div> -->
             <v-btn
               v-if="!getCartItemId"
               @click="$store.dispatch('addCartItem', $route.params.id)"
@@ -61,8 +67,22 @@
       </v-row>
       <v-divider class="mt-4"></v-divider>
       <div class="mt-4" v-if="!loading">
-        <div class="text-h6 font-weight-bold">รายละเอียด</div>
+        <div class="d-flex justify-space-between">
+          <div class="text-h6 font-weight-bold">รายละเอียด</div>
+          <v-btn
+            text
+            elevation="0"
+            class="rounded-xl"
+            color="warning"
+            @click="modalCreateReport = true"
+          >
+            <v-icon class="mr-1">mdi-alert-octagon</v-icon>
+            แจ้งอุปกรณ์เสียหาย</v-btn
+          >
+        </div>
+
         <div class="mt-2">{{ equipmentInfo.details }}</div>
+        <v-divider class="mt-4"></v-divider>
       </div>
       <v-skeleton-loader v-if="loading" type="article"></v-skeleton-loader>
     </v-card>
@@ -112,6 +132,7 @@ export default {
     return {
       equipmentInfo: {},
       tool: [],
+      modalCreateReport: false,
       routes: [
         { id: 1, name: 'หน้าหลัก', to: '/user/home' },
         { id: 2, name: 'อุปกรณ์', to: '/user/equipments' },
