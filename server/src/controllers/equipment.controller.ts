@@ -553,6 +553,15 @@ class EquipmentController {
         });
     }
 
+    public static async getAllReportSearch(fixStatus: boolean , limit: number, offset: number) {
+        return ReportModel.findAndCountAll({
+            where:{ fix_status: fixStatus},
+            limit,
+            offset,
+            raw: true
+        });
+    }
+
     public static async createReport(id: string, equipment: string, desc: string) {
         const packet: ReportAttribute = {
             user_id: id,
