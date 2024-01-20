@@ -30,14 +30,14 @@
       <v-card-title class="justify-center">
         <div class="line-clamp">{{ title }}</div>
       </v-card-title>
-      <v-card-text class="justify-space-around d-flex">
+      <!-- <v-card-text class="justify-space-around d-flex">
         <div class="text-subtitle-1 font-weight-bold">ราคา</div>
         <div>
           <v-chip class="text-subtitle-1 font-weight-bold">
             {{ price }} บาท
           </v-chip>
         </div>
-      </v-card-text>
+      </v-card-text> -->
       <v-card-actions class="justify-center">
         <v-btn
           elevation="0"
