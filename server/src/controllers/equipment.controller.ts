@@ -538,7 +538,7 @@ class EquipmentController {
     }
 
     //report
-    public static async getSingleReport(id: number) {
+    public static async getSingleReport(id: string) {
         return ReportModel.findOne({
             where: { id: id },
             raw: true
