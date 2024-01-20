@@ -82,7 +82,6 @@
         </div>
 
         <div class="mt-2">{{ equipmentInfo.details }}</div>
-        <v-divider class="mt-4"></v-divider>
       </div>
       <v-skeleton-loader v-if="loading" type="article"></v-skeleton-loader>
     </v-card>
