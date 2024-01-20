@@ -593,6 +593,15 @@ class EquipmentController {
             },
         })
     }
+
+    public static async getAllEquipmentDash() {
+        return EquipmentsModel.findAndCountAll({
+            where: { 
+                equipment_status: 'repair',
+                available_status: true },
+            raw: true
+        });
+    }
 }
 
 export default EquipmentController;

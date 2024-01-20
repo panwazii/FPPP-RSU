@@ -178,6 +178,12 @@ class UserController {
 
         return UserModel.update({ password: newPass }, { where: { id: userID } });
     }
+
+    public static async getAllUsersDash() {
+        return UserModel.findAndCountAll({
+            raw: true
+        });
+    }
 }
 
 export default UserController;

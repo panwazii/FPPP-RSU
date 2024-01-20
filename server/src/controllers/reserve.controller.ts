@@ -308,6 +308,34 @@ class ReserveController {
         })
     }
 
+    // Dash Board
+    public static async getAllReserveGraph() {
+        return ReserveModel.findAll({
+            where: {
+                approval_status: 'CONFIRM',
+                available_status: true
+            },
+            attributes: [
+                [literal('DATE_TRUNC(\'month\',"time_start")'), 'month'],
+                [literal('count(*)'),'count'],
+            ],
+        group: ["month"],
+        raw:true
+        });
+}
+
+public static async getAllReserveDash() {
+    return ReserveModel.findAndCountAll({
+        where: {
+            approval_status: 'WAITING',
+            available_status: true
+        },
+        raw: true
+    });
+}
+
+                    // [literal('DATE_FORMAT("time_start")'), 'month'],
+                // [literal('count(*)'),'count'],
     // reserve equipment
     // public static async getReserveEquipmentByID(id: string) {
     //     return ReserveEquipmentOnlyModel.findOne({

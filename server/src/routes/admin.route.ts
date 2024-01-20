@@ -1313,6 +1313,50 @@ adminRouter.post('/updateReport', checkBodyEmpty, authValid, async (req, res) =>
     }
 });
 
+//Dash board
+adminRouter.get('/getAllDashboardGraph', checkParamsEmpty, async (req, res) => {
+    try {
+        
+        const dashboard = await ReserveController.getAllReserveGraph()
+        let graph = Array(12).fill(0)
+
+        // for (let i = 0; i < dashboard.length; i++){
+        //     graph[i] = dashboard?.count;
+        // }
+
+        res.status(200).json({ code: 200, graph: dashboard, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.get('/getDashBoardReserve', checkParamsEmpty, async (req, res) => {
+    try {
+        const waiting = await ReserveController.getAllReserveDash()
+        res.status(200).json({ code: 200, waiting: waiting.count, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.get('/getDashBoardEquipment', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const repair = await EquipmentController.getAllEquipmentDash()
+        res.status(200).json({ code: 200, repair: repair.count, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+adminRouter.get('/getDashBoardUser', checkParamsEmpty, authValid, async (req, res) => {
+    try {
+        const user = await UserController.getAllUsersDash()
+        res.status(200).json({ code: 200, user: user.count, });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
 export default adminRouter;
 
 
