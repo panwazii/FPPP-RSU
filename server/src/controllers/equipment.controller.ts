@@ -553,9 +553,9 @@ class EquipmentController {
         });
     }
 
-    public static async getAllReportSearch(fixStatus: boolean , limit: number, offset: number) {
+    public static async getAllReportSearch(status: boolean , limit: number, offset: number) {
         return ReportModel.findAndCountAll({
-            where:{ fix_status: fixStatus},
+            where:{ fix_status: status},
             limit,
             offset,
             raw: true
