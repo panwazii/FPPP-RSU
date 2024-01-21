@@ -67,4 +67,11 @@ export const actions = {
       .get('api/user/getRoomCalendar', data)
       .then((res) => res.data)
   },
+  //Report malfunction
+  async createReport({ getters }, data) {
+    this.$axios.setHeader('authorization', this.$cookies.get('token'))
+    return await this.$axios
+      .post('api/user/createReport', data)
+      .then((res) => res.data)
+  },
 }

@@ -1,5 +1,12 @@
 <template>
   <v-container>
+    <ModalConfirm
+      :open="modal.confirm.open"
+      :message="modal.confirm.message"
+      :method="deleteEquipment"
+      :confirm.sync="modal.confirm.open"
+    />
+    <ModalLoading :open="modal.loading.open" :message="modal.loading.message" />
     <AdminEquipmentEdit
       :open="editEquipment"
       :data="equipment"
@@ -38,9 +45,7 @@
           </v-icon>
         </template>
         <template v-slot:[`item.delete`]="{ item }">
-          <v-icon small class="mr-2" @click="deleteEquipment(item)">
-            mdi-delete
-          </v-icon>
+          <v-icon small class="mr-2" @click="confirm"> mdi-delete </v-icon>
         </template>
       </v-data-table>
       <div class="text-center pt-2">
@@ -97,6 +102,12 @@ export default {
           align: 'center',
         },
       ],
+      modal: {
+        confirm: { open: false, message: 'Confirm this change?' },
+        loading: { open: false, message: 'Loading' },
+        complete: { open: false, message: 'Complete' },
+        error: { open: false, message: '' },
+      },
     }
   },
   mounted() {
@@ -133,6 +144,30 @@ export default {
       )
       this.equipment = EquipmentData.equipment
       this.editEquipment = true
+    },
+    confirm() {
+      this.modal.confirm.open = true
+      //   this.$emit('update:editRoom', false)
+    },
+    cancel() {
+      this.$emit('update:deleteEquipment', false)
+    },
+    async deleteEquipment(id) {
+      try {
+        this.modal.loading.open = true
+        await this.$store
+          .dispatch('api/admin/deleteEquipmentInfo', { id: id })
+          .then((res) => {
+            this.equipment.id = res.id
+          })
+        this.$emit('update:deleteEquipment', false)
+        this.modal.loading.open = false
+        this.method()
+      } catch (error) {
+        this.modal.loading.open = false
+        console.log(error)
+        this.$emit('update:deleteEquipment', false)
+      }
     },
   },
 }

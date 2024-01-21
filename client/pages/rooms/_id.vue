@@ -26,14 +26,14 @@
         <v-col cols="12" md="6">
           <v-skeleton-loader v-if="loading" type="text@2"></v-skeleton-loader>
           <div v-if="!loading" justify="center" align="center">
-            <div class="d-flex justify-space-around">
+            <!-- <div class="d-flex justify-space-around">
               <div class="text-h6 font-weight-bold">ราคา</div>
               <div>
                 <v-chip class="text-h5 font-weight-bold">
                   {{ room.rent_price }} บาท
                 </v-chip>
               </div>
-            </div>
+            </div> -->
             <v-btn
               @click="modal.goToLogin.open = true"
               x-large
