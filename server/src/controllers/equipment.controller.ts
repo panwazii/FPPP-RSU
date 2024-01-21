@@ -603,9 +603,9 @@ class EquipmentController {
         return ReportModel.create(packet)
     }
 
-    public static async updateReport(id: number) {
+    public static async updateReport(id: string, status: boolean) {
         return ReportModel.update({
-            fix_status: true,
+            fix_status: status,
         }, {
             where: {
                 id: id,
