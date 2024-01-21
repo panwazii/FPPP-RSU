@@ -1273,11 +1273,11 @@ adminRouter.get('/getAllReport', checkParamsEmpty, authValid, async (req, res) =
         const status = Boolean(req.query.status);
         if (status) {
             const report = await EquipmentController.getAllReportSearch(status, limit, offset)
-            res.status(200).json({ code: 200, report: report, });
+            res.status(200).json({ code: 200, report: report,total_pages: Math.ceil(report.count / limit) });
         }
         else {
             const report = await EquipmentController.getAllReport(limit, offset)
-            res.status(200).json({ code: 200, report: report, });
+            res.status(200).json({ code: 200, report: report,total_pages: Math.ceil(report.count / limit) });
         }
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
@@ -1286,10 +1286,11 @@ adminRouter.get('/getAllReport', checkParamsEmpty, authValid, async (req, res) =
 
 adminRouter.get('/getSingleReport', checkParamsEmpty, authValid, async (req, res) => {
     try {
-        const id = req.body.id
+        const id = String(req.query.id)
         const report = await EquipmentController.getSingleReport(id)
         res.status(200).json({ code: 200, report: report, });
     } catch (error) {
+        log(error)
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
