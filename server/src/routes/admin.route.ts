@@ -1315,7 +1315,7 @@ adminRouter.post('/updateReport', checkBodyEmpty, authValid, async (req, res) =>
 });
 
 //Dash board
-adminRouter.get('/getAllDashboardGraph', checkParamsEmpty, async (req, res) => {
+adminRouter.get('/getDashboard', checkParamsEmpty, async (req, res) => {
     try {
         const dashboard: any = await ReserveController.getAllReserveGraph()
         const waiting = await ReserveController.countReserveWaiting()
@@ -1329,15 +1329,6 @@ adminRouter.get('/getAllDashboardGraph', checkParamsEmpty, async (req, res) => {
         }
 
         res.status(200).json({ code: 200, graph: graph, waiting: waiting, confirm: confirm, repair: repair, user: user });
-    } catch (error) {
-        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
-    }
-});
-
-adminRouter.get('/getyeartest', checkParamsEmpty, async (req, res) => {
-    try {
-        const { firstDay, lastDay } = getFirstAndLastDayOfYear()
-        res.status(200).json({ code: 200, start: firstDay, end: lastDay });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
