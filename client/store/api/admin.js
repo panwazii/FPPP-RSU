@@ -444,7 +444,13 @@ export const actions = {
   },
   async getSingleReport({ getters }, data) {
     return await this.$axios
-      .get('api/admin/getSingleRepor', data)
+      .get('api/admin/getSingleReport', data)
+      .then((res) => res.data)
+  },
+  // Dashboard
+  async getDashboard({ getters }, data) {
+    return await this.$axios
+      .get('api/admin/getDashboard', data)
       .then((res) => res.data)
   },
 }
