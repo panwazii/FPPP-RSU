@@ -183,6 +183,12 @@ export default {
           icon: 'mdi-warehouse',
           path: '/admin/manage-supplystock',
         },
+        {
+          id: 13,
+          name: 'จัดการ Report malfunction',
+          icon: 'mdi-warehouse',
+          path: '/admin/report-malfunction',
+        },
       ],
       super_admin_menu: [
         {

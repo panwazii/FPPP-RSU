@@ -9,7 +9,7 @@ import QuotationModel, { QuotationAttribute } from '../database/models/quotation
 import AdminModel from '../database/models/admins.model';
 import UserModel from '../database/models/users.model';
 import UserTypeModel from '../database/models/user_types.model';
-import { getMonthRange } from '../tools/util';
+import {getFirstAndLastDayOfYear, getMonthRange } from '../tools/util';
 
 class ReserveController {
     public static async getSingleReserveAndChildForUser(id: string, userId: string) {
@@ -308,6 +308,49 @@ class ReserveController {
         })
     }
 
+    // Dash Board
+    public static async getAllReserveGraph() {
+        const {firstDay,lastDay} = getFirstAndLastDayOfYear()
+        return ReserveModel.findAll({
+            where: {
+                approval_status: 'CONFIRM',
+                time_start:{
+                    [Op.and]:[
+                        {[Op.gte]: firstDay},
+                        {[Op.lt]: lastDay},
+                    ]
+                },
+                available_status: true
+            },
+            attributes: [
+                [literal('DATE_TRUNC(\'month\',"time_start")'), 'month'],
+                [literal('count(*)'),'count'],
+            ],
+        group: ["month"],
+        raw:true
+        });
+}
+
+public static async countReserveWaiting() {
+    return ReserveModel.count({
+        where: {
+            approval_status: 'WAITING',
+            available_status: true
+        },
+    });
+}
+
+public static async countReserveConfirm() {
+    return ReserveModel.count({
+        where: {
+            approval_status: 'CONFIRM',
+            available_status: true
+        },
+    });
+}
+
+                    // [literal('DATE_FORMAT("time_start")'), 'month'],
+                // [literal('count(*)'),'count'],
     // reserve equipment
     // public static async getReserveEquipmentByID(id: string) {
     //     return ReserveEquipmentOnlyModel.findOne({

@@ -19,10 +19,18 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" @click="confirm" class="rounded-xl font-weight-medium mt-3">
+        <v-btn
+          color="primary"
+          @click="confirm"
+          class="rounded-xl font-weight-medium mt-3"
+        >
           ตกลง
         </v-btn>
-        <v-btn color="error" @click="cancel" class="rounded-xl font-weight-medium mt-3">
+        <v-btn
+          color="error"
+          @click="cancel"
+          class="rounded-xl font-weight-medium mt-3"
+        >
           ยกเลิก
         </v-btn>
       </v-card-actions>
@@ -32,7 +40,7 @@
 <script>
 export default {
   props: {
-    method: { type: Function },
+    method: { type: Function, default: null },
     open: {
       required: true,
     },
@@ -49,8 +57,12 @@ export default {
   },
   methods: {
     confirm() {
-      this.method()
-      this.$emit('update:confirm', false)
+      if (this.method === null) {
+        this.$emit('update:confirm', false)
+      } else {
+        this.method()
+        this.$emit('update:confirm', false)
+      }
     },
     cancel() {
       this.$emit('update:confirm', false)

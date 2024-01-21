@@ -10,6 +10,7 @@ import SupplyModel, { SupplyAttribute } from '../database/models/supply.model';
 import ReportModel, { ReportAttribute } from '../database/models/report.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
+import UserModel from '../database/models/users.model';
 
 class EquipmentController {
 
@@ -113,6 +114,9 @@ class EquipmentController {
             include: [{
                 model: EquipmentsModel, as: 'stock',
                 where: { room_id: id, available_status: true, },
+            },
+            {
+                model: ProductionLineModel, as: 'production_line',
             }],
             limit,
             offset,
@@ -226,7 +230,7 @@ class EquipmentController {
             name: data.name,
             details: data.details,
             picture: data.picture,
-            average_price: data.price,
+            average_price: 0,
             rent_price: data.rent_price,
             quantity: data.quantity,
             type: data.type,
@@ -241,7 +245,6 @@ class EquipmentController {
             name: data.name,
             details: data.details,
             picture: data.picture,
-            average_price: data.price,
             rent_price: data.rent_price,
             quantity: data.quantity,
             type: data.type,
@@ -250,6 +253,16 @@ class EquipmentController {
         }, {
             where: {
                 id: data.id,
+            },
+        })
+    }
+
+    public static async updateAveragePrice(id: string, averagePrice: number) {
+        return EquipmentInfoModel.update({
+            average_price: averagePrice,
+        }, {
+            where: {
+                id: id,
             },
         })
     }
@@ -275,6 +288,17 @@ class EquipmentController {
             where: { available_status: true },
             limit,
             offset,
+            raw: true
+        });
+    }
+
+    public static async getAllEquipmentById(id: string) {
+        return EquipmentsModel.findAll({
+            where: {
+                equipment_info_id: id,
+                available_status: true
+            },
+            attributes: ['price'],
             raw: true
         });
     }
@@ -538,15 +562,30 @@ class EquipmentController {
     }
 
     //report
-    public static async getSingleReport(id: number) {
+    public static async getSingleReport(id: string) {
         return ReportModel.findOne({
             where: { id: id },
-            raw: true
+            include: [{
+                model: EquipmentInfoModel, as: 'report_equipment',
+            },
+            {
+                model: UserModel, as: 'report_user',
+            }
+            ]
         });
     }
 
     public static async getAllReport(limit: number, offset: number) {
         return ReportModel.findAndCountAll({
+            limit,
+            offset,
+            raw: true
+        });
+    }
+
+    public static async getAllReportSearch(status: boolean, limit: number, offset: number) {
+        return ReportModel.findAndCountAll({
+            where: { fix_status: status },
             limit,
             offset,
             raw: true
@@ -575,11 +614,20 @@ class EquipmentController {
     }
 
     public static async deleteReport(id: number) {
-        return ReportModel.destroy({      
+        return ReportModel.destroy({
             where: {
                 id: id,
             },
         })
+    }
+
+    public static async countEquipment() {
+        return EquipmentsModel.count({
+            where: {
+                equipment_status: 'repair',
+                available_status: true
+            },
+        });
     }
 }
 

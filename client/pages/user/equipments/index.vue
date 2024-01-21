@@ -1,7 +1,7 @@
 <template>
   <div>
     <SharedBreadCrumbs title="อุปกรณ์ทั้งหมด" :routes="routes" />
-    <v-card min-height="1250" class="rounded-xl mt-2">
+    <v-card min-height="1100" class="rounded-xl mt-2">
       <v-card-text>
         <div class="d-flex">
           <v-row>

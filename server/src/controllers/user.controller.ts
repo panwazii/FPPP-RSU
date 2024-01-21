@@ -178,6 +178,10 @@ class UserController {
 
         return UserModel.update({ password: newPass }, { where: { id: userID } });
     }
+
+    public static async countUsers() {
+        return UserModel.count();
+    }
 }
 
 export default UserController;

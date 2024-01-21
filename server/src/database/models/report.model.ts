@@ -5,7 +5,7 @@ import UserModel from './users.model';
 import EquipmentInfoModel from './equipment_infos.model';
 
 export interface ReportAttribute {
-    id?: number;
+    id?: string;
     user_id?: string;
     equipment_info_id?: string;
     desc?: string;
@@ -19,7 +19,7 @@ export interface ReportAttributeCreation extends Optional<ReportAttribute, 'id'>
 
 
 class ReportModel extends Model<ReportAttribute, ReportAttributeCreation> implements ReportAttribute {
-    declare id: number;
+    declare id: string;
 
     declare user_id: string;
 
@@ -34,8 +34,8 @@ export const initReportModel = (connection: Sequelize) => {
     ReportModel.init(
         {
             id: {
-                type: DataTypes.INTEGER,
-                autoIncrement: true,
+                type: DataTypes.UUID,
+                defaultValue: DataTypes.UUIDV4,
                 allowNull: false,
                 primaryKey: true,
             },
