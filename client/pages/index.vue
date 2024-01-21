@@ -4,16 +4,19 @@
     <v-btn @click="$store.dispatch('addCartItems', { id: 1, name: 'test1' })">cart add</v-btn>
     <v-btn @click="$store.dispatch('removeCartItems', 1)">cart remove</v-btn> -->
     <v-card class="rounded-xl">
-      <v-parallax
+      <!-- <v-parallax
         height="750"
         :src="require('~/static/img/index/index-bg.jpg')"
-      >
+      > -->
         <!-- <div
           class="d-flex flex-column fill-height justify-center align-center text-white"
         >
           <h1 class="text-h4 font-weight-bold mb-4 paralax-text"></h1>
         </div> -->
-      </v-parallax>
+      <!-- </v-parallax> -->
+      <v-img :src="require('~/static/img/index/index-bg.jpg')">
+
+      </v-img>
     </v-card>
 
     <h1 class="text-h4 font-weight-bold d-flex justify-center mt-12">
