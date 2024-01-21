@@ -123,3 +123,12 @@ export function getMonthRange(inputDate?: Date): { startOfMonth: Date, startOfNe
         startOfNextMonth,
     };
 }
+
+export function getFirstAndLastDayOfYear(): { firstDay: Date; lastDay: Date } {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const firstDay = new Date(currentYear, 0, 1);
+    const lastDay = new Date(currentYear, 11, 31);
+  
+    return { firstDay, lastDay };
+  }

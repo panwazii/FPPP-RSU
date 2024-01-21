@@ -13,10 +13,11 @@ import WebInfoController from '../controllers/web_info.controller';
 import NotificationController from '../controllers/notification.controller';
 import { authValid, requestLog } from '../middleware/admin.middleware';
 import { checkBodyEmpty, checkParamsEmpty } from '../middleware/validator.middleware';
-import { numberOrDefault } from '../tools/util';
+import { getFirstAndLastDayOfYear, numberOrDefault } from '../tools/util';
 import { uploadSinglePicture, uploadSinglePictureV2 } from '../tools/util';
 import multer from 'multer';
 import { Admin } from '../service/firebase';
+
 
 const bucket = Admin.storage().bucket()
 const adminRouter: express.Router = express.Router();
@@ -1316,42 +1317,27 @@ adminRouter.post('/updateReport', checkBodyEmpty, authValid, async (req, res) =>
 //Dash board
 adminRouter.get('/getAllDashboardGraph', checkParamsEmpty, async (req, res) => {
     try {
-        
-        const dashboard = await ReserveController.getAllReserveGraph()
+        const dashboard: any = await ReserveController.getAllReserveGraph()
+        const waiting = await ReserveController.countReserveWaiting()
+        const confirm = await ReserveController.countReserveConfirm()
+        const repair = await EquipmentController.countEquipment()
+        const user = await UserController.countUsers()
         let graph = Array(12).fill(0)
 
-        // for (let i = 0; i < dashboard.length; i++){
-        //     graph[i] = dashboard?.count;
-        // }
+        for (let i = 0; i < dashboard.length; i++) {
+            graph[i] = Number(dashboard[i]?.count);
+        }
 
-        res.status(200).json({ code: 200, graph: dashboard, });
+        res.status(200).json({ code: 200, graph: graph, waiting: waiting, confirm: confirm, repair: repair, user: user });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
 
-adminRouter.get('/getDashBoardReserve', checkParamsEmpty, async (req, res) => {
+adminRouter.get('/getyeartest', checkParamsEmpty, async (req, res) => {
     try {
-        const waiting = await ReserveController.getAllReserveDash()
-        res.status(200).json({ code: 200, waiting: waiting.count, });
-    } catch (error) {
-        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
-    }
-});
-
-adminRouter.get('/getDashBoardEquipment', checkParamsEmpty, authValid, async (req, res) => {
-    try {
-        const repair = await EquipmentController.getAllEquipmentDash()
-        res.status(200).json({ code: 200, repair: repair.count, });
-    } catch (error) {
-        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
-    }
-});
-
-adminRouter.get('/getDashBoardUser', checkParamsEmpty, authValid, async (req, res) => {
-    try {
-        const user = await UserController.getAllUsersDash()
-        res.status(200).json({ code: 200, user: user.count, });
+        const { firstDay, lastDay } = getFirstAndLastDayOfYear()
+        res.status(200).json({ code: 200, start: firstDay, end: lastDay });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }

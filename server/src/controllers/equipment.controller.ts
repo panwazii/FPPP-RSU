@@ -594,12 +594,11 @@ class EquipmentController {
         })
     }
 
-    public static async getAllEquipmentDash() {
-        return EquipmentsModel.findAndCountAll({
+    public static async countEquipment() {
+        return EquipmentsModel.count({
             where: { 
                 equipment_status: 'repair',
                 available_status: true },
-            raw: true
         });
     }
 }
