@@ -131,4 +131,12 @@ export function getFirstAndLastDayOfYear(): { firstDay: Date; lastDay: Date } {
     const lastDay = new Date(currentYear, 11, 31);
   
     return { firstDay, lastDay };
-  }
+}
+
+export function calculateAverage(data:any){
+    let sum = 0
+    for(let i = 0;i<data.length;i++){
+        sum += Number(data[i].price) 
+    }
+    return sum/data.length ;
+}
