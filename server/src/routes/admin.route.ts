@@ -1278,9 +1278,13 @@ adminRouter.get('/getAllReport', checkParamsEmpty, authValid, async (req, res) =
             Page = Page - 1
         }
         const offset = limit * Page;
-        const status = Boolean(req.query.status);
-        if (status) {
-            const report = await EquipmentController.getAllReportSearch(status, limit, offset)
+        const status = req.query.status;
+        if (status==='FIXED') {
+            const report = await EquipmentController.getAllReportSearch(true, limit, offset)
+            res.status(200).json({ code: 200, report: report,total_pages: Math.ceil(report.count / limit) });
+        }
+        else if(status==='UNFIXED'){
+            const report = await EquipmentController.getAllReportSearch(false, limit, offset)
             res.status(200).json({ code: 200, report: report,total_pages: Math.ceil(report.count / limit) });
         }
         else {
@@ -1316,8 +1320,9 @@ adminRouter.delete('/deleteReport', checkBodyEmpty, authValid, async (req, res) 
 adminRouter.post('/updateReport', checkBodyEmpty, authValid, async (req, res) => {
     try {
         const id = req.body.id
-        await EquipmentController.updateReport(id)
-        res.status(200).json({ code: 200 });
+        const status = req.body.status
+        await EquipmentController.updateReport(id, status)
+        res.status(200).json({ code: 201 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }

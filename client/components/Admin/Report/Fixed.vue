@@ -1,10 +1,10 @@
 <template>
-  <v-container>
+  <div>
     <AdminReportEdit
-      :open="editDialog"
+      :open="editReport"
       :data="report"
       :method="fetchAllReport"
-      :editDialog.sync="editDialog"
+      :editReport.sync="editReport"
       v-if="report"
     />
     <div>
@@ -18,7 +18,7 @@
         @page-count="pageCount = $event"
       >
         <template v-slot:[`item.edit`]="{ item }">
-          <v-icon small class="mr-2" @click="openEditRoomModal(item.id)">
+          <v-icon small class="mr-2" @click="openEditReportModal(item.id)">
             mdi-pencil
           </v-icon>
         </template>
@@ -36,7 +36,7 @@
         ></v-pagination>
       </div>
     </div>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -60,7 +60,7 @@ export default {
       },
       valid: true,
       loadingDialog: false,
-      editDialog: false,
+      editReport: false,
       deleteDialog: false,
       search: '',
       AllReport: [],
@@ -100,6 +100,7 @@ export default {
         params: {
           limit: this.fetchOption.itemsPerPage,
           page: this.fetchOption.page,
+          status: 'FIXED',
         },
       })
       this.AllReport = Data.report.rows
@@ -115,9 +116,9 @@ export default {
           },
         }
       )
-      console.log('here', ReportData)
       this.report = ReportData.report
-      this.editDialog = true
+      console.log('here', ReportData)
+      this.editReport = true
     },
   },
 }
