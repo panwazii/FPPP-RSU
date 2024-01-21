@@ -46,12 +46,12 @@ export const actions = {
   },
   async deleteRoom({ getters }, data) {
     return await this.$axios
-      .post('api/admin/deleteRoom', data)
+      .delete('api/admin/deleteRoom', data)
       .then((res) => res.data)
   },
   async deleteRoomPicture({ getters }, data) {
     return await this.$axios
-      .post('api/admin/deleteRoomPicture', data)
+      .delete('api/admin/deleteRoomPicture', data)
       .then((res) => res.data)
   },
   //Equipment
@@ -111,7 +111,7 @@ export const actions = {
   },
   async deleteProductionLine({ getters }, data) {
     return await this.$axios
-      .post('api/admin/deleteProductionLine', data)
+      .delete('api/admin/deleteProductionLine', data)
       .then((res) => res.data)
   },
   async getSingleEquipmentRentRate({ getters }, data) {
@@ -128,7 +128,7 @@ export const actions = {
   },
   async deleteEquipmentInfo({ getters }, data) {
     return await this.$axios
-      .post('api/admin/deleteEquipmentInfo', data)
+      .delete('api/admin/deleteEquipmentInfo', data)
       .then((res) => res.data)
   },
   async createEquipmentInfo({ getters }, data) {
@@ -143,7 +143,7 @@ export const actions = {
   },
   async deleteEquipmentStock({ getters }, data) {
     return await this.$axios
-      .post('api/admin/deleteEquipmentStock', data)
+      .delete('api/admin/deleteEquipmentStock', data)
       .then((res) => res.data)
   },
   async createEquipmentRentRate({ getters }, data) {
@@ -153,7 +153,7 @@ export const actions = {
   },
   async deleteEquipmentRentRate({ getters }, data) {
     return await this.$axios
-      .post('api/admin/deleteEquipmentRentRate', data)
+      .delete('api/admin/deleteEquipmentRentRate', data)
       .then((res) => res.data)
   },
   async createProductionLine({ getters }, data) {
@@ -233,7 +233,7 @@ export const actions = {
   },
   async deleteUserType({ getters }, data) {
     return await this.$axios
-      .post('api/admin/deleteUserType', data)
+      .delete('api/admin/deleteUserType', data)
       .then((res) => res.data)
   },
   //News
@@ -260,7 +260,7 @@ export const actions = {
   },
   async deleteNews({ getters }, data) {
     return await this.$axios
-      .post('api/admin/deleteNews', data)
+      .delete('api/admin/deleteNews', data)
       .then((res) => res.data)
   },
   //Reserve
@@ -317,7 +317,7 @@ export const actions = {
   async deleteQuotation({ getters }, data) {
     this.$axios.setHeader('authorization', this.$cookies.get('token'))
     return await this.$axios
-      .post('api/admin/deleteQuotation', data)
+      .delete('api/admin/deleteQuotation', data)
       .then((res) => res.data)
   },
   async getSingleQuotation({ getters }, data) {
@@ -328,7 +328,7 @@ export const actions = {
   },
   async deleteReserve({ getters }, data) {
     return await this.$axios
-      .post('api/admin/deleteReserve', data)
+      .delete('api/admin/deleteReserve', data)
       .then((res) => res.data)
   },
   //Service
@@ -389,7 +389,7 @@ export const actions = {
   },
   async deleteSupply({ getters }, data) {
     return await this.$axios
-      .post('api/admin/deleteSupply', data)
+      .delete('api/admin/deleteSupply', data)
       .then((res) => res.data)
   },
   //supplier
@@ -416,7 +416,7 @@ export const actions = {
   },
   async deleteSupplier({ getters }, data) {
     return await this.$axios
-      .post('api/admin/deleteSupplier', data)
+      .delete('api/admin/deleteSupplier', data)
       .then((res) => res.data)
   },
   //report
@@ -427,14 +427,9 @@ export const actions = {
       .get('api/admin/getAllReport', data)
       .then((res) => res.data)
   },
-  async getAllReport({ getters }, data) {
-    return await this.$axios
-      .get('api/admin/getAllReport', data)
-      .then((res) => res.data)
-  },
   async deleteReport({ getters }, data) {
     return await this.$axios
-      .post('api/admin/deleteReport', data)
+      .delete('api/admin/deleteReport', data)
       .then((res) => res.data)
   },
   async updateReport({ getters }, data) {
