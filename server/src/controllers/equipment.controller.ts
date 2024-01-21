@@ -10,6 +10,7 @@ import SupplyModel, { SupplyAttribute } from '../database/models/supply.model';
 import ReportModel, { ReportAttribute } from '../database/models/report.model';
 import config from '../config/global.config';
 import { log } from '../tools/log';
+import UserModel from '../database/models/users.model';
 
 class EquipmentController {
 
@@ -256,7 +257,7 @@ class EquipmentController {
         })
     }
 
-    public static async updateAveragePrice(id:string,averagePrice: number) {
+    public static async updateAveragePrice(id: string, averagePrice: number) {
         return EquipmentInfoModel.update({
             average_price: averagePrice,
         }, {
@@ -564,7 +565,13 @@ class EquipmentController {
     public static async getSingleReport(id: string) {
         return ReportModel.findOne({
             where: { id: id },
-            raw: true
+            include: [{
+                model: EquipmentInfoModel, as: 'report_equipment',
+            },
+            {
+                model: UserModel, as: 'report_user',
+            }
+            ]
         });
     }
 
