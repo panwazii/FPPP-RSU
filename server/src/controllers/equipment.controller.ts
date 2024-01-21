@@ -229,7 +229,7 @@ class EquipmentController {
             name: data.name,
             details: data.details,
             picture: data.picture,
-            average_price: data.price,
+            average_price: 0,
             rent_price: data.rent_price,
             quantity: data.quantity,
             type: data.type,
@@ -244,7 +244,6 @@ class EquipmentController {
             name: data.name,
             details: data.details,
             picture: data.picture,
-            average_price: data.price,
             rent_price: data.rent_price,
             quantity: data.quantity,
             type: data.type,
@@ -253,6 +252,16 @@ class EquipmentController {
         }, {
             where: {
                 id: data.id,
+            },
+        })
+    }
+
+    public static async updateAveragePrice(id:string,averagePrice: number) {
+        return EquipmentInfoModel.update({
+            average_price: averagePrice,
+        }, {
+            where: {
+                id: id,
             },
         })
     }
@@ -278,6 +287,17 @@ class EquipmentController {
             where: { available_status: true },
             limit,
             offset,
+            raw: true
+        });
+    }
+
+    public static async getAllEquipmentById(id: string) {
+        return EquipmentsModel.findAll({
+            where: {
+                equipment_info_id: id,
+                available_status: true
+            },
+            attributes: ['price'],
             raw: true
         });
     }
@@ -556,9 +576,9 @@ class EquipmentController {
         });
     }
 
-    public static async getAllReportSearch(status: boolean , limit: number, offset: number) {
+    public static async getAllReportSearch(status: boolean, limit: number, offset: number) {
         return ReportModel.findAndCountAll({
-            where:{ fix_status: status},
+            where: { fix_status: status },
             limit,
             offset,
             raw: true
@@ -596,9 +616,10 @@ class EquipmentController {
 
     public static async countEquipment() {
         return EquipmentsModel.count({
-            where: { 
+            where: {
                 equipment_status: 'repair',
-                available_status: true },
+                available_status: true
+            },
         });
     }
 }
