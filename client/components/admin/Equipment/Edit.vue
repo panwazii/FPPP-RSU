@@ -13,6 +13,7 @@
       v-model="open"
       max-width="650"
       max-height="300"
+      content-class="rounded-xl"
     >
       <v-card class="rounded-xl">
         <v-card-title class="text-h5">
@@ -94,7 +95,7 @@
                       ></v-img>
                     </v-col>
                     <v-file-input
-                      v-model="data.file"
+                      v-model="file"
                       label="รูปภาพ"
                       filled
                       prepend-icon="mdi-camera"
@@ -143,6 +144,7 @@ export default {
   data() {
     return {
       rooms: null,
+      file: null,
       modal: {
         confirm: { open: false, message: 'Confirm this change?' },
         loading: { open: false, message: 'Loading' },
@@ -163,13 +165,13 @@ export default {
       try {
         this.modal.loading.open = true
         let file = new FormData()
-        file.append('file', this.data.file),
+        file.append('file', this.file),
           file.append('id', this.data.id),
           file.append('name', this.data.name),
           file.append('price', this.data.price),
           file.append('rent_price', this.data.rent_price),
           file.append('details', this.data.details),
-          await this.$store.dispatch('api/admin/updateEquipment', file)
+          await this.$store.dispatch('api/admin/updateEquipmentInfo', file)
         this.$emit('update:editEquipment', false)
         this.modal.loading.open = false
         this.method()

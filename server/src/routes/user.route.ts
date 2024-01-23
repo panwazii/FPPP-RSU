@@ -10,7 +10,9 @@ import EquipmentController from '../controllers/equipment.controller';
 import { checkBodyEmpty, checkParamsEmpty } from '../middleware/validator.middleware';
 import CartController from '../controllers/cart.controller';
 import NotificationController from '../controllers/notification.controller';
-import { body } from 'express-validator';
+import { uploadSinglePicture } from '../tools/util';
+import multer from 'multer';
+const multerUpload = multer();
 
 const userRouter: express.Router = express.Router();
 const errorCode = createErrCodeJSON();
@@ -384,6 +386,21 @@ userRouter.post('/createReport', checkBodyEmpty, authValid, async (req, res) => 
     } catch (error) {
         console.log(error);
 
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+userRouter.post('/uploadReceipt', checkBodyEmpty, multerUpload.single("file"), authValid, async (req, res) => {
+    try {
+        const picture = req.file;
+        const reserveId = req.body.id;
+        let pictureUrl = await uploadSinglePicture(
+            picture!.originalname,
+            picture!.mimetype,
+            picture!.buffer);
+        await ReserveController.update(reserveId, { receipt: pictureUrl })
+        res.status(200).json({ code: 201 });
+    } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }
 });
