@@ -160,6 +160,7 @@ class ReserveController {
             time_start: data.time_start,
             time_end: data.time_end,
             details: data.details,
+            receipt: data.receipt,
             approval_status: data.approval_status,
             available_status: data.available_status,
         }, {

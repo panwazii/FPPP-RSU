@@ -11,6 +11,7 @@ export interface ReserveAttribute {
     time_start?: Date;
     time_end?: Date;
     details?: string;
+    receipt?: string;
     approval_status?: string;
     available_status?: boolean;
     created_at?: Date;
@@ -33,6 +34,8 @@ class ReserveModel extends Model<ReserveAttribute, ReserveAttributeCreation> imp
     declare time_end: Date;
 
     declare details: string;
+
+    declare receipt: string;
 
     declare approval_status: string;
 
@@ -73,12 +76,16 @@ export const initReserveModel = (connection: Sequelize) => {
                 allowNull: false,
             },
             details: {
-                allowNull: false,
+                allowNull: true,
                 type: DataTypes.TEXT,
+            },
+            receipt: {
+                allowNull: true,
+                type: DataTypes.STRING,
             },
             approval_status: {
                 allowNull: false,
-                type: DataTypes.ENUM('WAITING', 'RETURN_QUOTATION','CONFIRM_QUOTATION', 'CONFIRM','CANCEL'),
+                type: DataTypes.ENUM('WAITING', 'RETURN_QUOTATION', 'CONFIRM_QUOTATION', 'CONFIRM', 'CANCEL'),
             },
             available_status: {
                 allowNull: false,

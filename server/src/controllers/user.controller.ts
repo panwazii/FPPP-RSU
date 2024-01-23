@@ -149,6 +149,7 @@ class UserController {
             email: data.email,
             avatar: data.avatar,
             tel: data.tel,
+            address: data.address,
             booking_permission: 'NONE',
         };
 

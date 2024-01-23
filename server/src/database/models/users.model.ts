@@ -11,6 +11,7 @@ export interface UserAttribute {
     email?: string;
     password?: string;
     tel?: string;
+    address?: string;
     verify_status?: boolean;
     booking_permission?: string;
     available_status?: boolean;
@@ -34,6 +35,8 @@ class UserModel extends Model<UserAttribute, UserAttributeCreation> implements U
     declare password: string;
 
     declare tel: string;
+
+    declare address: string;
 
     declare verify_status: boolean;
 
@@ -85,6 +88,10 @@ export const initUserModel = (connection: Sequelize) => {
             tel: {
                 allowNull: true,
                 type: DataTypes.STRING,
+            },
+            address: {
+                allowNull: true,
+                type: DataTypes.TEXT,
             },
             verify_status: {
                 type: DataTypes.BOOLEAN,
