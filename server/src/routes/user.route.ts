@@ -30,11 +30,27 @@ userRouter.get('/getUserInfo', authValid, async (req, res) => {
                 lname: userInfo!.lname,
                 email: userInfo!.email,
                 tel: userInfo!.tel,
+                address: userInfo!.address,
                 booking_permission: userInfo!.booking_permission,
                 created_at: userInfo!.created_at,
                 updated_at: userInfo!.updated_at
             }
         });
+    } catch (error) {
+        res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
+    }
+});
+
+userRouter.post('/updateUserInfo', authValid, async (req, res) => {
+    try {
+        const userId = req.body.credentials.id;
+        await UserController.update(userId, {
+            fname: req.body.fname,
+            lname: req.body.lname,
+            tel: req.body.tel,
+            address: req.body.address
+        })
+        res.status(200).json({ code: 201 });
     } catch (error) {
         res.status(200).json(unknownErrorCode(HttpStatusCode.INTERNAL_SERVER_ERROR, error as string));
     }

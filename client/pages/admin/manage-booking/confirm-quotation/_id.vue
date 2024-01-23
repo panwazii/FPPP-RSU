@@ -136,6 +136,10 @@
             <p class="ml-4 mb-0 subtitle-2 font-weight-bold">เบอร์โทร</p>
             <p class="ml-4 subtitle-1">{{ bookingData.user.tel }}</p>
           </v-col>
+          <v-col cols="12">
+            <p class="ml-4 mb-0 subtitle-2 font-weight-bold">ที่อยู่</p>
+            <p class="ml-4 subtitle-1">{{ bookingData.user.address }}</p>
+          </v-col>
         </v-row>
         <v-divider class="mt-5"></v-divider>
         <v-card-title class="font-weight-bold">

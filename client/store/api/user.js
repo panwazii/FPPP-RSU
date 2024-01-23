@@ -1,4 +1,16 @@
 export const actions = {
+  async getUserInfo({ getters }, data) {
+    this.$axios.setHeader('authorization', this.$cookies.get('token'))
+    return await this.$axios
+      .get('api/user/getUserInfo', data)
+      .then((res) => res.data)
+  },
+  async updateUserInfo({ getters }, data) {
+    this.$axios.setHeader('authorization', this.$cookies.get('token'))
+    return await this.$axios
+      .post('api/user/updateUserInfo', data)
+      .then((res) => res.data)
+  },
   async getSingleReserve({ getters }, data) {
     return await this.$axios
       .get('api/user/getSingleReserve', data)
@@ -33,12 +45,6 @@ export const actions = {
     this.$axios.setHeader('authorization', this.$cookies.get('token'))
     return await this.$axios
       .post('api/user/createCart', data)
-      .then((res) => res.data)
-  },
-  async getUserInfo({ getters }, data) {
-    this.$axios.setHeader('authorization', this.$cookies.get('token'))
-    return await this.$axios
-      .get('api/user/getUserInfo', data)
       .then((res) => res.data)
   },
   async getAllEquipmentInfoInRoom({ getters }, data) {

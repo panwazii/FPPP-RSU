@@ -1,18 +1,23 @@
 <template>
   <div>
+    <ModalConfirm
+      :open="modal.confirm.open"
+      :message="modal.confirm.message"
+      :method="updateUserInfo"
+      :confirm.sync="modal.confirm.open"
+    />
     <ModalComplete
-      :open="completeModal"
-      :message="completeMessage"
+      :open="modal.complete.open"
+      :message="modal.complete.message"
       :method="refresh"
-      :complete.sync="completeModal"
+      :complete.sync="modal.complete.open"
     />
     <ModalError
-      :open="errorModal"
-      :message="errorMessage"
-      :method="refresh"
-      :error.sync="errorModal"
+      :open="modal.error.open"
+      :message="modal.error.message"
+      :error.sync="modal.error.open"
     />
-    <ModalLoading :open="loading" :message="loadingMessage" />
+    <ModalLoading :open="modal.loading.open" :message="modal.loading.message" />
     <SharedBreadCrumbs title="จัดการข้อมูลส่วนตัว" :routes="routes" />
     <v-card class="rounded-xl pa-6" elevation="4">
       <v-form ref="form" v-model="valid" lazy-validation>
@@ -25,57 +30,69 @@
             <v-col cols="12" md="4">
               <v-text-field
                 class="rounded-xl"
-                v-model="UserInfo.fname"
-                outlined
-                label="ชื่อจริง"
-                :rules="firstName"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-text-field
-                class="rounded-xl"
-                v-model="UserInfo.lname"
-                outlined
-                label="นามสกุล"
-                :rules="lastName"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-text-field
-                class="rounded-xl"
-                v-model="UserInfo.tel"
-                outlined
-                label="เบอร์ติดต่อ"
-                :rules="tel"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                class="rounded-xl"
-                v-model="UserInfo.email"
+                v-model="userInfo.email"
                 outlined
                 label="อีเมล"
-                :rules="email"
                 required
+                disabled
               ></v-text-field>
             </v-col>
-
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="4">
               <v-select
                 :items="userTypes"
-                v-model="UserInfo.type_id"
+                v-model="userInfo.type_id"
                 item-text="name"
                 item-value="id"
-                label="user type"
+                label="ประเภทผู้ใช้งาน"
                 disabled
                 outlined
                 required
                 class="rounded-xl"
               >
               </v-select>
+            </v-col>
+            <v-col cols="12" md="4"></v-col>
+            <v-col cols="12" md="4">
+              <v-text-field
+                class="rounded-xl"
+                v-model="forms.fname"
+                outlined
+                label="ชื่อจริง"
+                :rules="firstName"
+                required
+                :disabled="!edit"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="4">
+              <v-text-field
+                class="rounded-xl"
+                v-model="forms.lname"
+                outlined
+                label="นามสกุล"
+                :rules="lastName"
+                required
+                :disabled="!edit"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="4">
+              <v-text-field
+                class="rounded-xl"
+                v-model="forms.tel"
+                outlined
+                label="เบอร์ติดต่อ"
+                :rules="tel"
+                required
+                :disabled="!edit"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-textarea
+                class="rounded-xl"
+                v-model="forms.address"
+                outlined
+                label="ที่อยู่เพื่อออกใบกำกับภาษี"
+                :disabled="!edit"
+              ></v-textarea>
             </v-col>
           </v-row>
           <v-divider class="my-5"></v-divider>
@@ -95,7 +112,7 @@
               :disabled="!valid"
               color="primary"
               class="rounded-xl mr-4"
-              @click="confirmUpdateModal = true"
+              @click="modal.confirm.open = true"
             >
               <v-icon>mdi-content-save</v-icon>
               save
@@ -121,28 +138,17 @@ export default {
   mounted() {
     this.$store.dispatch('setPathName', 'ข้อมูลส่วนตัว')
   },
-  async asyncData({ params }) {
-    const id = params.id
-    return { id }
-  },
   async fetch() {
     const UserTypes = await this.$store.dispatch(
       'api/public/getAllUserTypesDropdown'
     )
     this.userTypes = UserTypes.user_types
-    let Data = await this.$store.dispatch('api/user/getUserInfo', {
-      params: { id: this.id },
-    })
-    if (!Data) {
-      this.$nuxt.error({
-        statusCode: 404,
-        message: ' Data Not found ' + this.id,
-      })
-      return
-    } else {
-      this.UserInfo = Data.user
-      console.log
-    }
+    let Data = await this.$store.dispatch('api/user/getUserInfo')
+    this.userInfo = Data.user
+    this.forms.fname = Data.user.fname
+    this.forms.lname = Data.user.lname
+    this.forms.tel = Data.user.tel
+    this.forms.address = Data.user.address
   },
   layout: 'user',
   middleware: 'user',
@@ -157,50 +163,34 @@ export default {
         { id: 1, name: 'หน้าหลัก', to: '/user/home' },
         { id: 2, name: 'จัดการข้อมูลส่วนตัว', to: '/' },
       ],
-      UserInfo: [],
+      userInfo: {},
       forms: {
         fname: '',
         lname: '',
-        email: '',
         tel: '',
-        type_id: '',
-        update_at: '',
-        created_at: '',
+        address: '',
       },
       userTypes: [],
       edit: false,
-      selectLoading1: false,
-      selectLoading2: false,
-      selectLoading3: false,
-      page: 1,
-      pageCount: 10,
       valid: true,
-      confirmUpdateMessage: 'ยืนยันการแก้ไขข้อมูล?',
-      confirmUpdateModal: false,
-      confirmUploadMessage: 'ยืนยันการอัพโหลดไฟล์?',
-      confirmUploadModal: false,
-      completeMessage: '',
-      completeModal: false,
-      errorMessage: '',
-      errorModal: false,
-      loadingMessage: '',
-      loading: false,
-      // Rules: {
-      //   firstName: [(v) => !!v || 'โปรดระบุชื่อจริง'],
-      //   lastName: [(v) => !!v || 'โปรดระบุนามสกุล'],
-      //   tel: [
-      //     (v) => !!v || 'โปรดระบุเบอร์โทรศัพท์',
-      //     (v) =>
-      //       /((\+66|0)(\d{1,2}\-?\d{3}\-?\d{3,4}))|((\+๖๖|๐)([๐-๙]{1,2}\-?[๐-๙]{3}\-?[๐-๙]{3,4}))/gm.test(
-      //         v
-      //       ) || 'โปรดระบุเบอร์โทรศัพท์ที่ถูกต้อง',
-      //   ],
-      //   email: [
-      //     (v) => !!v || 'โปรดระบุอีเมล',
-      //     (v) =>
-      //       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'โปรดระบุอีเมลที่ถูกต้อง',
-      //   ],
-      // },
+      modal: {
+        confirm: {
+          open: false,
+          message: 'ยืนยันการแก้ไขข้อมูลส่วนตัว',
+        },
+        complete: {
+          open: false,
+          message: '',
+        },
+        error: {
+          open: false,
+          message: '',
+        },
+        loading: {
+          open: false,
+          message: '',
+        },
+      },
     }
   },
   computed: {
@@ -237,27 +227,35 @@ export default {
     async updateUserInfo() {
       try {
         if (!this.$refs.form.validate()) {
-          this.errorMessage = 'กรุณาตรวจสอบความถูกต้องของข้อมูล'
-          this.errorModal = true
+          this.modal.error.message = 'กรุณาตรวจสอบความถูกต้องของข้อมูล'
+          this.modal.error.open = true
           return
         }
-        this.loadingMessage = 'กำลังอัปเดต'
-        this.loading = true
-        const token = await this.$cookies.get('token')
-        await this.$axios.setHeader('authorization', token)
-        await this.$store.dispatch('api/user/updateUserInfo', this.forms)
-        this.edit = false
-        this.loading = false
-        this.completeMessage = 'อัปเดตข้อมูลส่วนตัวสำเร็จ'
-        this.completeModal = true
+        const response = await this.$store.dispatch('api/user/updateUserInfo', {
+          ...this.forms,
+        })
+        if (response.code === 201) {
+          this.modal.loading.open = false
+          this.modal.complete.open = true
+          this.edit = false
+          this.modal.complete.message = 'แก้ไขข้อมูลส่วนตัวสำเร็จ'
+        } else {
+          this.modal.loading.open = false
+          this.modal.error.message = 'เกิดข้อผิดพลาดที่ไม่รู้จัก'
+          this.modal.error.open = true
+        }
       } catch (error) {
-        this.loading = false
-        this.errorMessage = String(error)
-        this.errorModal = true
+        this.modal.loading.open = false
+        this.modal.error.message = String(error)
+        this.modal.error.open = true
       }
     },
     async closeUpdateModal() {
       this.edit = false
+      this.forms.fname = this.userInfo.fname
+      this.forms.lname = this.userInfo.lname
+      this.forms.tel = this.userInfo.tel
+      this.forms.address = this.userInfo.address
     },
 
     refresh() {
