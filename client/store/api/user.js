@@ -74,4 +74,11 @@ export const actions = {
       .post('api/user/createReport', data)
       .then((res) => res.data)
   },
+  //Upload Receipt
+  async uploadReceipt({ getters }, data) {
+    this.$axios.setHeader('authorization', this.$cookies.get('token'))
+    return await this.$axios
+      .post('api/user/uploadReceipt', data)
+      .then((res) => res.data)
+  },
 }

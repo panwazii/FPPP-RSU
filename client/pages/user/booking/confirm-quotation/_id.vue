@@ -6,6 +6,12 @@
       :close.sync="quotationDialog"
       v-if="!loading"
     />
+    <UserReceiptDialog
+      :bookingData="bookingData"
+      :open="receiptDialog"
+      :close.sync="receiptDialog"
+      v-if="!loading"
+    />
     <SharedBreadCrumbs title="รายละเอียดการจอง" :routes="routes" />
     <v-card min-height="200" v-if="loading" class="rounded-xl mt-2 pa-4">
       <v-skeleton-loader type="article"></v-skeleton-loader>
@@ -23,6 +29,15 @@
             </v-card-subtitle>
           </div>
           <div>
+            <v-btn
+              elevation="0"
+              color="success"
+              class="rounded-xl"
+              @click="receiptDialog = true"
+            >
+              <v-icon class="mr-1">mdi-receipt-text</v-icon>
+              ดูใบเสร็จ
+            </v-btn>
             <v-btn
               elevation="0"
               color="primary"
@@ -307,6 +322,7 @@ export default {
       bookingData: {},
       roomPicture: '',
       quotationDialog: false,
+      receiptDialog: false,
       routes: [
         { id: 1, name: 'รายการจอง', to: '/user/home' },
         {

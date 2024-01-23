@@ -27,6 +27,20 @@
             อุปกรณ์ทั้งหมด : {{ displayEquipmentCount }}</v-chip
           >
         </div>
+        <div class="mt-2">
+          <v-chip
+            color="success"
+            :input-value="true"
+            v-if="bookingData.receipt !== null"
+          >
+            <v-icon class="mr-1">mdi-receipt-text-check</v-icon>
+            อัพโหลดใบเสร็จแล้ว</v-chip
+          >
+          <v-chip :input-value="true" v-if="bookingData.receipt === null">
+            <v-icon class="mr-1">mdi-receipt-text-remove</v-icon>
+            ยังไม่ได้อัพโหลดใบเสร็จ</v-chip
+          >
+        </div>
       </v-card-text>
       <v-card-actions>
         <v-spacer />

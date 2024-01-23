@@ -6,6 +6,12 @@
       :close.sync="quotationDialog"
       v-if="!loading"
     />
+    <AdminReceiptDialog
+      :bookingData="bookingData"
+      :open="receiptDialog"
+      :close.sync="receiptDialog"
+      v-if="!loading"
+    />
     <ModalConfirm
       :open="modal.confirm.open"
       :message="modal.confirm.message"
@@ -39,33 +45,47 @@
             </v-card-subtitle>
           </div>
           <div>
-            <v-btn
-              color="error"
-              class="rounded-xl"
-              elevation="0"
-              @click="modal.confirm.open = true"
-            >
-              <v-icon class="mr-1">mdi-close-circle</v-icon>
-              ยกเลิกการจอง
-            </v-btn>
-            <v-btn
-              color="primary"
-              elevation="0"
-              class="rounded-xl"
-              @click="quotationDialog = true"
-            >
-              <v-icon class="mr-1">mdi-text-box-search</v-icon>
-              ดูใบเสนอราคา
-            </v-btn>
-            <v-btn
-              dark
-              class="rounded-xl"
-              elevation="0"
-              @click="$router.push('/admin/manage-booking')"
-            >
-              <v-icon class="mr-1">mdi-arrow-left-bold-circle</v-icon>
-              กลับ
-            </v-btn>
+            <div>
+              <v-btn
+                color="error"
+                class="rounded-xl"
+                elevation="0"
+                @click="modal.confirm.open = true"
+              >
+                <v-icon class="mr-1">mdi-close-circle</v-icon>
+                ยกเลิกการจอง
+              </v-btn>
+              <v-btn
+                color="primary"
+                elevation="0"
+                class="rounded-xl"
+                @click="quotationDialog = true"
+              >
+                <v-icon class="mr-1">mdi-text-box-search</v-icon>
+                ดูใบเสนอราคา
+              </v-btn>
+              <v-btn
+                dark
+                class="rounded-xl"
+                elevation="0"
+                @click="$router.push('/admin/manage-booking')"
+              >
+                <v-icon class="mr-1">mdi-arrow-left-bold-circle</v-icon>
+                กลับ
+              </v-btn>
+            </div>
+            <div class="mt-2 d-flex">
+              <v-spacer></v-spacer>
+              <v-btn
+                color="primary"
+                elevation="0"
+                class="rounded-xl"
+                @click="receiptDialog = true"
+              >
+                <v-icon class="mr-1">mdi-receipt-text</v-icon>
+                ดูใบเสร็จ
+              </v-btn>
+            </div>
           </div>
         </div>
         <v-row class="ma-1">
@@ -290,6 +310,7 @@ export default {
       roomPicture: '',
       tool: [],
       quotationDialog: false,
+      receiptDialog: false,
       loading: true,
       routes: [
         { id: 1, name: 'รายการจอง', to: '/admin/manage-booking' },
